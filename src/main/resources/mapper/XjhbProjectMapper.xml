@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.XjhbProjectMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.XjhbProject">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="project_application" jdbcType="VARCHAR" property="projectApplication" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="period" jdbcType="VARCHAR" property="period" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from xjhb_project
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbProject">
+    insert into xjhb_project (id, name, start_time, 
+      project_application, end_time, period, 
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{projectApplication,jdbcType=VARCHAR}, #{endTime,jdbcType=TIMESTAMP}, #{period,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbProject">
+    update xjhb_project
+    set name = #{name,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      project_application = #{projectApplication,jdbcType=VARCHAR},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      period = #{period,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, start_time, project_application, end_time, period, create_time
+    from xjhb_project
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, start_time, project_application, end_time, period, create_time
+    from xjhb_project
+  </select>
+</mapper>

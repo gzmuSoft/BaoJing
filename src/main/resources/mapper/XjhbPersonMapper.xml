@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.XjhbPersonMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.XjhbPerson">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="identity" jdbcType="VARCHAR" property="identity" />
+    <result column="telphone" jdbcType="VARCHAR" property="telphone" />
+    <result column="village" jdbcType="VARCHAR" property="village" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="one_card_solution" jdbcType="VARCHAR" property="oneCardSolution" />
+    <result column="id_card_front" jdbcType="VARCHAR" property="idCardFront" />
+    <result column="id_card_reverse" jdbcType="VARCHAR" property="idCardReverse" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from xjhb_person
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbPerson">
+    insert into xjhb_person (id, name, identity, 
+      telphone, village, create_time, 
+      one_card_solution, id_card_front, id_card_reverse
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, 
+      #{telphone,jdbcType=VARCHAR}, #{village,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{oneCardSolution,jdbcType=VARCHAR}, #{idCardFront,jdbcType=VARCHAR}, #{idCardReverse,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbPerson">
+    update xjhb_person
+    set name = #{name,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR},
+      telphone = #{telphone,jdbcType=VARCHAR},
+      village = #{village,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      one_card_solution = #{oneCardSolution,jdbcType=VARCHAR},
+      id_card_front = #{idCardFront,jdbcType=VARCHAR},
+      id_card_reverse = #{idCardReverse,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front, 
+    id_card_reverse
+    from xjhb_person
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front, 
+    id_card_reverse
+    from xjhb_person
+  </select>
+</mapper>

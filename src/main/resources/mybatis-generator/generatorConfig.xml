@@ -8,7 +8,9 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
-        <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/gzmu_bj?serverTimezone=UTC&amp;characterEncoding=utf8" driverClass="com.mysql.cj.jdbc.Driver" password="123456" userId="root" />
+        <jdbcConnection connectionURL="jdbc:mysql://localhost:3306/gzmu_bj?serverTimezone=UTC&amp;characterEncoding=utf8" driverClass="com.mysql.cj.jdbc.Driver" password="123456" userId="root" >
+        <property name="useInformationSchema" value="true" />
+        </jdbcConnection>
         <javaModelGenerator targetPackage="com.gzmusxxy.entity" targetProject="src\main\java" />
         <sqlMapGenerator targetPackage="com.gzmusxxy.mapper" targetProject="src\main\java" />
         <javaClientGenerator targetPackage="com.gzmusxxy.mapper" targetProject="src\main\java" type="XMLMAPPER" />

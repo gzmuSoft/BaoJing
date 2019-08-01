@@ -1,5 +1,8 @@
 package com.gzmusxxy.entity;
 
+import lombok.Data;
+
+@Data
 public class XjhbProject {
     private Integer id;
 
@@ -7,27 +10,5 @@ public class XjhbProject {
 
     private String applicationTemplate;
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getApplicationTemplate() {
-        return applicationTemplate;
-    }
-
-    public void setApplicationTemplate(String applicationTemplate) {
-        this.applicationTemplate = applicationTemplate;
-    }
 }

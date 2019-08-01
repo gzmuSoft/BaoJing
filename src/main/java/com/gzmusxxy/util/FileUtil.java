@@ -25,8 +25,9 @@ public class FileUtil {
             try {
                 // 文件保存路径
                 String savePath = path;
-                if (path == null)
+                if (path == null){
                     savePath ="/home/fengxin/" + UUID.randomUUID() + type;
+                }
                 System.out.println("文件保存的路径："+savePath);
                 // 转存文件
                 file.transferTo(new File(savePath));
@@ -51,8 +52,9 @@ public class FileUtil {
         File fileurl = new File(url);
         //浏览器下载后的文件名称showValue,从url中截取到源文件名称以及，以及文件类型，如board.docx;
         String showValue = "默认";
-        if (name != null)
+        if (name != null) {
             showValue = name;
+        }
         try{
             //将文件读入文件流
             InputStream inStream = new FileInputStream(fileurl);

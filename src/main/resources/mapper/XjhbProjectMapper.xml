@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.XjhbProjectMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.XjhbProject">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="application_template" jdbcType="VARCHAR" property="applicationTemplate" />
+  </resultMap>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbProject">
+    insert into xjhb_project (id, project_name, application_template
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{applicationTemplate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, project_name, application_template
+    from xjhb_project
+  </select>
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.XjhbProject">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="application_template" jdbcType="VARCHAR" property="applicationTemplate" />
+  </resultMap>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbProject">
+    insert into xjhb_project (id, project_name, application_template
+      )
+    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{applicationTemplate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, project_name, application_template
+    from xjhb_project
+  </select>
+</mapper>

@@ -26,7 +26,7 @@ public class FileUtil {
                 // 文件保存路径
                 String savePath = path;
                 if (path == null){
-                    savePath ="/home/fengxin/" + UUID.randomUUID() + type;
+                    savePath ="D:\\" + UUID.randomUUID() + type;
                 }
                 System.out.println("文件保存的路径："+savePath);
                 // 转存文件

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * 扶贫先建后补
@@ -22,7 +23,7 @@ public class PovertyController {
     @Autowired
     private PovertyService povertyService;
 
-    @RequestMapping(value = "/")
+    @RequestMapping(value = "")
     public String information() {
         return "poverty/information";
     }
@@ -44,12 +45,15 @@ public class PovertyController {
     }
 
     @RequestMapping(value = "/userMsg")
-    public String userMsg(String name, String identity, String tel,String village,String identify_front,String identify_back) {
-        XjhbPerson xjhbPerson = new XjhbPerson();
-        xjhbPerson.setIdCardFront(identify_front);
-        xjhbPerson.setIdCardReverse(identify_back);
+    public String userMsg(XjhbPerson xjhbPerson) {
+
+        Date data = new Date();
+        xjhbPerson.setCreateTime(data);
+        xjhbPerson.setIdCardFront(xjhbPerson.getIdCardFront());
+        xjhbPerson.setIdCardReverse(xjhbPerson.getIdCardReverse());
         povertyService.insert(xjhbPerson);
-        System.out.println("地址="+identify_front);
+        System.out.println("地址="+xjhbPerson.getIdCardFront()+"..."+xjhbPerson.getIdCardReverse());
+        System.out.println(xjhbPerson);
         return "poverty/usershen";
     }
 

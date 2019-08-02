@@ -17,6 +17,10 @@ spring:
       prefix: /
       suffix: .html
     static-path-pattern: /static/**
+  servlet:
+    multipart:
+      max-request-size: 10485760
+      max-file-size: 10485760
 mybatis:
   mapper-locations:
     - classpath:mapper/*.xml

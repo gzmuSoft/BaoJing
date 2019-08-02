@@ -6,11 +6,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * 后台管理
  */
-@RequestMapping("/")
+@RequestMapping("/admin")
 @Controller
 public class AdminController {
 
-    @RequestMapping
+    @RequestMapping(value = "login")
     public String login() {
         return "admin/login";
     }

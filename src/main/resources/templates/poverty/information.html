@@ -32,46 +32,35 @@
 
 	</div>
 	 <div class="panel-footer" style=" text-align: center;">
-	 	<input class="checkboxOk" type="checkbox" value="0" />&nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-info">我已阅读</button>
+	 	<input class="checkboxOk" type="checkbox" value="0" />&nbsp;&nbsp;&nbsp;&nbsp;<button id="readOK" type="button" class="btn btn-info">我已阅读</button>
+	 <div class="tishi" style="color: red;">
+
+	 </div>
 	 </div>
 </div>
-<footer class="am-menu am-cf">
-	<div class="am-menu-column" id="index">
-		<a href="/poverty">
-			<span>首页</span>
-		</a>
-	</div>
-	<div class="am-menu-column" id="explore">
-		<a href="/poverty/apply">
-			<span>申请</span>
-		</a>
-	</div>
-	<div class="am-menu-column" id="life">
-		<a href="/poverty/information">
-			<span>记录</span>
-		</a>
-	</div>
-	<div class="am-menu-column active" id="my">
-		<a href="/poverty/user">
-			<span>我的</span>
-		</a>
-	</div>
-</footer>
-<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
-<script th:src="@{../static/js/jquery.min.js}"></script>
-<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
-<script th:src="@{../static/js/bootstrap.min.js}"></script>
 <script>
-	$(".checkboxOk").click(function(){
-		var checkboxOkValue = $(".checkboxOk").val();
-		console.log(checkboxOkValue)
-		if(checkboxOkValue === 0){
-			$(".checkboxOk").val(1);
-		}
-		if(checkboxOkValue === 1){
-			$(".checkboxOk").val(0);
-		}
 
+
+$(".checkboxOk").click(function(){
+	var checkboxOkValue = $(".checkboxOk").val();
+	if(checkboxOkValue == 0){
+		$(".checkboxOk").val(1) ;
+	}
+	if(checkboxOkValue == 1){
+		$(".checkboxOk").val(0);
+	}
+});
+
+	$("#readOK").click(function () {
+		var checkboxOkValue = $(".checkboxOk").val();
+		if (checkboxOkValue == 0){
+			$(".tishi").html("请阅读后并勾选！")
+		}
+		else{
+			$.post("http://localhost:8083/poverty/informationOk",{},function (result) {
+				window.location.href = "http://localhost:8083/"+result
+			})
+		}
 	})
 </script>
 </body>

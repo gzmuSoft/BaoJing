@@ -22,15 +22,21 @@ public class PovertyController {
     @Autowired
     private PovertyService povertyService;
 
-    @RequestMapping(value = "/information")
+    @RequestMapping(value = "/")
     public String information() {
         return "poverty/information";
     }
 
-    @RequestMapping
-    public String Index() {
-        return "poverty/index";
+    @ResponseBody
+    @RequestMapping(value = "/informationOk")
+    public String informationOk() {
+        return "poverty/user";
     }
+
+//    @RequestMapping(value = "/index")
+//    public String Index() {
+//        return "poverty/index";
+//    }
 
     @RequestMapping(value = "/user")
     public String user() {
@@ -55,8 +61,8 @@ public class PovertyController {
         }else {
             if (backPath != null ) {
                 return FileUtil.saveFile(file,backPath,type);
-            }else
-                return FileUtil.saveFile(file,frontPath,type);
+            }else{
+                return FileUtil.saveFile(file,frontPath,type);}
         }
     }
 

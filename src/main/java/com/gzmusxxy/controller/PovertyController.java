@@ -6,37 +6,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 扶贫先建后补
+ */
+@RequestMapping("/poverty")
 @Controller
-public class HomeController {
-
-    @RequestMapping(value = "/login")
-    public String login() {
-        return "login";
-    }
+public class PovertyController {
 
     @RequestMapping(value = "/information")
     public String information() {
-        return "information";
+        return "poverty/information";
     }
 
-    @RequestMapping(value = "/")
+    @RequestMapping
     public String Index() {
-        return "index";
+        return "poverty/index";
     }
 
     @RequestMapping(value = "/user")
     public String user() {
-        return "users";
+        return "poverty/users";
     }
 
     @RequestMapping(value = "/userMsg")
     public String userMsg(String name) {
         System.out.println("name="+name);
-        return "usershen";
+        return "poverty/usershen";
     }
 
     @ResponseBody

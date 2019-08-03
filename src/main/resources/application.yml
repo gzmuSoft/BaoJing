@@ -12,11 +12,6 @@ spring:
       min-idle: 5
       max-total: 10
       max-wait-millis: 2000
-  mvc:
-    view:
-      prefix: /
-      suffix: .html
-    static-path-pattern: /static/**
   servlet:
     multipart:
       max-request-size: 10485760

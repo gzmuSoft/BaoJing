@@ -3,6 +3,7 @@ package com.gzmusxxy.controller;
 import com.gzmusxxy.service.AdminService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -31,8 +32,9 @@ public class AdminController {
             return "输入的账号或密码错误！";
     }
 
-    @RequestMapping(value = "/main")
-    public String main(Integer id) {
-        return "admin/main";
+    @RequestMapping(value = "/index")
+    public String index(Integer id, Model model) {
+        model.addAttribute("admin",adminService.selectByPrimaryKey(id));
+        return "admin/index";
     }
 }

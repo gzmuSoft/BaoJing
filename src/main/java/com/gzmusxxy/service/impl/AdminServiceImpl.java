@@ -25,4 +25,9 @@ public class AdminServiceImpl implements AdminService {
         }
         return 0;
     }
+
+    @Override
+    public Admin selectByPrimaryKey(Integer id) {
+        return admimMapper.selectByPrimaryKey(id);
+    }
 }

@@ -4,6 +4,7 @@ import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.service.PovertyService;
 import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 
 /**
@@ -22,9 +24,14 @@ public class PovertyController {
 
     @Autowired
     private PovertyService povertyService;
+    //从配置文件中获取文件的上传路径
+    //@Value("${ws.fileUploadPath}")
+    //private String fileUploadPath;
 
-    @RequestMapping(value = "")
-    public String information() {
+    @RequestMapping(value = {"","/"})
+    public String information(HttpSession session) {
+        //获取session中的用户openid
+        System.out.println(session.getAttribute("openid"));
         return "poverty/information";
     }
 
@@ -46,8 +53,11 @@ public class PovertyController {
 
     @ResponseBody
     @RequestMapping(value = "/userMsg")
-    public String userMsg(XjhbPerson xjhbPerson) {
-
+    public String userMsg(XjhbPerson xjhbPerson,HttpSession session) {
+        //从session中获得用户的openid,如果为空则用户未登录
+        //暂时未进行登录验证
+        String openId = session.getAttribute("openid").toString();
+        xjhbPerson.setOpenid(openId);
         Date data = new Date();
         xjhbPerson.setCreateTime(data);
         xjhbPerson.setIdCardFront(xjhbPerson.getIdCardFront());

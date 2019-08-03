@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/assets/img/apple-icon.png}">
-    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{../static/assets/img/apple-icon.png}">
+    <link rel="icon" type="image/png" th:href="@{../static/assets/img/favicon.png}">
     <title>Login Page - Now UI Kit by Creative Tim</title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
@@ -116,7 +116,7 @@
                         <!--验证信息-->
                         <div class="text-center">
                             <h6>
-                                <a class="d-none d-md-block d-xl-none">验证信息</a>
+                                <a id="verify" href="#" class="d-none d-md-block d-xl-none">验证信息</a>
                             </h6>
                         </div>
                     </div>
@@ -174,14 +174,28 @@
 </div>
 <script>
     function verify(){
-        alert("进来了");
         $.post('/admin/verify',
         {
             'username':$("#username").val(),
             'password':$("#password").val()
         },
         function(data,status){
-            alert("数据: \n" + data + "\n状态: " + status);
+            if (status == "success"){
+                if(data > 0){
+                    //alert('登录成功！');
+                    if($("#verify").hasClass("d-none d-md-block d-xl-none")){
+                        $("#verify").addClass("d-none d-md-block d-xl-none");
+                    }
+                    window.location.href="/admin/main?id="+data;
+                }else {
+                    alert(data);
+                    $("#verify").text(data);
+                    $("#verify").removeClass("d-none d-md-block d-xl-none");
+                }
+            }else {
+                alert("请求超时！");
+            }
+            //alert("数据: \n" + data + "\n状态: " + status);
         });
     }
 </script>

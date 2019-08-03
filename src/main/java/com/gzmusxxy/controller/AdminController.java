@@ -16,19 +16,25 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @RequestMapping(value = "login")
+    @RequestMapping(value = "/login")
     public String login() {
         return "admin/login";
     }
 
     @ResponseBody
-    @RequestMapping(value = "verify")
+    @RequestMapping(value = "/verify")
     public String verify(String username,String password) {
-        System.out.println("zm"+username+password);
-        int flag = adminService.verify(username,password);
-        if (flag == 1){
-            return "登录成功！";
+        System.out.println("um"+username+password);
+        Integer id = adminService.verify(username,password);
+        if (id > 0){
+            return id.toString();
         }else
-            return "登录失败";
+            return "输入的账号或密码错误！";
+    }
+
+    @RequestMapping(value = "/main")
+    public String main(Integer id) {
+        System.out.println("id="+id);
+        return "admin/main";
     }
 }

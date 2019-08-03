@@ -7,9 +7,9 @@ import org.springframework.stereotype.Service;
 public class AdminServiceImpl implements AdminService {
     @Override
     public int verify(String useranme, String password) {
-        if (useranme == "admin" && password == "123123"){
+        if ("admin".equals(useranme) && "123123".equals(password)){
             return 1;
-        }else
-            return 0;
+        }else{
+            return 0;}
     }
 }

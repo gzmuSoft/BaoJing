@@ -9,8 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class PovertyServiceImpl implements PovertyService {
 
+    private final XjhbPersonMapper xjhbPersonMapper;
+
     @Autowired
-    private XjhbPersonMapper xjhbPersonMapper;
+    public PovertyServiceImpl(XjhbPersonMapper xjhbPersonMapper) {
+        this.xjhbPersonMapper = xjhbPersonMapper;
+    }
 
     @Override
     public int insert(XjhbPerson record) {

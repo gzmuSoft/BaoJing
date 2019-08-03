@@ -34,10 +34,10 @@ public class PovertyController {
         return "poverty/user";
     }
 
-//    @RequestMapping(value = "/index")
-//    public String Index() {
-//        return "poverty/index";
-//    }
+    @RequestMapping(value = "/index")
+    public String Index() {
+        return "poverty/index";
+    }
 
     @RequestMapping(value = "/user")
     public String user() {

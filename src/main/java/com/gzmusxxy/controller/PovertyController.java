@@ -44,6 +44,7 @@ public class PovertyController {
         return "poverty/users";
     }
 
+    @ResponseBody
     @RequestMapping(value = "/userMsg")
     public String userMsg(XjhbPerson xjhbPerson) {
 
@@ -57,6 +58,10 @@ public class PovertyController {
         return "poverty/usershen";
     }
 
+    @RequestMapping(value = "/usershen")
+    public String userShen(){
+        return "poverty/usershen";
+    }
     @ResponseBody
     @RequestMapping(value = "/upload")
     public String upload(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {

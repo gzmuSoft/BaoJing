@@ -27,7 +27,7 @@ public class EncryptUtil {
     /**AES*/
     public int keysizeAES = 128;
 
-    public static EncryptUtil me;
+    public static EncryptUtil me = new EncryptUtil();
 
     private EncryptUtil(){
         //单例

@@ -27,3 +27,5 @@ logging:
     com:
       gzmusxxy:
         mapper: debug
+#ws:
+#  fileUploadPath: D:/

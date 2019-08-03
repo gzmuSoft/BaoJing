@@ -24,7 +24,6 @@ public class AdminController {
     @ResponseBody
     @RequestMapping(value = "/verify")
     public String verify(String username,String password) {
-        System.out.println("um"+username+password);
         Integer id = adminService.verify(username,password);
         if (id > 0){
             return id.toString();
@@ -34,7 +33,6 @@ public class AdminController {
 
     @RequestMapping(value = "/main")
     public String main(Integer id) {
-        System.out.println("id="+id);
         return "admin/main";
     }
 }

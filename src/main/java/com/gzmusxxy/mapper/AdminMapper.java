@@ -10,6 +10,8 @@ public interface AdminMapper {
 
     Admin selectByPrimaryKey(Integer id);
 
+    Admin selectByUsername(String username);
+
     List<Admin> selectAll();
 
     int updateByPrimaryKey(Admin record);

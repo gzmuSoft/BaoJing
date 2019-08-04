@@ -18,11 +18,11 @@
         <!--<table schema="gzmu_bj" tableName="xjhb_information">-->
             <!--<columnOverride column="useActualColumnNames" property="false" />-->
         <!--</table>-->
-        <table schema="gzmu_bj" tableName="xjhb_person">
+        <table schema="gzmu_bj" tableName="xjhb_project">
             <columnOverride column="useActualColumnNames" property="false" />
         </table>
-        <table schema="gzmu_bj" tableName="admin">
-            <columnOverride column="useActualColumnNames" property="false" />
-        </table>
+        <!--<table schema="gzmu_bj" tableName="admin">-->
+            <!--<columnOverride column="useActualColumnNames" property="false" />-->
+        <!--</table>-->
     </context>
 </generatorConfiguration>

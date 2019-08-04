@@ -21,7 +21,7 @@
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
                     <li class="active"><a href="#" class="sf-house">主页</a></li>
-                    <li><a href="components-text.html" class="sf-brick">组件</a></li>
+                    <li><a href="/admin/xjhbProject?id=${admin.id}" class="sf-brick">先建后补项目管理</a></li>
                     <li class="cm-submenu">
                         <a class="sf-window-layout">导航栏布局<span class="caret"></span></a>
                         <ul>
@@ -47,11 +47,11 @@
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
                 <li class="disabled text-center">
-                    <a style="cursor:default;"><strong th:text="${admin.username}"></strong></a>
+                    <a style="cursor:default;"><strong th:text="${session.username}"></strong></a>
                 </li>
                 <li class="divider"></li><!--下划线 -->
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-cog"></i> 设置</a>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
                 </li>
                 <li>
                     <a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>

@@ -13,7 +13,7 @@
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
     <nav class="cm-navbar cm-navbar-primary">
-        <div class="cm-flex"><a href="index.html" class="cm-logo"></a></div>
+        <div class="cm-flex"><a href="/admin/index" class="cm-logo"></a></div>
         <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
     </nav>
     <div id="cm-menu-content">
@@ -21,7 +21,7 @@
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
                     <li class="active"><a href="#" class="sf-house">主页</a></li>
-                    <li><a href="/admin/xjhbProject?id=${admin.id}" class="sf-brick">先建后补项目管理</a></li>
+                    <li><a href="/admin/xjhbProject" class="sf-brick">先建后补项目管理</a></li>
                     <li class="cm-submenu">
                         <a class="sf-window-layout">导航栏布局<span class="caret"></span></a>
                         <ul>
@@ -47,7 +47,7 @@
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
                 <li class="disabled text-center">
-                    <a style="cursor:default;"><strong th:text="${session.username}"></strong></a>
+                    <a style="cursor:default;"><strong th:text="${session.admin.username}"></strong></a>
                 </li>
                 <li class="divider"></li><!--下划线 -->
                 <li>

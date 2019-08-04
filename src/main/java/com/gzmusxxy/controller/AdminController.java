@@ -6,10 +6,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -29,23 +25,22 @@ public class AdminController {
 
     @ResponseBody
     @RequestMapping(value = "/verify")
-    public String verify(String username, String password) {
+    public String verify(String username, String password, HttpSession session) {
         Integer id = adminService.verify(username,password);
         if (id > 0){
+            session.setAttribute("admin",adminService.selectByPrimaryKey(id));
             return id.toString();
         }else
             return "输入的账号或密码错误！";
     }
 
     @RequestMapping(value = "/index")
-    public String index(Integer id, HttpSession session) {
-        session.setAttribute("admin",adminService.selectByPrimaryKey(id));
+    public String index() {
         return "admin/index";
     }
 
     @RequestMapping(value = "/xjhbProject")
-    public String xjhbProject(Model model, Integer id) {
-        model.addAttribute("admin",adminService.selectByPrimaryKey(id));
+    public String xjhbProject(Model model){
         return "admin/xjhb_project";
     }
 }

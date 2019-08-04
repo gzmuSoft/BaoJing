@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.XjhbProject">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="project_name" jdbcType="VARCHAR" property="projectName" />
+    <result column="application_template_name" jdbcType="VARCHAR" property="applicationTemplateName" />
     <result column="application_template" jdbcType="VARCHAR" property="applicationTemplate" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
@@ -14,16 +15,17 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbProject">
-    insert into xjhb_project (id, project_name, application_template, 
-      start_time, end_time, period
-      )
-    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{applicationTemplate,jdbcType=VARCHAR}, 
-      #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{period,jdbcType=INTEGER}
-      )
+    insert into xjhb_project (id, project_name, application_template_name, 
+      application_template, start_time, end_time, 
+      period)
+    values (#{id,jdbcType=INTEGER}, #{projectName,jdbcType=VARCHAR}, #{applicationTemplateName,jdbcType=VARCHAR}, 
+      #{applicationTemplate,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{period,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbProject">
     update xjhb_project
     set project_name = #{projectName,jdbcType=VARCHAR},
+      application_template_name = #{applicationTemplateName,jdbcType=VARCHAR},
       application_template = #{applicationTemplate,jdbcType=VARCHAR},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
@@ -31,12 +33,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, project_name, application_template, start_time, end_time, period
+    select id, project_name, application_template_name, application_template, start_time, 
+    end_time, period
     from xjhb_project
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, project_name, application_template, start_time, end_time, period
+    select id, project_name, application_template_name, application_template, start_time, 
+    end_time, period
     from xjhb_project
   </select>
 </mapper>

@@ -88,6 +88,19 @@ public class PovertyController {
     }
 
     @ResponseBody
+    @RequestMapping(value = "/upProjectInformation")
+    public String upProjectInformation(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {
+        if (backPath != null && frontPath != null) {
+            return FileUtil.saveFile(file,null, type);
+        }else {
+            if (backPath != null ) {
+                return FileUtil.saveFile(file,backPath,type);
+            }else{
+                return FileUtil.saveFile(file,frontPath,type);}
+        }
+    }
+
+    @ResponseBody
     @RequestMapping(value= "/download")
     public String download(String path,String name,HttpServletRequest request, HttpServletResponse response){
         FileUtil.downloadFile(path,name,request,response);

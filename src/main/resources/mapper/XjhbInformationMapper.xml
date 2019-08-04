@@ -3,11 +3,12 @@
 <mapper namespace="com.gzmusxxy.mapper.XjhbInformationMapper">
   <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.XjhbInformation">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="project_id" jdbcType="INTEGER" property="projectId" />
     <result column="outlay" jdbcType="DOUBLE" property="outlay" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
     <result column="one_card_solution" jdbcType="VARCHAR" property="oneCardSolution" />
+    <result column="other_proof_name" jdbcType="VARCHAR" property="otherProofName" />
     <result column="other_proof" jdbcType="VARCHAR" property="otherProof" />
     <result column="project_application" jdbcType="VARCHAR" property="projectApplication" />
     <result column="person_id" jdbcType="INTEGER" property="personId" />
@@ -18,22 +19,23 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbInformation">
-    insert into xjhb_information (id, name, outlay, 
+    insert into xjhb_information (id, project_id, outlay, 
       start_time, end_time, one_card_solution, 
-      other_proof, project_application, person_id, 
-      create_time)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{outlay,jdbcType=DOUBLE}, 
+      other_proof_name, other_proof, project_application, 
+      person_id, create_time)
+    values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{outlay,jdbcType=DOUBLE}, 
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{oneCardSolution,jdbcType=VARCHAR}, 
-      #{otherProof,jdbcType=VARCHAR}, #{projectApplication,jdbcType=VARCHAR}, #{personId,jdbcType=INTEGER}, 
-      #{createTime,jdbcType=VARCHAR})
+      #{otherProofName,jdbcType=VARCHAR}, #{otherProof,jdbcType=VARCHAR}, #{projectApplication,jdbcType=VARCHAR}, 
+      #{personId,jdbcType=INTEGER}, #{createTime,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbInformation">
     update xjhb_information
-    set name = #{name,jdbcType=VARCHAR},
+    set project_id = #{projectId,jdbcType=INTEGER},
       outlay = #{outlay,jdbcType=DOUBLE},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
       one_card_solution = #{oneCardSolution,jdbcType=VARCHAR},
+      other_proof_name = #{otherProofName,jdbcType=VARCHAR},
       other_proof = #{otherProof,jdbcType=VARCHAR},
       project_application = #{projectApplication,jdbcType=VARCHAR},
       person_id = #{personId,jdbcType=INTEGER},
@@ -41,14 +43,14 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, name, outlay, start_time, end_time, one_card_solution, other_proof, project_application, 
-    person_id, create_time
+    select id, project_id, outlay, start_time, end_time, one_card_solution, other_proof_name, 
+    other_proof, project_application, person_id, create_time
     from xjhb_information
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, name, outlay, start_time, end_time, one_card_solution, other_proof, project_application, 
-    person_id, create_time
+    select id, project_id, outlay, start_time, end_time, one_card_solution, other_proof_name, 
+    other_proof, project_application, person_id, create_time
     from xjhb_information
   </select>
 </mapper>

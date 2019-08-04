@@ -114,9 +114,47 @@
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script>
+    var front_path = null;
+    var back_path = null;
+    function saveFile(obj){
+        var data = new FormData();
+        data.append('file', obj.files[0]);
+        if(front_path != null && obj.id == 'identify_front'){
+            data.append('frontPath',front_path);
+        }
+        if(back_path != null && obj.id == 'identify_back'){
+            data.append('backPath',back_path);
+        }
+        //判断类型
+        var filename = obj.value;
+        extStart = filename.lastIndexOf('.');
+        ext = obj.value.substring(extStart,filename.length).toUpperCase();
+        data.append('type',ext);
+        $.ajax({
+            url: '/poverty/upload',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
+
+                alert("上传成功！");
+                if(obj.id == 'identify_front'){
+                    front_path=result;
+                }else {
+                    back_path=result;
+                }
+            },
+            error:function(result){
+                alert("上传失败！");
+            }
+        });
+    }
 
     $("#tijiao").click(function () {
 
+        console.log($("#select").val())
         $.post("/poverty/saveProject",
         {
             "name":$("#select").val(),
@@ -139,6 +177,8 @@
 
 
     });
+
+
 
 </script>
 </body>

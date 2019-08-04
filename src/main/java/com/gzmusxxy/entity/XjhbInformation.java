@@ -7,7 +7,7 @@ import java.util.Date;
 public class XjhbInformation {
     private Integer id;
 
-    private String name;
+    private Integer projectId;
 
     private Double outlay;
 
@@ -16,6 +16,8 @@ public class XjhbInformation {
     private Date endTime;
 
     private String oneCardSolution;
+
+    private String otherProofName;
 
     private String otherProof;
 

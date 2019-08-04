@@ -9,6 +9,8 @@ public class XjhbProject {
 
     private String projectName;
 
+    private String applicationTemplateName;
+
     private String applicationTemplate;
 
     private Date startTime;

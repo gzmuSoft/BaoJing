@@ -26,7 +26,7 @@
                     <li class="cm-submenu">
                         <a class="sf-brick">先建后补项目<span class="caret"></span></a>
                         <ul>
-                            <li class="active"><a href="/admin/xjhbProject">项目管理</a></li>
+                            <li class="active"><a href="#">项目管理</a></li>
                             <li><a href="/admin/xjhbApply">申请书管理</a></li>
                             <li><a href="/admin/xjhbCheck">待验收管理</a></li>
                             <li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
@@ -43,8 +43,8 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
 			<h1>项目管理</h1>
-			<form id="cm-search" action="index.html" method="get">
-				<input type="search" name="q" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			<form id="cm-search" action="/admin/xjhbProject?pageNumber=1" method="get">
+				<input type="search" name="name" autocomplete="off" placeholder="输入需要查询的项目名称...">
 			</form>
 		</div>
 		<!-- 查询按钮 -->
@@ -76,12 +76,13 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Tables with contextual classes</div>
                     <div class="panel-body">
-						<button type="button" class="btn btn-success">添加项目</button>
+						<button type="button" id="addProject" data-toggle="modal" data-target="#addModal" class="btn btn-success">添加项目</button>
                     </div>
+                    <input type="hidden" th:value="${pageNumber}" id="pageNumber"/>
                     <table class="table text-center">
                         <thead>
                         <tr>
-                            <th >#</th>
+                            <th>#</th>
                             <th class="text-center">项目名称</th>
                             <th class="text-center">项目申请书模板</th>
                             <th class="text-center">起始时间</th>
@@ -91,113 +92,17 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>active</td>
-                            <td>未上传&nbsp;</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr class="success">
-                            <th scope="row">3</th>
-                            <td>success</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr class="info">
-                            <th scope="row">5</th>
-                            <td>info</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">6</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr class="warning">
-                            <th scope="row">7</th>
-                            <td>warning</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">8</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
-                        </tr>
-                        <tr class="danger">
-                            <th scope="row">9</th>
-                            <td>danger</td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
-								<button type="button" class="btn btn-danger btn-xs">删除</button>
-							</td>
+                        <tr class="success" th:each="project:${projectList}">
+                            <th scope="row" th:text="${projectStat.index+1}"></th>
+                            <td th:text="${project.projectName}"></td>
+                            <td th:text="${project.applicationTemplateName}"></td>
+                            <td th:text="${project.startTime}"></td>
+                            <td th:text="${project.endTime}"></td>
+                            <td th:text="${project.period}"></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#updateModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp&nbsp
+                                <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -225,7 +130,40 @@
 			</ul>
 		</nav>
     </div>
-
+    <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel"></h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="awd">添加项目</h4>
+                </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
@@ -235,5 +173,31 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
+<script>
+    function update(obj){
+        $('#myModalLabel').text(obj.value+"s");
+    }
+
+    function del(obj){
+        if(confirm("确认是否删除?")){
+            $.post("/admin/delProject",
+            {
+                "id":obj.value
+            },
+            function(data){
+                if(data > 0){
+                    alert("删除成功！");
+                    window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
+                }else{
+                    alert("删除失败！");
+                }
+            });
+        }
+    }
+
+    $('#addProject').click(function(){
+        alert("添加");
+    });
+</script>
 </body>
 </html>

@@ -43,4 +43,10 @@
     end_time, period
     from xjhb_project
   </select>
+  <select id="selectProjectByNameLike" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, project_name, application_template_name, application_template, start_time,
+    end_time, period
+    from xjhb_project
+    where project_name like #{name}
+  </select>
 </mapper>

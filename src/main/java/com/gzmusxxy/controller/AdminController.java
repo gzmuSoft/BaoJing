@@ -1,10 +1,16 @@
 package com.gzmusxxy.controller;
 
+import com.github.pagehelper.PageInfo;
+import com.gzmusxxy.entity.XjhbProject;
+import com.gzmusxxy.mapper.XjhbProjectMapper;
 import com.gzmusxxy.service.AdminService;
+import com.gzmusxxy.service.XjhbProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 
@@ -17,6 +23,9 @@ public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private XjhbProjectService xjhbProjectService;
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -46,7 +55,10 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "/xjhbProject")
-    public String xjhbProject(Model model){
+    public String xjhbProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
+        model.addAttribute("projectList",pageInfo.getList());
+        model.addAttribute("pageNumber",pageNumber);
         return "admin/xjhb_project";
     }
 
@@ -88,5 +100,28 @@ public class AdminController {
     @RequestMapping(value = "/message")
     public String message(Model model){
         return "admin/admin_message";
+    }
+
+    /**
+     * 添加项目
+     * @param xjhbProject
+     * @return
+     */
+    @RequestMapping(value = "/addProject")
+    public String addProject(XjhbProject xjhbProject) {
+        Integer re = xjhbProjectService.insert(xjhbProject);
+        return re.toString();
+    }
+
+    /**
+     * 删除项目
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/delProject")
+    public String addProject(int id) {
+        Integer re = xjhbProjectService.deleteByPrimaryKey(id);
+        return re.toString();
     }
 }

@@ -27,5 +27,10 @@ logging:
     com:
       gzmusxxy:
         mapper: debug
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
 #ws:
 #  fileUploadPath: D:/

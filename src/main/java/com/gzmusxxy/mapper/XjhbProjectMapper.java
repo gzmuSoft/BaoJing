@@ -1,8 +1,10 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.XjhbProject;
-import java.util.List;
+import org.springframework.stereotype.Controller;
 
+import java.util.List;
+@Controller
 public interface XjhbProjectMapper {
     int deleteByPrimaryKey(Integer id);
 

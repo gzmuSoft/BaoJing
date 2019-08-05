@@ -29,6 +29,9 @@ public class XjhbProjectServiceImpl implements XjhbProjectService {
         return new PageInfo<>(list);
     }
 
+
+
+
     @Override
     public int insert(XjhbProject record) {
         return xjhbProjectMapper.insert(record);
@@ -42,5 +45,10 @@ public class XjhbProjectServiceImpl implements XjhbProjectService {
     @Override
     public int deleteByPrimaryKey(Integer id) {
         return xjhbProjectMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<XjhbProject> selectAll() {
+        return xjhbProjectMapper.selectAll();
     }
 }

@@ -19,7 +19,8 @@ public class AdminController {
     private AdminService adminService;
 
     @RequestMapping(value = "/login")
-    public String login() {
+        public String login(HttpSession session) {
+        session.removeAttribute("admin");
         return "admin/login";
     }
 

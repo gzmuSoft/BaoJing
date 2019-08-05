@@ -154,19 +154,21 @@
 
     $("#tijiao").click(function () {
 
-        console.log($("#select").val())
-        $.post("/poverty/saveProject",
-        {
-            "name":$("#select").val(),
+       var datas =  {
+            "projectId":$("#select").val(),
             "outlay":$("#outlay").val(),
             "startTime":$("#startTime").val(),
             "endTime":$("#endTime").val(),
-            "oneCardSolution":$("#oneCardSolution").val(),
-            "otherProof":$("#other").val(),
-            "projectApplication":$("#upFile").val(),
+            "oneCardSolution":"11",
+            "otherProofName":"材料名字",
+            "otherProof":"11",
+            "projectApplication":"11",
             "personId":"0001",
             "createTime":""
-        },
+        }
+        console.log(datas)
+        $.post("/poverty/saveInformation",datas
+       ,
         function(result) {
 
             console.log(result)

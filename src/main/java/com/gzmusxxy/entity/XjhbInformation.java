@@ -15,8 +15,6 @@ public class XjhbInformation {
 
     private Date endTime;
 
-    private String oneCardSolution;
-
     private String otherProofName;
 
     private String otherProof;

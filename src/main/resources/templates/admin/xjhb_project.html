@@ -8,7 +8,9 @@
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
-    <title>主页</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/tong-yong.css}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>admin Page</title>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -21,16 +23,15 @@
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
                     <li><a href="/admin/index" class="sf-house">主页</a></li>
-                    <li class="active"><a href="#" class="sf-brick">先建后补项目管理</a></li>
                     <li class="cm-submenu">
-                        <a class="sf-window-layout">导航栏布局<span class="caret"></span></a>
+                        <a class="sf-brick">先建后补项目<span class="caret"></span></a>
                         <ul>
-                            <li><a href="layouts-breadcrumb1.html">1st nav breadcrumb</a></li>
-                            <li><a href="layouts-breadcrumb2.html">2nd nav breadcrumb</a></li>
-                            <li><a href="layouts-tabs.html">2nd nav tabs</a></li>
+                            <li class="active"><a href="/admin/xjhbProject">项目管理</a></li>
+                            <li><a href="/admin/xjhbApply">申请书管理</a></li>
+                            <li><a href="/admin/xjhbCheck">待验收管理</a></li>
+                            <li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
                         </ul>
                     </li>
-                    <li><a href="notepad.html" class="sf-notepad">文本编辑器</a></li>
                     <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
                 </ul>
             </div>
@@ -40,9 +41,16 @@
 <header id="cm-header">
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
-        <div class="cm-flex">
-            <h1>先建后补项目管理</h1>
-        </div>
+		<div class="cm-flex">
+			<h1>项目管理</h1>
+			<form id="cm-search" action="index.html" method="get">
+				<input type="search" name="q" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			</form>
+		</div>
+		<!-- 查询按钮 -->
+		<div class="pull-right">
+			<div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
+		</div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
@@ -51,7 +59,7 @@
                 </li>
                 <li class="divider"></li><!--下划线 -->
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
+                    <a href="/admin/message"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
                 </li>
                 <li>
                     <a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>
@@ -61,88 +69,161 @@
     </nav>
 </header>
 <div id="global">
-<!--    <div class="container-fluid  cm-container-white" style="margin-top:0;height:875px;">-->
-<!--        <h2 style="margin-top:0;">Welcome to Clearmin template demo !</h2>-->
-<!--        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra.-->
-<!--            Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis.</p>-->
-<!--    </div>-->
     <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+		<!-- 表格 -->
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">Tables with contextual classes</div>
                     <div class="panel-body">
-                        <p style="margin-bottom:0">The table is outside the <code>.panel-body</code></p>
+						<button type="button" class="btn btn-success">添加项目</button>
                     </div>
-                    <table class="table">
+                    <table class="table text-center">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th><code>tr</code> classes</th>
-                            <th>Column heading</th>
-                            <th>Column heading</th>
+                            <th >#</th>
+                            <th class="text-center">项目名称</th>
+                            <th class="text-center">项目申请书模板</th>
+                            <th class="text-center">起始时间</th>
+							<th class="text-center">结束时间</th>
+							<th class="text-center">建设周期</th>
+							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="active">
+                        <tr>
                             <th scope="row">1</th>
                             <td>active</td>
+                            <td>未上传&nbsp;</td>
                             <td>Column content</td>
-                            <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr>
                             <th scope="row">2</th>
                             <td>Column content</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr class="success">
                             <th scope="row">3</th>
                             <td>success</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr>
                             <th scope="row">4</th>
                             <td>Column content</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr class="info">
                             <th scope="row">5</th>
                             <td>info</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr>
                             <th scope="row">6</th>
                             <td>Column content</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr class="warning">
                             <th scope="row">7</th>
                             <td>warning</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr>
                             <th scope="row">8</th>
                             <td>Column content</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         <tr class="danger">
                             <th scope="row">9</th>
                             <td>danger</td>
                             <td>Column content</td>
                             <td>Column content</td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">修改</button>&nbsp&nbsp
+								<button type="button" class="btn btn-danger btn-xs">删除</button>
+							</td>
                         </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+		<!-- 分页 -->
+		<nav class="text-center mt-50">
+			<ul class="pagination shadowed" style="margin:0">
+				<li>
+					<a href="#">
+						<span><i class="fa fa-angle-left"></i></span>
+					</a>
+				</li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li>
+					<a href="#">
+						<span><i class="fa fa-angle-right"></i></span>
+					</a>
+				</li>
+			</ul>
+		</nav>
     </div>
 
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>

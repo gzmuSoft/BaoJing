@@ -39,8 +39,53 @@ public class AdminController {
         return "admin/index";
     }
 
+    /**
+     * 项目管理
+     * @param model
+     * @return
+     */
     @RequestMapping(value = "/xjhbProject")
     public String xjhbProject(Model model){
         return "admin/xjhb_project";
+    }
+
+    /**
+     * 申请书管理
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/xjhbApply")
+    public String xjhbApply(Model model){
+        return "admin/xjhb_apply";
+    }
+
+    /**
+     * 待验收管理
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/xjhbCheck")
+    public String xjhbCheck(Model model){
+        return "admin/xjhb_check";
+    }
+
+    /**
+     * 验收通过查看
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/xjhbAdopt")
+    public String xjhbAdopt(Model model){
+        return "admin/xjhb_adopt";
+    }
+
+    /**
+     * 管理员信息管理
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/message")
+    public String message(Model model){
+        return "admin/admin_message";
     }
 }

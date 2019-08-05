@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/tong-yong.css}">
+	<link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+	<title>admin Page</title>
+</head>
+<body class="cm-no-transition cm-1-navbar">
+<div id="cm-menu">
+	<nav class="cm-navbar cm-navbar-primary">
+		<div class="cm-flex"><a href="/admin/index" class="cm-logo"></a></div>
+		<div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+	</nav>
+	<div id="cm-menu-content">
+		<div id="cm-menu-items-wrapper">
+			<div id="cm-menu-scroller">
+				<ul class="cm-menu-items">
+					<li><a href="/admin/index" class="sf-house">主页</a></li>
+					<li class="cm-submenu">
+						<a class="sf-brick">先建后补项目<span class="caret"></span></a>
+						<ul>
+							<li><a href="/admin/xjhbProject">项目管理</a></li>
+							<li class="active"><a href="/admin/xjhbApply">申请书管理</a></li>
+							<li><a href="/admin/xjhbCheck">待验收管理</a></li>
+							<li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
+						</ul>
+					</li>
+					<li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+		<div class="cm-flex">
+			<h1>申请书管理</h1>
+			<form id="cm-search" action="index.html" method="get">
+				<input type="search" name="q" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			</form>
+		</div>
+		<!-- 查询按钮 -->
+		<div class="pull-right">
+			<div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
+		</div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong th:text="${session.admin.username}"></strong></a>
+                </li>
+                <li class="divider"></li><!--下划线 -->
+                <li>
+					<a href="/admin/message"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
+				</li>
+				<li>
+					<a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global">
+    <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+		<!-- 表格 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Tables with contextual classes</div>
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th >#</th>
+                            <th class="text-center">申请项目名称</th>
+                            <th class="text-center">项目申请经费</th>
+                            <th class="text-center">项目申请书</th>
+							<th class="text-center">项目起始时间</th>
+							<th class="text-center">项目结束时间</th>
+							<th class="text-center">其他证明材料</th>
+							<th class="text-center">申请人</th>
+							<th class="text-center"><code>操作</code></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <th scope="row">1</th>
+                            <td>active</td>
+                            <td>未上传&nbsp;</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+							<td>Column content</td>
+							<td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">2</th>
+                            <td>Column content</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>Column content</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr class="success">
+                            <th scope="row">3</th>
+                            <td>success</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>dwaadawda</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">4</th>
+                            <td>Column content</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>Column content</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr class="info">
+                            <th scope="row">5</th>
+                            <td>info</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>dawdawda</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">6</th>
+                            <td>Column content</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>Column content</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr class="warning">
+                            <th scope="row">7</th>
+                            <td>warning</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>ssdawdwadaw</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">8</th>
+                            <td>Column content</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>Column content</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        <tr class="danger">
+                            <th scope="row">9</th>
+                            <td>danger</td>
+                            <td>Column content</td>
+                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
+                            <td>Column content</td>
+                            <td>Column content</td>
+							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
+							<td>Column content</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
+								<div class="btn-group">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
+								    <ul class="dropdown-menu" role="menu" style="width:50px">
+								        <li><a href="#">通过</a></li>
+										<li class="divider"></li>
+								        <li><a href="#">否定</a></li>
+								    </ul>
+								</div>
+							</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+		<!-- 分页 -->
+		<nav class="text-center mt-50">
+			<ul class="pagination shadowed" style="margin:0">
+				<li>
+					<a href="#">
+						<span><i class="fa fa-angle-left"></i></span>
+					</a>
+				</li>
+				<li class="active"><a href="#">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li>
+					<a href="#">
+						<span><i class="fa fa-angle-right"></i></span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+    </div>
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	    <div class="modal-dialog">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+	                <h4 class="modal-title" id="myModalLabel">
+	                    Modal title
+	                    <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+	                </h4>
+	            </div>
+	            <div class="modal-body">
+	                <h4 id="text-in-a-modal">
+	                    Text in a modal
+	                    <a class="anchorjs-link" href="#text-in-a-modal"><span class="anchorjs-icon"></span></a>
+	                </h4>
+	                <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula.</p>
+	                <hr>
+	                <h4 id="popover-in-a-modal">
+	                    Popover in a modal
+	                    <a class="anchorjs-link" href="#popover-in-a-modal"><span class="anchorjs-icon"></span></a>
+	                </h4>
+	                <p>This <a href="#" role="button" class="btn btn-default popover-test" title="" data-content="And here's some amazing content. It's very engaging. right?" data-original-title="A Title">button</a> should trigger a popover on click.</p>
+	                <hr>
+	                <h4 id="tooltips-in-a-modal">
+	                    Tooltips in a modal
+	                    <a class="anchorjs-link" href="#tooltips-in-a-modal"><span class="anchorjs-icon"></span></a>
+	                </h4>
+	                <p><a href="#" class="tooltip-test" title="" data-original-title="Tooltip">This link</a> and <a href="#" class="tooltip-test" title="" data-original-title="Tooltip">that link</a> should have tooltips on hover.</p>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	                <button type="button" class="btn btn-primary">Save changes</button>
+	            </div>
+	        </div>
+	        <!-- /.modal-content -->
+	    </div>
+	    <!-- /.modal-dialog -->
+	</div>
+    <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
+</div>
+<script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
+<script th:src="@{/assets/js/jquery.mousewheel.min.js}"></script>
+<script th:src="@{/assets/js/jquery.cookie.min.js}"></script>
+<script th:src="@{/assets/js/fastclick.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/clearmin.min.js}"></script>
+<script th:src="@{/assets/js/demo/home.js}"></script>
+</body>
+</html>

@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>admin Page</title>
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
-    <title>主页</title>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -21,16 +22,15 @@
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
                     <li class="active"><a href="#" class="sf-house">主页</a></li>
-                    <li><a href="/admin/xjhbProject" class="sf-brick">先建后补项目管理</a></li>
                     <li class="cm-submenu">
-                        <a class="sf-window-layout">导航栏布局<span class="caret"></span></a>
+                        <a class="sf-brick">先建后补项目<span class="caret"></span></a>
                         <ul>
-                            <li><a href="layouts-breadcrumb1.html">1st nav breadcrumb</a></li>
-                            <li><a href="layouts-breadcrumb2.html">2nd nav breadcrumb</a></li>
-                            <li><a href="layouts-tabs.html">2nd nav tabs</a></li>
+                            <li><a href="/admin/xjhbProject">项目管理</a></li>
+                            <li><a href="/admin/xjhbApply">申请书管理</a></li>
+                            <li><a href="/admin/xjhbCheck">待验收管理</a></li>
+                            <li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
                         </ul>
                     </li>
-                    <li><a href="notepad.html" class="sf-notepad">文本编辑器</a></li>
                     <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
                 </ul>
             </div>
@@ -51,7 +51,7 @@
                 </li>
                 <li class="divider"></li><!--下划线 -->
                 <li>
-                    <a href="#"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
+                    <a href="/admin/message"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
                 </li>
                 <li>
                     <a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>

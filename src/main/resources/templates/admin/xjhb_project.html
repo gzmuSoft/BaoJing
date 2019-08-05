@@ -76,7 +76,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">Tables with contextual classes</div>
                     <div class="panel-body">
-						<button type="button" id="addProject" data-toggle="modal" data-target="#addModal" class="btn btn-success">添加项目</button>
+						<button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加项目</button>
                     </div>
                     <input type="hidden" th:value="${pageNumber}" id="pageNumber"/>
                     <table class="table text-center">
@@ -96,11 +96,11 @@
                             <th scope="row" th:text="${projectStat.index+1}"></th>
                             <td th:text="${project.projectName}"></td>
                             <td th:text="${project.applicationTemplateName}"></td>
-                            <td th:text="${project.startTime}"></td>
-                            <td th:text="${project.endTime}"></td>
+                            <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
                             <td th:text="${project.period}"></td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#updateModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp&nbsp
+                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp&nbsp
                                 <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
                             </td>
                         </tr>
@@ -130,35 +130,55 @@
 			</ul>
 		</nav>
     </div>
-    <div id="updateModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!--弹窗-->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel"></h4>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <div id="addModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="awd">添加项目</h4>
-                </div>
-                <div class="modal-body">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            Modal title
+                            <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="projectName" class="col-sm-2 control-label">项目名称</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="projectName" name="projectName" placeholder="请输入项目名称..">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="applicationTemplate" class="col-sm-2 control-label">申请书模板</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control" onchange="saveFile(this)" id="applicationTemplate" name="applicationTemplate" placeholder="请上传申请书模板.."/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="startTime" class="col-sm-2 control-label">起始时间</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="startTime" id="startTime" placeholder="请输入可申请的起始时间...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="endTime" class="col-sm-2 control-label">结束时间</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" name="endTime" id="endTime" placeholder="请输入可申请的结束时间...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="period" class="col-sm-2 control-label">建设周期</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control" id="period" name="period" placeholder="请输入多少周...">
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="save" class="btn btn-primary">保存</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -174,8 +194,19 @@
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
 <script>
+    var flag = null;
+    var name = null;
+    var filePath = null;
+
+    $('#addProject').click(function(){
+        flag = "add";
+        $("#myModalLabel").text("创建先建后补项目");
+    });
+
     function update(obj){
-        $('#myModalLabel').text(obj.value+"s");
+        flag = "update";
+        $("#myModalLabel").text("修改先建后补项目");
+        //获取数据显示
     }
 
     function del(obj){
@@ -186,7 +217,6 @@
             },
             function(data){
                 if(data > 0){
-                    alert("删除成功！");
                     window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("删除失败！");
@@ -195,9 +225,56 @@
         }
     }
 
-    $('#addProject').click(function(){
-        alert("添加");
+    $('#save').click(function(){
+        if(flag == "add"){
+            $.post("/admin/addProject",
+            {
+                'projectName':$('#projectName').val(),
+                'applicationTemplate':filePath,
+                'applicationTemplateName':name,
+                'startTime':$('#startTime').val(),
+                'endTime':$('#endTime').val(),
+                'period':$('#period').val()
+            },
+            function(data){
+                if(data > 0){
+                    alert("保存成功！");
+                    window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
+                }else{
+                    alert("保存失败！");
+                }
+            });
+        }else{
+
+        }
     });
+
+    function saveFile(obj){
+        var data = new FormData();
+        data.append('file', obj.files[0]);
+        var filename = obj.value;
+        var endGang = filename.lastIndexOf('\\');
+        var extStart = filename.lastIndexOf('.');
+        var ext = obj.value.substring(extStart,filename.length);
+        data.append('type',ext);
+        name = obj.value.substring(endGang+1,filename.length);
+        alert(name);
+        $.ajax({
+        url: '/admin/upload',
+        type: 'POST',
+        data: data,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success:function(result){
+                alert("上传成功！");
+                filePath = result;
+            },
+        error:function(result){
+                alert("上传失败！");
+            }
+        });
+    }
 </script>
 </body>
 </html>

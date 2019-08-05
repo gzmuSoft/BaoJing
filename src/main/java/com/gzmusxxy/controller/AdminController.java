@@ -5,14 +5,18 @@ import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.mapper.XjhbProjectMapper;
 import com.gzmusxxy.service.AdminService;
 import com.gzmusxxy.service.XjhbProjectService;
+import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 后台管理
@@ -103,12 +107,24 @@ public class AdminController {
     }
 
     /**
+     * 处理前台时间传到后台的格式
+     * @param binder
+     */
+    @InitBinder
+    protected void initBinder(WebDataBinder binder){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
+    }
+
+    /**
      * 添加项目
      * @param xjhbProject
      * @return
      */
+    @ResponseBody
     @RequestMapping(value = "/addProject")
     public String addProject(XjhbProject xjhbProject) {
+        System.out.println("sda"+xjhbProject.getApplicationTemplate());
         Integer re = xjhbProjectService.insert(xjhbProject);
         return re.toString();
     }
@@ -123,5 +139,12 @@ public class AdminController {
     public String addProject(int id) {
         Integer re = xjhbProjectService.deleteByPrimaryKey(id);
         return re.toString();
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/upload")
+    public String upload(@RequestParam("file") MultipartFile file, String type) {
+        return FileUtil.saveFile(file,"/home/fengxin/",type);
     }
 }

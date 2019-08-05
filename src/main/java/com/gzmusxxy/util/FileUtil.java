@@ -24,9 +24,11 @@ public class FileUtil {
         if (!file.isEmpty()) {
             try {
                 // 文件保存路径
-                String savePath = path;
+                String savePath;
                 if (path == null){
                     savePath ="D:\\" + UUID.randomUUID() + type;
+                }else {
+                    savePath = path + UUID.randomUUID() + type;
                 }
                 System.out.println("文件保存的路径："+savePath);
                 // 转存文件

@@ -2,6 +2,7 @@ package com.gzmusxxy.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.gzmusxxy.entity.Admin;
 import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.mapper.XjhbProjectMapper;
 import com.gzmusxxy.service.AdminService;
@@ -38,6 +39,17 @@ public class AdminController {
         public String login(HttpSession session) {
         session.removeAttribute("admin");
         return "admin/login";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/updateMsg")
+    public String updateMsg(Admin admin){
+        Admin admin1 = adminService.selectByPrimaryKey(admin.getId());
+        Integer re = adminService.updateByPrimaryKey(admin);
+        if (!admin.getPassword().equals(admin1.getPassword())){
+            return "reLogin";
+        }
+        return re.toString();
     }
 
     @ResponseBody

@@ -30,4 +30,14 @@ public class AdminServiceImpl implements AdminService {
     public Admin selectByPrimaryKey(Integer id) {
         return admimMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public int updateByPrimaryKey(Admin record) {
+        Admin admin = admimMapper.selectByPrimaryKey(record.getId());
+        if (!admin.getPassword().equals(record.getPassword())){
+            //不相等
+            record.setPassword(EncryptUtil.me.Base64Encode(record.getPassword()));
+        }
+        return admimMapper.updateByPrimaryKey(record);
+    }
 }

@@ -25,7 +25,7 @@
 							<li class="cm-submenu">
 								<a class="sf-brick">先建后补项目<span class="caret"></span></a>
 								<ul>
-                                    <li><a href="/admin/xjhbProject">项目管理</a></li>
+                                    <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
                                     <li><a href="/admin/xjhbApply">申请书管理</a></li>
                                     <li><a href="/admin/xjhbCheck">待验收管理</a></li>
                                     <li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
@@ -47,7 +47,7 @@
                     <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
                     <ul class="dropdown-menu">
                         <li class="disabled text-center">
-                            <a style="cursor:default;"><strong>admin</strong></a>
+                            <a style="cursor:default;"><strong th:text="${session.admin.username}"></strong></a>
                         </li>
                         <li class="divider"></li><!--下划线 -->
                         <li>
@@ -64,25 +64,34 @@
             <div class="container-fluid  cm-container-white" style="margin-top:0;height:875px;">
                 <div class="col-lg-12">
                     <div class="panel panel-default">
-                        <div class="panel-heading">Login Form (responsive)</div>
+                        <div class="panel-heading">个人信息设置</div>
                         <div class="panel-body">
                             <form class="form-horizontal">
+                                <input type="hidden" name="id" id="id" th:value="${session.admin.id}">
                                 <div class="form-group">
-                                    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-                                    <div class="col-sm-10">
-                                        <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
+                                    <label for="username" class="col-sm-2 control-label">用户名：</label>
+                                    <div class="col-sm-8">
+                                        <fieldset disabled>
+                                            <input type="text" name="username" class="form-control" id="username" th:value="${session.admin.username}" placeholder="Username">
+                                        </fieldset>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputPassword3" class="col-sm-2 control-label">Password</label>
-                                    <div class="col-sm-10">
-                                        <input type="password" class="form-control" id="inputPassword3" placeholder="Password">
+                                    <label for="password" class="col-sm-2 control-label">密码：</label>
+                                    <div class="col-sm-8">
+                                        <input type="password" name="password" class="form-control" id="password" th:value="${session.admin.password}" placeholder="Password">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone" class="col-sm-2 control-label">电话号码：</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="phone" name="phone" th:value="${session.admin.phone}" placeholder="Phone">
                                     </div>
                                 </div>
                                 <div class="form-group" style="margin-bottom:0">
-                                    <div class="col-sm-offset-1 col-sm-10 text-center">
-                                        <button type="reset" class="btn btn-default">Cancel</button>
-                                        <button type="submit" class="btn btn-primary">Sign in</button>
+                                    <div class="col-sm-offset-1 col-sm-8 text-center">
+                                        <button type="button" id="sub" class="btn btn-primary">保存</button>
+                                        <button type="button" id="ret" class="btn btn-default">取消</button>
                                     </div>
                                 </div>
                             </form>
@@ -99,5 +108,33 @@
         <script th:src="@{/assets/js/bootstrap.min.js}"></script>
         <script th:src="@{/assets/js/clearmin.min.js}"></script>
         <script th:src="@{/assets/js/demo/home.js}"></script>
+        <script>
+            $('#ret').click(function(){
+                window.location.href='/admin/index';
+            });
+
+            $('#sub').click(function(){
+                $.post("/admin/updateMsg",
+                {
+                    "id":$('#id').val(),
+                    "username":$('#username').val(),
+                    "password":$('#password').val(),
+                    "phone":$('#phone').val()
+                },
+                function(data){
+                    if(data == "reLogin"){
+                        alert("保存成功！密码重置请重新登录！");
+                        window.location.href="/admin/login";
+                    }else{
+                        if(data > 0){
+                            alert("保存成功！");
+                        }else{
+                            alert("保存失败！");
+                        }
+                    }
+                });
+            });
+
+        </script>
     </body>
 </html>

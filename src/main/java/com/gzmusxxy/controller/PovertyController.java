@@ -156,7 +156,7 @@ public class PovertyController {
      */
     @ResponseBody
     @RequestMapping(value = "/upProjectBook")
-    public String upProjectInformation(@RequestParam("file") MultipartFile file, String projectPath, String type) {
+    public String upProjectBook(@RequestParam("file") MultipartFile file, String projectPath, String type) {
         return "";
     }
 
@@ -174,7 +174,7 @@ public class PovertyController {
     //private String fileUploadPath;
     @ResponseBody
     @RequestMapping(value= "/downProjectBook")
-    public String download(String path, String name, HttpServletRequest request, HttpServletResponse response){
+    public String downProjectBook(String path, String name, HttpServletRequest request, HttpServletResponse response){
         FileUtil.downloadFile(path,name,request,response);
         return "";
     }

@@ -37,6 +37,10 @@ public class XjhbProjectServiceImpl implements XjhbProjectService {
 
     @Override
     public int updateByPrimaryKey(XjhbProject record) {
+        XjhbProject xjhbProject = xjhbProjectMapper.selectByPrimaryKey(record.getId());
+        if (!xjhbProject.getApplicationTemplate().equals(record.getApplicationTemplate())) {
+            FileUtil.deleteFile(xjhbProject.getApplicationTemplate());
+        }
         return xjhbProjectMapper.updateByPrimaryKey(record);
     }
 

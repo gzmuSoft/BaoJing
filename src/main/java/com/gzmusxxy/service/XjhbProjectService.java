@@ -2,6 +2,7 @@ package com.gzmusxxy.service;
 
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbProject;
+import java.util.List;
 
 public interface XjhbProjectService {
 
@@ -14,4 +15,6 @@ public interface XjhbProjectService {
     int deleteByPrimaryKey(Integer id);
 
     XjhbProject selectByPrimaryKey(Integer id);
+
+    List<XjhbProject> selectAll();
 }

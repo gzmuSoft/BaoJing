@@ -86,12 +86,12 @@
             <span>首页</span>
     </div>
         </a>
-        <a href="/poverty/apply">
+        <a href="/poverty/usershen">
     <div class="am-menu-column" id="explore">
             <span>申请</span>
     </div>
         </a>
-        <a href="/poverty">
+        <a href="/poverty/record">
     <div class="am-menu-column" id="life">
             <span>记录</span>
     </div>
@@ -124,7 +124,7 @@
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         data.append('type',ext);
         $.ajax({
-        url: '/poverty/upload',
+        url: '/person/upIdCard',
         type: 'POST',
         data: data,
         cache: false,
@@ -153,7 +153,7 @@
 
     $("#submit").click(function(){
 
-        $.post('/poverty/userMsg',
+        $.post('/person/userMsg',
         {
             'name':$('#name').val(),
             'identity':$('#identity').val(),
@@ -163,7 +163,7 @@
             'village':$('#village').val(),
             'idCardFront':front_path,
             'idCardReverse':back_path,
-            //'openid':'10000001'
+            'openid':'10000001'
         },
         function(result){
            // alert("数据: \n" + data + "\n状态: " + status);

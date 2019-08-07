@@ -57,7 +57,7 @@ $(".checkboxOk").click(function(){
 			$(".tishi").html("请阅读后并勾选！")
 		}
 		else{
-			$.post("http://localhost:8083/poverty/informationOk",{},function (result) {
+			$.post("http://localhost:8083/information/informationOk",{},function (result) {
 				window.location.href = "http://localhost:8083/"+result
 			})
 		}

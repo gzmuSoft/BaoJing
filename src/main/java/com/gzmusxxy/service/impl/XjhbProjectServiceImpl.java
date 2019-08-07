@@ -51,4 +51,9 @@ public class XjhbProjectServiceImpl implements XjhbProjectService {
     public XjhbProject selectByPrimaryKey(Integer id) {
         return xjhbProjectMapper.selectByPrimaryKey(id);
     }
+
+    @Override
+    public List<XjhbProject> selectAll() {
+        return xjhbProjectMapper.selectAll();
+    }
 }

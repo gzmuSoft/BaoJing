@@ -1,5 +1,6 @@
 package com.gzmusxxy.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.mapper.XjhbProjectMapper;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -124,7 +127,6 @@ public class AdminController {
     @ResponseBody
     @RequestMapping(value = "/addProject")
     public String addProject(XjhbProject xjhbProject) {
-        System.out.println("sda"+xjhbProject.getApplicationTemplate());
         Integer re = xjhbProjectService.insert(xjhbProject);
         return re.toString();
     }
@@ -136,15 +138,59 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/delProject")
-    public String addProject(int id) {
+    public String delProject(int id) {
         Integer re = xjhbProjectService.deleteByPrimaryKey(id);
         return re.toString();
     }
 
+    @ResponseBody
+    @RequestMapping(value = "/updateProject")
+    public String updateProject(int id){
+        JSONObject json = new JSONObject();
+        XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String startTime = formatter.format(xjhbProject.getStartTime());
+        String endTime = formatter.format(xjhbProject.getEndTime());
+        json.put("project",xjhbProject);
+        json.put("startTime",startTime);
+        json.put("endTime",endTime);
+        return json.toJSONString();
+    }
 
     @ResponseBody
+    @PostMapping(value = "/update")
+    public String update(XjhbProject xjhbProject,String filePath, String fileName){
+        //已经上传文件
+        if (filePath !=null && !filePath.equals("")) {
+            xjhbProject.setApplicationTemplate(filePath);
+            xjhbProject.setApplicationTemplateName(fileName);
+        }
+        Integer re = xjhbProjectService.updateByPrimaryKey(xjhbProject);
+        return re.toString();
+    }
+
+
+    /**
+     * 上传文件
+     * @param file  file
+     * @param path  path
+     * @param type  文件类型
+     * @return
+     */
+    @ResponseBody
     @RequestMapping(value = "/upload")
-    public String upload(@RequestParam("file") MultipartFile file, String type) {
-        return FileUtil.saveFile(file,"/home/fengxin/",type);
+    public String upload(@RequestParam("file") MultipartFile file,String path, String type) {
+        if (path.trim() == null || path.equals("null") || path.equals("")){
+            return FileUtil.saveFile(file,null,type);
+        }
+        return FileUtil.saveFile(file,path,type);
+    }
+
+    @ResponseBody
+    @RequestMapping(value= "/download")
+    public String download(int id, HttpServletRequest request, HttpServletResponse response){
+        XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
+        FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
+        return "";
     }
 }

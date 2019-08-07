@@ -12,10 +12,15 @@ import java.util.UUID;
  * 文件操作工具类
  */
 public class FileUtil {
+
+    public static final String FILE_PATH = "D:\\";
+
+    public static final String FILE_PATH2 = "/home/fengxin/";
+
     /**
      * 保存文件到服务器
      * @param file file
-     * @param path 路径，为空则生成，否则覆盖
+     * @param path file全路径，为空则生成，否则覆盖类型相同者
      * @param type 文件后缀
      * @return
      */
@@ -26,9 +31,10 @@ public class FileUtil {
                 // 文件保存路径
                 String savePath;
                 if (path == null){
-                    savePath ="D:\\" + UUID.randomUUID() + type;
+                    savePath = FILE_PATH + UUID.randomUUID() + type;
                 }else {
-                    savePath = path + UUID.randomUUID() + type;
+                    path = path.substring(0, path.lastIndexOf("."));
+                    savePath = path + type;
                 }
                 System.out.println("文件保存的路径："+savePath);
                 // 转存文件
@@ -39,6 +45,29 @@ public class FileUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * 删除单个文件
+     *
+     * @param fileName
+     *            要删除的文件的路径
+     * @return 单个文件删除成功返回true，否则返回false
+     */
+    public static boolean deleteFile(String fileName) {
+        File file = new File(fileName);
+        // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+        if (file.exists()) {
+            if (file.delete()) {
+                return true;
+            } else {
+                System.out.println("文件删除失败");
+                return false;
+            }
+        } else {
+            System.out.println("删除失败！没找到文件");
+            return false;
+        }
     }
 
     /**

@@ -12,4 +12,6 @@ public interface XjhbProjectService {
     int updateByPrimaryKey(XjhbProject record);
 
     int deleteByPrimaryKey(Integer id);
+
+    XjhbProject selectByPrimaryKey(Integer id);
 }

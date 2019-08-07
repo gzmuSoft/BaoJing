@@ -95,12 +95,17 @@
                         <tr class="success" th:each="project:${projectList}">
                             <th scope="row" th:text="${projectStat.index+1}"></th>
                             <td th:text="${project.projectName}"></td>
-                            <td th:text="${project.applicationTemplateName}"></td>
+                            <td>
+                                <span th:text="${project.applicationTemplateName}"></span>&nbsp;
+                                <span th:if="${project.applicationTemplateName != null && project.applicationTemplateName != ''}">
+                                    <button type="button" class="btn btn-xs" th:value="${project.id}" onclick="download(this)"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></button>
+                                </span>
+                            </td>
                             <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
                             <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
                             <td th:text="${project.period}"></td>
                             <td>
-                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp&nbsp
+                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
                                 <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
                             </td>
                         </tr>
@@ -110,7 +115,7 @@
             </div>
         </div>
 		<!-- 分页 -->
-		<nav class="text-center mt-50">
+		<nav class="text-center mt-100">
 			<ul class="pagination shadowed" style="margin:0">
 				<li>
 					<a href="#">
@@ -135,7 +140,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         <h4 class="modal-title" id="myModalLabel">
                             Modal title
                             <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
@@ -143,6 +148,7 @@
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal">
+                            <input type="hidden" id="projectId">
                         <div class="form-group">
                             <label for="projectName" class="col-sm-2 control-label">项目名称</label>
                             <div class="col-sm-10">
@@ -177,7 +183,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" id="save" class="btn btn-primary">保存</button>
-                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
                     </div>
             </div>
             <!-- /.modal-content -->
@@ -197,7 +203,8 @@
     var flag = null;
     var name = null;
     var filePath = null;
-
+    var yuan_filePath = null;
+    var yuan_fileName = null;
     $('#addProject').click(function(){
         flag = "add";
         $("#myModalLabel").text("创建先建后补项目");
@@ -207,6 +214,37 @@
         flag = "update";
         $("#myModalLabel").text("修改先建后补项目");
         //获取数据显示
+        $.post("/admin/updateProject",
+            {
+                "id":obj.value
+            },
+            function(data){
+                var project = $.parseJSON(data).project;
+                yuan_filePath = project.applicationTemplate;
+                yuan_fileName = project.applicationTemplateName;
+                $('#projectId').val(project.id);
+                $('#projectName').val(project.projectName);
+                $('#startTime').val($.parseJSON(data).startTime);
+                $('#endTime').val($.parseJSON(data).endTime);
+                $('#period').val(project.period);
+                $('#ret').click(function(){
+                    clean();
+                });
+            }),"json";
+    }
+
+    $('#cha').click(function(){
+        clean();
+    });
+
+    function clean(){
+        $('#projectId').val("");
+        $('#projectName').val("");
+        $('#startTime').val("");
+        $('#endTime').val("");
+        $('#period').val("");
+        yuan_filePath = null;
+        yuan_fileName = null;
     }
 
     function del(obj){
@@ -245,12 +283,32 @@
                 }
             });
         }else{
-
+            $.post("/admin/update",
+            {
+                'id':$('#projectId').val(),
+                'projectName':$('#projectName').val(),
+                'applicationTemplate':yuan_filePath,
+                'applicationTemplateName':yuan_fileName,
+                'filePath':filePath,
+                'fileName':name,
+                'startTime':$('#startTime').val(),
+                'endTime':$('#endTime').val(),
+                'period':$('#period').val()
+            },
+            function(data){
+                if(data > 0){
+                    alert("保存成功！");
+                    window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
+                }else{
+                    alert("保存失败！");
+                }
+            });
         }
     });
 
     function saveFile(obj){
         var data = new FormData();
+        data.append('path',filePath);
         data.append('file', obj.files[0]);
         var filename = obj.value;
         var endGang = filename.lastIndexOf('\\');
@@ -258,7 +316,6 @@
         var ext = obj.value.substring(extStart,filename.length);
         data.append('type',ext);
         name = obj.value.substring(endGang+1,filename.length);
-        alert(name);
         $.ajax({
         url: '/admin/upload',
         type: 'POST',
@@ -274,6 +331,10 @@
                 alert("上传失败！");
             }
         });
+    }
+
+    function download(obj){
+        window.location.href="http://127.0.0.1:8083/admin/download?id="+obj.value;
     }
 </script>
 </body>

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.mapper.XjhbProjectMapper;
 import com.gzmusxxy.service.XjhbProjectService;
+import com.gzmusxxy.util.FileUtil;
 import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,13 @@ public class XjhbProjectServiceImpl implements XjhbProjectService {
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
+        XjhbProject xjhbProject = xjhbProjectMapper.selectByPrimaryKey(id);
+        FileUtil.deleteFile(xjhbProject.getApplicationTemplate());
         return xjhbProjectMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public XjhbProject selectByPrimaryKey(Integer id) {
+        return xjhbProjectMapper.selectByPrimaryKey(id);
     }
 }

@@ -1,5 +1,6 @@
 package com.gzmusxxy.controller;
 
+import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.entity.XjhbInformation;
 import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.entity.XjhbProject;
@@ -37,6 +38,7 @@ public class PovertyController {
     @Autowired
     private XjhbPersonService xjhbPersonService;
 
+    @IsLogin
     @RequestMapping(value = {"","/"})
     public String information(HttpSession session) {
         //获取session中的用户openid
@@ -178,10 +180,4 @@ public class PovertyController {
         FileUtil.downloadFile(path,name,request,response);
         return "";
     }
-
-
-
-
-
-
 }

@@ -1,8 +1,10 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.Admin;
-import java.util.List;
+import org.springframework.stereotype.Repository;
 
+import java.util.List;
+@Repository
 public interface AdminMapper {
     int deleteByPrimaryKey(Integer id);
 

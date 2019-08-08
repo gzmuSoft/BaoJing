@@ -11,7 +11,7 @@ public class WxConfig {
 
     public static final String HOST = "https://open.weixin.qq.com/connect/oauth2/authorize?";
 
-    public static final String APPSECRET = "";
+    public static final String APPSECRET = "049013d010a4854e3c1997c93efe6c0e";
 
     //构建微信登录访问地址
     public static String getLoginUrl() {

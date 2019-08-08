@@ -59,8 +59,9 @@ public class AdminController {
         if (id > 0){
             session.setAttribute("admin",adminService.selectByPrimaryKey(id));
             return id.toString();
-        }else
+        }else{
             return "输入的账号或密码错误！";
+        }
     }
 
     @RequestMapping(value = "/index")

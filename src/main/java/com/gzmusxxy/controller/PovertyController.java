@@ -11,6 +11,7 @@ import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,20 +51,25 @@ public class PovertyController {
         return "poverty/index";
     }
 
+
+
+    /**
+    * @File : PovertyController.java
+    * @Description : 转发页面连openid
+    * @Param
+    * @Return
+    * @Author yxf
+    * @Date : 2019/8/9 0:33
+    */
+
+    @IsLogin
     @RequestMapping(value = "/user")
-    public String user() {
+    public String user(HttpSession session,Model model) {
+        String openId =  session.getAttribute("openid").toString();
+        model.addAttribute("openId",openId);
         return "poverty/users";
     }
 
-    @RequestMapping(value = "/usershen")
-    public String usershen() {
-        return "poverty/usershen";
-    }
-
-    @RequestMapping(value = "/information")
-    public String information() {
-        return "poverty/information";
-    }
 
     /**
      * @File : PovertyController.java
@@ -73,12 +79,24 @@ public class PovertyController {
      * @Author yxf
      * @Date : 2019/8/6 0:15
      */
-    @RequestMapping(value = "/findProjectName")
-    public String findProjectName(Model model){
+    @IsLogin
+    @RequestMapping(value = "/usershen")
+    public String usershen(Model model,HttpSession session) {
+        String openId =  session.getAttribute("openid").toString();
+        model.addAttribute("openId",openId);
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
         List<XjhbProject> list = xjhbProjectService.selectAll();
         model.addAttribute("projectList",list);
+        model.addAttribute("person",person);
         return "poverty/usershen";
     }
+
+    @RequestMapping(value = "/information")
+    public String information() {
+        return "poverty/information";
+    }
+
+
 
 
     /**
@@ -94,12 +112,12 @@ public class PovertyController {
     @RequestMapping(value = "/upIdCard")
     public String upIdCard(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {
         if (backPath != null && frontPath != null) {
-            return FileUtil.saveFile(file,null, type);
+            return FileUtil.saveFile(file,null, type,FileUtil.FILE_PATH);
         }else {
             if (backPath != null ) {
-                return FileUtil.saveFile(file,backPath,type);
+                return FileUtil.saveFile(file,backPath,type,FileUtil.FILE_PATH);
             }else{
-                return FileUtil.saveFile(file,frontPath,type);}
+                return FileUtil.saveFile(file,frontPath,type,FileUtil.FILE_PATH);}
         }
     }
 
@@ -125,10 +143,9 @@ public class PovertyController {
         xjhbPerson.setIdCardFront(xjhbPerson.getIdCardFront());
         xjhbPerson.setIdCardReverse(xjhbPerson.getIdCardReverse());
         xjhbPersonService.insert(xjhbPerson);
-        System.out.println("地址="+xjhbPerson.getIdCardFront()+"..."+xjhbPerson.getIdCardReverse());
-        System.out.println(xjhbPerson);
         return "poverty/usershen";
     }
+
 
     @ResponseBody
     @RequestMapping(value = "/informationOk")
@@ -141,7 +158,7 @@ public class PovertyController {
      * */
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
-    public String saveInformation(XjhbInformation xjhbInformation){
+    public String saveInformation(XjhbInformation xjhbInformation, HttpSession session){
         Date date = new Date();
         xjhbInformation.setCreateTime(date);
         xjhbInformationService.saveInformation(xjhbInformation);
@@ -159,8 +176,34 @@ public class PovertyController {
      */
     @ResponseBody
     @RequestMapping(value = "/upProjectBook")
-    public String upProjectBook(@RequestParam("file") MultipartFile file, String projectPath, String type) {
-        return "";
+    public String upProjectBook(@RequestParam("file") MultipartFile file,String projectPath, String type) {
+        System.out.println(projectPath+"."+type);
+        if (projectPath != null ) {
+            return FileUtil.saveFile(file,projectPath, type,FileUtil.PROJECT_FILE_PATH);
+        }else {
+            return FileUtil.saveFile(file,null, type,FileUtil.PROJECT_FILE_PATH);
+        }
+
+    }
+
+    /**
+     * @File : PovertyController.java
+     * @Description : 上传其他材料
+     * @Param [file, projectPath, type]
+     * @Return java.lang.String
+     * @Author yxf
+     * @Date : 2019/8/6 0:06
+     */
+    @ResponseBody
+    @RequestMapping(value = "/upOther")
+    public String upOther(@RequestParam("file") MultipartFile file,String otherPath, String type) {
+        System.out.println(otherPath+"."+type);
+        if (otherPath != null ) {
+            return FileUtil.saveFile(file,otherPath, type,FileUtil.OTHER_FILE_PATH);
+        }else {
+            return FileUtil.saveFile(file,null, type,FileUtil.OTHER_FILE_PATH);
+        }
+
     }
 
     /**

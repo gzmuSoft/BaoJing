@@ -18,13 +18,13 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.XjhbPerson">
-    insert into xjhb_person (id, name, identity, 
-      telphone, village, create_time, 
-      one_card_solution, id_card_front, id_card_reverse, 
+    insert into xjhb_person (id, name, identity,
+      telphone, village, create_time,
+      one_card_solution, id_card_front, id_card_reverse,
       openId)
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR}, 
-      #{telphone,jdbcType=VARCHAR}, #{village,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{oneCardSolution,jdbcType=VARCHAR}, #{idCardFront,jdbcType=VARCHAR}, #{idCardReverse,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR},
+      #{telphone,jdbcType=VARCHAR}, #{village,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{oneCardSolution,jdbcType=VARCHAR}, #{idCardFront,jdbcType=VARCHAR}, #{idCardReverse,jdbcType=VARCHAR},
       #{openid,jdbcType=VARCHAR})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbPerson">
@@ -41,13 +41,20 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front, 
+    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
     id_card_reverse, openId
     from xjhb_person
     where id = #{id,jdbcType=INTEGER}
   </select>
+
+  <select id="findPersonByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
+    id_card_reverse, openId
+    from xjhb_person
+    where openId = #{openid,jdbcType=VARCHAR}
+  </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front, 
+    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
     id_card_reverse, openId
     from xjhb_person
   </select>

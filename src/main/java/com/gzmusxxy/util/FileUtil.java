@@ -15,6 +15,14 @@ public class FileUtil {
 
     public static final String FILE_PATH = "D:\\";
 
+    //项目申请书模板上传到本地路径
+    public static final String PROJECT_FILE_PATH = "D:\\projectBook\\";
+
+    //项目申请书模板下载上传
+    public static final String DOWN_PROJECT_FILE_PATH = "****";
+    //其他证明材料上传路径
+    public static final String OTHER_FILE_PATH = "D:\\projectBook\\";
+
     public static final String FILE_PATH2 = "/home/fengxin/";
 
     /**
@@ -24,14 +32,14 @@ public class FileUtil {
      * @param type 文件后缀
      * @return
      */
-    public static String saveFile(MultipartFile file, String path, String type){
+    public static String saveFile(MultipartFile file, String path, String type ,String localPath){
         // 判断文件是否为空
         if (!file.isEmpty()) {
             try {
                 // 文件保存路径
                 String savePath;
                 if (path == null){
-                    savePath = FILE_PATH + UUID.randomUUID() + type;
+                    savePath = localPath + UUID.randomUUID() + type;
                 }else {
                     path = path.substring(0, path.lastIndexOf("."));
                     savePath = path + type;

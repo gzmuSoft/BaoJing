@@ -6,4 +6,6 @@ import com.gzmusxxy.entity.XjhbPerson;
 public interface XjhbPersonService {
 
     int insert(XjhbPerson record);
+
+    XjhbPerson findPersonByOpenId(String openId);
 }

@@ -57,9 +57,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="other" class="col-sm-2 control-label">其他证明材料：</label>
+                    <label for="identify_other" class="col-sm-2 control-label">其他证明材料：</label>
                     <div class="col-sm-10">
-                        <input type="file" name="other" id="other" onchange="saveFile(this)">
+                        <input type="file" name="identify_other" id="identify_other" onchange="upOtherFile(this)">
                     </div>
                 </div>
 
@@ -70,9 +70,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="upFile" class="col-sm-2 control-label">项目申请书上传：</label>
+                    <label for="identify_project" class="col-sm-2 control-label">项目申请书上传：</label>
                     <div class="col-sm-10">
-                        <input type="file" name="upFile" id="upFile" onchange="upFile(this)">
+                        <input type="file" name="identify_project" id="identify_project" onchange="upFile(this)">
                     </div>
                 </div>
                 <div class="form-group">
@@ -113,22 +113,93 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
-<script>
+<script  th:inline="javascript">
+
+    var project_path = null;
+    var other_path = null;
+    function upOtherFile(obj){
+        var data = new FormData();
+        data.append('file', obj.files[0]);
+        if(other_path != null && obj.id == 'identify_other'){
+            data.append('projectPath',other_path);
+        }
+        //判断类型
+        var filename = obj.value;
+        extStart = filename.lastIndexOf('.');
+        ext = obj.value.substring(extStart,filename.length).toUpperCase();
+        data.append('type',ext);
+        console.log(data)
+        $.ajax({
+            url: '/poverty/upOther',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
+
+                alert("上传成功！");
+                if(obj.id == 'identify_other'){
+                    other_path=result;
+                }
+            },
+            error:function(result){
+                alert("上传失败！");
+            }
+        });
+    };
+    function upFile(obj){
+        var data = new FormData();
+        data.append('file', obj.files[0]);
+        if(project_path != null && obj.id == 'identify_project'){
+            data.append('projectPath',project_path);
+        }
+        //判断类型
+        var filename = obj.value;
+        extStart = filename.lastIndexOf('.');
+        ext = obj.value.substring(extStart,filename.length).toUpperCase();
+        data.append('type',ext);
+        console.log(data)
+        $.ajax({
+            url: '/poverty/upProjectBook',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
+
+                alert("上传成功！");
+                if(obj.id == 'identify_project'){
+                    project_path=result;
+                }
+            },
+            error:function(result){
+                alert("上传失败！");
+            }
+        });
+    };
+
+    $("#downloadFile").click(function(){
+        window.location.href="http://127.0.0.1:8083/poverty/download?path=null";
+    });
 
     $("#tijiao").click(function () {
+
+        $.post("/poverty/findPersonId")
 
        var datas =  {
             "projectId":$("#select").val(),
             "outlay":$("#outlay").val(),
             "startTime":$("#startTime").val(),
             "endTime":$("#endTime").val(),
-            "oneCardSolution":"11",
+            "oneCardSolution":"一卡通",
             "otherProofName":"材料名字",
             "otherProof":"11",
-            "projectApplication":"11",
-            "personId":"",
+            "projectApplication":project_path,
+            "personId":[[${person.id}]],
             "createTime":"",
-           "stutas":""
+            "stutas":""
         }
         console.log(datas)
         $.post("/poverty/saveInformation",datas
@@ -143,6 +214,8 @@
 
 
     });
+
+
 
 
 

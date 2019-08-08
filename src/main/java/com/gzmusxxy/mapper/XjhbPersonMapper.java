@@ -14,4 +14,6 @@ public interface XjhbPersonMapper {
     List<XjhbPerson> selectAll();
 
     int updateByPrimaryKey(XjhbPerson record);
+
+    XjhbPerson findPersonByOpenId(String openId);
 }

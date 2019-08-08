@@ -23,4 +23,9 @@ public class XjhbPersonServiceImpl implements XjhbPersonService {
         return xjhbPersonMapper.insert(record);
     }
 
+    @Override
+    public XjhbPerson findPersonByOpenId(String openId) {
+        return xjhbPersonMapper.findPersonByOpenId(openId);
+    }
+
 }

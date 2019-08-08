@@ -60,9 +60,7 @@
                     <div class="col-sm-10">
                         <input   type="file" name="identify_front" id="identify_front" onchange="saveFile(this)">
                     </div>
-                    <div class="col-sm-10">
-                        <input type="button" value="下载文件" name="downloadFile" id="downloadFile">
-                    </div>
+
                 </div>
                 <div class="form-group">
                     <label for="identify_back" class="col-sm-2 control-label">身份证反面（个人信息的一面）：</label>
@@ -106,7 +104,7 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
-<script>
+<script th:inline="javascript">
     var front_path = null;
     var back_path = null;
     function saveFile(obj){
@@ -145,9 +143,7 @@
         });
     }
 
-    $("#downloadFile").click(function(){
-        window.location.href="http://127.0.0.1:8083/poverty/download?path="+front_path;
-    });
+
 
 
 
@@ -163,7 +159,7 @@
             'village':$('#village').val(),
             'idCardFront':front_path,
             'idCardReverse':back_path,
-            'openid':'10000001'
+            'openid':[[${openId}]]
         },
         function(result){
            // alert("数据: \n" + data + "\n状态: " + status);

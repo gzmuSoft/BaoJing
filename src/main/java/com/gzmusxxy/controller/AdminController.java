@@ -255,9 +255,9 @@ public class AdminController {
     @RequestMapping(value = "/upload")
     public String upload(@RequestParam("file") MultipartFile file,String path, String type) {
         if (path.trim() == null || path.equals("null") || path.equals("")){
-            return FileUtil.saveFile(file,null,type);
+            return FileUtil.saveFile(file,null,type,FileUtil.DOWN_PROJECT_FILE_PATH);
         }
-        return FileUtil.saveFile(file,path,type);
+        return FileUtil.saveFile(file,path,type,FileUtil.DOWN_PROJECT_FILE_PATH);
     }
 
     /**

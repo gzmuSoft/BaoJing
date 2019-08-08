@@ -1,7 +1,7 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.XjhbInformation;
-import org.springframework.stereotype.Controller;
+import com.gzmusxxy.entity.XjhbProject;
 
 import java.util.List;
 
@@ -15,4 +15,6 @@ public interface XjhbInformationMapper {
     List<XjhbInformation> selectAll();
 
     int updateByPrimaryKey(XjhbInformation record);
+
+    List<XjhbInformation> selectInformationByProjectLike(XjhbProject records);
 }

@@ -1,7 +1,6 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.XjhbPerson;
-import org.springframework.stereotype.Controller;
 
 import java.util.List;
 

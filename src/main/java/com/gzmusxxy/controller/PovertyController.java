@@ -143,7 +143,7 @@ public class PovertyController {
     @RequestMapping(value = "/saveInformation")
     public String saveInformation(XjhbInformation xjhbInformation){
         Date date = new Date();
-        xjhbInformation.setCreateTime(date.toString());
+        xjhbInformation.setCreateTime(date);
         xjhbInformationService.saveInformation(xjhbInformation);
         System.out.println(xjhbInformation);
         return "";

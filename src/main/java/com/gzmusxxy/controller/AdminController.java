@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.Admin;
 import com.gzmusxxy.entity.XjhbProject;
-import com.gzmusxxy.mapper.XjhbProjectMapper;
 import com.gzmusxxy.service.AdminService;
 import com.gzmusxxy.service.XjhbProjectService;
 import com.gzmusxxy.util.FileUtil;
@@ -15,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -41,6 +39,11 @@ public class AdminController {
         return "admin/login";
     }
 
+    /**
+     * 更新admin信息
+     * @param admin
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/updateMsg")
     public String updateMsg(Admin admin){
@@ -52,6 +55,13 @@ public class AdminController {
         return re.toString();
     }
 
+    /**
+     * 验证登录
+     * @param username
+     * @param password
+     * @param session
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/verify")
     public String verify(String username, String password, HttpSession session) {
@@ -70,9 +80,11 @@ public class AdminController {
     }
 
     /**
-     * 项目管理
-     * @param model
-     * @return
+     * 查询加分页
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return admin/xjhb_project
      */
     @RequestMapping(value = "/xjhbProject")
     public String xjhbProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
@@ -120,10 +132,12 @@ public class AdminController {
     /**
      * 申请书管理
      * @param model
+     * @param name
+     * @param pageNumber
      * @return
      */
     @RequestMapping(value = "/xjhbApply")
-    public String xjhbApply(Model model){
+    public String xjhbApply(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         return "admin/xjhb_apply";
     }
 
@@ -139,8 +153,8 @@ public class AdminController {
 
     /**
      * 验收通过查看
-     * @param model
-     * @return
+     * @param model model
+     * @return return
      */
     @RequestMapping(value = "/xjhbAdopt")
     public String xjhbAdopt(Model model){
@@ -149,8 +163,8 @@ public class AdminController {
 
     /**
      * 管理员信息管理
-     * @param model
-     * @return
+     * @param model model
+     * @return return
      */
     @RequestMapping(value = "/message")
     public String message(Model model){
@@ -159,7 +173,7 @@ public class AdminController {
 
     /**
      * 处理前台时间传到后台的格式
-     * @param binder
+     * @param binder binder
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder){
@@ -169,8 +183,8 @@ public class AdminController {
 
     /**
      * 添加项目
-     * @param xjhbProject
-     * @return
+     * @param xjhbProject xjhbProject
+     * @return return
      */
     @ResponseBody
     @RequestMapping(value = "/addProject")
@@ -180,9 +194,9 @@ public class AdminController {
     }
 
     /**
-     * 删除项目
-     * @param id
-     * @return
+     * 根据id删除项目
+     * @param id id
+     * @return return
      */
     @ResponseBody
     @PostMapping(value = "/delProject")
@@ -191,6 +205,11 @@ public class AdminController {
         return re.toString();
     }
 
+    /**
+     * 获取项目id
+     * @param id id
+     * @return return
+     */
     @ResponseBody
     @RequestMapping(value = "/updateProject")
     public String updateProject(int id){
@@ -205,6 +224,13 @@ public class AdminController {
         return json.toJSONString();
     }
 
+    /**
+     * 更新项目
+     * @param xjhbProject xjhbProject
+     * @param filePath filePath
+     * @param fileName fileName
+     * @return return
+     */
     @ResponseBody
     @PostMapping(value = "/update")
     public String update(XjhbProject xjhbProject,String filePath, String fileName){
@@ -219,11 +245,11 @@ public class AdminController {
 
 
     /**
-     * 上传文件
+     * 上传文件（通用）
      * @param file  file
      * @param path  path
      * @param type  文件类型
-     * @return
+     * @return return
      */
     @ResponseBody
     @RequestMapping(value = "/upload")
@@ -234,6 +260,13 @@ public class AdminController {
         return FileUtil.saveFile(file,path,type);
     }
 
+    /**
+     * 下载项目模板文件
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
     @ResponseBody
     @RequestMapping(value= "/download")
     public String download(int id, HttpServletRequest request, HttpServletResponse response){

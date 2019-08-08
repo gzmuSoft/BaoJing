@@ -24,7 +24,7 @@ public class WeChatController {
     private RestTemplate restTemplate;
 
     /**
-     * 微信登录重定向
+     * 微信登录重定向，跳转到微信登录页面
      * @return
      */
     @RequestMapping(value = "/redirect")
@@ -33,6 +33,13 @@ public class WeChatController {
         return "redirect:"+ WxConfig.getLoginUrl();
     }
 
+    /**
+     * 微信登录解析
+     * @param weChat
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = {"","/"})
     public String WechatRedirect(WeChat weChat, Model model, HttpSession session){
         //获取授权代码
@@ -53,7 +60,6 @@ public class WeChatController {
             }
             //成功获取用户openid
             String openId = parse.get("openid").toString();
-            System.out.println("设置之前"+openId);
             //将用户openid保存到session
             session.setAttribute("openid",openId);
             //回到首页
@@ -63,6 +69,11 @@ public class WeChatController {
             return "wechat/msg";
         }
     }
+
+    /**
+     * 微信接口验证
+     * @return
+     */
     @RequestMapping(value = "MP_verify_spcLemLRmu9e3Md7.txt")
     public String verify(){
         return "wechat/verify";

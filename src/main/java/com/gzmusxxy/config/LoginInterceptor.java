@@ -24,7 +24,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             if(isLogin != null){
                 //存在注解则判断登录章台
                 String openid = (String)request.getSession().getAttribute("openid");
-                System.out.println("openId="+openid);
                 if(openid != null && !openid.trim().equals("")){
                     return true;
                 }else{

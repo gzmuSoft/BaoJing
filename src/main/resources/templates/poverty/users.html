@@ -124,7 +124,7 @@
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         data.append('type',ext);
         $.ajax({
-        url: '/person/upIdCard',
+        url: '/poverty/upIdCard',
         type: 'POST',
         data: data,
         cache: false,
@@ -153,7 +153,7 @@
 
     $("#submit").click(function(){
 
-        $.post('/person/userMsg',
+        $.post('/poverty/userMsg',
         {
             'name':$('#name').val(),
             'identity':$('#identity').val(),

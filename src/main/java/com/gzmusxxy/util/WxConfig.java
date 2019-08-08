@@ -7,7 +7,7 @@ public class WxConfig {
     //微信公众号开发者ID
     public static final String APPID = "wx71c419649472ae20";
     //回调地址
-    public static final String REDIRECT_URL = "http://bjglpt.cn/phpapp";
+    public static final String REDIRECT_URL = "http://bjglpt.cn/wechat";
 
     public static final String HOST = "https://open.weixin.qq.com/connect/oauth2/authorize?";
 

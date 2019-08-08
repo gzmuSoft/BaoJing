@@ -29,7 +29,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     return true;
                 }else{
                     //若未登录重定向到登陆页面
-                    response.sendRedirect("/wechat");
+                    response.sendRedirect("/wechat/redirect");
                     return false;
                 }
             }else{

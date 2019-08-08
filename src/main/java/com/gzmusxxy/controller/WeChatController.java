@@ -27,12 +27,13 @@ public class WeChatController {
      * 微信登录重定向
      * @return
      */
-    @RequestMapping(value = {"","/"})
+    @RequestMapping(value = "/redirect")
     public String Index(){
         //获得微信用户登录链接,重定向
         return "redirect:"+ WxConfig.getLoginUrl();
     }
-    @RequestMapping(value = "/redirect")
+
+    @RequestMapping(value = {"","/"})
     public String WechatRedirect(WeChat weChat, Model model, HttpSession session){
         //获取授权代码
         String code = weChat.getCode();
@@ -48,7 +49,7 @@ public class WeChatController {
             if(parse.containsKey("errcode")){
                 String errmsg = parse.get("errcode").toString()+parse.get("errmsg").toString();
                 model.addAttribute("msg",errmsg);
-                return "poverty/msg";
+                return "wechat/msg";
             }
             //成功获取用户openid
             String openId = parse.get("openid").toString();
@@ -59,7 +60,11 @@ public class WeChatController {
             return "redirect:/poverty";
         }else{
             model.addAttribute("msg","登录失败，请重试！");
-            return "poverty/msg";
+            return "wechat/msg";
         }
+    }
+    @RequestMapping(value = "MP_verify_spcLemLRmu9e3Md7.txt")
+    public String verify(){
+        return "wechat/verify";
     }
 }

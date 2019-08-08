@@ -76,8 +76,43 @@ public class AdminController {
     @RequestMapping(value = "/xjhbProject")
     public String xjhbProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
-        model.addAttribute("projectList",pageInfo.getList());
-        model.addAttribute("pageNumber",pageNumber);
+        //固定5页
+        final int page = 5;
+        int numPage[];
+        //总共页数
+        int pageCount = pageInfo.getPages();
+        //判断是否需要省略
+        if (pageCount > page) {
+            numPage = new int[page];
+            //两边都可以显示
+            if (pageNumber - 2 > 0 && pageCount - 2 >= pageNumber) {
+                for (int i = 0; i < numPage.length; i++) {
+                    numPage[i] = pageNumber - 2 + i;
+                }
+            }else if (pageNumber - 2 > 0 && pageCount - 2 < pageNumber){
+                //前面可以显示 后面不够
+                for (int i = numPage.length-1; i >= 0; i--) {
+                    numPage[i] = pageCount--;
+                }
+            }else {
+                //后面可以显示 前面不够
+                for (int i = 0; i < numPage.length; i++) {
+                    numPage[i] = i + 1;
+                }
+            }
+        }else {
+            numPage = new int[pageCount];
+            for (int i = 0; i < numPage.length; i++) {
+                numPage[i] = i + 1;
+            }
+        }
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",numPage);
         return "admin/xjhb_project";
     }
 

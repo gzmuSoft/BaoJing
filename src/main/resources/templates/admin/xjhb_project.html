@@ -43,8 +43,9 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
 			<h1>项目管理</h1>
-			<form id="cm-search" action="/admin/xjhbProject?pageNumber=1" method="get">
-				<input type="search" name="name" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			<form id="cm-search" action="/admin/xjhbProject" method="get">
+                <input type="hidden" name="pageNumber" value="1">
+				<input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
 			</form>
 		</div>
 		<!-- 查询按钮 -->
@@ -74,11 +75,11 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Tables with contextual classes</div>
+                    <div class="panel-heading">先建后补项目管理</div>
                     <div class="panel-body">
 						<button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加项目</button>
                     </div>
-                    <input type="hidden" th:value="${pageNumber}" id="pageNumber"/>
+                    <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
                     <table class="table text-center table-hover">
                         <thead>
                         <tr>
@@ -92,23 +93,23 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="success" th:each="project:${projectList}">
-                            <th scope="row" th:text="${projectStat.index+1}"></th>
-                            <td th:text="${project.projectName}"></td>
-                            <td>
-                                <span th:text="${project.applicationTemplateName}"></span>&nbsp;
-                                <span th:if="${project.applicationTemplateName != null && project.applicationTemplateName != ''}">
-                                    <button type="button" class="btn btn-xs" th:value="${project.id}" onclick="download(this)"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></button>
-                                </span>
-                            </td>
-                            <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${project.period}"></td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
-                                <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
-                            </td>
-                        </tr>
+                            <tr class="success" th:each="project:${pageInfo.list}">
+                                <th scope="row" th:text="${projectStat.index+1}"></th>
+                                <td th:text="${project.projectName}"></td>
+                                <td>
+                                    <div th:if="${project.applicationTemplateName != null && project.applicationTemplateName != 'null' && project.applicationTemplateName != ''}">
+                                        <span th:text="${project.applicationTemplateName}"></span>&nbsp;
+                                        <a th:href="@{'/admin/download?id='+${project.id}}" th:value="${project.id}" onclick="download(this)"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                    </div>
+                                </td>
+                                <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
+                                <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
+                                <td th:text="${project.period}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
+                                    <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -117,21 +118,30 @@
 		<!-- 分页 -->
 		<nav class="text-center mt-100">
 			<ul class="pagination shadowed" style="margin:0">
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage > 0}">
+					<a th:href="@{'/admin/xjhbProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li>
-					<a href="#">
-						<span><i class="fa fa-angle-right"></i></span>
-					</a>
-				</li>
+                <li th:if="${pageInfo.prePage <= 0}">
+                    <a>
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+				<li th:each="num:${pages}">
+                    <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+                    <a th:href="@{'/admin/xjhbProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                </li>
+                <li th:if="${pageInfo.nextPage <= 0}">
+                    <a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.nextPage > 0}">
+                    <a th:href="@{'/admin/xjhbProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
 			</ul>
 		</nav>
     </div>
@@ -200,16 +210,25 @@
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
 <script>
+    //给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    //搜索栏有数据则打开
+    if($("#selectName").val() != null && $("#selectName").val() != ''){
+        $("#cm-search").addClass("open");
+    }
     var flag = null;
     var name = null;
     var filePath = null;
     var yuan_filePath = null;
     var yuan_fileName = null;
+
+    //判断是增加还是修改
     $('#addProject').click(function(){
         flag = "add";
         $("#myModalLabel").text("创建先建后补项目");
     });
 
+    //获取要更新数据
     function update(obj){
         flag = "update";
         $("#myModalLabel").text("修改先建后补项目");
@@ -233,10 +252,12 @@
             }),"json";
     }
 
+    //点cha之后重置数据
     $('#cha').click(function(){
         clean();
     });
 
+    //重置数据
     function clean(){
         $('#projectId').val("");
         $('#projectName').val("");
@@ -247,6 +268,7 @@
         yuan_fileName = null;
     }
 
+    //删除
     function del(obj){
         if(confirm("确认是否删除?")){
             $.post("/admin/delProject",
@@ -263,6 +285,7 @@
         }
     }
 
+    //添加和修改
     $('#save').click(function(){
         if(flag == "add"){
             $.post("/admin/addProject",
@@ -306,6 +329,7 @@
         }
     });
 
+    //保存文件
     function saveFile(obj){
         var data = new FormData();
         data.append('path',filePath);
@@ -331,10 +355,6 @@
                 alert("上传失败！");
             }
         });
-    }
-
-    function download(obj){
-        window.location.href="http://127.0.0.1:8083/admin/download?id="+obj.value;
     }
 </script>
 </body>

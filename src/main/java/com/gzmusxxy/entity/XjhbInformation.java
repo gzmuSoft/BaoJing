@@ -15,6 +15,8 @@ public class XjhbInformation {
 
     private Date endTime;
 
+    private String oneCardSolution;
+
     private String otherProofName;
 
     private String otherProof;
@@ -23,7 +25,9 @@ public class XjhbInformation {
 
     private Integer personId;
 
-    private String createTime;
+    private Date createTime;
+
+    private Byte status;
 
 
 }

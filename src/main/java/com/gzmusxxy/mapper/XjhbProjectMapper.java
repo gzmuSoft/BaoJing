@@ -4,7 +4,7 @@ import com.gzmusxxy.entity.XjhbProject;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-@Controller
+
 public interface XjhbProjectMapper {
     int deleteByPrimaryKey(Integer id);
 

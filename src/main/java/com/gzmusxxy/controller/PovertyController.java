@@ -112,6 +112,7 @@ public class PovertyController {
      * @Date : 2019/8/6 0:01
      */
 
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/userMsg")
     public String userMsg(XjhbPerson xjhbPerson, HttpSession session) {

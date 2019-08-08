@@ -71,11 +71,24 @@ public class WeChatController {
     }
 
     /**
-     * 微信接口验证
+     * 微信接口验证方法
      * @return
      */
     @RequestMapping(value = "MP_verify_spcLemLRmu9e3Md7.txt")
     public String verify(){
         return "wechat/verify";
+    }
+
+    /**
+     * 设置用于测试的openid
+     * @param model
+     * @param session
+     * @return
+     */
+    @RequestMapping(value = "/demo")
+    public String setTestSession(Model model,HttpSession session){
+        session.setAttribute("openid","oP1se1IxKwG6Su0y6K4Q-_3pkN_Y");
+        model.addAttribute("msg","设置的openid为："+session.getAttribute("openid"));
+        return "wechat/msg";
     }
 }

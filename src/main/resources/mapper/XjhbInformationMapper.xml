@@ -61,9 +61,11 @@
     status
     from xjhb_information
   </select>
-  <select id="findInfobyPersonId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+
+  <select id="findInfobyPersonId" resultMap="BaseResultMap">
     select id, project_id, outlay, start_time, end_time, one_card_solution, other_proof_name,
-    other_proof, project_application,project_application_name, person_id, create_time, status
+    other_proof, project_application, project_application_name, person_id, create_time,
+    status
     from xjhb_information
     where person_id = #{id,jdbcType=INTEGER}
   </select>

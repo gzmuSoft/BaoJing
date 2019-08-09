@@ -3,6 +3,8 @@ package com.gzmusxxy.service;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbInformation;
 
+import java.util.List;
+
 public interface XjhbInformationService {
 
     /**
@@ -12,7 +14,7 @@ public interface XjhbInformationService {
 
     PageInfo<XjhbInformation> selectInformationByNameLike(String name, Integer pageNumber);
 
-    XjhbInformation findInfobyPersonId(int personId);
+    List<XjhbInformation> findInfobyPersonId(int personId);
 
     int updateByPrimaryKey(XjhbInformation record);
 

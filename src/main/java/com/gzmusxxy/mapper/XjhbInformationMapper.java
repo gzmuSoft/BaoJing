@@ -18,5 +18,5 @@ public interface XjhbInformationMapper {
 
     List<XjhbInformation> selectInformationByNameLike(String name);
 
-    XjhbInformation findInfobyPersonId(int personId);
+    List<XjhbInformation> findInfobyPersonId(int personId);
 }

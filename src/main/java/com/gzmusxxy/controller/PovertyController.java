@@ -11,7 +11,6 @@ import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -46,9 +45,16 @@ public class PovertyController {
         System.out.println(session.getAttribute("openid"));
         return "poverty/information";
     }
-    @RequestMapping(value = "/index")
-    public String index() {
-        return "poverty/index";
+
+    @IsLogin
+    @RequestMapping(value = "/audit")
+    public String audit(HttpSession session,Model model) {
+        String openId = session.getAttribute("openid").toString();
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+        List<XjhbInformation> xjhbInformationList= xjhbInformationService.findInfobyPersonId(person.getId());
+        model.addAttribute("person",person);
+        model.addAttribute("xjhbInformationList",xjhbInformationList);
+        return "poverty/audit";
     }
 
 
@@ -87,17 +93,6 @@ public class PovertyController {
         model.addAttribute("openId",openId);
         List<XjhbProject> list = xjhbProjectService.selectAll();
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
-        XjhbInformation information = new XjhbInformation();
-        XjhbInformation findInformation = xjhbInformationService.findInfobyPersonId(person.getId());
-        if(findInformation != null){
-            information = findInformation;
-        }
-        else{
-
-            information.setPersonId(person.getId());
-            xjhbInformationService.saveInformation(information);
-        }
-        model.addAttribute("information",information);
         model.addAttribute("person",person);
         model.addAttribute("projectList",list);
         return "poverty/usershen";
@@ -191,24 +186,13 @@ public class PovertyController {
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
-    public String saveInformation(XjhbInformation xjhbInformation, HttpSession session){
-        String openId = session.getAttribute("openid").toString();
-        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
-        XjhbInformation information = xjhbInformationService.findInfobyPersonId(person.getId());
-        if(information.getCreateTime() == null){
-            Date date = new Date();
-            xjhbInformation.setCreateTime(date);
-            xjhbInformationService.saveInformation(xjhbInformation);
-        }
-        if (information.getCreateTime() != null){
-            Date startTime = information.getStartTime();
-            Date endTime = information.getEndTime();
-            information.setStartTime(startTime);
-            information.setEndTime(endTime);
-            xjhbInformationService.updateByPrimaryKey(information);
-        }
+    public String saveInformation(XjhbInformation xjhbInformation){
+        Date date = new Date();
+        xjhbInformation.setCreateTime(date);
+        xjhbInformation.setStatus((byte)1);
+        xjhbInformationService.saveInformation(xjhbInformation);
 
-        return "";
+        return "poverty/audit";
     }
 
     /**

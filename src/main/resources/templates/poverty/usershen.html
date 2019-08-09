@@ -86,24 +86,19 @@
 </div>
 <!--底部导航条-->
 <footer class="am-menu am-cf">
-    <a href="/poverty/index">
-        <div class="am-menu-column" id="index">
-            <span>首页</span>
+    <a href="/poverty/usershen">
+        <div class="am-menu-column" id="explore" style="width: 33%;">
+            <span>项目申请</span>
         </div>
     </a>
-    <a href="/poverty/apply">
-        <div class="am-menu-column" id="explore">
-            <span>申请</span>
-        </div>
-    </a>
-    <a href="/poverty">
-        <div class="am-menu-column" id="life">
-            <span>记录</span>
+    <a href="/poverty/audit">
+        <div class="am-menu-column" id="index" style="width: 33%;">
+            <span>项目进度</span>
         </div>
     </a>
     <a href="/poverty/user">
-        <div class="am-menu-column active" id="my">
-            <span>我的</span>
+        <div class="am-menu-column active" id="my" style="width: 33%;">
+            <span>我的资料</span>
         </div>
     </a>
 </footer>
@@ -115,22 +110,12 @@
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script  th:inline="javascript">
 
-    $(function () {
-        if([[${information.id}]] != null){
-            $("#select").val([[${information.projectId}]])
-            $("#outlay").val([[${information.outlay}]])
-            $("#startTime").val([[${information.startTime}]])
-            $("#endTime").val([[${information.endTime}]])
-            $("#oneCardSolution").val([[${person.oneCardSolution}]])
 
-        }
 
-    });
-
-    var project_path = [[${information.projectApplication}]];
-    var other_path = [[${information.otherProof}]];
-    var other_file_name = [[${information.otherProofName}]];
-    var project_file_name = [[${information.projectApplicationName}]];
+    var project_path = null;
+    var other_path = null;
+    var other_file_name = null;
+    var project_file_name = null;
     function upOtherFile(obj){
         var data = new FormData();
         data.append('file', obj.files[0]);
@@ -225,8 +210,7 @@
         $.post("/poverty/saveInformation",datas
        ,
         function(result) {
-
-            console.log(result)
+            window.location.href="http://localhost:8083/"+result;
         }
 
         )

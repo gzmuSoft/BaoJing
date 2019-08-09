@@ -129,6 +129,8 @@
 
     var project_path = null;
     var other_path = null;
+    var other_file_name = null;
+    var project_file_name = null;
     function upOtherFile(obj){
         var data = new FormData();
         data.append('file', obj.files[0]);
@@ -137,8 +139,11 @@
         }
         //判断类型
         var filename = obj.value;
+
         extStart = filename.lastIndexOf('.');
+        otherFileNameStart = filename.lastIndexOf('\\');
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
+        other_file_name = obj.value.substring(otherFileNameStart,extStart)
         data.append('type',ext);
         console.log(data)
         $.ajax({
@@ -171,7 +176,9 @@
         var filename = obj.value;
         console.log(filename)
         extStart = filename.lastIndexOf('.');
+        projectFileNameStart = filename.lastIndexOf('\\');
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
+        project_file_name = obj.value.substring(otherFileNameStart,extStart)
         data.append('type',ext);
         console.log(data)
         $.ajax({
@@ -208,9 +215,9 @@
             "startTime":$("#startTime").val(),
             "endTime":$("#endTime").val(),
             "oneCardSolution":[[${person.oneCardSolution}]],
-            "otherProofName":"其他材料名字",
+            "otherProofName":other_file_name,
             "otherProof":other_path,
-            "projectApplicationName":"申请书名字",
+            "projectApplicationName":project_file_name,
             "projectApplication":project_path,
             "personId":[[${person.id}]],
             "createTime":"",

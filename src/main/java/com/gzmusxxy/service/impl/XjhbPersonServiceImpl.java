@@ -33,4 +33,10 @@ public class XjhbPersonServiceImpl implements XjhbPersonService {
         return xjhbPersonMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public XjhbPerson selectByPrimaryKey(Integer id) {
+        return xjhbPersonMapper.selectByPrimaryKey(id);
+    }
+
+
 }

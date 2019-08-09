@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.Admin;
 import com.gzmusxxy.entity.XjhbInformation;
+import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.service.AdminService;
 import com.gzmusxxy.service.XjhbInformationService;
+import com.gzmusxxy.service.XjhbPersonService;
 import com.gzmusxxy.service.XjhbProjectService;
 import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,9 @@ public class AdminController {
 
     @Autowired
     private XjhbInformationService xjhbInformationService;
+
+    @Autowired
+    private XjhbPersonService xjhbPersonService;
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -158,11 +163,56 @@ public class AdminController {
         if (name == null) {
             name = "";
         }
-        System.out.println(pageInfo);
         model.addAttribute("name",name);
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_apply";
+    }
+
+    /**
+     * 申请书详细信息
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/detailed")
+    public String detailed(int id) {
+        JSONObject json = new JSONObject();
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(xjhbInformation.getProjectId());
+        XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(xjhbInformation.getPersonId());
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String createTime = null;
+        if (xjhbInformation.getCreateTime() != null) {
+            createTime = formatter.format(xjhbInformation.getCreateTime());
+        }
+        json.put("card",xjhbInformation.getOneCardSolution());
+        json.put("createTime",createTime);
+        json.put("project",xjhbProject);
+        json.put("person",xjhbPerson);
+        return json.toJSONString();
+    }
+
+    /**
+     * 改变申请书状态
+     * @param id 申请书id
+     * @param status 申请书status
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/applyStatus")
+    public String applyStatus(int id, String status) {
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        System.out.println("id="+id + status);
+        if (status.equals("通过")) {
+            byte sta = 2;
+            xjhbInformation.setStatus(sta);
+        } else {
+            byte sta = 3;
+            xjhbInformation.setStatus(sta);
+        }
+        xjhbInformationService.updateByPrimaryKey(xjhbInformation);
+        return "";
     }
 
     /**
@@ -314,6 +364,27 @@ public class AdminController {
             FileUtil.downloadFile(xjhbInformation.getProjectApplication(),xjhbInformation.getProjectApplicationName(),request,response);
         }else {
             FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
+        }
+        return "";
+    }
+
+    /**
+     * 下载身份证
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadCard")
+    public String downloadCard(int id,String name, HttpServletRequest request, HttpServletResponse response){
+        XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(id);
+        if (name.equals("front")) {
+            String type = xjhbPerson.getIdCardFront().substring(xjhbPerson.getIdCardFront().lastIndexOf("."));
+            FileUtil.downloadFile(xjhbPerson.getIdCardFront(),"身份证正面"+type,request,response);
+        }else {
+            String type = xjhbPerson.getIdCardReverse().substring(xjhbPerson.getIdCardReverse().lastIndexOf("."));
+            FileUtil.downloadFile(xjhbPerson.getIdCardReverse(),"身份证反面"+type,request,response);
         }
         return "";
     }

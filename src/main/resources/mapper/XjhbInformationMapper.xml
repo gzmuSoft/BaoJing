@@ -76,6 +76,6 @@
     i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status
     from xjhb_information i join xjhb_project p
     where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
-    where h.person_id = p.id
+    where h.person_id = p.id and h.status = 1
   </select>
 </mapper>

@@ -10,4 +10,6 @@ public interface XjhbPersonService {
     XjhbPerson findPersonByOpenId(String openId);
 
     int updateByPrimaryKey(XjhbPerson record);
+
+    XjhbPerson selectByPrimaryKey(Integer id);
 }

@@ -35,7 +35,7 @@ public class XjhbInformation {
     private String personName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
-
+    /**1.未审核 2.审核失败 3.审核通过*/
     private Byte status;
 
 

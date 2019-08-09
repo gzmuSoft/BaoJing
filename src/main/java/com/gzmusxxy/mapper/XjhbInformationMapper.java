@@ -16,5 +16,5 @@ public interface XjhbInformationMapper {
 
     int updateByPrimaryKey(XjhbInformation record);
 
-    List<XjhbInformation> selectInformationByProjectLike(XjhbProject records);
+    List<XjhbInformation> selectInformationByNameLike(String name);
 }

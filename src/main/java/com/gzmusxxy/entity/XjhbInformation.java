@@ -8,6 +8,8 @@ public class XjhbInformation {
     private Integer id;
 
     private Integer projectId;
+    /**额外添加的字段*/
+    private String projectName;
 
     private Double outlay;
 

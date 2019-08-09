@@ -43,8 +43,9 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
 			<h1>申请书管理</h1>
-			<form id="cm-search" action="index.html" method="get">
-				<input type="search" name="q" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			<form id="cm-search" action="/admin/xjhbApply" method="get">
+				<input type="hidden" name="pageNumber" value="1">
+				<input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
 			</form>
 		</div>
 		<!-- 查询按钮 -->
@@ -74,7 +75,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Tables with contextual classes</div>
+                    <div class="panel-heading">先建后补申请书管理</div>
                     <table class="table text-center">
                         <thead>
                         <tr>
@@ -90,183 +91,25 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>active</td>
-                            <td>未上传&nbsp;</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
+                        <tr class="info" th:each="apply:${pageInfo.list}">
+                            <th scope="row" th:text="${applyStat.index+1}"></th>
+                            <td th:text="${apply.projectName}"></td>
+                            <td th:text="${apply.outlay}"></td>
+                            <td>
+								<div th:if="${apply.projectApplicationName != null && apply.projectApplicationName != 'null' && apply.projectApplicationName != ''}">
+									<span th:text="${apply.projectApplicationName}"></span>&nbsp;
+									<a th:href="@{'/admin/downloadApply?name=apply&id='+${apply.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
 								</div>
 							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
+							<td th:text="${#dates.format(apply.startTime,'yyyy-MM-dd')}"></td>
+							<td th:text="${#dates.format(apply.endTime,'yyyy-MM-dd')}"></td>
 							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
+								<div th:if="${apply.otherProofName != null && apply.otherProofName != 'null' && apply.otherProofName != ''}">
+									<span th:text="${apply.otherProofName}"></span>&nbsp;
+									<a th:href="@{'/admin/downloadApply?name=other&id='+${apply.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
 								</div>
 							</td>
-                        </tr>
-                        <tr class="success">
-                            <th scope="row">3</th>
-                            <td>success</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>dwaadawda</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
-								</div>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">4</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
-								</div>
-							</td>
-                        </tr>
-                        <tr class="info">
-                            <th scope="row">5</th>
-                            <td>info</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>dawdawda</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
-								</div>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">6</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
-								</div>
-							</td>
-                        </tr>
-                        <tr class="warning">
-                            <th scope="row">7</th>
-                            <td>warning</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>ssdawdwadaw</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
-								</div>
-							</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">8</th>
-                            <td>Column content</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp审核&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">通过</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">否定</a></li>
-								    </ul>
-								</div>
-							</td>
-                        </tr>
-                        <tr class="danger">
-                            <th scope="row">9</th>
-                            <td>danger</td>
-                            <td>Column content</td>
-                            <td><button type="button" class="btn btn-success btn-xs">下载申请书</button></td>
-                            <td>Column content</td>
-                            <td>Column content</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载其他材料</button></td>
-							<td>Column content</td>
+							<td th:text="${apply.personName}"></td>
 							<td>
 								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
 								<div class="btn-group">
@@ -287,18 +130,27 @@
 		<!-- 分页 -->
 		<nav class="text-center mt-50">
 			<ul class="pagination shadowed" style="margin:0">
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage > 0}">
+					<a th:href="@{'/admin/xjhbApply?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage <= 0}">
+					<a>
+						<span><i class="fa fa-angle-left"></i></span>
+					</a>
+				</li>
+				<li th:each="num:${pages}">
+					<a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+					<a th:href="@{'/admin/xjhbApply?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+				</li>
+				<li th:if="${pageInfo.nextPage <= 0}">
+					<a>
+						<span><i class="fa fa-angle-right"></i></span>
+					</a>
+				</li>
+				<li th:if="${pageInfo.nextPage > 0}">
+					<a th:href="@{'/admin/xjhbApply?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-right"></i></span>
 					</a>
 				</li>
@@ -352,5 +204,13 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
+<script>
+	//给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    //搜索栏有数据则打开
+    if($("#selectName").val() != null && $("#selectName").val() != ''){
+        $("#cm-search").addClass("open");
+    }
+</script>
 </body>
 </html>

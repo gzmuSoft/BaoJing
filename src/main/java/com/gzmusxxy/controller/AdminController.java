@@ -292,10 +292,29 @@ public class AdminController {
      * @return return
      */
     @ResponseBody
-    @RequestMapping(value= "/download")
-    public String download(int id, HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value= "/downloadProject")
+    public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
         FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
+        return "";
+    }
+
+    /**
+     * 下载申请书
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadApply")
+    public String downloadApply(int id,String name, HttpServletRequest request, HttpServletResponse response){
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        if (name.equals("apply")) {
+            FileUtil.downloadFile(xjhbInformation.getProjectApplication(),xjhbInformation.getProjectApplicationName(),request,response);
+        }else {
+            FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
+        }
         return "";
     }
 }

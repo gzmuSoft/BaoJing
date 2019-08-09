@@ -92,13 +92,13 @@
                         </tr>
                         </thead>
                         <tbody>
-                            <tr class="success" th:each="project:${pageInfo.list}">
+                            <tr class="info" th:each="project:${pageInfo.list}">
                                 <th scope="row" th:text="${projectStat.index+1}"></th>
                                 <td th:text="${project.projectName}"></td>
                                 <td>
                                     <div th:if="${project.applicationTemplateName != null && project.applicationTemplateName != 'null' && project.applicationTemplateName != ''}">
                                         <span th:text="${project.applicationTemplateName}"></span>&nbsp;
-                                        <a th:href="@{'/admin/download?id='+${project.id}}" th:value="${project.id}" onclick="download(this)"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                        <a th:href="@{'/admin/downloadProject?id='+${project.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                                     </div>
                                 </td>
                                 <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>

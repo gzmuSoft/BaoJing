@@ -16,5 +16,5 @@ public interface XjhbInformationService {
 
     int updateByPrimaryKey(XjhbInformation record);
 
-
+    XjhbInformation selectByPrimaryKey(Integer id);
 }

@@ -31,6 +31,8 @@ public class XjhbInformation {
     private String projectApplicationName;
 
     private Integer personId;
+    /**额外添加的字段*/
+    private String personName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 

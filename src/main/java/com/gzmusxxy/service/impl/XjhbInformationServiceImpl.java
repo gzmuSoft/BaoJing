@@ -61,5 +61,10 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
         return xjhbInformationMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public XjhbInformation selectByPrimaryKey(Integer id) {
+        return xjhbInformationMapper.selectByPrimaryKey(id);
+    }
+
 
 }

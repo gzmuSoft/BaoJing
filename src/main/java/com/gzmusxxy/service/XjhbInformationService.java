@@ -1,5 +1,6 @@
 package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbInformation;
 
 public interface XjhbInformationService {
@@ -11,4 +12,6 @@ public interface XjhbInformationService {
 
 
     XjhbInformation findInfobyPersonId(int personId);
+
+    PageInfo<XjhbInformation> selectInformationByNameLike(String name, Integer pageNumber);
 }

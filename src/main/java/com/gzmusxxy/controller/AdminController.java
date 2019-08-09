@@ -3,8 +3,10 @@ package com.gzmusxxy.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.Admin;
+import com.gzmusxxy.entity.XjhbInformation;
 import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.service.AdminService;
+import com.gzmusxxy.service.XjhbInformationService;
 import com.gzmusxxy.service.XjhbProjectService;
 import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class AdminController {
 
     @Autowired
     private XjhbProjectService xjhbProjectService;
+
+    @Autowired
+    private XjhbInformationService xjhbInformationService;
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -89,11 +94,28 @@ public class AdminController {
     @RequestMapping(value = "/xjhbProject")
     public String xjhbProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        return "admin/xjhb_project";
+    }
+
+    /**
+     * 分页按钮
+     * @param pages 总页数
+     * @param pageNumber 当前页
+     * @return 分页按钮
+     */
+    private int[] getPage(int pages,int pageNumber) {
         //固定5页
         final int page = 5;
         int numPage[];
         //总共页数
-        int pageCount = pageInfo.getPages();
+        int pageCount = pages;
         //判断是否需要省略
         if (pageCount > page) {
             numPage = new int[page];
@@ -119,25 +141,27 @@ public class AdminController {
                 numPage[i] = i + 1;
             }
         }
-        //防止搜索栏bug
-        if (name == null) {
-            name = "";
-        }
-        model.addAttribute("name",name);
-        model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages",numPage);
-        return "admin/xjhb_project";
+        return numPage;
     }
 
     /**
      * 申请书管理
-     * @param model
-     * @param name
-     * @param pageNumber
-     * @return
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return return
      */
     @RequestMapping(value = "/xjhbApply")
     public String xjhbApply(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectInformationByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        System.out.println(pageInfo);
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_apply";
     }
 
@@ -255,9 +279,9 @@ public class AdminController {
     @RequestMapping(value = "/upload")
     public String upload(@RequestParam("file") MultipartFile file,String path, String type) {
         if (path.trim() == null || path.equals("null") || path.equals("")){
-            return FileUtil.saveFile(file,null,type,FileUtil.DOWN_PROJECT_FILE_PATH);
+            return FileUtil.saveFile(file,null,type);
         }
-        return FileUtil.saveFile(file,path,type,FileUtil.DOWN_PROJECT_FILE_PATH);
+        return FileUtil.saveFile(file,path,type);
     }
 
     /**

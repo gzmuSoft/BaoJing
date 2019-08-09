@@ -67,4 +67,10 @@
     from xjhb_information
     where person_id = #{personId,jdbcType=INTEGER}
   </select>
+  <select id="selectInformationByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+      select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.one_card_solution, i.other_proof_name,
+      i.other_proof, i.project_application, i.person_id, i.create_time, i.status
+      from xjhb_information i join xjhb_project p
+      where i.project_id= p.id and p.project_name like #{name}
+  </select>
 </mapper>

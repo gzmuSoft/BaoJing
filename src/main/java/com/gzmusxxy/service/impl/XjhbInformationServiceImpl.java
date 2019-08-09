@@ -1,10 +1,16 @@
 package com.gzmusxxy.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbInformation;
+import com.gzmusxxy.entity.XjhbProject;
 import com.gzmusxxy.mapper.XjhbInformationMapper;
 import com.gzmusxxy.service.XjhbInformationService;
+import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @Author: yxf
@@ -35,5 +41,20 @@ public class XjhbInformationServiceImpl implements XjhbInformationService  {
     public XjhbInformation findInfobyPersonId(int personId) {
         return xjhbInformationMapper.findInfobyPersonId(personId);
     }
+
+    @Override
+    public PageInfo<XjhbInformation> selectInformationByNameLike(String name,Integer pageNumber) {
+        if (name != null && name != ""){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<XjhbInformation> list = xjhbInformationMapper.selectInformationByNameLike(name);
+        return new PageInfo<>(list);
+    }
+
 
 }

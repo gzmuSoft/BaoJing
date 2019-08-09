@@ -37,15 +37,33 @@
                     </script>
                     <tr th:each="xjhbInformation : ${xjhbInformationList}">
                         <td th:text="${xjhbInformation.projectId}">暂无项目</td>
-                        <td th:text="${xjhbInformation.startTime}"></td>
+                        <td th:text="${#dates.format(xjhbInformation.startTime,'yyyy-MM-dd')}"></td>
                         <td th:text="${xjhbInformation.outlay}"></td>
-                        <td th:text="${xjhbInformation.personId}"></td>
-                        <td th:text="${xjhbInformation.status}" ></td>
+                        <td th:text="${personName}"></td>
+                        <td  th:if="${xjhbInformation.status} eq '1' " ></span> <button type="button" class="btn btn-warning" >待审核</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '2' " ></span><button th:id="${xjhbInformation.id}" type="button" class="btn btn-danger" onclick="restart(this)" >重新申请</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '3' " ></span><button th:id="${xjhbInformation.id}"  type="button" class="btn btn-success" onclick="succeed(this)"  >申请验收</button></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        <script>
+            function restart(obj) {
+                var informationId = $(obj).attr("id");
+                $.post("/poverty/restartInformation",
+                    {
+                        "informationId":informationId
+                    },function (result) {
+                console.log(result)
+                        window.location.href="/poverty/usershen"+"?informationId="+informationId;
+                })
+            }
+
+            function succeed(obj) {
+                var informationId = $(obj).attr("id");
+            }
+        </script>
         <!--分割线-->
         <div class="decoration"></div>
     </div>

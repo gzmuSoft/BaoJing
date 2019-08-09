@@ -53,6 +53,7 @@ public class PovertyController {
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
         List<XjhbInformation> xjhbInformationList= xjhbInformationService.findInfobyPersonId(person.getId());
         model.addAttribute("person",person);
+        model.addAttribute("personName",person.getName());
         model.addAttribute("xjhbInformationList",xjhbInformationList);
         return "poverty/audit";
     }
@@ -176,7 +177,6 @@ public class PovertyController {
             person.setOpenid(openId);
             xjhbPersonService.insert(person);
         }
-
         return "poverty/user";
     }
 
@@ -186,11 +186,21 @@ public class PovertyController {
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
-    public String saveInformation(XjhbInformation xjhbInformation){
+    public String saveInformation(XjhbInformation xjhbInformation ){
+        System.out.println(xjhbInformation);
         Date date = new Date();
-        xjhbInformation.setCreateTime(date);
-        xjhbInformation.setStatus((byte)1);
-        xjhbInformationService.saveInformation(xjhbInformation);
+        if (xjhbInformation.getId() == null){
+
+            xjhbInformation.setCreateTime(date);
+            xjhbInformation.setStatus((byte)1);
+            xjhbInformationService.saveInformation(xjhbInformation);
+
+        }else{
+            xjhbInformation.setCreateTime(date);
+            xjhbInformation.setStatus((byte)1);
+            xjhbInformationService.updateByPrimaryKey(xjhbInformation);
+        }
+
 
         return "poverty/audit";
     }
@@ -243,8 +253,6 @@ public class PovertyController {
      * @Author yxf
      * @Date : 2019/8/6 0:08
      */
-
-
     @ResponseBody
     @RequestMapping(value= "/downProjectBook")
     public String downProjectBook(int id,String name, HttpServletRequest request, HttpServletResponse response){
@@ -255,5 +263,19 @@ public class PovertyController {
             FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
         }
         return "";
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "/restartInformation")
+    public String restartInformation(){
+        return "poverty/usershen";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/findInformationById")
+    public XjhbInformation findInformationById(int findId){
+
+        return xjhbInformationService.selectByPrimaryKey(findId);
     }
 }

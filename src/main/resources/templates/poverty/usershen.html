@@ -51,12 +51,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="oneCardSolution" class="col-sm-2 control-label">农户一卡通：</label>
-                    <div class="col-sm-10">
-                        <input  style="width: 50%" type="text" name="oneCardSolution" class="form-control" id="oneCardSolution" placeholder="农户一卡通" required>
-                    </div>
-                </div>
-                <div class="form-group">
                     <label for="identify_other" class="col-sm-2 control-label">其他证明材料：</label>
                     <div class="col-sm-10">
                         <input type="file" name="identify_other" id="identify_other" onchange="upOtherFile(this)">
@@ -111,7 +105,7 @@
 <script  th:inline="javascript">
 
 
-
+    var information_id = getQueryString("informationId");
     var project_path = null;
     var other_path = null;
     var other_file_name = null;
@@ -195,9 +189,8 @@
 
     $("#tijiao").click(function () {
 
-        $.post("/poverty/findPersonId")
-
        var datas =  {
+            "id":information_id,
             "projectId":$("#select").val(),
             "outlay":$("#outlay").val(),
             "startTime":$("#startTime").val(),
@@ -215,7 +208,10 @@
         $.post("/poverty/saveInformation",datas
        ,
         function(result) {
-            window.location.href="http://localhost:8083/"+result;
+            if(result!=null){
+                window.location.href="/poverty/audit";
+            }
+
         }
 
         )
@@ -224,7 +220,27 @@
 
     });
 
+    $(function () {
+        if(information_id != null){
 
+            $.post("/poverty/findInformationById",
+                {
+                    "findId":information_id
+                },function (result) {
+                    $("#select").val(result.projectId)
+                    $("#outlay").val(result.outlay)
+
+                })
+        }
+    })
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = decodeURI(window.location.search).substr(1).match(reg);
+        if (r != null)
+            return unescape(r[2]);
+        return null;
+    }
 
 
 

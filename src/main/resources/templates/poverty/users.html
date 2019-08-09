@@ -169,7 +169,10 @@
         function(result){
             //alert("数据: \n" + data + "\n状态: " + status);
             alert(result)
-            window.location.href="http://localhost:8083/"+result
+            if(result!=null){
+                window.location.href="/poverty/usershen"
+            }
+
         });
 
     });

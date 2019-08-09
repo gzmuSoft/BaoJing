@@ -244,13 +244,16 @@ public class PovertyController {
      * @Date : 2019/8/6 0:08
      */
 
-    //从配置文件中获取文件的上传路径
-    //@Value("${ws.fileUploadPath}")
-    //private String fileUploadPath;
+
     @ResponseBody
     @RequestMapping(value= "/downProjectBook")
-    public String downProjectBook(String path, String name, HttpServletRequest request, HttpServletResponse response){
-        FileUtil.downloadFile(path,name,request,response);
+    public String downProjectBook(int id,String name, HttpServletRequest request, HttpServletResponse response){
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        if (name.equals("apply")) {
+            FileUtil.downloadFile(xjhbInformation.getProjectApplication(),xjhbInformation.getProjectApplicationName(),request,response);
+        }else {
+            FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
+        }
         return "";
     }
 }

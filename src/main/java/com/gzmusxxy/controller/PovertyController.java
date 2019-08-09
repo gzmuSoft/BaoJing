@@ -112,12 +112,12 @@ public class PovertyController {
     @RequestMapping(value = "/upIdCard")
     public String upIdCard(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {
         if (backPath != null && frontPath != null) {
-            return FileUtil.saveFile(file,null, type,FileUtil.FILE_PATH);
+            return FileUtil.saveFile(file,null, type);
         }else {
             if (backPath != null ) {
-                return FileUtil.saveFile(file,backPath,type,FileUtil.FILE_PATH);
+                return FileUtil.saveFile(file,backPath,type);
             }else{
-                return FileUtil.saveFile(file,frontPath,type,FileUtil.FILE_PATH);}
+                return FileUtil.saveFile(file,frontPath,type);}
         }
     }
 
@@ -179,9 +179,9 @@ public class PovertyController {
     public String upProjectBook(@RequestParam("file") MultipartFile file,String projectPath, String type) {
         System.out.println(projectPath+"."+type);
         if (projectPath != null ) {
-            return FileUtil.saveFile(file,projectPath, type,FileUtil.PROJECT_FILE_PATH);
+            return FileUtil.saveFile(file,projectPath, type);
         }else {
-            return FileUtil.saveFile(file,null, type,FileUtil.PROJECT_FILE_PATH);
+            return FileUtil.saveFile(file,null, type);
         }
 
     }
@@ -199,9 +199,9 @@ public class PovertyController {
     public String upOther(@RequestParam("file") MultipartFile file,String otherPath, String type) {
         System.out.println(otherPath+"."+type);
         if (otherPath != null ) {
-            return FileUtil.saveFile(file,otherPath, type,FileUtil.OTHER_FILE_PATH);
+            return FileUtil.saveFile(file,otherPath, type);
         }else {
-            return FileUtil.saveFile(file,null, type,FileUtil.OTHER_FILE_PATH);
+            return FileUtil.saveFile(file,null, type);
         }
 
     }

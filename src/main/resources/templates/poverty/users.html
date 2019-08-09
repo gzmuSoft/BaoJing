@@ -169,12 +169,12 @@
             'village':$('#village').val(),
             'idCardFront':front_path,
             'idCardReverse':back_path,
-            'openid':[[${person.id}]]
+            'openid':[[${person.openid}]]
         },
         function(result){
             //alert("数据: \n" + data + "\n状态: " + status);
             alert(result)
-           //window.location.href="http://localhost:8083/"+result
+            window.location.href="http://localhost:8083/"+result
         });
 
     });

@@ -150,16 +150,20 @@ public class PovertyController {
         //暂时未进行登录验证
         String openId = session.getAttribute("openid").toString();
         XjhbPerson findXjhbPerson=xjhbPersonService.findPersonByOpenId(openId);
-        if(findXjhbPerson !=  null){
+        if(findXjhbPerson.getCreateTime() !=  null){
+            xjhbPerson.setId(findXjhbPerson.getId());
+            xjhbPerson.setCreateTime(findXjhbPerson.getCreateTime());
             xjhbPersonService.updateByPrimaryKey(xjhbPerson);
+            System.out.println(xjhbPerson);
         }
         else{
+            xjhbPerson.setId(findXjhbPerson.getId());
             xjhbPerson.setOpenid(openId);
             Date data = new Date();
             xjhbPerson.setCreateTime(data);
             xjhbPerson.setIdCardFront(xjhbPerson.getIdCardFront());
             xjhbPerson.setIdCardReverse(xjhbPerson.getIdCardReverse());
-            xjhbPersonService.insert(xjhbPerson);
+            xjhbPersonService.updateByPrimaryKey(xjhbPerson);
 
         }
 
@@ -167,9 +171,17 @@ public class PovertyController {
     }
 
 
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/informationOk")
-    public String informationOk() {
+    public String informationOk(HttpSession session) {
+        String openId =  session.getAttribute("openid").toString();
+        XjhbPerson person = new XjhbPerson();
+        if(xjhbPersonService.findPersonByOpenId(openId) == null){
+            person.setOpenid(openId);
+            xjhbPersonService.insert(person);
+        }
+
         return "poverty/user";
     }
 
@@ -196,7 +208,6 @@ public class PovertyController {
             xjhbInformationService.updateByPrimaryKey(information);
         }
 
-        System.out.println(xjhbInformation);
         return "";
     }
 

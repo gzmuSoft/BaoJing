@@ -53,7 +53,7 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
 
     @Override
     public XjhbInformation findInfobyPersonId(int personId) {
-        return null;
+        return xjhbInformationMapper.findInfobyPersonId(personId);
     }
 
 

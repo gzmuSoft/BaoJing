@@ -11,6 +11,7 @@
     <result column="other_proof_name" jdbcType="VARCHAR" property="otherProofName" />
     <result column="other_proof" jdbcType="VARCHAR" property="otherProof" />
     <result column="project_application" jdbcType="VARCHAR" property="projectApplication" />
+    <result column="project_application_name" jdbcType="VARCHAR" property="projectApplicationName" />
     <result column="person_id" jdbcType="INTEGER" property="personId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="status" jdbcType="TINYINT" property="status" />
@@ -23,13 +24,13 @@
     insert into xjhb_information (id, project_id, outlay,
       start_time, end_time, one_card_solution,
       other_proof_name, other_proof, project_application,
-      person_id, create_time, status
-      )
+      project_application_name, person_id, create_time,
+      status)
     values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{outlay,jdbcType=DOUBLE},
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{oneCardSolution,jdbcType=VARCHAR},
       #{otherProofName,jdbcType=VARCHAR}, #{otherProof,jdbcType=VARCHAR}, #{projectApplication,jdbcType=VARCHAR},
-      #{personId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}
-      )
+      #{projectApplicationName,jdbcType=VARCHAR}, #{personId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbInformation">
     update xjhb_information
@@ -37,9 +38,11 @@
       outlay = #{outlay,jdbcType=DOUBLE},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
+      one_card_solution = #{oneCardSolution,jdbcType=VARCHAR},
       other_proof_name = #{otherProofName,jdbcType=VARCHAR},
       other_proof = #{otherProof,jdbcType=VARCHAR},
       project_application = #{projectApplication,jdbcType=VARCHAR},
+      project_application_name = #{projectApplicationName,jdbcType=VARCHAR},
       person_id = #{personId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       status = #{status,jdbcType=TINYINT}
@@ -47,13 +50,21 @@
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, project_id, outlay, start_time, end_time, one_card_solution, other_proof_name,
-    other_proof, project_application, person_id, create_time, status
+    other_proof, project_application, project_application_name, person_id, create_time,
+    status
     from xjhb_information
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, project_id, outlay, start_time, end_time, one_card_solution, other_proof_name,
-    other_proof, project_application, person_id, create_time, status
+    other_proof, project_application, project_application_name, person_id, create_time,
+    status
     from xjhb_information
+  </select>
+  <select id="findInfobyPersonId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, project_id, outlay, start_time, end_time, one_card_solution, other_proof_name,
+    other_proof, project_application,project_application_name, person_id, create_time, status
+    from xjhb_information
+    where person_id = #{personId,jdbcType=INTEGER}
   </select>
 </mapper>

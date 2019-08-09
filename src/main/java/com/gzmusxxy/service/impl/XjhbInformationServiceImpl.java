@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @Version 1.0
  */
 @Service
-public class XjhbInformationServiceImpl implements XjhbInformationService {
+public class XjhbInformationServiceImpl implements XjhbInformationService  {
 
 
     @Autowired
@@ -29,6 +29,11 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
     public int saveInformation(XjhbInformation xjhbInformation){
 
         return xjhbInformationMapper.insert(xjhbInformation);
+    }
+
+    @Override
+    public XjhbInformation findInfobyPersonId(int personId) {
+        return xjhbInformationMapper.findInfobyPersonId(personId);
     }
 
 }

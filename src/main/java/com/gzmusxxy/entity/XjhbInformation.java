@@ -1,6 +1,7 @@
 package com.gzmusxxy.entity;
 
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 @Data
@@ -11,8 +12,10 @@ public class XjhbInformation {
 
     private Double outlay;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
 
     private String oneCardSolution;
@@ -23,8 +26,10 @@ public class XjhbInformation {
 
     private String projectApplication;
 
-    private Integer personId;
+    private String projectApplicationName;
 
+    private Integer personId;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
     private Byte status;

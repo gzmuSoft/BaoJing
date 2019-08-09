@@ -105,8 +105,8 @@
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:inline="javascript">
-    var front_path = null;
-    var back_path = null;
+    var front_path = [[${person.idCardFront}]];
+    var back_path = [[${person.idCardReverse}]];
     function saveFile(obj){
         var data = new FormData();
         data.append('file', obj.files[0]);
@@ -143,6 +143,16 @@
         });
     }
 
+    $(function () {
+        if([[${person.id}]] != null ){
+
+            $('#name').val([[${person.name}]])
+            $('#identity').val([[${person.identity}]])
+            $('#tel').val([[${person.telphone}]])
+            $('#village').val([[${person.village}]])
+            $('#oneCardSolution').val([[${person.oneCardSolution}]])
+        }
+    })
 
 
 
@@ -159,7 +169,7 @@
             'village':$('#village').val(),
             'idCardFront':front_path,
             'idCardReverse':back_path,
-            'openid':[[${openId}]]
+            'openid':[[${person.id}]]
         },
         function(result){
            // alert("数据: \n" + data + "\n状态: " + status);

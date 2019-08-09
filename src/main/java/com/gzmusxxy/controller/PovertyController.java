@@ -66,6 +66,8 @@ public class PovertyController {
     @RequestMapping(value = "/user")
     public String user(HttpSession session,Model model) {
         String openId =  session.getAttribute("openid").toString();
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+        model.addAttribute("person",person);
         model.addAttribute("openId",openId);
         return "poverty/users";
     }
@@ -85,7 +87,10 @@ public class PovertyController {
         String openId =  session.getAttribute("openid").toString();
         model.addAttribute("openId",openId);
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+        XjhbInformation information = xjhbInformationService.findInfobyPersonId(person.getId());
+        System.out.println(person.getId()+"++++++"+information);
         List<XjhbProject> list = xjhbProjectService.selectAll();
+        model.addAttribute("information",information);
         model.addAttribute("projectList",list);
         model.addAttribute("person",person);
         return "poverty/usershen";
@@ -159,9 +164,11 @@ public class PovertyController {
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
     public String saveInformation(XjhbInformation xjhbInformation, HttpSession session){
+        System.out.println(xjhbInformation);
         Date date = new Date();
         xjhbInformation.setCreateTime(date);
         xjhbInformationService.saveInformation(xjhbInformation);
+
         System.out.println(xjhbInformation);
         return "";
     }

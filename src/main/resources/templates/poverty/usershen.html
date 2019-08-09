@@ -115,6 +115,18 @@
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script  th:inline="javascript">
 
+    $(function () {
+        if([[${information.id}]] != null){
+            $("#select").val([[${information.projectId}]])
+            $("#outlay").val([[${information.outlay}]])
+            $("#startTime").val([[${information.startTime}]])
+            $("#endTime").val([[${information.endTime}]])
+            $("#oneCardSolution").val([[${person.oneCardSolution}]])
+
+        }
+
+    });
+
     var project_path = null;
     var other_path = null;
     function upOtherFile(obj){
@@ -155,7 +167,9 @@
             data.append('projectPath',project_path);
         }
         //判断类型
+
         var filename = obj.value;
+        console.log(filename)
         extStart = filename.lastIndexOf('.');
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         data.append('type',ext);
@@ -193,9 +207,10 @@
             "outlay":$("#outlay").val(),
             "startTime":$("#startTime").val(),
             "endTime":$("#endTime").val(),
-            "oneCardSolution":"一卡通",
-            "otherProofName":"材料名字",
-            "otherProof":"11",
+            "oneCardSolution":[[${person.oneCardSolution}]],
+            "otherProofName":"其他材料名字",
+            "otherProof":other_path,
+            "projectApplicationName":"申请书名字",
             "projectApplication":project_path,
             "personId":[[${person.id}]],
             "createTime":"",

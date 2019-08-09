@@ -8,4 +8,7 @@ public interface XjhbInformationService {
      * 保存申请信息
      * */
     int saveInformation(XjhbInformation xjhbInformation);
+
+
+    XjhbInformation findInfobyPersonId(int personId);
 }

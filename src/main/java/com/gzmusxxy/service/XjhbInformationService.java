@@ -10,8 +10,9 @@ public interface XjhbInformationService {
      * */
     int saveInformation(XjhbInformation xjhbInformation);
 
+    PageInfo<XjhbInformation> selectInformationByNameLike(String name, Integer pageNumber);
 
     XjhbInformation findInfobyPersonId(int personId);
 
-    PageInfo<XjhbInformation> selectInformationByNameLike(String name, Integer pageNumber);
+
 }

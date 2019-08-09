@@ -1,6 +1,8 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.XjhbInformation;
+import com.gzmusxxy.entity.XjhbProject;
+
 import java.util.List;
 
 public interface XjhbInformationMapper {
@@ -14,6 +16,7 @@ public interface XjhbInformationMapper {
 
     int updateByPrimaryKey(XjhbInformation record);
 
-    XjhbInformation findInfobyPersonId(int personId);
+    List<XjhbInformation> selectInformationByNameLike(String name);
 
+    XjhbInformation findInfobyPersonId(int personId);
 }

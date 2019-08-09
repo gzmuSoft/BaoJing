@@ -18,7 +18,7 @@ import java.util.List;
  * @Version 1.0
  */
 @Service
-public class XjhbInformationServiceImpl implements XjhbInformationService  {
+public class XjhbInformationServiceImpl implements XjhbInformationService {
 
 
     @Autowired
@@ -38,11 +38,6 @@ public class XjhbInformationServiceImpl implements XjhbInformationService  {
     }
 
     @Override
-    public XjhbInformation findInfobyPersonId(int personId) {
-        return xjhbInformationMapper.findInfobyPersonId(personId);
-    }
-
-    @Override
     public PageInfo<XjhbInformation> selectInformationByNameLike(String name,Integer pageNumber) {
         if (name != null && name != ""){
             name = "%" + name + "%";
@@ -54,6 +49,11 @@ public class XjhbInformationServiceImpl implements XjhbInformationService  {
         //查询数据
         List<XjhbInformation> list = xjhbInformationMapper.selectInformationByNameLike(name);
         return new PageInfo<>(list);
+    }
+
+    @Override
+    public XjhbInformation findInfobyPersonId(int personId) {
+        return null;
     }
 
 

@@ -14,5 +14,7 @@ public interface XjhbInformationService {
 
     XjhbInformation findInfobyPersonId(int personId);
 
+    int updateByPrimaryKey(XjhbInformation record);
+
 
 }

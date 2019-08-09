@@ -28,4 +28,9 @@ public class XjhbPersonServiceImpl implements XjhbPersonService {
         return xjhbPersonMapper.findPersonByOpenId(openId);
     }
 
+    @Override
+    public int updateByPrimaryKey(XjhbPerson record) {
+        return xjhbPersonMapper.updateByPrimaryKey(record);
+    }
+
 }

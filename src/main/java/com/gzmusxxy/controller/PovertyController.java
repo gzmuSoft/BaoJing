@@ -52,7 +52,6 @@ public class PovertyController {
     }
 
 
-
     /**
     * @File : PovertyController.java
     * @Description : 转发页面连openid
@@ -86,13 +85,21 @@ public class PovertyController {
     public String usershen(Model model,HttpSession session) {
         String openId =  session.getAttribute("openid").toString();
         model.addAttribute("openId",openId);
-        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
-        XjhbInformation information = xjhbInformationService.findInfobyPersonId(person.getId());
-        System.out.println(person.getId()+"++++++"+information);
         List<XjhbProject> list = xjhbProjectService.selectAll();
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+        XjhbInformation information = new XjhbInformation();
+        XjhbInformation findInformation = xjhbInformationService.findInfobyPersonId(person.getId());
+        if(findInformation != null){
+            information = findInformation;
+        }
+        else{
+
+            information.setPersonId(person.getId());
+            xjhbInformationService.saveInformation(information);
+        }
         model.addAttribute("information",information);
-        model.addAttribute("projectList",list);
         model.addAttribute("person",person);
+        model.addAttribute("projectList",list);
         return "poverty/usershen";
     }
 
@@ -142,12 +149,20 @@ public class PovertyController {
         //从session中获得用户的openid,如果为空则用户未登录
         //暂时未进行登录验证
         String openId = session.getAttribute("openid").toString();
-        xjhbPerson.setOpenid(openId);
-        Date data = new Date();
-        xjhbPerson.setCreateTime(data);
-        xjhbPerson.setIdCardFront(xjhbPerson.getIdCardFront());
-        xjhbPerson.setIdCardReverse(xjhbPerson.getIdCardReverse());
-        xjhbPersonService.insert(xjhbPerson);
+        XjhbPerson findXjhbPerson=xjhbPersonService.findPersonByOpenId(openId);
+        if(findXjhbPerson !=  null){
+            xjhbPersonService.updateByPrimaryKey(xjhbPerson);
+        }
+        else{
+            xjhbPerson.setOpenid(openId);
+            Date data = new Date();
+            xjhbPerson.setCreateTime(data);
+            xjhbPerson.setIdCardFront(xjhbPerson.getIdCardFront());
+            xjhbPerson.setIdCardReverse(xjhbPerson.getIdCardReverse());
+            xjhbPersonService.insert(xjhbPerson);
+
+        }
+
         return "poverty/usershen";
     }
 
@@ -161,13 +176,25 @@ public class PovertyController {
     /**
      * 保存申请信息
      * */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
     public String saveInformation(XjhbInformation xjhbInformation, HttpSession session){
-        System.out.println(xjhbInformation);
-        Date date = new Date();
-        xjhbInformation.setCreateTime(date);
-        xjhbInformationService.saveInformation(xjhbInformation);
+        String openId = session.getAttribute("openid").toString();
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+        XjhbInformation information = xjhbInformationService.findInfobyPersonId(person.getId());
+        if(information.getCreateTime() == null){
+            Date date = new Date();
+            xjhbInformation.setCreateTime(date);
+            xjhbInformationService.saveInformation(xjhbInformation);
+        }
+        if (information.getCreateTime() != null){
+            Date startTime = information.getStartTime();
+            Date endTime = information.getEndTime();
+            information.setStartTime(startTime);
+            information.setEndTime(endTime);
+            xjhbInformationService.updateByPrimaryKey(information);
+        }
 
         System.out.println(xjhbInformation);
         return "";

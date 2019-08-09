@@ -127,10 +127,10 @@
 
     });
 
-    var project_path = null;
-    var other_path = null;
-    var other_file_name = null;
-    var project_file_name = null;
+    var project_path = [[${information.projectApplication}]];
+    var other_path = [[${information.otherProof}]];
+    var other_file_name = [[${information.otherProofName}]];
+    var project_file_name = [[${information.projectApplicationName}]];
     function upOtherFile(obj){
         var data = new FormData();
         data.append('file', obj.files[0]);
@@ -145,7 +145,6 @@
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         other_file_name = obj.value.substring(otherFileNameStart,extStart)
         data.append('type',ext);
-        console.log(data)
         $.ajax({
             url: '/poverty/upOther',
             type: 'POST',
@@ -180,7 +179,6 @@
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         project_file_name = obj.value.substring(otherFileNameStart,extStart)
         data.append('type',ext);
-        console.log(data)
         $.ajax({
             url: '/poverty/upProjectBook',
             type: 'POST',

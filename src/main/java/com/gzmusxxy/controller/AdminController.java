@@ -186,7 +186,7 @@ public class AdminController {
         if (xjhbInformation.getCreateTime() != null) {
             createTime = formatter.format(xjhbInformation.getCreateTime());
         }
-        json.put("card",xjhbInformation.getOneCardSolution());
+        //json.put("card",xjhbInformation.getOneCardSolution());
         json.put("createTime",createTime);
         json.put("project",xjhbProject);
         json.put("person",xjhbPerson);

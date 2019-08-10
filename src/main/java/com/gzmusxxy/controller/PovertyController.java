@@ -150,7 +150,7 @@ public class PovertyController {
             xjhbPerson.setId(findXjhbPerson.getId());
             xjhbPerson.setCreateTime(findXjhbPerson.getCreateTime());
             xjhbPersonService.updateByPrimaryKey(xjhbPerson);
-            System.out.println(xjhbPerson);
+
         }
         else{
             xjhbPerson.setId(findXjhbPerson.getId());
@@ -216,7 +216,7 @@ public class PovertyController {
     @ResponseBody
     @RequestMapping(value = "/upProjectBook")
     public String upProjectBook(@RequestParam("file") MultipartFile file,String projectPath, String type) {
-        System.out.println(projectPath+"."+type);
+
         if (projectPath != null ) {
             return FileUtil.saveFile(file,projectPath, type);
         }else {
@@ -236,7 +236,7 @@ public class PovertyController {
     @ResponseBody
     @RequestMapping(value = "/upOther")
     public String upOther(@RequestParam("file") MultipartFile file,String otherPath, String type) {
-        System.out.println(otherPath+"."+type);
+
         if (otherPath != null ) {
             return FileUtil.saveFile(file,otherPath, type);
         }else {
@@ -254,16 +254,14 @@ public class PovertyController {
      * @Date : 2019/8/6 0:08
      */
     @ResponseBody
-    @RequestMapping(value= "/downProjectBook")
-    public String downProjectBook(int id,String name, HttpServletRequest request, HttpServletResponse response){
-        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
-        if (name.equals("apply")) {
-            FileUtil.downloadFile(xjhbInformation.getProjectApplication(),xjhbInformation.getProjectApplicationName(),request,response);
-        }else {
-            FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
-        }
+    @RequestMapping(value= "/downloadProject")
+    public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
+        XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
+        System.out.println(xjhbProject.getApplicationTemplate()+"........"+xjhbProject.getApplicationTemplateName());
+        FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
         return "";
     }
+
 
 
     @ResponseBody
@@ -275,7 +273,12 @@ public class PovertyController {
     @ResponseBody
     @RequestMapping(value = "/findInformationById")
     public XjhbInformation findInformationById(int findId){
-
         return xjhbInformationService.selectByPrimaryKey(findId);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/findProject")
+    public XjhbProject findProject(String findId){
+        return xjhbProjectService.selectByPrimaryKey(Integer.parseInt(findId));
     }
 }

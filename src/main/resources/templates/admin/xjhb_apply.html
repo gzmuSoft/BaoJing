@@ -122,6 +122,9 @@
 								</div>
 							</td>
                         </tr>
+						<tr th:if="${pageInfo.pages <= 0}">
+							<th colspan="0" class="text-center">无数据</th>
+						</tr>
                         </tbody>
                     </table>
                 </div>
@@ -135,7 +138,7 @@
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
-				<li th:if="${pageInfo.prePage <= 0}">
+				<li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
 					<a>
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
@@ -144,7 +147,7 @@
 					<a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
 					<a th:href="@{'/admin/xjhbApply?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
 				</li>
-				<li th:if="${pageInfo.nextPage <= 0}">
+				<li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
 					<a>
 						<span><i class="fa fa-angle-right"></i></span>
 					</a>

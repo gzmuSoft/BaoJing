@@ -205,10 +205,10 @@ public class AdminController {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
         System.out.println("id="+id + status);
         if (status.equals("通过")) {
-            byte sta = 2;
+            byte sta = 3;
             xjhbInformation.setStatus(sta);
         } else {
-            byte sta = 3;
+            byte sta = 2;
             xjhbInformation.setStatus(sta);
         }
         xjhbInformationService.updateByPrimaryKey(xjhbInformation);

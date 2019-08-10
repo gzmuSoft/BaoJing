@@ -1,8 +1,7 @@
 package com.gzmusxxy.mapper;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.XjhbInformation;
-import com.gzmusxxy.entity.XjhbProject;
-
 import java.util.List;
 
 public interface XjhbInformationMapper {
@@ -16,7 +15,8 @@ public interface XjhbInformationMapper {
 
     int updateByPrimaryKey(XjhbInformation record);
 
-    List<XjhbInformation> selectInformationByNameLike(String name);
+    PageInfo<XjhbInformation> selectInformationByNameLike(String name, Integer pageNumber);
 
     List<XjhbInformation> findInfobyPersonId(int personId);
+
 }

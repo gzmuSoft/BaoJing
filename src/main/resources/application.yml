@@ -12,6 +12,11 @@ spring:
       min-idle: 5
       max-total: 10
       max-wait-millis: 2000
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
   servlet:
     multipart:
       max-request-size: 10485760

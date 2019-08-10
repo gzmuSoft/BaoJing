@@ -28,8 +28,8 @@
 						<ul>
 							<li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
 							<li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
-							<li class="active"><a href="/admin/xjhbCheck">待验收管理</a></li>
-							<li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
+							<li class="active"><a href="#">待验收管理</a></li>
+							<li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
 						</ul>
 					</li>
 					<li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
@@ -43,8 +43,9 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
 			<h1>待验收管理</h1>
-			<form id="cm-search" action="index.html" method="get">
-				<input type="search" name="q" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			<form id="cm-search" action="/admin/xjhbCheck" method="get">
+				<input type="hidden" name="pageNumber" value="1">
+				<input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
 			</form>
 		</div>
 		<!-- 查询按钮 -->
@@ -74,7 +75,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Tables with contextual classes</div>
+                    <div class="panel-heading">先建后补待验收管理</div>
                     <table class="table text-center">
                         <thead>
                         <tr>
@@ -87,149 +88,39 @@
                         </tr>
                         </thead>
                         <tbody>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
+						<tr class="success" th:each="check:${pageInfo.list}">
+							<th scope="row" th:text="${checkStat.index+1}"></th>
+							<td th:text="${check.projectName}"></td>
+							<td th:text="${check.outlay}"></td>
+							<td th:text="${check.personName}"></td>
 							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
+								<div th:if="${check.scenePhotosName != null && check.scenePhotosName != 'null' && check.scenePhotosName != ''}">
+									<span th:text="${check.scenePhotosName}"></span>&nbsp;
+									<a th:href="@{'/admin/downloadScenePhotos?id='+${check.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+								</div>
+							</td>
+							<td>
+								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#select" th:value="${check.id}" onclick="select(this)">详细信息</button>
+								<div class="btn-group" th:if="${check.status == 4}">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待验收&nbsp;&nbsp;<span class="caret"></span></button>
 								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
+										<li><a href="#" th:value="${check.id+',5'}" onclick="status(this)">线下验收</a></li>
 										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
+								        <li><a href="#" th:value="${check.id+',7'}" onclick="status(this)">不合格</a></li>
 								    </ul>
+								</div>
+								<div class="btn-group" th:if="${check.status == 5}">
+									<button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待线下验收&nbsp;&nbsp;<span class="caret"></span></button>
+									<ul class="dropdown-menu" role="menu" style="width:50px">
+										<li><a href="#" th:value="${check.id+',6'}" onclick="status(this)">通过</a></li>
+										<li class="divider"></li>
+										<li><a href="#" th:value="${check.id+',7'}" onclick="status(this)">不合格</a></li>
+									</ul>
 								</div>
 							</td>
 						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr class="success">
-						    <th scope="row">3</th>
-						    <td>验收项目名称</td>
-						    <td>Column content</td>
-						    <td>dwaadawda</td>
-							<td><button type="button" class="btn btn-success btn-xs">下载现场照片</button></td>
-							<td>
-								<button type="button" class="btn btn-primary btn-xs">详细信息</button>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp待验收&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">线下验收</a></li>
-										<li class="divider"></li>
-								        <li><a href="#">验收通过</a></li>
-								    </ul>
-								</div>
-							</td>
+						<tr th:if="${pageInfo.pages <= 0}">
+							<th colspan="0" class="text-center">无数据</th>
 						</tr>
                         </tbody>
                     </table>
@@ -239,25 +130,100 @@
 		<!-- 分页 -->
 		<nav class="text-center mt-50">
 			<ul class="pagination shadowed" style="margin:0">
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage > 0}">
+					<a th:href="@{'/admin/xjhbCheck?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+					<a>
+						<span><i class="fa fa-angle-left"></i></span>
+					</a>
+				</li>
+				<li th:each="num:${pages}">
+					<a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+					<a th:href="@{'/admin/xjhbCheck?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+				</li>
+				<li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+					<a>
+						<span><i class="fa fa-angle-right"></i></span>
+					</a>
+				</li>
+				<li th:if="${pageInfo.nextPage > 0}">
+					<a th:href="@{'/admin/xjhbCheck?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-right"></i></span>
 					</a>
 				</li>
 			</ul>
 		</nav>
     </div>
-
+	<!--弹窗-->
+	<div id="select" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+					<h4 class="modal-title" id="myModalLabel">
+						Modal title
+						<a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+					</h4>
+				</div>
+				<div class="modal-body">
+					<form class="form-horizontal">
+						<input type="hidden" id="projectId">
+						<div class="form-group">
+							<label for="personName" class="col-sm-3 control-label">申请人</label>
+							<div class="col-sm-9">
+								<input type="text" disabled class="form-control" id="personName">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="card" class="col-sm-3 control-label">农行一卡通卡号</label>
+							<div class="col-sm-9">
+								<input type="text" disabled class="form-control" id="card"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="telphone" class="col-sm-3 control-label">电话号码</label>
+							<div class="col-sm-9">
+								<input type="text" disabled class="form-control" id="telphone">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cardFront" class="col-sm-3 control-label">身份证正面</label>
+							<div class="col-sm-9">
+								<button type="button" class="form-control btn btn-success" id="cardFront" >下载身份证正面</button>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="cardReverse" class="col-sm-3 control-label">身份证反面</label>
+							<div class="col-sm-9">
+								<button type="button" class="form-control btn btn-success" id="cardReverse" >下载身份证反面</button>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="period" class="col-sm-3 control-label">项目建设周期</label>
+							<div class="col-sm-9">
+								<input type="number" disabled class="form-control" id="period">
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="createTime" class="col-sm-3 control-label">创建时间</label>
+							<div class="col-sm-9">
+								<input type="date" disabled class="form-control" id="createTime">
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="ret" class="btn btn-default" data-dismiss="modal">返回</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
@@ -267,5 +233,51 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
+<script>
+	//给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    //搜索栏有数据则打开
+    if($("#selectName").val() != null && $("#selectName").val() != ''){
+        $("#cm-search").addClass("open");
+    }
+
+    //获取详细信息
+    function select(obj){
+        $("#myModalLabel").text("详细信息");
+        $.post("/admin/detailed",
+		{
+			"id":obj.value
+		},
+		function(data){
+			var obj = $.parseJSON(data);
+			$('#period').val(obj.project.period);
+			$('#card').val(obj.person.oneCardSolution);
+			$('#createTime').val(obj.createTime);
+			$('#telphone').val(obj.person.telphone);
+			$('#personName').val(obj.person.name);
+			$('#cardFront').click(function(){
+				window.location.href="/admin/downloadCard?name=front&id=" + obj.person.id;
+			});
+			$('#cardReverse').click(function(){
+				window.location.href="/admin/downloadCard?name=reverse&id=" + obj.person.id;
+			});
+        }),"json";
+    }
+
+    //改变
+    function status(obj){
+    	var id = $(obj).attr("value");
+    	$.post("/admin/status",{
+    		"id":id.substring(0, id.indexOf(",")),
+    		"status":id.substring(id.indexOf(",")+1)
+    	},function(status){
+    		if(status != "error"){
+    			window.location.href="/admin/xjhbCheck?pageNumber="+ $('#pageNumber').val();
+    		}else{
+    			alert("网络错误！");
+    		}
+    	});
+	}
+</script>
 </body>
 </html>

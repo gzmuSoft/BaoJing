@@ -158,7 +158,7 @@ public class AdminController {
      */
     @RequestMapping(value = "/xjhbApply")
     public String xjhbApply(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
-        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectInformationByNameLike(name, pageNumber);
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectApplyByNameLike(name, pageNumber);
         //防止搜索栏bug
         if (name == null) {
             name = "";
@@ -170,7 +170,7 @@ public class AdminController {
     }
 
     /**
-     * 申请书详细信息
+     * 详细信息(通用)
      * @param id
      * @return
      */
@@ -194,23 +194,16 @@ public class AdminController {
     }
 
     /**
-     * 改变申请书状态
+     * 改变状态（通用）
      * @param id 申请书id
      * @param status 申请书status
      * @return
      */
     @ResponseBody
-    @PostMapping(value = "/applyStatus")
-    public String applyStatus(int id, String status) {
+    @PostMapping(value = "/status")
+    public String status(int id, byte status) {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
-        System.out.println("id="+id + status);
-        if (status.equals("通过")) {
-            byte sta = 3;
-            xjhbInformation.setStatus(sta);
-        } else {
-            byte sta = 2;
-            xjhbInformation.setStatus(sta);
-        }
+        xjhbInformation.setStatus(status);
         xjhbInformationService.updateByPrimaryKey(xjhbInformation);
         return "";
     }
@@ -221,7 +214,16 @@ public class AdminController {
      * @return
      */
     @RequestMapping(value = "/xjhbCheck")
-    public String xjhbCheck(Model model){
+    public String xjhbCheck(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectCheckByNameLike(name, pageNumber);
+        System.out.println(pageInfo);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_check";
     }
 
@@ -231,7 +233,7 @@ public class AdminController {
      * @return return
      */
     @RequestMapping(value = "/xjhbAdopt")
-    public String xjhbAdopt(Model model){
+    public String xjhbAdopt(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         return "admin/xjhb_adopt";
     }
 
@@ -352,6 +354,7 @@ public class AdminController {
     /**
      * 下载申请书
      * @param id id
+     * @param name name
      * @param request request
      * @param response response
      * @return return
@@ -365,6 +368,21 @@ public class AdminController {
         }else {
             FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
         }
+        return "";
+    }
+
+    /**
+     * 下载现场照片
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadScenePhotos")
+    public String downloadScenePhotos(int id, HttpServletRequest request, HttpServletResponse response){
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        FileUtil.downloadFile(xjhbInformation.getScenePhotos(),xjhbInformation.getScenePhotosName(),request,response);
         return "";
     }
 

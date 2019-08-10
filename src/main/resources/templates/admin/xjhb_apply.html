@@ -27,8 +27,8 @@
 						<ul>
 							<li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
 							<li class="active"><a href="#">申请书管理</a></li>
-							<li><a href="/admin/xjhbCheck">待验收管理</a></li>
-							<li><a href="/admin/xjhbAdopt">验收通过查看</a></li>
+							<li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
+							<li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
 						</ul>
 					</li>
 					<li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
@@ -115,9 +115,9 @@
 								<div class="btn-group">
 								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;审核&nbsp;&nbsp;<span class="caret"></span></button>
 								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#" th:value="${apply.id}" onclick="applyStatus(this)">通过</a></li>
+								        <li><a href="#" th:value="${apply.id+',3'}" onclick="status(this)">通过</a></li>
 										<li class="divider"></li>
-								        <li><a href="#" th:value="${apply.id}" onclick="applyStatus(this)">否定</a></li>
+								        <li><a href="#" th:value="${apply.id+',2'}" onclick="status(this)">否定</a></li>
 								    </ul>
 								</div>
 							</td>
@@ -268,10 +268,11 @@
     }
 
     //改变
-    function applyStatus(obj){
-    	$.post("/admin/applyStatus",{
-    		"id":$(obj).attr("value"),
-    		"status":obj.text
+    function status(obj){
+    	var id = $(obj).attr("value");
+    	$.post("/admin/status",{
+    		"id":id.substring(0, id.indexOf(",")),
+    		"status":id.substring(id.indexOf(",")+1)
     	},function(status){
     		if(status != "error"){
     			window.location.href="/admin/xjhbApply?pageNumber="+ $('#pageNumber').val();

@@ -7,6 +7,7 @@
     <result column="outlay" jdbcType="DOUBLE" property="outlay" />
     <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="scene_photos_name" jdbcType="VARCHAR" property="scenePhotosName" />
     <result column="scene_photos" jdbcType="VARCHAR" property="scenePhotos" />
     <result column="other_proof_name" jdbcType="VARCHAR" property="otherProofName" />
     <result column="other_proof" jdbcType="VARCHAR" property="otherProof" />
@@ -38,6 +39,7 @@
       outlay = #{outlay,jdbcType=DOUBLE},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
+      scene_photos_name = #{scenePhotosName,jdbcType=VARCHAR},
       scene_photos = #{scenePhotos,jdbcType=VARCHAR},
       other_proof_name = #{otherProofName,jdbcType=VARCHAR},
       other_proof = #{otherProof,jdbcType=VARCHAR},
@@ -49,7 +51,7 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, project_id, outlay, start_time, end_time, scene_photos, other_proof_name,
+    select id, project_id, outlay, start_time, end_time, scene_photos_name, scene_photos, other_proof_name,
     other_proof, project_application, project_application_name, person_id, create_time,
     status
     from xjhb_information
@@ -69,13 +71,27 @@
     from xjhb_information
     where person_id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectInformationByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, h.scene_photos, h.other_proof_name,
+  <select id="selectApplyByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, h.other_proof_name,
     h.other_proof,h.project_application_name, h.project_application, h.person_id,p.name as person_name,h.create_time, h.status
-    from (select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.scene_photos, i.other_proof_name,
+    from (select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.other_proof_name,
     i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status
     from xjhb_information i join xjhb_project p
     where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
     where h.person_id = p.id and h.status = 1
+  </select>
+  <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, p.one_card_solution, h.other_proof_name,h.scene_photos,h.scene_photos_name,
+    h.other_proof,h.project_application_name, h.project_application, h.person_id,p.name as person_name,h.create_time, h.status
+    from (select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.other_proof_name,i.scene_photos ,i.scene_photos_name,
+    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status
+    from xjhb_information i join xjhb_project p
+    where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
+    where h.person_id = p.id and h.status in (4,5)
+    order by
+    case
+    when h.status=4 then 1
+    when h.status=5 then 2
+    end
   </select>
 </mapper>

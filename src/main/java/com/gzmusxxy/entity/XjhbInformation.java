@@ -10,12 +10,16 @@ public class XjhbInformation {
     private Integer id;
 
     private Integer projectId;
+    /**额外添加的字段*/
+    private String projectName;
 
     private Double outlay;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
+
+    private String scenePhotosName;
 
     private String scenePhotos;
 
@@ -32,7 +36,7 @@ public class XjhbInformation {
     private String personName;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
-    /**1.未审核 2.审核失败 3.审核通过（待验收） 4.线下验收 5.验收通过（待转帐） 6.已转帐*/
+    /**1.未审核 2.审核失败 3.审核通过 4.待验收 5.线下验收 6.验收通过（待转帐）7.验收失败 8.已转帐*/
     private Byte status;
 
 

@@ -15,7 +15,9 @@ public interface XjhbInformationMapper {
 
     int updateByPrimaryKey(XjhbInformation record);
 
-    List<XjhbInformation> selectInformationByNameLike(String name);
+    List<XjhbInformation> selectApplyByNameLike(String name);
+
+    List<XjhbInformation> selectCheckByNameLike(String name);
 
     List<XjhbInformation> findInfobyPersonId(int personId);
 

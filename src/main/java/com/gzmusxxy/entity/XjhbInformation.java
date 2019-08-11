@@ -34,6 +34,8 @@ public class XjhbInformation {
     private Integer personId;
     /**额外添加的字段*/
     private String personName;
+    /**额外添加的字段*/
+    private String oneCardSolution;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
     /**1.未审核 2.审核失败 3.审核通过 4.待验收 5.线下验收 6.验收通过（待转帐）7.验收失败 8.已转帐*/

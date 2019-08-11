@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 后台管理
@@ -186,7 +187,6 @@ public class AdminController {
         if (xjhbInformation.getCreateTime() != null) {
             createTime = formatter.format(xjhbInformation.getCreateTime());
         }
-        //json.put("card",xjhbInformation.getOneCardSolution());
         json.put("createTime",createTime);
         json.put("project",xjhbProject);
         json.put("person",xjhbPerson);
@@ -210,13 +210,14 @@ public class AdminController {
 
     /**
      * 待验收管理
-     * @param model
-     * @return
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return return
      */
     @RequestMapping(value = "/xjhbCheck")
     public String xjhbCheck(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectCheckByNameLike(name, pageNumber);
-        System.out.println(pageInfo);
         //防止搜索栏bug
         if (name == null) {
             name = "";
@@ -230,11 +231,33 @@ public class AdminController {
     /**
      * 验收通过查看
      * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
      * @return return
      */
     @RequestMapping(value = "/xjhbAdopt")
     public String xjhbAdopt(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectAdoptByNameLike(name, pageNumber);
+        System.out.println(pageInfo);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_adopt";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/adoptAllTransfer")
+    public String adoptAllTransfer(Integer status){
+        if (status == 8){
+            return xjhbInformationService.updateStatus().toString();
+        }else {
+            List<XjhbInformation> xjhbInformationList = xjhbInformationService.selectAdoptByStatus(status);
+        }
+        return "dao";
     }
 
     /**

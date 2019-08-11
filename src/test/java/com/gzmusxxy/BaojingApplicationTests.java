@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.List;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BaojingApplicationTests {
@@ -18,7 +20,7 @@ public class BaojingApplicationTests {
 
     @Test
     public void contextLoads() {
-        PageInfo<XjhbInformation> xjhbInformationPageInfo = xjhbInformationService.selectInformationByNameLike(null, 1);
+        List<XjhbInformation> xjhbInformationPageInfo = xjhbInformationService.selectAdoptByStatus(6);
         System.out.println(xjhbInformationPageInfo);
     }
 

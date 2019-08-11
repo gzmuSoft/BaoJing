@@ -19,6 +19,11 @@ public interface XjhbInformationMapper {
 
     List<XjhbInformation> selectCheckByNameLike(String name);
 
+    List<XjhbInformation> selectAdoptByNameLike(String name);
+
     List<XjhbInformation> findInfobyPersonId(int personId);
 
+    List<XjhbInformation> selectAdoptByStatus(int status);
+
+    int updateStatus();
 }

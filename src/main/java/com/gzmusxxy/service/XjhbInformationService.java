@@ -21,4 +21,10 @@ public interface XjhbInformationService {
     XjhbInformation selectByPrimaryKey(Integer id);
 
     PageInfo<XjhbInformation> selectCheckByNameLike(String name,Integer pageNumber);
+
+    PageInfo<XjhbInformation> selectAdoptByNameLike(String name,Integer pageNumber);
+
+    List<XjhbInformation> selectAdoptByStatus(int status);
+
+    Integer updateStatus();
 }

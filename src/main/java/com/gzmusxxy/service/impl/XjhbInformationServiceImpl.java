@@ -80,5 +80,29 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
         return new PageInfo<>(list);
     }
 
+    @Override
+    public PageInfo<XjhbInformation> selectAdoptByNameLike(String name, Integer pageNumber) {
+        if (name != null && name != ""){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<XjhbInformation> list = xjhbInformationMapper.selectAdoptByNameLike(name);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<XjhbInformation> selectAdoptByStatus(int status) {
+        return xjhbInformationMapper.selectAdoptByStatus(status);
+    }
+
+    @Override
+    public Integer updateStatus() {
+        return xjhbInformationMapper.updateStatus();
+    }
+
 
 }

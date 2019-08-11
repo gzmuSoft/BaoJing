@@ -94,4 +94,24 @@
     when h.status=5 then 2
     end
   </select>
+  <select id="selectAdoptByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select h.id, h.project_id, h.project_name,h.outlay,p.one_card_solution,h.person_id,p.name as person_name, h.status
+    from (select i.id, i.project_id, p.project_name,i.outlay, i.person_id, i.status from xjhb_information i join xjhb_project p where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
+    where h.person_id = p.id and h.status in (6,8)
+    order by
+    case
+    when h.status=6 then 1
+    when h.status=8 then 2
+    end
+  </select>
+  <select id="selectAdoptByStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select h.id, h.project_id, h.project_name,h.outlay,p.one_card_solution,h.person_id,p.name as person_name, h.status
+    from (select i.id, i.project_id, p.project_name,i.outlay, i.person_id, i.status from xjhb_information i join xjhb_project p where i.project_id= p.id) h join xjhb_person p
+    where h.person_id = p.id and h.status = #{status}
+  </select>
+  <update id="updateStatus">
+    update xjhb_information
+    set status = 8
+    where status = 6
+  </update>
 </mapper>

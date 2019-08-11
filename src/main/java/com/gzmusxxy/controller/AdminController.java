@@ -10,6 +10,7 @@ import com.gzmusxxy.service.AdminService;
 import com.gzmusxxy.service.XjhbInformationService;
 import com.gzmusxxy.service.XjhbPersonService;
 import com.gzmusxxy.service.XjhbProjectService;
+import com.gzmusxxy.util.ExcelUtil;
 import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -249,15 +251,14 @@ public class AdminController {
         return "admin/xjhb_adopt";
     }
 
+    /**
+     * 标记全部转帐
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "/adoptAllTransfer")
-    public String adoptAllTransfer(Integer status){
-        if (status == 8){
-            return xjhbInformationService.updateStatus().toString();
-        }else {
-            List<XjhbInformation> xjhbInformationList = xjhbInformationService.selectAdoptByStatus(status);
-        }
-        return "dao";
+    public String adoptAllTransfer(){
+        return xjhbInformationService.updateStatus().toString();
     }
 
     /**
@@ -406,6 +407,38 @@ public class AdminController {
     public String downloadScenePhotos(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
         FileUtil.downloadFile(xjhbInformation.getScenePhotos(),xjhbInformation.getScenePhotosName(),request,response);
+        return "";
+    }
+
+    /**
+     * 导出全部未转帐excl
+     * @param status id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadExcl")
+    public String downloadExcl(int status, HttpServletRequest request, HttpServletResponse response){
+        List<XjhbInformation> xjhbInformationList = xjhbInformationService.selectAdoptByStatus(status);
+        String title[] = new String[]{"编号","申请项目名称","项目申请经费","申请人","农户一卡通号"};
+        String items[][] = new String[xjhbInformationList.size()][title.length];
+        int j = 0;
+        for (XjhbInformation xjhbInformation:
+        xjhbInformationList) {
+            items[j][0] = xjhbInformation.getId().toString();
+            items[j][1] = xjhbInformation.getProjectName();
+            items[j][2] = xjhbInformation.getOutlay().toString();
+            items[j][3] = xjhbInformation.getProjectName();
+            items[j][4] = xjhbInformation.getOneCardSolution();
+            j++;
+        }
+        String path = ExcelUtil.getHSSFWorkbook(
+                "先建后补项目转帐名单",title,items,null,
+                FileUtil.FILE_PATH2,"先建后补项目转帐名单"
+        );
+        String name = path.substring(path.lastIndexOf("/"));
+        FileUtil.downloadFile(path,name,request,response);
         return "";
     }
 

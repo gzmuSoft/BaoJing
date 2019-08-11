@@ -10,6 +10,7 @@ import com.gzmusxxy.service.AdminService;
 import com.gzmusxxy.service.XjhbInformationService;
 import com.gzmusxxy.service.XjhbPersonService;
 import com.gzmusxxy.service.XjhbProjectService;
+import com.gzmusxxy.util.ExcelUtil;
 import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -22,7 +23,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 后台管理
@@ -158,7 +161,7 @@ public class AdminController {
      */
     @RequestMapping(value = "/xjhbApply")
     public String xjhbApply(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
-        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectInformationByNameLike(name, pageNumber);
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectApplyByNameLike(name, pageNumber);
         //防止搜索栏bug
         if (name == null) {
             name = "";
@@ -170,7 +173,7 @@ public class AdminController {
     }
 
     /**
-     * 申请书详细信息
+     * 详细信息(通用)
      * @param id
      * @return
      */
@@ -186,7 +189,6 @@ public class AdminController {
         if (xjhbInformation.getCreateTime() != null) {
             createTime = formatter.format(xjhbInformation.getCreateTime());
         }
-        json.put("card",xjhbInformation.getOneCardSolution());
         json.put("createTime",createTime);
         json.put("project",xjhbProject);
         json.put("person",xjhbPerson);
@@ -194,45 +196,69 @@ public class AdminController {
     }
 
     /**
-     * 改变申请书状态
+     * 改变状态（通用）
      * @param id 申请书id
      * @param status 申请书status
      * @return
      */
     @ResponseBody
-    @PostMapping(value = "/applyStatus")
-    public String applyStatus(int id, String status) {
+    @PostMapping(value = "/status")
+    public String status(int id, byte status) {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
-        System.out.println("id="+id + status);
-        if (status.equals("通过")) {
-            byte sta = 2;
-            xjhbInformation.setStatus(sta);
-        } else {
-            byte sta = 3;
-            xjhbInformation.setStatus(sta);
-        }
+        xjhbInformation.setStatus(status);
         xjhbInformationService.updateByPrimaryKey(xjhbInformation);
         return "";
     }
 
     /**
      * 待验收管理
-     * @param model
-     * @return
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return return
      */
     @RequestMapping(value = "/xjhbCheck")
-    public String xjhbCheck(Model model){
+    public String xjhbCheck(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectCheckByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_check";
     }
 
     /**
      * 验收通过查看
      * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
      * @return return
      */
     @RequestMapping(value = "/xjhbAdopt")
-    public String xjhbAdopt(Model model){
+    public String xjhbAdopt(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectAdoptByNameLike(name, pageNumber);
+        System.out.println(pageInfo);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_adopt";
+    }
+
+    /**
+     * 标记全部转帐
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/adoptAllTransfer")
+    public String adoptAllTransfer(){
+        return xjhbInformationService.updateStatus().toString();
     }
 
     /**
@@ -345,6 +371,7 @@ public class AdminController {
     @RequestMapping(value= "/downloadProject")
     public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
+        System.out.println(xjhbProject.getApplicationTemplate()+"........"+xjhbProject.getApplicationTemplateName());
         FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
         return "";
     }
@@ -352,6 +379,7 @@ public class AdminController {
     /**
      * 下载申请书
      * @param id id
+     * @param name name
      * @param request request
      * @param response response
      * @return return
@@ -365,6 +393,53 @@ public class AdminController {
         }else {
             FileUtil.downloadFile(xjhbInformation.getOtherProof(),xjhbInformation.getOtherProofName(),request,response);
         }
+        return "";
+    }
+
+    /**
+     * 下载现场照片
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadScenePhotos")
+    public String downloadScenePhotos(int id, HttpServletRequest request, HttpServletResponse response){
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        FileUtil.downloadFile(xjhbInformation.getScenePhotos(),xjhbInformation.getScenePhotosName(),request,response);
+        return "";
+    }
+
+    /**
+     * 导出全部未转帐excl
+     * @param status id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadExcl")
+    public String downloadExcl(int status, HttpServletRequest request, HttpServletResponse response){
+        List<XjhbInformation> xjhbInformationList = xjhbInformationService.selectAdoptByStatus(status);
+        String title[] = new String[]{"编号","申请项目名称","项目申请经费","申请人","农户一卡通号"};
+        String items[][] = new String[xjhbInformationList.size()][title.length];
+        int j = 0;
+        for (XjhbInformation xjhbInformation:
+        xjhbInformationList) {
+            items[j][0] = xjhbInformation.getId().toString();
+            items[j][1] = xjhbInformation.getProjectName();
+            items[j][2] = xjhbInformation.getOutlay().toString();
+            items[j][3] = xjhbInformation.getProjectName();
+            items[j][4] = xjhbInformation.getOneCardSolution();
+            j++;
+        }
+        String path = ExcelUtil.getHSSFWorkbook(
+                "先建后补项目转帐名单",title,items,null,
+                FileUtil.FILE_PATH2,"先建后补项目转帐名单"
+        );
+        String name = path.substring(path.lastIndexOf("/"));
+        FileUtil.downloadFile(path,name,request,response);
         return "";
     }
 

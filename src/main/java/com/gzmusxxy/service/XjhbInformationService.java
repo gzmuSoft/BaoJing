@@ -12,11 +12,19 @@ public interface XjhbInformationService {
      * */
     int saveInformation(XjhbInformation xjhbInformation);
 
-    PageInfo<XjhbInformation> selectInformationByNameLike(String name, Integer pageNumber);
+    PageInfo<XjhbInformation> selectApplyByNameLike(String name, Integer pageNumber);
 
     List<XjhbInformation> findInfobyPersonId(int personId);
 
     int updateByPrimaryKey(XjhbInformation record);
 
     XjhbInformation selectByPrimaryKey(Integer id);
+
+    PageInfo<XjhbInformation> selectCheckByNameLike(String name,Integer pageNumber);
+
+    PageInfo<XjhbInformation> selectAdoptByNameLike(String name,Integer pageNumber);
+
+    List<XjhbInformation> selectAdoptByStatus(int status);
+
+    Integer updateStatus();
 }

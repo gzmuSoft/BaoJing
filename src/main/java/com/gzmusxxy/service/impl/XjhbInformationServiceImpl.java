@@ -38,7 +38,7 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
     }
 
     @Override
-    public PageInfo<XjhbInformation> selectInformationByNameLike(String name,Integer pageNumber) {
+    public PageInfo<XjhbInformation> selectApplyByNameLike(String name,Integer pageNumber) {
         if (name != null && name != ""){
             name = "%" + name + "%";
         }else {
@@ -47,7 +47,7 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
-        List<XjhbInformation> list = xjhbInformationMapper.selectInformationByNameLike(name);
+        List<XjhbInformation> list = xjhbInformationMapper.selectApplyByNameLike(name);
         return new PageInfo<>(list);
     }
 
@@ -64,6 +64,44 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
     @Override
     public XjhbInformation selectByPrimaryKey(Integer id) {
         return xjhbInformationMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public PageInfo<XjhbInformation> selectCheckByNameLike(String name,Integer pageNumber) {
+        if (name != null && name != ""){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<XjhbInformation> list = xjhbInformationMapper.selectCheckByNameLike(name);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<XjhbInformation> selectAdoptByNameLike(String name, Integer pageNumber) {
+        if (name != null && name != ""){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<XjhbInformation> list = xjhbInformationMapper.selectAdoptByNameLike(name);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public List<XjhbInformation> selectAdoptByStatus(int status) {
+        return xjhbInformationMapper.selectAdoptByStatus(status);
+    }
+
+    @Override
+    public Integer updateStatus() {
+        return xjhbInformationMapper.updateStatus();
     }
 
 

@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
-	<link rel="stylesheet" type="text/css" th:href="@{/assets/css/tong-yong.css}">
 	<link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
 	<title>admin Page</title>
 </head>
@@ -28,8 +27,8 @@
 						<ul>
 							<li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
 							<li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
-							<li><a href="/admin/xjhbCheck">待验收管理</a></li>
-							<li class="active"><a href="/admin/xjhbAdopt">验收通过查看</a></li>
+							<li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
+							<li class="active"><a href="#">验收通过查看</a></li>
 						</ul>
 					</li>
 					<li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
@@ -43,8 +42,9 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
 			<h1>验收通过查看</h1>
-			<form id="cm-search" action="index.html" method="get">
-				<input type="search" name="q" autocomplete="off" placeholder="输入需要查询的项目名称...">
+			<form id="cm-search" action="/admin/xjhbAdopt" method="get">
+				<input type="hidden" name="pageNumber" value="1">
+				<input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
 			</form>
 		</div>
 		<!-- 查询按钮 -->
@@ -74,11 +74,16 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Tables with contextual classes</div>
+                    <div class="panel-heading">先建后补待转帐查看</div>
+					<div class="panel-body">
+						<button type="button" value="8" onclick="allTransfer(this)" class="btn btn-success">全部标记已转帐</button>&nbsp;&nbsp;&nbsp;&nbsp;
+						<button type="button" value="6" onclick="allTransfer(this)" class="btn btn-success">Excl导出全部待转帐信息</button>
+					</div>
                     <table class="table text-center">
                         <thead>
                         <tr>
                             <th >#</th>
+							<th class="text-center">编号</th>
                             <th class="text-center">申请项目名称</th>
                             <th class="text-center">项目申请经费</th>
 							<th class="text-center">申请人</th>
@@ -87,111 +92,25 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>active</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
+						<tr class="success" th:each="adopt:${pageInfo.list}">
+							<th scope="row" th:text="${adoptStat.index+1}"></th>
+							<th th:text="${adopt.id}"></th>
+							<td th:text="${adopt.projectName}"></td>
+							<td th:text="${adopt.outlay}"></td>
+							<td th:text="${adopt.personName}"></td>
+							<td th:text="${adopt.oneCardSolution}"></td>
 							<td>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp未打钱&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">已打钱</a></li>
-								    </ul>
+								<div class="btn-group" th:if="${adopt.status == 6}">
+								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待转帐&nbsp;&nbsp;<span class="caret"></span></button>
+									<ul class="dropdown-menu" role="menu" style="width:50px">
+										<li><a href="#" th:value="${adopt.id+',8'}" onclick="status(this)">已转帐</a></li>
+									</ul>
+								</div>
+								<div th:if="${adopt.status == 8}">
+									<button type="button" disabled class="btn btn-success btn-xs">&nbsp;&nbsp;已转帐&nbsp;&nbsp;</button>
 								</div>
 							</td>
                         </tr>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>active</td>
-                        	<td>Column content</td>
-                        	<td>Column content</td>
-                        	<td>Column content</td>
-                        	<td>
-                        		<div class="btn-group">
-                        		    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp未打钱&nbsp &nbsp <span class="caret"></span></button>
-                        		    <ul class="dropdown-menu" role="menu" style="width:50px">
-                        		        <li><a href="#">已打钱</a></li>
-                        		    </ul>
-                        		</div>
-                        	</td>
-                        </tr>
-						<tr>
-						    <th scope="row">1</th>
-						    <td>active</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp未打钱&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">已打钱</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-						    <th scope="row">1</th>
-						    <td>active</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp未打钱&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">已打钱</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-						    <th scope="row">1</th>
-						    <td>active</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp未打钱&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">已打钱</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-						    <th scope="row">1</th>
-						    <td>active</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-success dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp已打钱&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">未打钱</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
-						<tr>
-						    <th scope="row">1</th>
-						    <td>active</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>Column content</td>
-							<td>
-								<div class="btn-group">
-								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp&nbsp未打钱&nbsp &nbsp <span class="caret"></span></button>
-								    <ul class="dropdown-menu" role="menu" style="width:50px">
-								        <li><a href="#">已打钱</a></li>
-								    </ul>
-								</div>
-							</td>
-						</tr>
                         </tbody>
                     </table>
                 </div>
@@ -200,25 +119,34 @@
 		<!-- 分页 -->
 		<nav class="text-center mt-50">
 			<ul class="pagination shadowed" style="margin:0">
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage > 0}">
+					<a th:href="@{'/admin/xjhbAdopt?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li>
-					<a href="#">
+				<li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+					<a>
+						<span><i class="fa fa-angle-left"></i></span>
+					</a>
+				</li>
+				<li th:each="num:${pages}">
+					<a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+					<a th:href="@{'/admin/xjhbAdopt?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+				</li>
+				<li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+					<a>
+						<span><i class="fa fa-angle-right"></i></span>
+					</a>
+				</li>
+				<li th:if="${pageInfo.nextPage > 0}">
+					<a th:href="@{'/admin/xjhbAdopt?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-right"></i></span>
 					</a>
 				</li>
 			</ul>
 		</nav>
     </div>
-
+	<input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
@@ -228,5 +156,45 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
+<script>
+	//给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    //搜索栏有数据则打开
+    if($("#selectName").val() != null && $("#selectName").val() != ''){
+        $("#cm-search").addClass("open");
+    }
+
+    //改变
+    function status(obj){
+    	var id = $(obj).attr("value");
+    	$.post("/admin/status",{
+    		"id":id.substring(0, id.indexOf(",")),
+    		"status":id.substring(id.indexOf(",")+1)
+    	},function(status){
+    		if(status != "error"){
+    			window.location.href="/admin/xjhbAdopt?pageNumber="+ $('#pageNumber').val();
+    		}else{
+    			alert("网络错误！");
+    		}
+    	});
+	}
+
+	function allTransfer(obj){
+		if(obj.value == 8){
+			$.post("/admin/adoptAllTransfer",
+				{
+					'status':obj.value
+				},function(data){
+					if(data != '' && data != null){
+						alert("更新了"+data+"条数据");
+						window.location.href="/admin/xjhbAdopt?pageNumber="+ $('#pageNumber').val();
+					}
+				}
+			);
+		}else{
+			window.location.href="/admin/downloadExcl?status="+ obj.value;
+		}
+	}
+</script>
 </body>
 </html>

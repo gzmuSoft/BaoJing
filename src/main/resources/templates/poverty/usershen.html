@@ -177,6 +177,7 @@
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         other_file_name = obj.value.substring(otherFileNameStart+1,extStart)
         data.append('type',ext);
+
         $.ajax({
             url: '/poverty/upOther',
             type: 'POST',
@@ -188,7 +189,6 @@
 
                 alert("上传成功！");
                 if(obj.id == 'scenePhotos'){
-                    alert(result)
                     scenePhotos_path=result;
                 }
             },

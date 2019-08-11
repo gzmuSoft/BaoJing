@@ -326,10 +326,8 @@
                 {
                     "findId":information_id
                 },function (result) {
-                    // var start= new Date(result.startTime);
-                    // start=start.format('yyyy-MM-dd');//2017-11-22
-                    // var end= new Date(result.endTime);
-                    // end=end.format('yyyy-MM-dd');//2017-11-22
+                var result = new Function("return" + result)();
+
                     $("#startTime").val(timestampToTime(result.startTime));
                     $("#endTime").val(timestampToTime(result.endTime));
                     $("#select").val(result.projectId)

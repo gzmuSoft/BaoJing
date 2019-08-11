@@ -221,8 +221,8 @@
 
     $("#submit").click(function(){
 
-        console.log(front_path)
-        if($('#name').val() != null&& $('#name').val() != "" && $('#identity').val()!=null && $('#identity').val()!="" &&$('#tel').val()!=null &&$('#tel').val()!=""  &&$('#oneCardSolution').val()!=null &&$('#oneCardSolution').val()!=""&&$('#village').val()!=null&&$('#village').val()!="" ){
+        console.log($("#filename2").html())
+        if($('#name').val() != null&& $('#name').val() != "" && $('#identity').val()!=null && $('#identity').val()!="" &&$('#tel').val()!=null &&$('#tel').val()!=""  &&$('#oneCardSolution').val()!=null &&$('#oneCardSolution').val()!=""&&$('#village').val()!=null&&$('#village').val()!="" && $("#filename1").html() !="未上传文件" && $("#filename2").html() !="未上传文件"){
             $.post('/poverty/userMsg',
                 {
                     'name':$('#name').val(),
@@ -238,7 +238,7 @@
                 function(result){
                     //alert("数据: \n" + data + "\n状态: " + status);
                     if(result!=null){
-                        //window.location.href="/poverty/usershen"
+                        window.location.href="/poverty/usershen"
                     }
 
                 });

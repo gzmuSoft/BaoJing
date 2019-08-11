@@ -28,8 +28,10 @@
                 <div class="form-group">
                     <label for="name" class="col-sm-2 control-label">姓名：</label>
                     <div class="col-sm-10">
-                        <input  type="text" name="name" class="form-control" id="name" placeholder="姓名" required>
+                        <input  type="text" name="name" class="form-control" id="name" onblur='onName(this)' placeholder="姓名" required>
+                        <div id="tishiName" style="color: red;"></div>
                     </div>
+
                 </div>
                 <div class="form-group">
                     <label for="identity" class="col-sm-2 control-label">身份证号码：</label>
@@ -38,14 +40,41 @@
                         <div id="tishiIdentity" style="color: red;"></div>
                     </div>
                     <script>
+                        function onName(){
+                            console.log($("#name"))
+                            if($("#name").val() == null || $("#name").val() ==""){
+                                $("#tishiName").html("*请填写名字")
+                            }else{
+                                $("#tishiName").html("")
+                            }
+                        }
                         function onIdentity(){
-                            if($("#identity").length<18 || $("#identity").length<18){
+
+                            if($("#identity").val().length<18 || $("#identity").val().length>18){
                                 $("#tishiIdentity").html("*身份证号码填写有误")
+                            }else{
+                                $("#tishiIdentity").html("")
                             }
                         }
                         function onOneCardSolution(){
-                            if($("#oneCardSolution").length<18 || $("#oneCardSolution").length<18){
+                            if($("#oneCardSolution").val().length<22 || $("#oneCardSolution").val().length>22){
                                 $("#tishiOneCardSolution").html("*一卡通号码填写有误")
+                            }else{
+                                $("#tishiOneCardSolution").html("")
+                            }
+                        }
+                        function onTel(){
+                            if($("#tel").val() == null || $("#tel").val() ==""){
+                                $("#tishiTel").html("*请填写电话")
+                            }else{
+                                $("#tishiTel").html("")
+                            }
+                        }
+                        function onVillage(){
+                            if($("#village").val() == null || $("#village").val() ==""){
+                                $("#tishiVillage").html("*请填写村组")
+                            }else{
+                                $("#tishiVillage").html("")
                             }
                         }
                     </script>
@@ -54,19 +83,23 @@
                     <label for="identity" class="col-sm-2 control-label">农户一卡通：</label>
                     <div class="col-sm-10">
                         <input   type="text" name="oneCardSolution" class="form-control" id="oneCardSolution"  onblur='onOneCardSolution(this)'  placeholder="农户一卡通" required>
+                        <div id="tishiOneCardSolution" style="color: red;"></div>
                     </div>
-                    <div id="tishiOneCardSolution" style="color: red;"></div>
+
                 </div>
                 <div class="form-group">
                     <label for="tel" class="col-sm-2 control-label">联系电话：</label>
                     <div class="col-sm-10">
-                        <input   type="tel" name="tel" class="form-control" id="tel" placeholder="联系电话" required>
+                        <input   type="tel" name="tel" class="form-control" onblur='onTel(this)' id="tel" placeholder="联系电话" required>
+                        <div id="tishiTel" style="color: red;"></div>
                     </div>
+
                 </div>
                 <div class="form-group">
                     <label for="village" class="col-sm-2 control-label">村组：</label>
                     <div class="col-sm-10">
-                        <input   type="text" name="village" class="form-control" id="village" placeholder="村组" required>
+                        <input   type="text" name="village" class="form-control" onblur='onVillage(this)' id="village" placeholder="村组" required>
+                        <div id="tishiVillage" style="color: red;"></div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -98,7 +131,7 @@
 <!--底部导航条-->
 <footer class="am-menu am-cf">
     <a href="/poverty/usershen">
-        <div class="am-menu-column" id="explore" style="width: 33%;">
+        <div class="am-menu-column " id="explore" style="width: 33%;">
             <span>项目申请</span>
         </div>
     </a>
@@ -108,7 +141,7 @@
         </div>
     </a>
     <a href="/poverty/user">
-        <div class="am-menu-column active" id="my" style="width: 33%;">
+        <div class="am-menu-column active " id="my" style="width: 33%;">
             <span>我的资料</span>
         </div>
     </a>
@@ -130,10 +163,10 @@
 
         var data = new FormData();
         data.append('file', obj.files[0]);
-        if(front_path != null && obj.id == 'identify_front'){
+        if(front_path != null && obj.id == 'identify_front'&&front_path != ""){
             data.append('frontPath',front_path);
         }
-        if(back_path != null && obj.id == 'identify_back'){
+        if(back_path != null && obj.id == 'identify_back'&&back_path != ""){
             data.append('backPath',back_path);
         }
         //判断类型
@@ -141,6 +174,7 @@
         extStart = filename.lastIndexOf('.');
         ext = obj.value.substring(extStart,filename.length).toUpperCase();
         data.append('type',ext);
+        console.log(data)
         $.ajax({
         url: '/poverty/upIdCard',
         type: 'POST',
@@ -153,8 +187,10 @@
                 alert("上传成功！");
                 if(obj.id == 'identify_front'){
                     front_path=result;
+
                 }else {
                     back_path=result;
+
                 }
             },
         error:function(result){
@@ -165,12 +201,18 @@
 
     $(function () {
         if([[${person.id}]] != null ){
-
             $('#name').val([[${person.name}]])
             $('#identity').val([[${person.identity}]])
             $('#tel').val([[${person.telphone}]])
             $('#village').val([[${person.village}]])
             $('#oneCardSolution').val([[${person.oneCardSolution}]])
+            if([[${person.idCardFront}]] != null && [[${person.idCardFront}]] != "" ){
+
+                $("#filename1").html("已上传，点击重新上传")
+            }
+            if([[${person.idCardReverse}]] != null &&[[${person.idCardReverse}]] != ""){
+                $("#filename2").html("已上传，点击重新上传")
+            }
         }
     })
 
@@ -179,27 +221,35 @@
 
     $("#submit").click(function(){
 
-        $.post('/poverty/userMsg',
-        {
-            'name':$('#name').val(),
-            'identity':$('#identity').val(),
-            'telphone':$('#tel').val(),
-            'createTime':"",
-            'oneCardSolution':$('#oneCardSolution').val(),
-            'village':$('#village').val(),
-            'idCardFront':front_path,
-            'idCardReverse':back_path,
-            'openid':[[${person.openid}]]
-        },
-        function(result){
-            //alert("数据: \n" + data + "\n状态: " + status);
-            if(result!=null){
-                window.location.href="/poverty/usershen"
-            }
+        console.log(front_path)
+        if($('#name').val() != null&& $('#name').val() != "" && $('#identity').val()!=null && $('#identity').val()!="" &&$('#tel').val()!=null &&$('#tel').val()!=""  &&$('#oneCardSolution').val()!=null &&$('#oneCardSolution').val()!=""&&$('#village').val()!=null&&$('#village').val()!="" ){
+            $.post('/poverty/userMsg',
+                {
+                    'name':$('#name').val(),
+                    'identity':$('#identity').val(),
+                    'telphone':$('#tel').val(),
+                    'createTime':"",
+                    'oneCardSolution':$('#oneCardSolution').val(),
+                    'village':$('#village').val(),
+                    'idCardFront':front_path,
+                    'idCardReverse':back_path,
+                    'openid':[[${person.openid}]]
+                },
+                function(result){
+                    //alert("数据: \n" + data + "\n状态: " + status);
+                    if(result!=null){
+                        //window.location.href="/poverty/usershen"
+                    }
 
-        });
+                });
+        }else
+        {
+            alert("请完善资料！")
+        }
+
 
     });
 </script>
+
 </body>
 </html>

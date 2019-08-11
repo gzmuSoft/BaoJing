@@ -18,7 +18,7 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public int verify(String username, String password) {
         Admin admin = admimMapper.selectByUsername(username);
-        if (admin.getUsername() != null && !admin.getUsername().equals("")){
+        if (admin != null && admin.getUsername() != null && !admin.getUsername().equals("")){
             if (password != null && !password.equals("")){
                 if (EncryptUtil.me.Base64Decode(admin.getPassword()).equals(password)){
                     return admin.getId();

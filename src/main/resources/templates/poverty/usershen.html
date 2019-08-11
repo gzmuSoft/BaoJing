@@ -50,22 +50,25 @@
                         <input   type="date" name="endTime" class="form-control" id="endTime" placeholder="截止时间" required>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="identify_other" class="col-sm-2 control-label">其他证明材料：</label><br>
                     <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
                         <button class="btn btn-success fileinput-button" type="button">其他证明材料上传</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="identify_other" id="identify_other" onchange="upOtherFile(this,this.files[0])">
                     </div>
                     <span id="otherFilename" style="vertical-align: middle">未上传文件</span>
+                    <a onclick="downZmFile(this)" ><img id="img1" th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"  style="display: none" ></a>
+
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="scenePhotos" class="col-sm-2 control-label">现场相片上传：</label><br>
                     <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
                         <button class="btn btn-success fileinput-button" type="button">现场相片上传</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="scenePhotos" id="scenePhotos" onchange="upScenePhotos(this,this.files[0])">
                     </div>
                     <span id="scenePhotosFilename" style="vertical-align: middle">未上传文件</span>
+                    <a onclick="downXcxpFile(this)" ><img id="img2" th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"   style="display: none"></a>
                 </div>
                 <div class="form-group">
                     <label for="downloadFile" class="col-sm-2 control-label">项目申请书下载：</label><br>
@@ -75,13 +78,14 @@
                     </div>
 
                 </div>
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="identify_project" class="col-sm-2 control-label">项目申请书上传：</label><br>
                     <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
                         <button class="btn btn-success fileinput-button" type="button">项目申请书上传</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="identify_project" id="identify_project" onchange="upFile(this,this.files[0])">
                     </div>
                     <span id="ProjectFilename" style="vertical-align: middle">未上传文件</span>
+                    <a onclick="downSqsFile(this)" ><img  id="img3" th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"   style="display: none"></a>
                 </div>
                 <br />
                 <br /><br />
@@ -233,6 +237,18 @@
         });
     };
 
+    function downZmFile(){
+
+        window.location.href="/poverty/downOtherFile?id="+information_id
+
+    }
+    function downXcxpFile(){
+        window.location.href="/poverty/downXcxpFile?id="+information_id
+    }
+    function downSqsFile(){
+        window.location.href="/poverty/downSqsFile?id="+information_id
+    }
+
     $("#downloadFile").click(function(){
 
         if($("#select").val() == -1){
@@ -247,47 +263,83 @@
 
     $("#tijiao").click(function () {
 
-       var datas =  {
-            "id":information_id,
-            "projectId":$("#select").val(),
-            "outlay":$("#outlay").val(),
-            "startTime":$("#startTime").val(),
-            "endTime":$("#endTime").val(),
-            "scenePhotos":scenePhotos_path,
-            "otherProofName":other_file_name,
-            "otherProof":other_path,
-            "projectApplicationName":project_file_name,
-            "projectApplication":project_path,
-            "personId":[[${person.id}]],
-            "createTime":"",
-            "stutas":"1"
-        }
+        if([[${person.name}]] != "" && [[${person.identity}]] != ""&& [[${person.telphone}]] != ""&& [[${person.village}]] != ""&& [[${person.oneCardSolution}]] != ""&&[[${person.idCardFront}]] != ""&&[[${person.idCardReverse}]] != "")
+        {
+            if($("#select").val() != -1 && $("#outlay").val() != null &&$("#outlay").val() != ""&&$("#startTime").val() !="" &&$("#endTime").val() !="" && $("#otherFilename").html() !="未上传文件"&& $("#scenePhotosFilename").html() !="未上传文件"&& $("#ProjectFilename").html() !="未上传文件"){
+                var datas =  {
+                    "id":information_id,
+                    "projectId":$("#select").val(),
+                    "outlay":$("#outlay").val(),
+                    "startTime":$("#startTime").val(),
+                    "endTime":$("#endTime").val(),
+                    "scenePhotos":scenePhotos_path,
+                    "otherProofName":other_file_name,
+                    "otherProof":other_path,
+                    "projectApplicationName":project_file_name,
+                    "projectApplication":project_path,
+                    "personId":[[${person.id}]],
+                    "createTime":"",
+                    "stutas":"1"
+                }
 
-        $.post("/poverty/saveInformation",datas
-       ,
-        function(result) {
-            if(result!=null){
-                window.location.href="/poverty/audit";
+                $.post("/poverty/saveInformation",datas
+                    ,
+                    function(result) {
+                        if(result!=null){
+                            window.location.href="/poverty/audit";
+                        }
+
+                    }
+
+                )
+
+            }else {
+                alert("请完善申请资料！")
             }
 
+        }else{
+            alert("请完善个人资料后再填写！")
+
         }
 
-        )
 
 
 
     });
 
+
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp );//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate();
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D;
+    }
+
+
     $(function () {
         if(information_id != null){
-
             $.post("/poverty/findInformationById",
                 {
                     "findId":information_id
                 },function (result) {
+                    // var start= new Date(result.startTime);
+                    // start=start.format('yyyy-MM-dd');//2017-11-22
+                    // var end= new Date(result.endTime);
+                    // end=end.format('yyyy-MM-dd');//2017-11-22
+                    $("#startTime").val(timestampToTime(result.startTime));
+                    $("#endTime").val(timestampToTime(result.endTime));
                     $("#select").val(result.projectId)
                     $("#outlay").val(result.outlay)
-
+                    $("#otherFilename").html(result.otherProof)
+                    document.getElementById('img1').style.display='';
+                    $("#scenePhotosFilename").html(result.scenePhotos)
+                    document.getElementById('img2').style.display='';
+                    $("#ProjectFilename").html(result.projectApplication)
+                    document.getElementById('img3').style.display='';
                 })
         }
     })

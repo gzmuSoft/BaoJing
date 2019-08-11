@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class PovertyController {
     public String information(HttpSession session) {
         //获取session中的用户openid
         System.out.println(session.getAttribute("openid"));
-        return "poverty/information";
+        return "poverty/user";
     }
 
     @IsLogin
@@ -59,6 +60,19 @@ public class PovertyController {
     }
 
 
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/index")
+    public String informationOk(HttpSession session) {
+        String openId =  session.getAttribute("openid").toString();
+        XjhbPerson person = new XjhbPerson();
+        if(xjhbPersonService.findPersonByOpenId(openId) == null){
+            person.setOpenid(openId);
+            xjhbPersonService.insert(person);
+        }
+        return "poverty/user";
+    }
+
     /**
     * @File : PovertyController.java
     * @Description : 转发页面连openid
@@ -68,12 +82,22 @@ public class PovertyController {
     * @Date : 2019/8/9 0:33
     */
 
+
     @IsLogin
     @RequestMapping(value = "/user")
     public String user(HttpSession session,Model model) {
         String openId =  session.getAttribute("openid").toString();
-        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
-        model.addAttribute("person",person);
+
+        if(xjhbPersonService.findPersonByOpenId(openId) == null){
+            XjhbPerson person = new XjhbPerson();
+            person.setOpenid(openId);
+            xjhbPersonService.insert(person);
+            model.addAttribute("person",person);
+        }
+        else{
+            XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+            model.addAttribute("person",person);
+        }
         model.addAttribute("openId",openId);
         return "poverty/users";
     }
@@ -99,10 +123,7 @@ public class PovertyController {
         return "poverty/usershen";
     }
 
-    @RequestMapping(value = "/information")
-    public String information() {
-        return "poverty/information";
-    }
+
 
 
 
@@ -167,18 +188,7 @@ public class PovertyController {
     }
 
 
-    @IsLogin
-    @ResponseBody
-    @RequestMapping(value = "/informationOk")
-    public String informationOk(HttpSession session) {
-        String openId =  session.getAttribute("openid").toString();
-        XjhbPerson person = new XjhbPerson();
-        if(xjhbPersonService.findPersonByOpenId(openId) == null){
-            person.setOpenid(openId);
-            xjhbPersonService.insert(person);
-        }
-        return "poverty/user";
-    }
+
 
     /**
      * 保存申请信息
@@ -257,10 +267,52 @@ public class PovertyController {
     @RequestMapping(value= "/downloadProject")
     public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
-        System.out.println(xjhbProject.getApplicationTemplate()+"........"+xjhbProject.getApplicationTemplateName());
         FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
         return "";
     }
+
+    /**
+     * @File : PovertyController.java
+     * @Description : 对已经上传的项目申请书文件下载
+     * @Param [path, name, request, response]
+     * @Return java.lang.String
+     * @Author yxf
+     * @Date : 2019/8/6 0:08
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downOtherFile")
+    public String downOtherFile(Integer id, HttpServletRequest request, HttpServletResponse response){
+
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        String path = xjhbInformation.getOtherProof();
+        int start =path.lastIndexOf("\\");
+        String name = path.substring(start+1,path.length());
+        FileUtil.downloadFile(path,name,request,response);
+        return "";
+    }
+    @ResponseBody
+    @RequestMapping(value= "/downXcxpFile")
+    public String downXcxpFile(Integer id, HttpServletRequest request, HttpServletResponse response){
+
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        String path = xjhbInformation.getScenePhotos();
+        int start = path.lastIndexOf("\\");
+        String name = path.substring(start+1,path.length());
+        FileUtil.downloadFile(path,name,request,response);
+        return "";
+    }
+    @ResponseBody
+    @RequestMapping(value= "/downSqsFile")
+    public String downSqsFile(Integer id, HttpServletRequest request, HttpServletResponse response){
+
+        XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
+        String path = xjhbInformation.getProjectApplication();
+        int start = path.lastIndexOf("\\");
+        String name = path.substring(start+1,path.length());
+        FileUtil.downloadFile(path,name,request,response);
+        return "";
+    }
+
 
 
 
@@ -270,10 +322,15 @@ public class PovertyController {
         return "poverty/usershen";
     }
 
+
     @ResponseBody
     @RequestMapping(value = "/findInformationById")
     public XjhbInformation findInformationById(int findId){
-        return xjhbInformationService.selectByPrimaryKey(findId);
+        XjhbInformation xjhbInformation =xjhbInformationService.selectByPrimaryKey(findId);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String startTime = sdf.format(xjhbInformationService.selectByPrimaryKey(findId).getStartTime());
+        String endTime = sdf.format(xjhbInformationService.selectByPrimaryKey(findId).getEndTime());
+        return xjhbInformation;
     }
 
     @ResponseBody

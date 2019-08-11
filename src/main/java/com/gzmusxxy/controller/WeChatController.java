@@ -1,6 +1,7 @@
 package com.gzmusxxy.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.gzmusxxy.util.WeChatUtil;
 import com.gzmusxxy.util.WxConfig;
 import com.gzmusxxy.entity.WeChat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,7 @@ public class WeChatController {
      */
     @RequestMapping(value = "/demo")
     public String setTestSession(Model model,HttpSession session){
+        WeChatUtil instance = WeChatUtil.getInstance();
         session.setAttribute("openid","oP1se1IxKwG6Su0y6K4Q-_3pkN_Y");
         model.addAttribute("msg","设置的openid为："+session.getAttribute("openid"));
         return "wechat/msg";

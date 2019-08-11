@@ -41,11 +41,13 @@
                         <td th:text="${xjhbInformation.outlay}"></td>
                         <td th:text="${personName}"></td>
                         <td  th:if="${xjhbInformation.status} eq '1' " ></span> <button type="button" class="btn btn-default" >待审核</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '2' " ></span><button th:id="${xjhbInformation.id}" type="button" class="btn btn-danger" onclick="restart(this)" >重新申请</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '3' " ></span><button th:id="${xjhbInformation.id}"  type="button" class="btn btn-primary" onclick="succeed(this)"  >申请验收</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '4' " ></span> <button type="button" class="btn btn-info" >线下验收</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '5' " ></span> <button type="button" class="btn btn-success" >验收通过</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '6' " ></span> <button type="button" class="btn btn-warning" >已转账</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '2' " ></span><button th:id="${xjhbInformation.id}" type="button" class="btn btn-danger" onclick="restart(this)" >审核失败</button>
+                        <td  th:if="${xjhbInformation.status} eq '3' " ></span> <button type="button" class="btn btn-default" >审核失败</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '4' " ></span><button type="button" class="btn btn-primary"  >待验收</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '5' " ></span> <button type="button" class="btn btn-info" >线下验收</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '6' " ></span> <button type="button" class="btn btn-success" >验收通过</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '7' " ></span> <button type="button" class="btn btn-success" >验收失败</button></td>
+                        <td  th:if="${xjhbInformation.status} eq '8' " ></span> <button type="button" class="btn btn-warning" >已转账</button></td>
                     </tr>
                     </tbody>
                 </table>

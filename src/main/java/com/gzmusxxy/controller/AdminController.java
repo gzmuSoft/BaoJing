@@ -371,6 +371,7 @@ public class AdminController {
     @RequestMapping(value= "/downloadProject")
     public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
+        System.out.println(xjhbProject.getApplicationTemplate()+"........"+xjhbProject.getApplicationTemplateName());
         FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
         return "";
     }

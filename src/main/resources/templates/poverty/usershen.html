@@ -52,8 +52,8 @@
                 </div>
                 <div class="form-group">
                     <label for="identify_other" class="col-sm-2 control-label">其他证明材料：</label><br>
-                    <div class="file-container" style="margin-left:25%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                        <button class="btn btn-success fileinput-button" type="button">上传</button>
+                    <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                        <button class="btn btn-success fileinput-button" type="button">其他证明材料上传</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="identify_other" id="identify_other" onchange="upOtherFile(this,this.files[0])">
                     </div>
                     <span id="otherFilename" style="vertical-align: middle">未上传文件</span>
@@ -61,31 +61,33 @@
 
                 <div class="form-group">
                     <label for="scenePhotos" class="col-sm-2 control-label">现场相片上传：</label><br>
-                    <div class="file-container" style="margin-left:25%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                        <button class="btn btn-success fileinput-button" type="button">上传</button>
+                    <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                        <button class="btn btn-success fileinput-button" type="button">现场相片上传</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="scenePhotos" id="scenePhotos" onchange="upScenePhotos(this,this.files[0])">
                     </div>
                     <span id="scenePhotosFilename" style="vertical-align: middle">未上传文件</span>
                 </div>
                 <div class="form-group">
                     <label for="downloadFile" class="col-sm-2 control-label">项目申请书下载：</label><br>
-                    <div class="file-container" style="margin-left:25%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                        <button class="btn btn-info fileinput-button" type="button">下载</button>
+                    <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                        <button class="btn btn-info fileinput-button" type="button">项目申请书下载</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="button" value="项目申请书下载" name="downloadFile" id="downloadFile">
                     </div>
 
                 </div>
                 <div class="form-group">
                     <label for="identify_project" class="col-sm-2 control-label">项目申请书上传：</label><br>
-                    <div class="file-container" style="margin-left:25%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                        <button class="btn btn-success fileinput-button" type="button">上传</button>
+                    <div class="file-container" style="margin-left:10%;display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                        <button class="btn btn-success fileinput-button" type="button">项目申请书上传</button>
                         <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="identify_project" id="identify_project" onchange="upFile(this,this.files[0])">
                     </div>
                     <span id="ProjectFilename" style="vertical-align: middle">未上传文件</span>
                 </div>
+                <br />
+                <br /><br />
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" id="tijiao" class="btn btn-default">提交</button>
+                        <button type="button" id="tijiao" class="btn btn-warning" style="width: 100%;">提交</button>
                     </div>
                 </div>
             </form>
@@ -110,6 +112,7 @@
         </div>
     </a>
 </footer>
+
 
 </div>
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->

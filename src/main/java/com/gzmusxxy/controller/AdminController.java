@@ -240,7 +240,6 @@ public class AdminController {
     @RequestMapping(value = "/xjhbAdopt")
     public String xjhbAdopt(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectAdoptByNameLike(name, pageNumber);
-        System.out.println(pageInfo);
         //防止搜索栏bug
         if (name == null) {
             name = "";
@@ -371,7 +370,6 @@ public class AdminController {
     @RequestMapping(value= "/downloadProject")
     public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
-        System.out.println(xjhbProject.getApplicationTemplate()+"........"+xjhbProject.getApplicationTemplateName());
         FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
         return "";
     }

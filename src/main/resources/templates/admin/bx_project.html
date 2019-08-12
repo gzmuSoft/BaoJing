@@ -106,7 +106,9 @@
                             <td>
                                 <div th:if="${project.claimsTemplateName != null && project.claimsTemplateName != 'null' && project.claimsTemplateName != ''}">
                                     <span th:text="${project.claimsTemplateName}"></span>&nbsp;
-                                    <a th:href="@{'/admin/downloadBxProject?id='+${project.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                    <a th:href="@{'/admin/download?name='+${project.claimsTemplateName}+'&path='+${project.claimsTemplate}}">
+                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
+                                    </a>
                                 </div>
                             </td>
                             <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>

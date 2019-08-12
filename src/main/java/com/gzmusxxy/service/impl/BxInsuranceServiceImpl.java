@@ -44,4 +44,18 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
         List<BxInsurance> list = bxInsuranceMapper.selectAuditByNameLike(name);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber) {
+        if (name != null && name != ""){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<BxInsurance> list = bxInsuranceMapper.selectClaimsByNameLike(name);
+        return new PageInfo<>(list);
+    }
 }

@@ -507,21 +507,6 @@ public class AdminController {
     }
 
     /**
-     * 下载项目模板文件
-     * @param id id
-     * @param request request
-     * @param response response
-     * @return return
-     */
-    @ResponseBody
-    @RequestMapping(value= "/downloadBxProject")
-    public String downloadBxProject(int id, HttpServletRequest request, HttpServletResponse response){
-        BxProject bxProject = bxProjectService.selectByPrimaryKey(id);
-        FileUtil.downloadFile(bxProject.getClaimsTemplate(),bxProject.getClaimsTemplateName(),request,response);
-        return "";
-    }
-
-    /**
      * 查询加分页 购买审核
      * @param model model
      * @param name name
@@ -542,22 +527,6 @@ public class AdminController {
     }
 
     /**
-     * 下载贫困证明
-     * @param id id
-     * @param request request
-     * @param response response
-     * @return return
-     */
-    @ResponseBody
-    @RequestMapping(value= "/downloadAudit")
-    public String downloadAudit(int id, HttpServletRequest request, HttpServletResponse response){
-        BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
-        XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
-        FileUtil.downloadFile(xjhbPerson.getPovertyProve(),"贫困证明",request,response);
-        return "";
-    }
-
-    /**
      * 查询加分页 理赔审核
      * @param model model
      * @param name name
@@ -566,15 +535,30 @@ public class AdminController {
      */
     @RequestMapping(value = "/bxClaims")
     public String bxClaims(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
-//        PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
-//        //防止搜索栏bug
-//        if (name == null) {
-//            name = "";
-//        }
-//        model.addAttribute("name",name);
-//        model.addAttribute("pageInfo",pageInfo);
-//        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectClaimsByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_claims";
+    }
+
+    /**
+     * 通用下载
+     * @param name
+     * @param path
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/download")
+    public String download(String name,String path, HttpServletRequest request, HttpServletResponse response){
+        FileUtil.downloadFile(path,name,request,response);
+        return "";
     }
 
     /**

@@ -109,7 +109,7 @@
                             <td th:if="${audit.poverty == 1}">
                                 <div th:if="${audit.povertyProve != null && audit.povertyProve != 'null' && audit.povertyProve != ''}">
                                     <span>贫困证明材料</span>&nbsp;
-                                    <a th:href="@{'/admin/downloadAudit?id='+${audit.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                    <a th:href="@{'/admin/download?name=贫困证明&path='+${audit.povertyProve}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                                 </div>
                             </td>
                             <td th:if="${audit.poverty != 1}">无</td>

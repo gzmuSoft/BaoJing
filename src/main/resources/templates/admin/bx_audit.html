@@ -49,7 +49,15 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>home</h1>
+            <h1>购买保险申请管理</h1>
+            <form id="cm-search" action="/admin/bxAudit" method="get">
+                <input type="hidden" name="pageNumber" value="1">
+                <input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
+            </form>
+        </div>
+        <!-- 查询按钮 -->
+        <div class="pull-right">
+            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -69,11 +77,93 @@
     </nav>
 </header>
 <div id="global">
-    <div class="container-fluid  cm-container-white" style="margin-top:0;height:875px;">
-        <h2 style="margin-top:0;">Welcome to Clearmin template demo !</h2>
-        <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est et sapien ullamcorper pharetra.
-            Vestibulum erat wisi, condimentum sed, commodo vitae, ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis.</p>
+    <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+        <!-- 表格 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">购买保险申请管理</div>
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th >#</th>
+                            <th class="text-center">项目名称</th>
+                            <th class="text-center">项目购买数量</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">联系电话</th>
+                            <th class="text-center">申请人</th>
+                            <th class="text-center">是否贫困</th>
+                            <th class="text-center">贫困证明材料</th>
+                            <th class="text-center"><code>操作</code></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success" th:each="audit:${pageInfo.list}">
+                            <th scope="row" th:text="${auditStat.index+1}"></th>
+                            <td th:text="${audit.projectName}"></td>
+                            <td th:text="${audit.buyNumber}"></td>
+                            <td th:text="${audit.identity}"></td>
+                            <td th:text="${audit.telphone}"></td>
+                            <td th:text="${audit.personName}"></td>
+                            <td th:text="${audit.poverty == 1 ? '是':'否'}"></td>
+                            <td th:if="${audit.poverty == 1}">
+                                <div th:if="${audit.povertyProve != null && audit.povertyProve != 'null' && audit.povertyProve != ''}">
+                                    <span>贫困证明材料</span>&nbsp;
+                                    <a th:href="@{'/admin/downloadAudit?id='+${audit.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                </div>
+                            </td>
+                            <td th:if="${audit.poverty != 1}">无</td>
+                            <!--状态-->
+                            <td>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;审核&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu" role="menu" style="width:50px">
+                                        <li><a href="#" th:value="${audit.id+',2'}" onclick="status(this)">通过</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" th:value="${audit.id+',3'}" onclick="status(this)">否定</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr th:if="${pageInfo.pages <= 0}">
+                            <th colspan="0" class="text-center">无数据</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <nav class="text-center mt-50">
+            <ul class="pagination shadowed" style="margin:0">
+                <li th:if="${pageInfo.prePage > 0}">
+                    <a th:href="@{'/admin/bxAudit?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:each="num:${pages}">
+                    <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+                    <a th:href="@{'/admin/bxAudit?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                </li>
+                <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.nextPage > 0}">
+                    <a th:href="@{'/admin/bxAudit?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
+    <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
@@ -83,5 +173,28 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
+<script>
+    //给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    //搜索栏有数据则打开
+    if($("#selectName").val() != null && $("#selectName").val() != ''){
+        $("#cm-search").addClass("open");
+    }
+
+    //改变
+    function status(obj){
+    	var id = $(obj).attr("value");
+    	$.post("/admin/bxStatus",{
+    		"id":id.substring(0, id.indexOf(",")),
+    		"status":id.substring(id.indexOf(",")+1)
+    	},function(status){
+    		if(status != "error"){
+    			window.location.href="/admin/bxAudit?pageNumber="+ $('#pageNumber').val();
+    		}else{
+    			alert("网络错误！");
+    		}
+    	});
+	}
+</script>
 </body>
 </html>

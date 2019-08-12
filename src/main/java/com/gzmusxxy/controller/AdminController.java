@@ -6,6 +6,7 @@ import com.gzmusxxy.entity.*;
 import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.ExcelUtil;
 import com.gzmusxxy.util.FileUtil;
+import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,9 @@ public class AdminController {
 
     @Autowired
     private BxProjectService bxProjectService;
+
+    @Autowired
+    private BxInsuranceService bxInsuranceService;
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -104,48 +108,8 @@ public class AdminController {
         }
         model.addAttribute("name",name);
         model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_project";
-    }
-
-    /**
-     * 分页按钮
-     * @param pages 总页数
-     * @param pageNumber 当前页
-     * @return 分页按钮
-     */
-    private int[] getPage(int pages,int pageNumber) {
-        //固定5页
-        final int page = 5;
-        int numPage[];
-        //总共页数
-        int pageCount = pages;
-        //判断是否需要省略
-        if (pageCount > page) {
-            numPage = new int[page];
-            //两边都可以显示
-            if (pageNumber - 2 > 0 && pageCount - 2 >= pageNumber) {
-                for (int i = 0; i < numPage.length; i++) {
-                    numPage[i] = pageNumber - 2 + i;
-                }
-            }else if (pageNumber - 2 > 0 && pageCount - 2 < pageNumber){
-                //前面可以显示 后面不够
-                for (int i = numPage.length-1; i >= 0; i--) {
-                    numPage[i] = pageCount--;
-                }
-            }else {
-                //后面可以显示 前面不够
-                for (int i = 0; i < numPage.length; i++) {
-                    numPage[i] = i + 1;
-                }
-            }
-        }else {
-            numPage = new int[pageCount];
-            for (int i = 0; i < numPage.length; i++) {
-                numPage[i] = i + 1;
-            }
-        }
-        return numPage;
     }
 
     /**
@@ -164,7 +128,7 @@ public class AdminController {
         }
         model.addAttribute("name",name);
         model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_apply";
     }
 
@@ -192,7 +156,7 @@ public class AdminController {
     }
 
     /**
-     * 改变状态（通用）
+     * xjhb改变状态（通用）
      * @param id 申请书id
      * @param status 申请书status
      * @return
@@ -222,7 +186,7 @@ public class AdminController {
         }
         model.addAttribute("name",name);
         model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_check";
     }
 
@@ -242,7 +206,7 @@ public class AdminController {
         }
         model.addAttribute("name",name);
         model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/xjhb_adopt";
     }
 
@@ -476,7 +440,7 @@ public class AdminController {
         }
         model.addAttribute("name",name);
         model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_project";
     }
 
@@ -566,15 +530,31 @@ public class AdminController {
      */
     @RequestMapping(value = "/bxAudit")
     public String bxAudit(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
-//        PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
-//        //防止搜索栏bug
-//        if (name == null) {
-//            name = "";
-//        }
-//        model.addAttribute("name",name);
-//        model.addAttribute("pageInfo",pageInfo);
-//        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectAuditByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_audit";
+    }
+
+    /**
+     * 下载贫困证明
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadAudit")
+    public String downloadAudit(int id, HttpServletRequest request, HttpServletResponse response){
+        BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
+        XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
+        FileUtil.downloadFile(xjhbPerson.getPovertyProve(),"贫困证明",request,response);
+        return "";
     }
 
     /**
@@ -595,5 +575,20 @@ public class AdminController {
 //        model.addAttribute("pageInfo",pageInfo);
 //        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_claims";
+    }
+
+    /**
+     * bx改变状态（通用）
+     * @param id insuranceId
+     * @param status 需要改变的状态
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/bxStatus")
+    public String bxStatus(int id, byte status) {
+        BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
+        bxInsurance.setStatus(status);
+        bxInsuranceService.updateByPrimaryKey(bxInsurance);
+        return "";
     }
 }

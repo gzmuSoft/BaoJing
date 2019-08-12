@@ -31,7 +31,7 @@ public class FileUtil {
                 // 文件保存路径
                 String savePath;
                 if (path == null){
-                    savePath = FILE_PATH + UUID.randomUUID() + type;
+                    savePath = FILE_PATH2 + UUID.randomUUID() + type;
                 }else {
                     path = path.substring(0, path.lastIndexOf("."));
                     savePath = path + type;

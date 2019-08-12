@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * 拦截器扫描是否有注解
+ * 拦截器：扫描是否有注解
  */
 @Component
 public class LoginInterceptor extends HandlerInterceptorAdapter {

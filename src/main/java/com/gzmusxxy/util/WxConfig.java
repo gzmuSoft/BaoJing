@@ -4,6 +4,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
 public class WxConfig {
+    //私有变量
+
     /**
      * 微信公众号开发者ID
      */
@@ -20,6 +22,23 @@ public class WxConfig {
      * 开发者密码
      */
     private static final String APPSECRET = "049013d010a4854e3c1997c93efe6c0e";
+
+    /**
+     * 微信发送模板消息的url
+     */
+    private static final String SEND_WECHAT_MSG_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
+    //公有变量
+
+    /**
+     * 业务通知消息模板id
+     */
+    public static final String BUSINESS_TEMPLATE_ID = "-EjtHN-aeHw7bnjzoSPagr_cUnbinza8RatN_YYpOrA";
+
+    /**
+     * 审核结果通知模板id
+     */
+    public static final String REVIEW_TEMPLATE_ID = "NCMf1rrKmyrQ318JfPXvgHQt1h3RlZ3bW6Gx233Go_A";
+
 
     /**
      * 构建微信登录访问地址
@@ -58,4 +77,13 @@ public class WxConfig {
         return url;
     }
 
+    /**
+     * 拼接发送消息通知用的url链接
+     * @return
+     */
+    public static String getSendWechatMsgUrl() {
+        WeChatAccessTokenUtil wechat = WeChatAccessTokenUtil.getInstance();
+        String url = SEND_WECHAT_MSG_URL + wechat.getAccess_token();
+        return url;
+    }
 }

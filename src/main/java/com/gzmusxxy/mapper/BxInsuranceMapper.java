@@ -13,4 +13,6 @@ public interface BxInsuranceMapper {
     List<BxInsurance> selectAll();
 
     int updateByPrimaryKey(BxInsurance record);
+
+    List<BxInsurance> selectAuditByNameLike(String name);
 }

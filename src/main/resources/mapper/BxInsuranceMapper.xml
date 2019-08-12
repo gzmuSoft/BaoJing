@@ -51,4 +51,11 @@
     claims_application, claims_application_name, status
     from bx_insurance
   </select>
+  <select id="selectAuditByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.identity, b.telphone,b.poverty, b.poverty_prove,p.name as project_name
+    from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.identity, p.telphone,p.poverty, p.poverty_prove
+    from bx_insurance i join xjhb_person p
+    where i.person_id=p.id and p.name like #{name}) b join bx_project p
+    where b.project_id=p.id and b.status = 1
+  </select>
 </mapper>

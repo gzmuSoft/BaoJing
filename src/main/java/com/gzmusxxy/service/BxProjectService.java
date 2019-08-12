@@ -1,18 +1,17 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.BxProject;
-import java.util.List;
 
-public interface BxProjectMapper {
+public interface BxProjectService {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(BxProject record);
 
     BxProject selectByPrimaryKey(Integer id);
 
-    List<BxProject> selectAll();
-
     int updateByPrimaryKey(BxProject record);
 
-    List<BxProject> selectProjectByNameLike(String name);
+    PageInfo<BxProject> selectProjectByNameLike(String name,Integer pageNumber);
 }

@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>admin Page</title>
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
-    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-    <title>admin Page</title>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -25,7 +25,7 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
                         <a class="sf-brick">先建后补项目<span class="caret"></span></a>
                         <ul>
-                            <li class="active"><a href="#">项目管理</a></li>
+                            <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
                             <li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
                             <li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
                             <li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
@@ -34,7 +34,7 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
                         <a class="sf-globe">农业保险项目<span class="caret"></span></a>
                         <ul>
-                            <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
+                            <li class="active"><a href="#">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1">购买申请审核</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
                         </ul>
@@ -48,17 +48,17 @@
 <header id="cm-header">
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
-		<div class="cm-flex">
-			<h1>项目管理</h1>
-			<form id="cm-search" action="/admin/xjhbProject" method="get">
+        <div class="cm-flex">
+            <h1>home</h1>
+            <form id="cm-search" action="/admin/bxProject" method="get">
                 <input type="hidden" name="pageNumber" value="1">
-				<input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
-			</form>
-		</div>
-		<!-- 查询按钮 -->
-		<div class="pull-right">
-			<div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
-		</div>
+                <input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
+            </form>
+        </div>
+        <!-- 查询按钮 -->
+        <div class="pull-right">
+            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
+        </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
@@ -78,13 +78,13 @@
 </header>
 <div id="global">
     <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
-		<!-- 表格 -->
+        <!-- 表格 -->
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">先建后补项目管理</div>
+                    <div class="panel-heading">保险项目管理</div>
                     <div class="panel-body">
-						<button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加先建后补项目</button>
+                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加保险项目</button>
                     </div>
                     <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
                     <table class="table text-center table-hover">
@@ -92,55 +92,55 @@
                         <tr>
                             <th>#</th>
                             <th class="text-center">项目名称</th>
-                            <th class="text-center">项目申请书模板</th>
+                            <th class="text-center">理赔申请书模板</th>
                             <th class="text-center">申请起始时间</th>
-							<th class="text-center">申请结束时间</th>
-							<th class="text-center">建设周期</th>
-							<th class="text-center"><code>操作</code></th>
+                            <th class="text-center">申请结束时间</th>
+                            <th class="text-center">保险费用(元)</th>
+                            <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-                            <tr class="info" th:each="project:${pageInfo.list}">
-                                <th scope="row" th:text="${projectStat.index+1}"></th>
-                                <td th:text="${project.projectName}"></td>
-                                <td>
-                                    <div th:if="${project.applicationTemplateName != null && project.applicationTemplateName != 'null' && project.applicationTemplateName != ''}">
-                                        <span th:text="${project.applicationTemplateName}"></span>&nbsp;
-                                        <a th:href="@{'/admin/downloadProject?id='+${project.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
-                                    </div>
-                                </td>
-                                <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
-                                <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
-                                <td th:text="${project.period}"></td>
-                                <td>
-                                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
-                                    <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
-                                </td>
-                            </tr>
-                            <tr th:if="${pageInfo.pages <= 0}">
-                                <th colspan="0" class="text-center">无数据</th>
-                            </tr>
+                        <tr class="success" th:each="project:${pageInfo.list}">
+                            <th scope="row" th:text="${projectStat.index+1}"></th>
+                            <td th:text="${project.name}"></td>
+                            <td>
+                                <div th:if="${project.claimsTemplateName != null && project.claimsTemplateName != 'null' && project.claimsTemplateName != ''}">
+                                    <span th:text="${project.claimsTemplateName}"></span>&nbsp;
+                                    <a th:href="@{'/admin/downloadBxProject?id='+${project.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                </div>
+                            </td>
+                            <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
+                            <td th:text="${project.cost}"></td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
+                                <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${pageInfo.pages <= 0}">
+                            <th colspan="0" class="text-center">无数据</th>
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-		<!-- 分页 -->
-		<nav class="text-center">
-			<ul class="pagination shadowed" style="margin:0">
-				<li th:if="${pageInfo.prePage > 0}">
-					<a th:href="@{'/admin/xjhbProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
-						<span><i class="fa fa-angle-left"></i></span>
-					</a>
-				</li>
+        <!-- 分页 -->
+        <nav class="text-center">
+            <ul class="pagination shadowed" style="margin:0">
+                <li th:if="${pageInfo.prePage > 0}">
+                    <a th:href="@{'/admin/bxProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
                 <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
                     <a>
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
-				<li th:each="num:${pages}">
+                <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/xjhbProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/bxProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -148,37 +148,37 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/xjhbProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/bxProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
-			</ul>
-		</nav>
+            </ul>
+        </nav>
     </div>
     <!--弹窗-->
     <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title" id="myModalLabel">
-                            Modal title
-                            <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal">
-                            <input type="hidden" id="projectId">
+                <div class="modal-header">
+                    <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        Modal title
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <input type="hidden" id="projectId">
                         <div class="form-group">
                             <label for="projectName" class="col-sm-2 control-label">项目名称</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="projectName" name="projectName" placeholder="请输入项目名称..">
+                                <input type="text" class="form-control" id="projectName" name="name" placeholder="请输入项目名称..">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="applicationTemplate" class="col-sm-2 control-label">申请书模板</label>
+                            <label for="claimsTemplate" class="col-sm-2 control-label">理赔书模板</label>
                             <div class="col-sm-10">
-                                <input type="file" class="form-control" onchange="saveFile(this)" id="applicationTemplate" name="applicationTemplate" placeholder="请上传申请书模板.."/>
+                                <input type="file" class="form-control" onchange="saveFile(this)" id="claimsTemplate" name="claimsTemplate" placeholder="请上传申请书模板.."/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -194,17 +194,17 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="period" class="col-sm-2 control-label">建设周期</label>
+                            <label for="cost" class="col-sm-2 control-label">保险费用</label>
                             <div class="col-sm-10">
-                                <input type="number" class="form-control" id="period" name="period" placeholder="请输入多少周...">
+                                <input type="text" class="form-control" id="cost" name="cost" placeholder="请输入保险费用（元）...">
                             </div>
                         </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="save" class="btn btn-primary">保存</button>
-                        <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
-                    </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="save" class="btn btn-primary">保存</button>
+                    <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -235,35 +235,35 @@
     //判断是增加还是修改
     $('#addProject').click(function(){
         flag = "add";
-        $("#myModalLabel").text("创建先建后补项目");
+        $("#myModalLabel").text("创建保险项目");
     });
 
     //获取要更新数据
     function update(obj){
         flag = "update";
-        $("#myModalLabel").text("修改先建后补项目");
+        $("#myModalLabel").text("修改保险项目");
         //获取数据显示
-        $.post("/admin/updateProject",
+        $.post("/admin/findBxProject",
         {
             "id":obj.value
         },
         function(data){
             var project = $.parseJSON(data).project;
-            yuan_filePath = project.applicationTemplate;
-            yuan_fileName = project.applicationTemplateName;
+            yuan_filePath = project.claimsTemplate;
+            yuan_fileName = project.claimsTemplateName;
             $('#projectId').val(project.id);
-            $('#projectName').val(project.projectName);
+            $('#projectName').val(project.name);
             $('#startTime').val($.parseJSON(data).startTime);
             $('#endTime').val($.parseJSON(data).endTime);
-            $('#period').val(project.period);
+            $('#cost').val(project.cost);
         }),"json";
     }
-    $('#ret').click(function(){
-        clean();
-    });
 
     //点cha之后重置数据
     $('#cha').click(function(){
+        clean();
+    });
+    $('#ret').click(function(){
         clean();
     });
 
@@ -273,7 +273,7 @@
         $('#projectName').val("");
         $('#startTime').val("");
         $('#endTime').val("");
-        $('#period').val("");
+        $('#cost').val("");
         yuan_filePath = null;
         yuan_fileName = null;
     }
@@ -281,13 +281,13 @@
     //删除
     function del(obj){
         if(confirm("确认是否删除?")){
-            $.post("/admin/delProject",
+            $.post("/admin/delBxProject",
             {
                 "id":obj.value
             },
             function(data){
                 if(data > 0){
-                    window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
+                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("删除失败！");
                 }
@@ -298,40 +298,41 @@
     //添加和修改
     $('#save').click(function(){
         if(flag == "add"){
-            $.post("/admin/addProject",
+            alert("进来了！");
+            $.post("/admin/addBxProject",
             {
-                'projectName':$('#projectName').val(),
-                'applicationTemplate':filePath,
-                'applicationTemplateName':name,
+                'name':$('#projectName').val(),
+                'claimsTemplate':filePath,
+                'claimsTemplateName':name,
                 'startTime':$('#startTime').val(),
                 'endTime':$('#endTime').val(),
-                'period':$('#period').val()
+                'cost':$('#cost').val()
             },
             function(data){
                 if(data > 0){
                     alert("保存成功！");
-                    window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
+                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("保存失败！");
                 }
             });
         }else{
-            $.post("/admin/update",
+            $.post("/admin/updateBxProject",
             {
                 'id':$('#projectId').val(),
-                'projectName':$('#projectName').val(),
-                'applicationTemplate':yuan_filePath,
-                'applicationTemplateName':yuan_fileName,
+                'name':$('#projectName').val(),
+                'claimsTemplate':yuan_filePath,
+                'claimsTemplateName':yuan_fileName,
                 'filePath':filePath,
                 'fileName':name,
                 'startTime':$('#startTime').val(),
                 'endTime':$('#endTime').val(),
-                'period':$('#period').val()
+                'cost':$('#cost').val()
             },
             function(data){
                 if(data > 0){
                     alert("保存成功！");
-                    window.location.href="/admin/xjhbProject?pageNumber=" + $('#pageNumber').val();
+                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("保存失败！");
                 }

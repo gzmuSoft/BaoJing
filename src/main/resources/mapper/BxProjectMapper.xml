@@ -41,4 +41,10 @@
     select id, name, claims_template_name, claims_template, start_time, end_time, cost
     from bx_project
   </select>
+  <select id="selectProjectByNameLike" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, name, claims_template_name, claims_template, start_time,
+    end_time, cost
+    from bx_project
+    where name like #{name}
+  </select>
 </mapper>

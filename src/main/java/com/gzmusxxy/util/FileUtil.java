@@ -26,7 +26,6 @@ public class FileUtil {
      */
     public static String saveFile(MultipartFile file, String path, String type){
         // 判断文件是否为空
-        System.out.println(path);
         if (!file.isEmpty()) {
             try {
                 // 文件保存路径

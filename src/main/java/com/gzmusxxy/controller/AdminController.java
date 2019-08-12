@@ -2,14 +2,8 @@ package com.gzmusxxy.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
-import com.gzmusxxy.entity.Admin;
-import com.gzmusxxy.entity.XjhbInformation;
-import com.gzmusxxy.entity.XjhbPerson;
-import com.gzmusxxy.entity.XjhbProject;
-import com.gzmusxxy.service.AdminService;
-import com.gzmusxxy.service.XjhbInformationService;
-import com.gzmusxxy.service.XjhbPersonService;
-import com.gzmusxxy.service.XjhbProjectService;
+import com.gzmusxxy.entity.*;
+import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.ExcelUtil;
 import com.gzmusxxy.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +38,9 @@ public class AdminController {
 
     @Autowired
     private XjhbPersonService xjhbPersonService;
+
+    @Autowired
+    private BxProjectService bxProjectService;
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -460,5 +456,144 @@ public class AdminController {
             FileUtil.downloadFile(xjhbPerson.getIdCardReverse(),"身份证反面"+type,request,response);
         }
         return "";
+    }
+
+    /* -------------------农业保险管理------------------- */
+
+    /**
+     * 查询加分页 保险项目管理
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return admin/bx_project
+     */
+    @RequestMapping(value = "/bxProject")
+    public String bxProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<BxProject> pageInfo = bxProjectService.selectProjectByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        return "admin/bx_project";
+    }
+
+    /**
+     * 根据id查询保险项目
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/findBxProject")
+    public String findBxProject(Integer id){
+        JSONObject json = new JSONObject();
+        BxProject bxProject = bxProjectService.selectByPrimaryKey(id);
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String startTime = formatter.format(bxProject.getStartTime());
+        String endTime = formatter.format(bxProject.getEndTime());
+        json.put("project",bxProject);
+        json.put("startTime",startTime);
+        json.put("endTime",endTime);
+        return json.toJSONString();
+    }
+
+    /**
+     * 根据传过来的值更新保险项目
+     * @param bxProject
+     * @param filePath
+     * @param fileName
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateBxProject")
+    public String updateBxProject(BxProject bxProject, String filePath, String fileName) {
+        //已经上传文件
+        if (filePath !=null && !filePath.equals("")) {
+            bxProject.setClaimsTemplate(filePath);
+            bxProject.setClaimsTemplateName(fileName);
+        }
+        Integer re = bxProjectService.updateByPrimaryKey(bxProject);
+        return re.toString();
+    }
+
+    /**
+     * 添加保险项目
+     * @param bxProject
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addBxProject")
+    public String addBxProject(BxProject bxProject) {
+        Integer re = bxProjectService.insert(bxProject);
+        return re.toString();
+    }
+
+    /**
+     * 根据id删除保险项目
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delBxProject")
+    public String delBxProject(Integer id) {
+        Integer re = bxProjectService.deleteByPrimaryKey(id);
+        return re.toString();
+    }
+
+    /**
+     * 下载项目模板文件
+     * @param id id
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadBxProject")
+    public String downloadBxProject(int id, HttpServletRequest request, HttpServletResponse response){
+        BxProject bxProject = bxProjectService.selectByPrimaryKey(id);
+        FileUtil.downloadFile(bxProject.getClaimsTemplate(),bxProject.getClaimsTemplateName(),request,response);
+        return "";
+    }
+
+    /**
+     * 查询加分页 购买审核
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return admin/bx_audit
+     */
+    @RequestMapping(value = "/bxAudit")
+    public String bxAudit(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+//        PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
+//        //防止搜索栏bug
+//        if (name == null) {
+//            name = "";
+//        }
+//        model.addAttribute("name",name);
+//        model.addAttribute("pageInfo",pageInfo);
+//        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        return "admin/bx_audit";
+    }
+
+    /**
+     * 查询加分页 理赔审核
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return admin/bx_claims
+     */
+    @RequestMapping(value = "/bxClaims")
+    public String bxClaims(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+//        PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
+//        //防止搜索栏bug
+//        if (name == null) {
+//            name = "";
+//        }
+//        model.addAttribute("name",name);
+//        model.addAttribute("pageInfo",pageInfo);
+//        model.addAttribute("pages",getPage(pageInfo.getPages(), pageNumber));
+        return "admin/bx_claims";
     }
 }

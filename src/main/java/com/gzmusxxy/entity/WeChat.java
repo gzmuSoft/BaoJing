@@ -33,6 +33,10 @@ public class WeChat {
      * 接口返回的错误信息
      */
     private String errmsg;
+    /**
+     * 消息推送结果id
+     */
+    private String msgid;
 
     public String getCode() {
         return code;
@@ -82,15 +86,24 @@ public class WeChat {
         this.errmsg = errmsg;
     }
 
+    public String getMsgid() {
+        return msgid;
+    }
+
+    public void setMsgid(String msgid) {
+        this.msgid = msgid;
+    }
+
     @Override
     public String toString() {
         return "WeChat{" +
                 "code='" + code + '\'' +
                 ", state='" + state + '\'' +
                 ", access_token='" + access_token + '\'' +
-                ", expires_in='" + expires_in + '\'' +
+                ", expires_in=" + expires_in +
                 ", errcode=" + errcode +
                 ", errmsg='" + errmsg + '\'' +
+                ", msgid='" + msgid + '\'' +
                 '}';
     }
 }

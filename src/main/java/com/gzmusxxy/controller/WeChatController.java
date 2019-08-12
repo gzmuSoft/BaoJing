@@ -1,19 +1,18 @@
 package com.gzmusxxy.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.gzmusxxy.util.WeChatUtil;
+import com.gzmusxxy.util.WeChatAccessTokenUtil;
 import com.gzmusxxy.util.WxConfig;
 import com.gzmusxxy.entity.WeChat;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpSession;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 微信登录控制器
@@ -88,9 +87,13 @@ public class WeChatController {
      */
     @RequestMapping(value = "/demo")
     public String setTestSession(Model model,HttpSession session){
-        WeChatUtil instance = WeChatUtil.getInstance();
+        //获得access token
+        WeChatAccessTokenUtil instance = WeChatAccessTokenUtil.getInstance();
+        System.out.println(instance.getAccess_token());
+        //设置用于测试的session
         session.setAttribute("openid","oP1se1IxKwG6Su0y6K4Q-_3pkN_Y");
         model.addAttribute("msg","设置的openid为："+session.getAttribute("openid"));
         return "wechat/msg";
     }
+
 }

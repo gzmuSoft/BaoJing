@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.BxProjectMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.BxProject">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="claims_template_name" jdbcType="VARCHAR" property="claimsTemplateName" />
+    <result column="claims_template" jdbcType="VARCHAR" property="claimsTemplate" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="cost" jdbcType="REAL" property="cost" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from bx_project
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.BxProject">
+    insert into bx_project (id, name, claims_template_name, 
+      claims_template, start_time, end_time, 
+      cost)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{claimsTemplateName,jdbcType=VARCHAR}, 
+      #{claimsTemplate,jdbcType=VARCHAR}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
+      #{cost,jdbcType=REAL})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.BxProject">
+    update bx_project
+    set name = #{name,jdbcType=VARCHAR},
+      claims_template_name = #{claimsTemplateName,jdbcType=VARCHAR},
+      claims_template = #{claimsTemplate,jdbcType=VARCHAR},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      cost = #{cost,jdbcType=REAL}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, claims_template_name, claims_template, start_time, end_time, cost
+    from bx_project
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, claims_template_name, claims_template, start_time, end_time, cost
+    from bx_project
+  </select>
+</mapper>

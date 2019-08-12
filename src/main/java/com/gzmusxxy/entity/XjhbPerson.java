@@ -15,7 +15,6 @@ public class XjhbPerson {
     private String telphone;
 
     private String village;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
 
@@ -26,6 +25,10 @@ public class XjhbPerson {
     private String idCardReverse;
 
     private String openid;
+
+    private Byte poverty;
+
+    private String povertyProve;
 
 
 }

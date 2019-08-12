@@ -1,7 +1,6 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.Admin;
-
 import java.util.List;
 
 public interface AdminMapper {

@@ -12,6 +12,8 @@
     <result column="id_card_front" jdbcType="VARCHAR" property="idCardFront" />
     <result column="id_card_reverse" jdbcType="VARCHAR" property="idCardReverse" />
     <result column="openId" jdbcType="VARCHAR" property="openid" />
+    <result column="poverty" jdbcType="TINYINT" property="poverty" />
+    <result column="poverty_prove" jdbcType="VARCHAR" property="povertyProve" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from xjhb_person
@@ -21,11 +23,13 @@
     insert into xjhb_person (id, name, identity,
       telphone, village, create_time,
       one_card_solution, id_card_front, id_card_reverse,
-      openId)
+      openId, poverty, poverty_prove
+      )
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{identity,jdbcType=VARCHAR},
       #{telphone,jdbcType=VARCHAR}, #{village,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
       #{oneCardSolution,jdbcType=VARCHAR}, #{idCardFront,jdbcType=VARCHAR}, #{idCardReverse,jdbcType=VARCHAR},
-      #{openid,jdbcType=VARCHAR})
+      #{openid,jdbcType=VARCHAR}, #{poverty,jdbcType=TINYINT}, #{povertyProve,jdbcType=VARCHAR}
+      )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbPerson">
     update xjhb_person
@@ -37,25 +41,27 @@
       one_card_solution = #{oneCardSolution,jdbcType=VARCHAR},
       id_card_front = #{idCardFront,jdbcType=VARCHAR},
       id_card_reverse = #{idCardReverse,jdbcType=VARCHAR},
-      openId = #{openid,jdbcType=VARCHAR}
+      openId = #{openid,jdbcType=VARCHAR},
+      poverty = #{poverty,jdbcType=TINYINT},
+      poverty_prove = #{povertyProve,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
-    id_card_reverse, openId
+    id_card_reverse, openId, poverty, poverty_prove
     from xjhb_person
     where id = #{id,jdbcType=INTEGER}
   </select>
 
   <select id="findPersonByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
-    id_card_reverse, openId
+    select  id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
+    id_card_reverse, openId, poverty, poverty_prove
     from xjhb_person
     where openId = #{openid,jdbcType=VARCHAR}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
-    id_card_reverse, openId
+    id_card_reverse, openId, poverty, poverty_prove
     from xjhb_person
   </select>
 </mapper>

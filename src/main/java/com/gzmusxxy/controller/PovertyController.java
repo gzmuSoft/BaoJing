@@ -39,13 +39,13 @@ public class PovertyController {
     @Autowired
     private XjhbPersonService xjhbPersonService;
 
-    @IsLogin
-    @RequestMapping(value = {"","/"})
-    public String information(HttpSession session) {
-        //获取session中的用户openid
-        System.out.println(session.getAttribute("openid"));
-        return "poverty/user";
-    }
+//    @IsLogin
+//    @RequestMapping(value = {"","/"})
+//    public String information(HttpSession session) {
+//        //获取session中的用户openid
+//        System.out.println(session.getAttribute("openid"));
+//        return "poverty/user";
+//    }
 
     @IsLogin
     @RequestMapping(value = "/audit")
@@ -84,7 +84,7 @@ public class PovertyController {
 
 
     @IsLogin
-    @RequestMapping(value = "/user")
+    @RequestMapping(value = {"","/"})
     public String user(HttpSession session,Model model) {
         String openId =  session.getAttribute("openid").toString();
 

@@ -4,10 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.*;
 import com.gzmusxxy.service.*;
-import com.gzmusxxy.util.ExcelUtil;
-import com.gzmusxxy.util.FileUtil;
-import com.gzmusxxy.util.PageUtil;
-import com.gzmusxxy.util.WeChatUtil;
+import com.gzmusxxy.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -19,8 +16,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 后台管理
@@ -427,7 +426,7 @@ public class AdminController {
         }
         String path = ExcelUtil.getHSSFWorkbook(
                 "先建后补项目转帐名单",title,items,null,
-                FileUtil.FILE_PATH2,"先建后补项目转帐名单"
+                FileUtil.FILE_PATH,"先建后补项目转帐名单"
         );
         String name = path.substring(path.lastIndexOf("/"));
         FileUtil.downloadFile(path,name,request,response);
@@ -590,7 +589,25 @@ public class AdminController {
     @ResponseBody
     @RequestMapping(value= "/downloadZip")
     public String downloadZip(int id, HttpServletRequest request, HttpServletResponse response) {
-
+        BxInsurance bxInsurance = bxInsuranceService.selectClaimsById(id);
+        List<String> filePaths = new ArrayList<>();
+        List<String> fileNames = new ArrayList<>();
+        String zipPath = FileUtil.FILE_PATH + UUID.randomUUID() + ".zip";
+        filePaths.add(bxInsurance.getClaimsApplication());
+        filePaths.add(bxInsurance.getIdCardFront());
+        filePaths.add(bxInsurance.getIdCardReverse());
+        filePaths.add(bxInsurance.getAffectedPhoto());
+        fileNames.add(bxInsurance.getClaimsApplicationName());
+        fileNames.add("身份证正面照片");
+        fileNames.add("身份证反面照片");
+        if (!bxInsurance.getAffectedPhotoName().equals(bxInsurance.getClaimsApplicationName())) {
+            fileNames.add(bxInsurance.getAffectedPhotoName());
+        } else {
+            fileNames.add("受灾照片");
+        }
+        ZipUtil.toZip(filePaths,fileNames,zipPath);
+        FileUtil.downloadFile(zipPath,"理赔资料.zip",request,response);
+        FileUtil.deleteFile(zipPath);
         return "";
     }
 

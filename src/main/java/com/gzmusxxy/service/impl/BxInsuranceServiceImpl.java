@@ -58,4 +58,10 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
         List<BxInsurance> list = bxInsuranceMapper.selectClaimsByNameLike(name);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public BxInsurance selectClaimsById(Integer id) {
+        return bxInsuranceMapper.selectClaimsById(id);
+    }
+
 }

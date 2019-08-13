@@ -67,4 +67,13 @@
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status in (4,5)
   </select>
+  <select id="selectClaimsById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.telphone,p.name as project_name,b.affected_photo
+    ,b.affected_photo_name,b.claims_application,b.claims_application_name,b.id_card_front,b.id_card_reverse
+    from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.telphone,i.affected_photo
+    ,i.affected_photo_name,i.claims_application,i.claims_application_name,p.id_card_front,p.id_card_reverse
+    from bx_insurance i join xjhb_person p
+    where i.person_id=p.id) b join bx_project p
+    where b.project_id=p.id and b.id = #{id}
+  </select>
 </mapper>

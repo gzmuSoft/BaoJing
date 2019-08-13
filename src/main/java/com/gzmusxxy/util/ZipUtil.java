@@ -5,16 +5,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
  * ZipUtil
- * @author 	ZENG.XIAO.YAN
- * @date 	2017年11月19日 下午7:16:08
- * @version v1.0
  */
 public class ZipUtil {
 
@@ -90,6 +86,45 @@ public class ZipUtil {
         }
     }
 
+    /**
+     *压缩成ZIP 方法3 (当文件名字相同会报错)
+     * @param filePaths 需要压缩的文件路径
+     * @param fileNames 需要压缩的新文件名字
+     * @param zipPath 生成的压缩文件全路径
+     * @throws RuntimeException
+     */
+    public static void toZip(List<String> filePaths,List<String> fileNames, String zipPath)throws RuntimeException {
+        long start = System.currentTimeMillis();
+        ZipOutputStream zos = null ;
+        try {
+            OutputStream out = new FileOutputStream(new File(zipPath));
+            zos = new ZipOutputStream(out);
+            for (int i = 0; i < filePaths.size(); i++) {
+                byte[] buf = new byte[BUFFER_SIZE];
+                zos.putNextEntry(new ZipEntry(fileNames.get(i)));
+                int len;
+                FileInputStream in = new FileInputStream(new File(filePaths.get(i)));
+                while ((len = in.read(buf)) != -1){
+                    zos.write(buf, 0, len);
+                }
+                zos.closeEntry();
+                in.close();
+            }
+            long end = System.currentTimeMillis();
+            System.out.println("压缩完成，耗时：" + (end - start) +" ms");
+        } catch (Exception e) {
+            throw new RuntimeException("zip error from ZipUtil",e);
+        }finally{
+            if(zos != null){
+                try {
+                    zos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
 
     /**
      * 递归压缩方法
@@ -141,17 +176,4 @@ public class ZipUtil {
             }
         }
     }
-
-//    public static void main(String[] args) throws Exception {
-//        /** 测试压缩方法1  */
-//        FileOutputStream fos1 = new FileOutputStream(new File("c:/mytest01.zip"));
-//        ZipUtil.toZip("D:/log", fos1,true);
-//
-//        /** 测试压缩方法2  */
-//        List&lt;File&gt; fileList = new ArrayList&lt;&gt;();
-//        fileList.add(new File("D:/Java/jdk1.7.0_45_64bit/bin/jar.exe"));
-//        fileList.add(new File("D:/Java/jdk1.7.0_45_64bit/bin/java.exe"));
-//        FileOutputStream fos2 = new FileOutputStream(new File("c:/mytest02.zip"));
-//        ZipUtil.toZip(fileList, fos2);
-//    }
 }

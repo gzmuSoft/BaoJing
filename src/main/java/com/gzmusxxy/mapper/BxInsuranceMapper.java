@@ -17,4 +17,6 @@ public interface BxInsuranceMapper {
     List<BxInsurance> selectAuditByNameLike(String name);
 
     List<BxInsurance> selectClaimsByNameLike(String name);
+
+    BxInsurance selectClaimsById(Integer id);
 }

@@ -13,9 +13,7 @@ import java.util.UUID;
  */
 public class FileUtil {
 
-    public static final String FILE_PATH = "D:\\";
-
-    public static final String FILE_PATH2 = "/home/fengxin/";
+    public static final String FILE_PATH = "/home/fengxin/";
 
     /**
      * 保存文件到服务器
@@ -31,7 +29,7 @@ public class FileUtil {
                 // 文件保存路径
                 String savePath;
                 if (path == null){
-                    savePath = FILE_PATH2 + UUID.randomUUID() + type;
+                    savePath = FILE_PATH + UUID.randomUUID() + type;
                 }else {
                     path = path.substring(0, path.lastIndexOf("."));
                     savePath = path + type;

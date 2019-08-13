@@ -174,23 +174,28 @@ public class AdminController {
                     XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(xjhbInformation.getProjectId());
                     switch (status) {
                         case 2:
-                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"审核通知",xjhbProject.getProjectName(),
-                                    false,"审核失败，请完善资料再申请审核",null,"");break;
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！",
+                                    xjhbProject.getProjectName()+"的申请",
+                                    false,"审核失败","请完善资料再申请审核","");break;
                         case 3:
-                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"审核通知",xjhbProject.getProjectName(),
-                                    false,"审核通过",null,"");break;
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,xjhbProject.getProjectName()+"的申请",
+                                    true,"审核通过","","");break;
                         case 5:
-                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"验收通知",xjhbProject.getProjectName(),
-                                    false,"初步验收通过，请准备好接受线下验收",null,"");break;
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,xjhbProject.getProjectName()+"的验收",
+                                    true,"初步验收通过","请准备好接受线下验收","");break;
                         case 7:
-                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"验收通知",xjhbProject.getProjectName(),
-                                    false,"验收失败，请完善资料再申请验收",null,"");break;
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,xjhbProject.getProjectName()+"的验收",
+                                    false,"验收失败","请完善资料再申请验收","");break;
                         case 6:
-                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"验收通知",xjhbProject.getProjectName(),
-                                    false,"验收通过，请等待补助发放`",null,"");break;
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,xjhbProject.getProjectName()+"的验收",
+                                    true,"验收通过","请等待补助发放","");break;
                         case 8:
-                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"转帐通知",xjhbProject.getProjectName(),
-                                    false,"补助已发放，请查验`",null,"");break;
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"转帐业务","补助已发放,请查验","如有问题，请联系电话xxxxxxxxxxxxx","");break;
                     }
                 }
             }.start();

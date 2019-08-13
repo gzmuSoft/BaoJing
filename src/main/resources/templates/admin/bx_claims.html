@@ -146,7 +146,7 @@
                                     </ul>
                                 </div>
                                 <div class="btn-group" th:if="${claims.status == 5}">
-                                    <button type="button" class="btn btn-success btn-xs" id="pack">&nbsp;&nbsp;打包资料下载&nbsp;&nbsp;</span></button>
+                                    <button type="button" class="btn btn-success btn-xs" th:value="${claims.id}" onclick="pack(this)">&nbsp;&nbsp;打包资料下载&nbsp;&nbsp;</span></button>
                                 </div>
                             </td>
                         </tr>
@@ -221,9 +221,10 @@
     	});
 	}
 
-	$('#pack').click(function(){
+	function pack(obj){
 	    alert("尚未实现 告辞！");
-	});
+	    windows.location.href="/admin/downloadZip?id=" + obj.value;
+	}
 </script>
 </body>
 </html>

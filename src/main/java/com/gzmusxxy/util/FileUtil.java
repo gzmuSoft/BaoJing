@@ -59,6 +59,7 @@ public class FileUtil {
         // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
         if (file.exists()) {
             if (file.delete()) {
+                System.out.println("删除文件:"+fileName);
                 return true;
             } else {
                 System.out.println("文件删除失败");

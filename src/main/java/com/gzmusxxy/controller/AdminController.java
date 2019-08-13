@@ -7,6 +7,7 @@ import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.ExcelUtil;
 import com.gzmusxxy.util.FileUtil;
 import com.gzmusxxy.util.PageUtil;
+import com.gzmusxxy.util.WeChatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -166,7 +167,34 @@ public class AdminController {
     public String status(int id, byte status) {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
         xjhbInformation.setStatus(status);
-        xjhbInformationService.updateByPrimaryKey(xjhbInformation);
+        if(xjhbInformationService.updateByPrimaryKey(xjhbInformation) == 1){
+            new Thread(){
+                public void run(){
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(xjhbInformation.getPersonId());
+                    XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(xjhbInformation.getProjectId());
+                    switch (status) {
+                        case 2:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"审核通知",xjhbProject.getProjectName(),
+                                    false,"审核失败，请完善资料再申请审核",null,"");break;
+                        case 3:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"审核通知",xjhbProject.getProjectName(),
+                                    false,"审核通过",null,"");break;
+                        case 5:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"验收通知",xjhbProject.getProjectName(),
+                                    false,"初步验收通过，请准备好接受线下验收",null,"");break;
+                        case 7:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"验收通知",xjhbProject.getProjectName(),
+                                    false,"验收失败，请完善资料再申请验收",null,"");break;
+                        case 6:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"验收通知",xjhbProject.getProjectName(),
+                                    false,"验收通过，请等待补助发放`",null,"");break;
+                        case 8:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),"转帐通知",xjhbProject.getProjectName(),
+                                    false,"补助已发放，请查验`",null,"");break;
+                    }
+                }
+            }.start();
+        }
         return "";
     }
 
@@ -398,6 +426,7 @@ public class AdminController {
         );
         String name = path.substring(path.lastIndexOf("/"));
         FileUtil.downloadFile(path,name,request,response);
+        FileUtil.deleteFile(path);
         return "";
     }
 
@@ -544,6 +573,20 @@ public class AdminController {
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_claims";
+    }
+
+    /**
+     * 下载压缩打包文件
+     * @param id 理赔书id
+     * @param request request
+     * @param response response
+     * @return ""
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadZip")
+    public String downloadZip(int id, HttpServletRequest request, HttpServletResponse response) {
+
+        return "";
     }
 
     /**

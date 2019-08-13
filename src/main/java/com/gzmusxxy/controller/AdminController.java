@@ -636,6 +636,9 @@ public class AdminController {
     @PostMapping(value = "/bxStatus")
     public String bxStatus(int id, byte status) {
         BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
+        if (status == 2 && xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId()).getPoverty() == 1) {
+            bxInsurance.setPayCost((byte)1);
+        }
         bxInsurance.setStatus(status);
         bxInsuranceService.updateByPrimaryKey(bxInsurance);
         return "";

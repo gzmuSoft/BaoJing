@@ -180,7 +180,12 @@
                         <div class="form-group">
                             <label for="claimsTemplate" class="col-sm-2 control-label">理赔书模板</label>
                             <div class="col-sm-10">
-                                <input type="file" class="form-control" onchange="saveFile(this)" id="claimsTemplate" name="claimsTemplate" placeholder="请上传申请书模板.."/>
+                                <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                                    <button type="button" class="btn btn-success fileinput-button form-control" >理赔书模板上传</button>
+                                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="claimsTemplate" id="claimsTemplate" onchange="saveFile(this)">
+                                </div>&nbsp;&nbsp;
+                                <span id="fileName" style="vertical-align: middle">未上传文件</span>
+                                <a href="#" class="hidden" id="fileA" onclick="downloadFile()"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                             </div>
                         </div>
                         <div class="form-group">
@@ -253,6 +258,8 @@
             var project = $.parseJSON(data).project;
             yuan_filePath = project.claimsTemplate;
             yuan_fileName = project.claimsTemplateName;
+            $("#fileName").text(project.claimsTemplateName);
+            $('#fileA').removeClass('hidden');
             $('#projectId').val(project.id);
             $('#projectName').val(project.name);
             $('#startTime').val($.parseJSON(data).startTime);
@@ -278,6 +285,10 @@
         $('#cost').val("");
         yuan_filePath = null;
         yuan_fileName = null;
+        if(!$('#fileA').hasClass('hidden')){
+            $('#fileA').addClass('hidden');
+        }
+        $("#fileName").text("文件未上传");
     }
 
     //删除
@@ -300,7 +311,6 @@
     //添加和修改
     $('#save').click(function(){
         if(flag == "add"){
-            alert("进来了！");
             $.post("/admin/addBxProject",
             {
                 'name':$('#projectName').val(),
@@ -342,17 +352,22 @@
         }
     });
 
+    //下载修改时的模板文件
+    function downloadFile(){
+        window.location.href="/admin/download?name="+yuan_fileName+"&path="+yuan_filePath;
+    }
+
     //保存文件
     function saveFile(obj){
         var data = new FormData();
         data.append('path',filePath);
         data.append('file', obj.files[0]);
         var filename = obj.value;
-        var endGang = filename.lastIndexOf('\\');
+        name = obj.files[0].name;
+        $("#fileName").text(name);
         var extStart = filename.lastIndexOf('.');
         var ext = obj.value.substring(extStart,filename.length);
         data.append('type',ext);
-        name = obj.value.substring(endGang+1,filename.length);
         $.ajax({
         url: '/admin/upload',
         type: 'POST',
@@ -361,6 +376,9 @@
         processData: false,
         contentType: false,
         success:function(result){
+                if(!$('#fileA').hasClass('hidden')){
+                    $('#fileA').addClass('hidden');
+                }
                 alert("上传成功！");
                 filePath = result;
             },

@@ -14,7 +14,7 @@ public interface BxInsuranceMapper {
 
     int updateByPrimaryKey(BxInsurance record);
 
-    List<BxInsurance> selectAuditByNameLike(String name);
+    List<BxInsurance> selectAuditByNameLike(String name, String poverty);
 
     List<BxInsurance> selectClaimsByNameLike(String name);
 

@@ -32,16 +32,25 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
     }
 
     @Override
-    public PageInfo<BxInsurance> selectAuditByNameLike(String name, Integer pageNumber) {
+    public PageInfo<BxInsurance> selectAuditByNameLike(String name, String poverty, Integer pageNumber) {
         if (name != null && name != ""){
             name = "%" + name + "%";
         }else {
             name = "%%";
         }
+        if (poverty == null || name.equals("")){
+            poverty = "";
+        }else {
+            if (poverty.equals("1")){
+                poverty = "0";
+            }else {
+                poverty = "1";
+            }
+        }
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
-        List<BxInsurance> list = bxInsuranceMapper.selectAuditByNameLike(name);
+        List<BxInsurance> list = bxInsuranceMapper.selectAuditByNameLike(name, poverty);
         return new PageInfo<>(list);
     }
 

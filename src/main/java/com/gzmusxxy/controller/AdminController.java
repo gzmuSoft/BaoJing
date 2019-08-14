@@ -547,13 +547,14 @@ public class AdminController {
      * @return admin/bx_audit
      */
     @RequestMapping(value = "/bxAudit")
-    public String bxAudit(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
-        PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectAuditByNameLike(name, pageNumber);
+    public String bxAudit(Model model, String name,String poverty, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectAuditByNameLike(name, poverty, pageNumber);
         //防止搜索栏bug
         if (name == null) {
             name = "";
         }
         model.addAttribute("name",name);
+        model.addAttribute("poverty",poverty);
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_audit";

@@ -39,24 +39,61 @@ public class PovertyController {
     @Autowired
     private XjhbPersonService xjhbPersonService;
 
-//    @IsLogin
-//    @RequestMapping(value = {"","/"})
-//    public String information(HttpSession session) {
-//        //获取session中的用户openid
-//        System.out.println(session.getAttribute("openid"));
-//        return "poverty/user";
-//    }
+    /**
+     * 主页
+     * 根据openId 用户不存在则创建用户
+     * @param session session
+     * @return poverty/apply
+     */
+    @IsLogin
+    @RequestMapping(value = "/apply")
+    public String apply(HttpSession session) {
+        String openId =  session.getAttribute("openid").toString();
+        if(xjhbPersonService.findPersonByOpenId(openId) == null){
+            XjhbPerson person = new XjhbPerson();
+            person.setOpenid(openId);
+            xjhbPersonService.insert(person);
+        }
+        return "poverty/apply";
+    }
+
+    /**
+     * 跳转创建申请页面
+     * @return poverty/c_information
+     */
+    @IsLogin
+    @RequestMapping(value = "/cInformation")
+    public String cInformation(Model model){
+        model.addAttribute("projects",xjhbProjectService.selectAll());
+        return "poverty/c_information";
+    }
+
+    /**
+     * 上传文件（通用）
+     * @param file  file
+     * @param path  path
+     * @param type  文件类型
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/upload")
+    public String upload(@RequestParam("file") MultipartFile file,String path, String type) {
+        if (path.trim() == null || path.equals("null") || path.equals("")){
+            return FileUtil.saveFile(file,null,type);
+        }
+        return FileUtil.saveFile(file,path,type);
+    }
 
     @IsLogin
-    @RequestMapping(value = "/audit")
-    public String audit(HttpSession session,Model model) {
+    @RequestMapping(value = "/manage")
+    public String manage(HttpSession session,Model model) {
         String openId = session.getAttribute("openid").toString();
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
         List<XjhbInformation> xjhbInformationList= xjhbInformationService.findInfobyPersonId(person.getId());
         model.addAttribute("person",person);
         model.addAttribute("personName",person.getName());
         model.addAttribute("xjhbInformationList",xjhbInformationList);
-        return "poverty/audit";
+        return "poverty/manage";
     }
 
 
@@ -81,10 +118,8 @@ public class PovertyController {
     * @Author yxf
     * @Date : 2019/8/9 0:33
     */
-
-
     @IsLogin
-    @RequestMapping(value = {"","/"})
+    @RequestMapping(value = {"/user"})
     public String user(HttpSession session,Model model) {
         String openId =  session.getAttribute("openid").toString();
 
@@ -101,32 +136,6 @@ public class PovertyController {
         model.addAttribute("openId",openId);
         return "poverty/users";
     }
-
-
-    /**
-     * @File : PovertyController.java
-     * @Description : 查询项目信息
-     * @Param [model]
-     * @Return java.lang.String
-     * @Author yxf
-     * @Date : 2019/8/6 0:15
-     */
-    @IsLogin
-    @RequestMapping(value = "/usershen")
-    public String usershen(Model model,HttpSession session) {
-        String openId =  session.getAttribute("openid").toString();
-        model.addAttribute("openId",openId);
-        List<XjhbProject> list = xjhbProjectService.selectAll();
-        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
-        model.addAttribute("person",person);
-        model.addAttribute("projectList",list);
-        return "poverty/usershen";
-    }
-
-
-
-
-
 
     /**
      * @File : PovertyController.java
@@ -188,31 +197,24 @@ public class PovertyController {
     }
 
 
-
-
     /**
-     * 保存申请信息
-     * */
+     * 保存申请书信息
+     * @param xjhbInformation
+     * @param session
+     * @return
+     */
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
-    public String saveInformation(XjhbInformation xjhbInformation ){
-        System.out.println(xjhbInformation);
-        Date date = new Date();
-        if (xjhbInformation.getId() == null){
-
-            xjhbInformation.setCreateTime(date);
-            xjhbInformation.setStatus((byte)1);
-            xjhbInformationService.saveInformation(xjhbInformation);
-
-        }else{
-            xjhbInformation.setCreateTime(date);
-            xjhbInformation.setStatus((byte)1);
-            xjhbInformationService.updateByPrimaryKey(xjhbInformation);
-        }
-
-
-        return "poverty/audit";
+    public String saveInformation(XjhbInformation xjhbInformation,HttpSession session){
+        String openId = session.getAttribute("openid").toString();
+        XjhbPerson xjhbPerson = xjhbPersonService.findPersonByOpenId(openId);
+        xjhbInformation.setPersonId(xjhbPerson.getId());
+        xjhbInformation.setCreateTime(new Date());
+        xjhbInformation.setStatus((byte)1);
+        System.out.println("创建的申请书"+xjhbInformation);
+        xjhbInformationService.saveInformation(xjhbInformation);
+        return "success";
     }
 
     /**
@@ -256,16 +258,15 @@ public class PovertyController {
     }
 
     /**
-     * @File : PovertyController.java
-     * @Description : 对项目申请书文件模板的下载
-     * @Param [path, name, request, response]
-     * @Return java.lang.String
-     * @Author yxf
-     * @Date : 2019/8/6 0:08
+     * 对项目申请书文件模板的下载
+     * @param id 项目id
+     * @param request
+     * @param response
+     * @return
      */
     @ResponseBody
-    @RequestMapping(value= "/downloadProject")
-    public String downloadProject(int id, HttpServletRequest request, HttpServletResponse response){
+    @RequestMapping(value= "/downloadTemplate")
+    public String downloadTemplate(int id, HttpServletRequest request, HttpServletResponse response){
         XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(id);
         FileUtil.downloadFile(xjhbProject.getApplicationTemplate(),xjhbProject.getApplicationTemplateName(),request,response);
         return "";

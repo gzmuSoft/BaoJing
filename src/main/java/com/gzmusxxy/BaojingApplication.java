@@ -11,7 +11,9 @@ BaojingApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BaojingApplication.class, args);
-        System.out.println("管理员入口：http://127.0.0.1:8083/admin/login");
+        System.out.println("管理员：http://127.0.0.1:8083/admin/login");
+        System.out.println("微信登录：http://127.0.0.1:8083/wechat/demo");
+        System.out.println("先建后补：http://127.0.0.1:8083/poverty/apply");
     }
 
 }

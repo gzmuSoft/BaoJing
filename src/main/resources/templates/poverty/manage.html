@@ -41,7 +41,9 @@
                         <td th:text="${xjhbInformation.outlay}"></td>
                         <td th:text="${personName}"></td>
                         <td  th:if="${xjhbInformation.status} eq '1' " ></span> <button type="button" class="btn btn-default" >待审核</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '2' " ></span><button th:id="${xjhbInformation.id}" type="button" class="btn btn-danger" onclick="restart(this)" >审核失败,重新申请</button>
+                        <td  th:if="${xjhbInformation.status} eq '2' " ></span>
+                            <button th:id="${xjhbInformation.id}" type="button" class="btn btn-danger" onclick="restart(this)" >审核失败,重新申请</button>
+                        </td>
                         <td  th:if="${xjhbInformation.status} eq '3' " ></span> <button type="button" class="btn btn-success" >审核通过</button></td>
                         <td  th:if="${xjhbInformation.status} eq '4' " ></span><button type="button" class="btn btn-primary"  >待验收</button></td>
                         <td  th:if="${xjhbInformation.status} eq '5' " ></span> <button type="button" class="btn btn-info" >线下验收</button></td>
@@ -69,17 +71,17 @@
     </div>
 <!--底部导航条-->
 <footer class="am-menu am-cf">
-    <a href="/poverty/usershen">
+    <a href="/poverty/apply">
         <div class="am-menu-column" id="explore" style="width: 33%;">
             <span>项目申请</span>
         </div>
     </a>
-    <a href="/poverty/audit">
+    <a href="#">
         <div class="am-menu-column active" id="index" style="width: 33%;">
-            <span>项目进度</span>
+            <span>项目管理</span>
         </div>
     </a>
-    <a href="/poverty">
+    <a href="/poverty/user">
         <div class="am-menu-column " id="my" style="width: 33%;">
             <span>我的资料</span>
         </div>

@@ -14,7 +14,7 @@ public interface XjhbInformationService {
 
     PageInfo<XjhbInformation> selectApplyByNameLike(String name, Integer pageNumber);
 
-    List<XjhbInformation> findInfobyPersonId(int personId);
+    List<XjhbInformation> selectInformationByOpenId(String openId);
 
     int updateByPrimaryKey(XjhbInformation record);
 

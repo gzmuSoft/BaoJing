@@ -52,8 +52,8 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
     }
 
     @Override
-    public List<XjhbInformation> findInfobyPersonId(int personId) {
-        return xjhbInformationMapper.findInfobyPersonId(personId);
+    public List<XjhbInformation> selectInformationByOpenId(String openId) {
+        return xjhbInformationMapper.selectInformationByOpenId(openId);
     }
 
     @Override

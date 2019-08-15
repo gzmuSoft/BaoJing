@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>Bootstrap 101 Template</title>
+    <title>先建后补</title>
     <!-- Bootstrap -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -13,76 +13,61 @@
 <body>
 <div class="container">
     <div class="col-sm-12">
-        <h3>项目申请进度</h3>
+        <h3>项目管理</h3>
         <!--分割线-->
         <div class="decoration"></div>
         <!--通知面板-->
         <div class="panel panel-default">
-            <div class="panel-heading">通知信息</div>
+            <div class="panel-heading"></div>
             <div class="panel-body">
-
                 <table class="table">
                     <thead>
                     <tr>
                         <th>项目名</th>
-                        <th>申请时间</th>
-                        <th>经费</th>
-                        <th>申请人</th>
-                        <th>申请状态</th>
+                        <th>状态</th>
+                        <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <script th:inline="javascript">
-                        console.log([[${xjhbInformationList}]])
-                    </script>
-                    <tr th:each="xjhbInformation : ${xjhbInformationList}">
-                        <td th:text="${xjhbInformation.projectId}">暂无项目</td>
-                        <td th:text="${#dates.format(xjhbInformation.startTime,'yyyy-MM-dd')}"></td>
-                        <td th:text="${xjhbInformation.outlay}"></td>
-                        <td th:text="${personName}"></td>
-                        <td  th:if="${xjhbInformation.status} eq '1' " ></span> <button type="button" class="btn btn-default" >待审核</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '2' " ></span>
-                            <button th:id="${xjhbInformation.id}" type="button" class="btn btn-danger" onclick="restart(this)" >审核失败,重新申请</button>
-                        </td>
-                        <td  th:if="${xjhbInformation.status} eq '3' " ></span> <button type="button" class="btn btn-success" >审核通过</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '4' " ></span><button type="button" class="btn btn-primary"  >待验收</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '5' " ></span> <button type="button" class="btn btn-info" >线下验收</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '6' " ></span> <button type="button" class="btn btn-success" >验收通过</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '7' " ></span> <button type="button" class="btn btn-danger" >验收失败</button></td>
-                        <td  th:if="${xjhbInformation.status} eq '8' " ></span> <button type="button" class="btn btn-warning" >已转账</button></td>
+                    <tr th:each="information : ${informationList}">
+                        <td th:text="${information.projectName}"></td>
+                        <td  th:if="${information.status} eq '1' " ></span> <button type="button" class="btn btn-default" >待审核</button></td>
+                        <span th:if="${information.status} eq '2' " >
+                            <td>
+                                <button type="button" class="btn btn-danger">审核失败</button>
+                            </td>
+                            <td>
+                                <a th:href="@{'/poverty/updateInformation?id='+${information.id}}" class="btn btn-success">重新申请</a>
+                            </td>
+                        </span>
+                        <td  th:if="${information.status} eq '3' " ></span> <button type="button" class="btn btn-success" >审核通过</button></td>
+                        <td  th:if="${information.status} eq '4' " ></span><button type="button" class="btn btn-primary"  >待验收</button></td>
+                        <td  th:if="${information.status} eq '5' " ></span> <button type="button" class="btn btn-info" >待线下验收</button></td>
+                        <td  th:if="${information.status} eq '6' " ></span> <button type="button" class="btn btn-success" >验收通过</button></td>
+                        <td  th:if="${information.status} eq '7' " ></span> <button type="button" class="btn btn-danger" >验收失败</button></td>
+                        <td  th:if="${information.status} eq '8' " ></span> <button type="button" class="btn btn-warning" >已转账</button></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <script>
-            function restart(obj) {
-                var informationId = $(obj).attr("id");
-                $.post("/poverty/restartInformation",
-                    {
-                        "informationId":informationId
-                    },function (result) {
-                        window.location.href="/poverty/usershen"+"?informationId="+informationId;
-                })
-            }
-        </script>
         <!--分割线-->
         <div class="decoration"></div>
     </div>
 <!--底部导航条-->
 <footer class="am-menu am-cf">
     <a href="/poverty/apply">
-        <div class="am-menu-column" id="explore" style="width: 33%;">
+        <div class="am-menu-column" style="width: 33%;">
             <span>项目申请</span>
         </div>
     </a>
     <a href="#">
-        <div class="am-menu-column active" id="index" style="width: 33%;">
+        <div class="am-menu-column active" style="width: 33%;">
             <span>项目管理</span>
         </div>
     </a>
     <a href="/poverty/user">
-        <div class="am-menu-column " id="my" style="width: 33%;">
+        <div class="am-menu-column" style="width: 33%;">
             <span>我的资料</span>
         </div>
     </a>
@@ -92,5 +77,8 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
+<script>
+
+</script>
 </body>
 </html>

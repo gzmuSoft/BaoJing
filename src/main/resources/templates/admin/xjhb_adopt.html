@@ -102,7 +102,7 @@
                         <tbody>
 						<tr class="success" th:each="adopt:${pageInfo.list}">
 							<th scope="row" th:text="${adoptStat.index+1}"></th>
-							<th th:text="${adopt.id}"></th>
+							<th class="text-center" th:text="${adopt.id}"></th>
 							<td th:text="${adopt.projectName}"></td>
 							<td th:text="${adopt.outlay}"></td>
 							<td th:text="${adopt.personName}"></td>

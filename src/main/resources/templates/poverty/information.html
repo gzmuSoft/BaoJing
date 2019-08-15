@@ -170,12 +170,12 @@
             }
         }
         data.append('file', obj.files[0]);
-        var filename = obj.value;
-        var extStart = filename.lastIndexOf('.');
-        var ext = obj.value.substring(extStart,filename.length);
+        //切割类型
+        var extStart = obj.value.lastIndexOf('.');
+        var ext = obj.value.substring(extStart, obj.value.length);
         data.append('type',ext);
         $.ajax({
-        url: '/admin/upload',
+        url: '/poverty/upload',
         type: 'POST',
         data: data,
         cache: false,

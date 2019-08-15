@@ -23,29 +23,42 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>项目名</th>
-                        <th>状态</th>
-                        <th>操作</th>
+                        <th class="text-center">编号</th>
+                        <th class="text-center">项目名</th>
+                        <th class="text-center">进度</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="information : ${informationList}">
+                    <tr class="text-center" th:each="information : ${informationList}">
+                        <td th:text="${information.id}"></td>
                         <td th:text="${information.projectName}"></td>
-                        <td  th:if="${information.status} eq '1' " ></span> <button type="button" class="btn btn-default" >待审核</button></td>
-                        <span th:if="${information.status} eq '2' " >
-                            <td>
-                                <button type="button" class="btn btn-danger">审核失败</button>
-                            </td>
-                            <td>
-                                <a th:href="@{'/poverty/updateInformation?id='+${information.id}}" class="btn btn-success">重新申请</a>
-                            </td>
-                        </span>
-                        <td  th:if="${information.status} eq '3' " ></span> <button type="button" class="btn btn-success" >审核通过</button></td>
-                        <td  th:if="${information.status} eq '4' " ></span><button type="button" class="btn btn-primary"  >待验收</button></td>
-                        <td  th:if="${information.status} eq '5' " ></span> <button type="button" class="btn btn-info" >待线下验收</button></td>
-                        <td  th:if="${information.status} eq '6' " ></span> <button type="button" class="btn btn-success" >验收通过</button></td>
-                        <td  th:if="${information.status} eq '7' " ></span> <button type="button" class="btn btn-danger" >验收失败</button></td>
-                        <td  th:if="${information.status} eq '8' " ></span> <button type="button" class="btn btn-warning" >已转账</button></td>
+                        <td  th:if="${information.status} eq '1' ">
+                             <button disabled class="btn btn-info btn-sm" >待审核</button>
+                        </td>
+                        <td th:if="${information.status} eq '2' ">
+                            <button disabled class="btn btn-danger btn-sm">审核失败</button>
+                            <a th:href="@{'/poverty/updateInformation?id='+${information.id}}" class="btn btn-primary btn-sm">重新申请</a>
+                        </td>
+                        <td th:if="${information.status} eq '3' ">
+                            <button disabled class="btn btn-success btn-sm">审核通过</button>
+                            <a th:href="@{'/poverty/check?id='+${information.id}}" class="btn btn-primary btn-sm">申请验收</a>
+                        </td>
+                        <td th:if="${information.status} eq '4' ">
+                            <button disabled class="btn btn-info btn-sm">待验收</button>
+                        </td>
+                        <td th:if="${information.status} eq '5' ">
+                            <button disabled class="btn btn-info btn-sm">待线下验收</button>
+                        </td>
+                        <td th:if="${information.status} eq '6' ">
+                            <button disabled class="btn btn-success btn-sm">验收通过</button>
+                        </td>
+                        <td th:if="${information.status} eq '7' ">
+                            <button disabled class="btn btn-danger btn-sm">验收失败</button>
+                            <a th:href="@{'/poverty/check?id='+${information.id}}" class="btn btn-primary btn-sm">重新申请</a>
+                        </td>
+                        <td th:if="${information.status} eq '8' ">
+                            <button disabled class="btn btn-success btn-sm">已转账</button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

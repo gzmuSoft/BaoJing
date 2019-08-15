@@ -62,6 +62,7 @@ public class PovertyController {
      * 验证是否可以跳转创建申请页面
      * @return
      */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/verifyInformation")
     public String verifyInformation(HttpSession session){
@@ -147,10 +148,11 @@ public class PovertyController {
      * @param type  文件类型
      * @return return
      */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/upload")
     public String upload(@RequestParam("file") MultipartFile file,String path, String type) {
-        if (path.trim() == null || path.equals("null") || path.equals("")){
+        if (path == null || path.equals("null") || path.equals("")){
             return FileUtil.saveFile(file,null,type);
         }
         return FileUtil.saveFile(file,path,type);
@@ -164,6 +166,7 @@ public class PovertyController {
      * @param type
      * @return
      */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/upIdCard")
     public String upIdCard(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {
@@ -214,6 +217,35 @@ public class PovertyController {
             xjhbInformationService.updateByPrimaryKey(xjhbInformation);
         }
         System.out.println("创建的申请书"+xjhbInformation);
+        return "success";
+    }
+
+    /**
+     * 申请验收
+     * 跳转至上传现场照片
+     * @param id
+     * @param model
+     * @return
+     */
+    @IsLogin
+    @RequestMapping(value = "/check")
+    public String check(Integer id,Model model) {
+        model.addAttribute("information",xjhbInformationService.selectByPrimaryKey(id));
+        return "poverty/check";
+    }
+
+    /**
+     * 申请验收保存现场照片
+     * 成功跳转至项目管理
+     * @param information
+     * @return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/saveCheck")
+    public String saveCheck(XjhbInformation information) {
+        information.setStatus((byte)4);
+        xjhbInformationService.updateByPrimaryKey(information);
         return "success";
     }
 

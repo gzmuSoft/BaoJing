@@ -70,7 +70,7 @@
     from (select i.id, p.name as person_name, p.one_card_solution,i.project_id, i.outlay, i.start_time, i.end_time,i.scene_photos, i.other_proof_name,
     i.other_proof, i.project_application, i.project_application_name, i.person_id, i.create_time, i.status
     from xjhb_person p join xjhb_information i
-    where openId = #{openId} and p.id = i.project_id) i join xjhb_project p
+    where openId = #{openId} and p.id = i.person_id) i join xjhb_project p
     where p.id = i.project_id
   </select>
   <select id="selectApplyByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">

@@ -13,9 +13,11 @@ public interface BxInsuranceService {
 
     int updateByPrimaryKey(BxInsurance record);
 
-    PageInfo<BxInsurance> selectAuditByNameLike(String name, String poverty, Integer pageNumber);
+    PageInfo<BxInsurance> selectAuditByNameLike(String name, Integer poverty, Integer pageNumber);
 
     PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber);
+
+    PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber);
 
     BxInsurance selectClaimsById(Integer id);
 }

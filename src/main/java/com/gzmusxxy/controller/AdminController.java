@@ -542,12 +542,13 @@ public class AdminController {
     /**
      * 查询加分页 购买审核
      * @param model model
-     * @param name name
+     * @param name 项目名称
+     * @param poverty 是否贫困
      * @param pageNumber pageNumber
-     * @return admin/bx_audit
+     * @return
      */
     @RequestMapping(value = "/bxAudit")
-    public String bxAudit(Model model, String name,String poverty, @RequestParam("pageNumber") Integer pageNumber){
+    public String bxAudit(Model model, String name,Integer poverty, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectAuditByNameLike(name, poverty, pageNumber);
         //防止搜索栏bug
         if (name == null) {
@@ -558,6 +559,41 @@ public class AdminController {
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/bx_audit";
+    }
+
+    /**
+     * 查询加分页 缴费验收
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return admin/bx_audit
+     */
+    @RequestMapping(value = "/bxCheck")
+    public String bxCheck(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectCheckByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/bx_check";
+    }
+
+    /**
+     * 付款验证
+     * @param id insuranceId
+     * @param payCost 是否付款
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/bxPayCost")
+    public String bxPayCost(int id, byte payCost) {
+        BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
+        bxInsurance.setPayCost(payCost);
+        bxInsuranceService.updateByPrimaryKey(bxInsurance);
+        return "";
     }
 
     /**

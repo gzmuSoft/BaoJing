@@ -32,25 +32,23 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
     }
 
     @Override
-    public PageInfo<BxInsurance> selectAuditByNameLike(String name, String poverty, Integer pageNumber) {
+    public PageInfo<BxInsurance> selectAuditByNameLike(String name, Integer poverty, Integer pageNumber) {
         if (name != null && name != ""){
             name = "%" + name + "%";
         }else {
             name = "%%";
         }
-        if (poverty == null || name.equals("")){
-            poverty = "";
-        }else {
-            if (poverty.equals("1")){
-                poverty = "0";
-            }else {
-                poverty = "1";
-            }
-        }
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
-        List<BxInsurance> list = bxInsuranceMapper.selectAuditByNameLike(name, poverty);
+        List<BxInsurance> list;
+        if (poverty == 1){
+            list = bxInsuranceMapper.selectAuditByNameLike(name, 1,1);
+        }else if (poverty == 0){
+            list = bxInsuranceMapper.selectAuditByNameLike(name, 0,0);
+        }else {
+            list = bxInsuranceMapper.selectAuditByNameLike(name, 1,0);
+        }
         return new PageInfo<>(list);
     }
 
@@ -65,6 +63,20 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
         List<BxInsurance> list = bxInsuranceMapper.selectClaimsByNameLike(name);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber) {
+        if (name != null && name != ""){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<BxInsurance> list = bxInsuranceMapper.selectCheckByNameLike(name);
         return new PageInfo<>(list);
     }
 

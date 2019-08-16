@@ -36,6 +36,7 @@
                         <ul>
                             <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li class="active"><a href="#">购买申请审核</a></li>
+                            <li><a href="/admin/bxCheck?pageNumber=1">缴费验收</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
                         </ul>
                     </li>
@@ -87,14 +88,14 @@
                     <div class="panel-body">
                         <label class="control-label">是否贫困：</label>
                         <div class="btn-group">
-                            <button th:if="${poverty == null || poverty==''}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <button th:if="${poverty == 3}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 不限<span class="caret"></span></button>
-                            <button th:if="${poverty == '1'}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <button th:if="${poverty == 1}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 是<span class="caret"></span></button>
-                            <button th:if="${poverty == '0'}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                            <button th:if="${poverty == 0}" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
                                 否<span class="caret"></span></button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a th:href="@{'/admin/bxAudit?pageNumber=1&name='+${name}}">不限</a></li>
+                                <li><a th:href="@{'/admin/bxAudit?pageNumber=1&name='+${name}+'&poverty=3'}">不限</a></li>
                                 <li><a th:href="@{'/admin/bxAudit?pageNumber=1&name='+${name}+'&poverty=1'}">是</a></li>
                                 <li><a th:href="@{'/admin/bxAudit?pageNumber=1&name='+${name}+'&poverty=0'}">否</a></li>
                             </ul>
@@ -104,8 +105,8 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">项目名称</th>
-                            <th class="text-center">项目购买数量</th>
+                            <th class="text-center">保险名称</th>
+                            <th class="text-center">保险购买数量</th>
                             <th class="text-center">身份证号</th>
                             <th class="text-center">联系电话</th>
                             <th class="text-center">申请人</th>

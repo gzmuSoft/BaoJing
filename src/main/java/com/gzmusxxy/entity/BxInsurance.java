@@ -27,6 +27,8 @@ public class BxInsurance {
     private String idCardReverse;
     /**1已经缴费 0未缴费*/
     private Byte payCost;
+    /**没有的字段*/
+    private Double cost;
     /**受灾照片*/
     private String affectedPhoto;
 

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.BxProject;
 import com.gzmusxxy.mapper.BxProjectMapper;
 import com.gzmusxxy.service.BxProjectService;
+import com.gzmusxxy.util.FileUtil;
 import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,8 @@ public class BxProjectServiceImpl implements BxProjectService {
 
     @Override
     public int deleteByPrimaryKey(Integer id) {
+        BxProject bxProject = bxProjectMapper.selectByPrimaryKey(id);
+        FileUtil.deleteFile(bxProject.getClaimsTemplate());
         return bxProjectMapper.deleteByPrimaryKey(id);
     }
 

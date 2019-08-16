@@ -16,6 +16,16 @@ public class FileUtil {
     public static final String FILE_PATH = "/home/fengxin/";
 
     /**
+     * 判断文件是否存在
+     * @param path 文件路径
+     * @return
+     */
+    public static boolean existFile(String path){
+        File file = new File(path);
+        return file.exists();
+    }
+
+    /**
      * 保存文件到服务器
      * @param file file
      * @param path file全路径，为空则生成，否则覆盖类型相同者

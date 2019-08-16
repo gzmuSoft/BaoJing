@@ -630,17 +630,26 @@ public class AdminController {
         List<String> filePaths = new ArrayList<>();
         List<String> fileNames = new ArrayList<>();
         String zipPath = FileUtil.FILE_PATH + UUID.randomUUID() + ".zip";
-        filePaths.add(bxInsurance.getClaimsApplication());
-        filePaths.add(bxInsurance.getIdCardFront());
-        filePaths.add(bxInsurance.getIdCardReverse());
-        filePaths.add(bxInsurance.getAffectedPhoto());
-        fileNames.add(bxInsurance.getClaimsApplicationName());
-        fileNames.add("身份证正面照片");
-        fileNames.add("身份证反面照片");
-        if (!bxInsurance.getAffectedPhotoName().equals(bxInsurance.getClaimsApplicationName())) {
-            fileNames.add(bxInsurance.getAffectedPhotoName());
-        } else {
-            fileNames.add("受灾照片");
+        if (FileUtil.existFile(bxInsurance.getClaimsApplication())){
+            filePaths.add(bxInsurance.getClaimsApplication());
+            fileNames.add(bxInsurance.getClaimsApplicationName());
+        }
+        if (FileUtil.existFile(bxInsurance.getIdCardFront())){
+            filePaths.add(bxInsurance.getIdCardFront());
+            fileNames.add("身份证正面照片");
+        }
+        if (FileUtil.existFile(bxInsurance.getIdCardReverse())){
+            filePaths.add(bxInsurance.getIdCardReverse());
+            fileNames.add("身份证反面照片");
+        }
+        if (FileUtil.existFile(bxInsurance.getAffectedPhoto())){
+            filePaths.add(bxInsurance.getAffectedPhoto());
+            //防止可能出现的重名问题
+            if (!bxInsurance.getAffectedPhotoName().equals(bxInsurance.getClaimsApplicationName())) {
+                fileNames.add(bxInsurance.getAffectedPhotoName());
+            } else {
+                fileNames.add("受灾照片");
+            }
         }
         ZipUtil.toZip(filePaths,fileNames,zipPath);
         FileUtil.downloadFile(zipPath,"理赔资料.zip",request,response);

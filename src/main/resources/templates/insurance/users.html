@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="village" class="col-sm-2 control-label">村组：</label>
+                    <label for="village" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>村组：</label>
                     <div class="col-sm-10">
                         <input type="text" name="village" disabled class="form-control" id="village" placeholder="村组">
                     </div>
@@ -228,10 +228,19 @@
             $("#povertyDiv").hide();
         }
     }
-
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
     //设置存在的数据
     $(function () {
-        //第一次访问页面的时候执行该函数
+        //判断是否是补充个人信息
+        if(getQueryString("supplement") == 'true'){
+            alert('请补充个人信息才能申请！');
+        }
+        //第一次访问页面的时候执行该函数，设置是否需要上传证明材料
         poverty();
         //获得单选框改变事件
         $('input:radio[name="poverty"]').change(function () {
@@ -330,10 +339,14 @@
         //if($('#village').val()==null||$('#village').val()==""){
         //    return false;
         //}
-        if ($("#filename1").html() == "未上传文件" || $("#filename2").html() == "未上传文件" || $("#filename3").html() == "未上传文件") {
+        if ($("#filename1").html() == "未上传文件" || $("#filename2").html() == "未上传文件" ) {
             return false;
         }
         var poverty = $('input:radio[name="poverty"]:checked').val();
+        //如果是贫困户必须上传证明材料
+        if(poverty == 1 && $("#filename3").html() == "未上传文件"){
+            return false;
+        }
         if (poverty == null || poverty == '') {
             alert("是否贫困户必须选择一项！");
             return false;

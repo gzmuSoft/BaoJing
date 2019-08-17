@@ -56,7 +56,7 @@ public class InsuranceController {
             //再次判断用户的信息收否填写完全
             if (personByOpenId.getIdentity() == null || personByOpenId.getName() == null || personByOpenId.getTelphone() == null || personByOpenId.getOneCardSolution() == null || personByOpenId.getPoverty() == null) {
                 //所需要的资料未完全填写，跳转到资料填写界面
-                return "redirect:/insurance/user";
+                return "redirect:/insurance/user?supplement=true";
             }
         }else{
             //用户不存在创建用户

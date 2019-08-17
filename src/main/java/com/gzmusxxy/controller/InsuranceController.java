@@ -17,10 +17,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,8 +56,14 @@ public class InsuranceController {
             //再次判断用户的信息收否填写完全
             if (personByOpenId.getIdentity() == null || personByOpenId.getName() == null || personByOpenId.getTelphone() == null || personByOpenId.getOneCardSolution() == null || personByOpenId.getPoverty() == null) {
                 //所需要的资料未完全填写，跳转到资料填写界面
-                return "redirect:/poverty";
+                return "redirect:/insurance/user";
             }
+        }else{
+            //用户不存在创建用户
+            XjhbPerson person = new XjhbPerson();
+            person.setOpenid(openid);
+            person.setCreateTime(new Date());
+            xjhbPersonService.insert(person);
         }
         //用户资料填写完整，查询项目资料
         List<BxProject> bxProjects = bxProjectService.selectAll();
@@ -76,7 +84,37 @@ public class InsuranceController {
         BxProject bxProject = bxProjectService.selectByPrimaryKey(projectId);
         FileUtil.downloadFile(bxProject.getClaimsTemplate(), bxProject.getClaimsTemplateName(), request, response);
     }
+    /**
+     * 通用下载
+     * @param name
+     * @param path
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadFile")
+    public String download(String name,String path, HttpServletRequest request, HttpServletResponse response){
+        FileUtil.downloadFile(path,name,request,response);
+        return "";
+    }
 
+    /**
+     * 上传文件（通用）
+     * @param file  file
+     * @param path  path
+     * @param type  文件类型
+     * @return return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/upload")
+    public String upload(@RequestParam("file") MultipartFile file, String path, String type) {
+        if (path == null || path.equals("null") || path.equals("")){
+            return FileUtil.saveFile(file,null,type);
+        }
+        return FileUtil.saveFile(file,path,type);
+    }
 
     /**
      * 保存保险资料
@@ -126,6 +164,12 @@ public class InsuranceController {
         return "insurance/myInsurance";
     }
 
+    /**
+     * 进入保险理赔申请页面
+     * @param id
+     * @param model
+     * @return
+     */
     @IsLogin
     @RequestMapping(value = "/applyForClaim")
     public String applyForClaim(@RequestParam("id") Integer id, Model model) {
@@ -151,6 +195,12 @@ public class InsuranceController {
         }
     }
 
+    /**
+     * 提交保险理赔申请
+     * @param bxInsurance
+     * @param session
+     * @return
+     */
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/postApplyForClaim")
@@ -175,4 +225,55 @@ public class InsuranceController {
         jsonResult.setResult("失败");
         return jsonResult;
     }
+
+    /**
+     * 用户资料管理
+     * @param session
+     * @param model
+     * @return
+     */
+    @IsLogin
+    @RequestMapping(value = "/user")
+    public String user(HttpSession session,Model model) {
+        String openId =  session.getAttribute("openid").toString();
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
+        model.addAttribute("person",person);
+        return "insurance/users";
+    }
+    /**
+     * users页面上传身份证正反面照片
+     * @param file
+     * @param backPath
+     * @param frontPath
+     * @param type
+     * @return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/upIdCard")
+    public String upIdCard(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {
+        if (backPath != null && frontPath != null) {
+            return FileUtil.saveFile(file,null, type);
+        }else {
+            if (backPath != null ) {
+                return FileUtil.saveFile(file,backPath,type);
+            }else{
+                return FileUtil.saveFile(file,frontPath,type);}
+        }
+    }
+
+    /**
+     * 修改资料
+     * 因为一开始登录时自动创建用户
+     * @param xjhbPerson
+     * @return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/updateUser")
+    public String update(XjhbPerson xjhbPerson) {
+        Integer re = xjhbPersonService.updateByPrimaryKey(xjhbPerson);
+        return re.toString();
+    }
+
 }

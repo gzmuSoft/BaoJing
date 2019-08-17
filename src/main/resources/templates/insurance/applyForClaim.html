@@ -93,7 +93,7 @@
             <span>我的申请</span>
         </div>
     </a>
-    <a href="/poverty/user">
+    <a href="/insurance/user">
         <div class="am-menu-column active " id="my" style="width: 33%;">
             <span>我的资料</span>
         </div>
@@ -121,7 +121,7 @@
             $("#claimTemplateText").text(claimTemplateName);
             //添加单击事件
             $('#fileA').click(function () {
-                window.location.href = "/poverty/download?path=" + claimTemplate + "&name=" + claimTemplateName;
+                window.location.href = "/insurance/downloadFile?path=" + claimTemplate + "&name=" + claimTemplateName;
             });
             //如果是隐藏则取消隐藏
             if ($('#fileA').hasClass('hidden')) {
@@ -133,7 +133,7 @@
             $("#disasterPhotoText").text(disasterPhotoName);
             //添加单击事件
             $('#fileB').click(function(){
-                window.location.href="/poverty/download?path=" + disasterPhoto + "&name=" + disasterPhotoName;
+                window.location.href="/insurance/downloadFile?path=" + disasterPhoto + "&name=" + disasterPhotoName;
             });
             //如果是隐藏则取消隐藏
             if($('#fileB').hasClass('hidden')){
@@ -147,7 +147,7 @@
         var ext = obj.value.substring(extStart, obj.value.length);
         data.append('type', ext);
         $.ajax({
-            url: '/poverty/upload',
+            url: '/insurance/upload',
             type: 'POST',
             data: data,
             cache: false,

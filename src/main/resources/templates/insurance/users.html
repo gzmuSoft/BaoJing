@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>个人资料</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>基本信息</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <div class="full-width">
+            <h4 class="shadow"><span class="red">*&nbsp;</span>号为必填项</h4>
+        </div>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--表单-->
+        <div class="form">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>姓名：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="name" disabled class="form-control" id="name" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identity" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证号码：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="identity" disabled class="form-control" id="identity"
+                               placeholder="身份证号码">
+                        <div id="vIdentity" class="red"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identity" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>农户一卡通：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="oneCardSolution" disabled class="form-control" id="oneCardSolution"
+                               placeholder="农户一卡通">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tel" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>联系电话：</label>
+                    <div class="col-sm-10">
+                        <input type="tel" name="tel" disabled class="form-control" id="tel" placeholder="联系电话">
+                        <div id="vTel" class="red"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="village" class="col-sm-2 control-label">村组：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="village" disabled class="form-control" id="village" placeholder="村组">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identify_front" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证正面（个人信息的一面）：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">身份证正面上传</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" disabled type="file"
+                                   name="identify_front" id="identify_front" onchange=" saveFile(this,this.files[0],1)">
+                        </div>&nbsp;&nbsp;
+                        <span id="filename1" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identify_back" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证反面（带国徽的一面）：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">身份证反面上传</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="identify_back" id="identify_back" disabled
+                                   onchange="saveFile(this,this.files[0],2)">
+                        </div>&nbsp;&nbsp;
+                        <span id="filename2" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileB"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <div class="form-group" id="isPoverty">
+                    <label class="control-label col-sm-2"><span class="red">*&nbsp</span>是否贫困户：</label>
+                    <div class="col-sm-10">
+                        <label class="radio-inline">
+                            <input type="radio" name="poverty" value="1" disabled> 是贫困户
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="poverty" value="0" checked="checked" disabled> 不是贫困户
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group" id="povertyDiv" hidden="hidden">
+                    <label for="poverty_prove" class="col-sm-2 control-label"><span
+                            class="red">*&nbsp</span>贫困证明材料：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">贫困证明材料</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" disabled type="file"
+                                   name="povertyProve" id="poverty_prove" onchange=" saveFile(this,this.files[0],3)">
+                        </div>&nbsp;&nbsp;
+                        <span id="filename3" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileC"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="edit" class="btn btn-info" style="width: 100%;">编辑</button>
+                        <button type="button" id="submit" class="btn btn-success hidden" style="width: 100%;">保存
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/insurance">
+        <div class="am-menu-column " id="explore" style="width: 33%;">
+            <span>项目申请</span>
+        </div>
+    </a>
+    <a href="/insurance/myInsurance?pageNumber=1">
+        <div class="am-menu-column" id="index" style="width: 33%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+    <a href="/insurance/user">
+        <div class="am-menu-column active" id="my" style="width: 33%;">
+            <span>我的资料</span>
+        </div>
+    </a>
+</footer>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    var front_path = null;
+    var back_path = null;
+    //贫困证明材料
+    var poverty_prove = null;
+
+    //上传身份证正反面
+    function saveFile(obj, file, num) {
+        switch (num) {
+            case 1:
+                $("#filename1").html(file.name);
+                break;
+            case 2:
+                $("#filename2").html(file.name);
+                break;
+            case 3:
+                $("#filename3").html(file.name);
+                break;
+
+        }
+        var data = new FormData();
+        data.append('file', obj.files[0]);
+        if (front_path != null && obj.id == 'identify_front' && front_path != "") {
+            data.append('frontPath', front_path);
+        }
+        if (back_path != null && obj.id == 'identify_back' && back_path != "") {
+            data.append('backPath', back_path);
+        }
+        if (poverty_prove != null && obj.id == 'poverty_prove' && poverty_prove != "") {
+            data.append('povertyProve', poverty_prove);
+        }
+        //判断类型
+        var filename = obj.value;
+        extStart = filename.lastIndexOf('.');
+        ext = obj.value.substring(extStart, filename.length).toUpperCase();
+        data.append('type', ext);
+        console.log(data)
+        $.ajax({
+            url: '/insurance/upIdCard',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                alert("上传成功！");
+                switch (obj.id) {
+                    case 'identify_front':
+                        front_path = result;
+                        break;
+                    case 'identify_back':
+                        back_path = result;
+                        break;
+                    case 'poverty_prove':
+                        poverty_prove = result;
+                        break;
+                }
+            },
+            error: function (result) {
+                alert("上传失败！");
+            }
+        });
+    }
+
+    function poverty() {
+        //获得单选框的值
+        var val = $('input:radio[name="poverty"]:checked').val();
+        //等于1是贫困户 0 不是贫困户
+        if (val == 1) {
+            //是贫困户就显示贫困户证明材料的上传表单
+            $("#povertyDiv").show();
+        } else {
+            //否则隐藏怎么材料上传表单
+            $("#povertyDiv").hide();
+        }
+    }
+
+    //设置存在的数据
+    $(function () {
+        //第一次访问页面的时候执行该函数
+        poverty();
+        //获得单选框改变事件
+        $('input:radio[name="poverty"]').change(function () {
+            poverty();
+        });
+        if ([[${person.id}]] != null) {
+            $('#name').val([[${person.name}]]);
+            $('#identity').val([[${person.identity}]]);
+            $('#tel').val([[${person.telphone}]]);
+            $('#village').val([[${person.village}]]);
+            $('#oneCardSolution').val([[${person.oneCardSolution}]]);
+            //如果是贫困户
+            if([[${person.poverty}]] == 1){
+                $("input[type=radio][name=poverty][value='1']").attr("checked",'checked');
+                $("#povertyDiv").show();
+            }
+            if ([[${person.idCardFront}]] != null && [[${person.idCardFront}]] != "") {
+                $("#filename1").html("已上传");
+                front_path = [[${person.idCardFront}]];
+                $('#fileA').removeClass('hidden');
+                $('#fileA').click(function () {
+                    window.location.href = "/insurance/downloadFile?path=" + front_path + "&name=身份证正面";
+                });
+            }
+            if ([[${person.idCardReverse}]] != null && [[${person.idCardReverse}]] != "") {
+                $("#filename2").html("已上传");
+                back_path = [[${person.idCardReverse}]];
+                $('#fileB').removeClass('hidden');
+                $('#fileB').click(function () {
+                    window.location.href = "/insurance/downloadFile?path=" + back_path + "&name=身份证反面";
+                });
+            }
+
+            if ([[${person.povertyProve}]] != null && [[${person.povertyProve}]] != "") {
+                $("#filename3").html("已上传");
+                poverty_prove = [[${person.povertyProve}]];
+                $('#fileC').removeClass('hidden');
+                $('#fileC').click(function () {
+                    window.location.href = "/insurance/downloadFile?path=" + poverty_prove + "&name=贫困证明材料";
+                });
+            }
+        }
+    });
+
+    //提交资料
+    $("#submit").click(function () {
+        if (notNull()) {
+            $.post('/insurance/updateUser',
+                {
+                    'id': [[${person.id}]],
+                    'name': $('#name').val(),
+                    'identity': $('#identity').val(),
+                    'telphone': $('#tel').val(),
+                    'createTime': [[${person.createTime}]],
+                    'oneCardSolution': $('#oneCardSolution').val(),
+                    'village': $('#village').val(),
+                    'idCardFront': front_path,
+                    'idCardReverse': back_path,
+                    'openid': [[${person.openid}]],
+                    'poverty': $('input:radio[name="poverty"]:checked').val(),
+                    'povertyProve':poverty_prove
+                },
+                function (result) {
+                    if (result != null) {
+                        alert("保存成功！");
+                        addDis();
+                        if ($('#edit').hasClass('hidden')) {
+                            $('#edit').removeClass('hidden');
+                        }
+                        if (!$('#submit').hasClass('hidden')) {
+                            $('#submit').addClass('hidden');
+                        }
+                    }
+                });
+        } else {
+            alert("请补充必填的资料并正确填写！");
+        }
+    });
+
+    //判断是不是为空
+    function notNull() {
+        if ($('#name').val() == null || $('#name').val() == "") {
+            return false;
+        }
+        if (!(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test($('#identity').val()))) {
+            $('#vIdentity').text('身份证错误！');
+            return false;
+        }
+        if (!(/^1[3456789]\d{9}$/.test($('#tel').val()))) {
+            $('#vTel').text('电话号码错误！');
+            return false;
+        }
+        if ($('#oneCardSolution').val() == null || $('#oneCardSolution').val() == "") {
+            return false;
+        }
+        //if($('#village').val()==null||$('#village').val()==""){
+        //    return false;
+        //}
+        if ($("#filename1").html() == "未上传文件" || $("#filename2").html() == "未上传文件" || $("#filename3").html() == "未上传文件") {
+            return false;
+        }
+        var poverty = $('input:radio[name="poverty"]:checked').val();
+        if (poverty == null || poverty == '') {
+            alert("是否贫困户必须选择一项！");
+            return false;
+        }
+        $('#vIdentity').text('');
+        $('#vTel').text('');
+        return true;
+    }
+
+    //添加不可以编辑属性
+    function addDis() {
+        $("#name").attr("disabled", "disabled");
+        $("#identity").attr("disabled", "disabled");
+        $("#tel").attr("disabled", "disabled");
+        $("#oneCardSolution").attr("disabled", "disabled");
+        $("#village").attr("disabled", "disabled");
+        $("#identify_front").attr("disabled", "disabled");
+        $("#identify_back").attr("disabled", "disabled");
+        $("#poverty_prove").attr("disabled", "disabled");
+        $("#isPoverty").find("input:radio").attr("disabled","disabled");
+    }
+
+    $('#edit').click(function () {
+        removeDis();
+        if ($('#submit').hasClass('hidden')) {
+            $('#submit').removeClass('hidden');
+        }
+        if (!$('#edit').hasClass('hidden')) {
+            $('#edit').addClass('hidden');
+        }
+    });
+
+    //移除不可以编辑
+    function removeDis() {
+        $("#name").removeAttr("disabled");
+        $("#identity").removeAttr("disabled");
+        $("#tel").removeAttr("disabled");
+        $("#oneCardSolution").removeAttr("disabled");
+        $("#village").removeAttr("disabled");
+        $("#identify_front").removeAttr("disabled");
+        $("#identify_back").removeAttr("disabled");
+        $("#poverty_prove").removeAttr("disabled");
+        $("#isPoverty").find("input:radio").removeAttr("disabled","disabled");
+    }
+</script>
+</body>
+</html>

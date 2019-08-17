@@ -2,6 +2,7 @@ package com.gzmusxxy.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.gzmusxxy.util.WeChatAccessTokenUtil;
+import com.gzmusxxy.util.WeChatUtil;
 import com.gzmusxxy.util.WxConfig;
 import com.gzmusxxy.entity.WeChat;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,8 +89,9 @@ public class WeChatController {
     @RequestMapping(value = "/demo")
     public String setTestSession(Model model,HttpSession session){
         //获得access token
-        WeChatAccessTokenUtil instance = WeChatAccessTokenUtil.getInstance();
-        System.out.println(instance.getAccess_token());
+        //WeChatAccessTokenUtil instance = WeChatAccessTokenUtil.getInstance();
+        //System.out.println(instance.getAccess_token());
+        //WeChatUtil.sendBusinessNoticeMsg("oP1se1IxKwG6Su0y6K4Q-_3pkN_Y", "RLDS你好！！", "信息提交", "你的审核信息通过", "如有问题请联系我们！联系电话xxxxxxxxxxx","");
         //设置用于测试的session
         session.setAttribute("openid","oP1se1IxKwG6Su0y6K4Q-_3pkN_Y");
         model.addAttribute("msg","设置的openid为："+session.getAttribute("openid"));

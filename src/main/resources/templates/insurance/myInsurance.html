@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>Bootstrap 101 Template</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>项目申请进度</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--通知面板-->
+        <div class="panel panel-default">
+            <div class="panel-heading">通知信息</div>
+            <div class="panel-body">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>保险名称</th>
+                        <th>购买数量</th>
+                        <th>保险单价</th>
+                        <th>申请状态</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="insurance : ${pageInfo.list}">
+                        <!-- 隐藏的编号 -->
+                        <td th:text="${insuranceStat.index+1}"></td>
+                        <td th:text="${insurance.projectName}"></td>
+                        <td th:text="${insurance.buyNumber}"></td>
+                        <td th:text="${insurance.cost}"></td>
+                        <td th:switch="${insurance.status}">
+                            <span  th:case="1" class="label label-default">等待审核</span>
+                            <span  th:case="2" class="label label-success">审核通过</span>
+                            <span  th:case="3" class="label label-danger">审核失败</span>
+                            <span  th:case="4" class="label label-primary">理赔申请</span>
+                            <span  th:case="5" class="label label-info">理赔通过</span>
+                            <span  th:case="6" class="label label-danger">理赔失败</span>
+
+                        </td>
+                        <td th:switch="${insurance.status}" >
+                            <btn  th:case="1" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
+                            <div th:if="${insurance.payCost} eq 1">
+                                <btn  th:case="2" class="btn btn-xs btn-success" th:onclick="'applyClaim('+${insurance.id}+')'">申请理赔</btn>
+                            </div>
+                            <div th:if="${insurance.payCost} eq 0">
+                                <btn  th:case="2" class="btn btn-xs btn-warning">待缴费</btn>
+                            </div>
+                            <btn  th:case="3" class="btn btn-xs btn-danger" onclck="apply()">重新申请</btn>
+                            <btn  th:case="4" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
+                            <btn  th:case="5" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
+                            <btn  th:case="6" class="btn btn-xs btn-danger" th:onclick="'applyClaim('+${insurance.id}+')'">重新申请</btn>
+                        </td>
+                    </tr>
+                    </tbody> 
+                </table>
+            </div>
+        </div>
+        <script>
+
+        </script>
+        <!--分割线-->
+        <div class="decoration"></div>
+    </div>
+</div>
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/insurance">
+        <div class="am-menu-column " id="explore" style="width: 33%;">
+            <span>项目申请</span>
+        </div>
+    </a>
+    <a href="/insurance/myInsurance?pageNumber=1">
+        <div class="am-menu-column active" id="index" style="width: 33%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+    <a href="/poverty/user">
+        <div class="am-menu-column" id="my" style="width: 33%;">
+            <span>我的资料</span>
+        </div>
+    </a>
+</footer>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+     function applyClaim(id) {
+         window.location.href = "/insurance/applyForClaim?id="+id;
+     }
+     function apply() {
+         window.location.href = "/insurance/";
+     }
+</script>
+</body>
+</html>

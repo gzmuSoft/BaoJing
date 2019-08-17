@@ -8,6 +8,7 @@ import com.gzmusxxy.service.BxInsuranceService;
 import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
@@ -33,30 +34,30 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
 
     @Override
     public PageInfo<BxInsurance> selectAuditByNameLike(String name, Integer poverty, Integer pageNumber) {
-        if (name != null && name != ""){
+        if (name != null && name != "") {
             name = "%" + name + "%";
-        }else {
+        } else {
             name = "%%";
         }
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
         List<BxInsurance> list;
-        if (poverty == 1){
-            list = bxInsuranceMapper.selectAuditByNameLike(name, 1,1);
-        }else if (poverty == 0){
-            list = bxInsuranceMapper.selectAuditByNameLike(name, 0,0);
-        }else {
-            list = bxInsuranceMapper.selectAuditByNameLike(name, 1,0);
+        if (poverty == 1) {
+            list = bxInsuranceMapper.selectAuditByNameLike(name, 1, 1);
+        } else if (poverty == 0) {
+            list = bxInsuranceMapper.selectAuditByNameLike(name, 0, 0);
+        } else {
+            list = bxInsuranceMapper.selectAuditByNameLike(name, 1, 0);
         }
         return new PageInfo<>(list);
     }
 
     @Override
     public PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber) {
-        if (name != null && name != ""){
+        if (name != null && name != "") {
             name = "%" + name + "%";
-        }else {
+        } else {
             name = "%%";
         }
         //PageHelper插件的分页信息
@@ -68,9 +69,9 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
 
     @Override
     public PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber) {
-        if (name != null && name != ""){
+        if (name != null && name != "") {
             name = "%" + name + "%";
-        }else {
+        } else {
             name = "%%";
         }
         //PageHelper插件的分页信息
@@ -85,4 +86,21 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
         return bxInsuranceMapper.selectClaimsById(id);
     }
 
+    @Override
+    public PageInfo<BxInsurance> selectInsuranceByPersonId(Integer personId, Integer pageNumber) {
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        List<BxInsurance> list = bxInsuranceMapper.selectInsuranceByPersonId(personId);
+        return new PageInfo<>(list);
+    }
+
+    @Override
+    public int updateStatusByPersonIdAndId(Integer status, Integer personId, Integer id) {
+        return bxInsuranceMapper.updateStatusByPersonIdAndId(status, personId, id);
+    }
+
+    @Override
+    public int updateByIdAndPersonId(BxInsurance record) {
+        return bxInsuranceMapper.updateByIdAndPersonId(record);
+    }
 }

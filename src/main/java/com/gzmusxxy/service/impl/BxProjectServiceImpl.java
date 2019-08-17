@@ -53,4 +53,9 @@ public class BxProjectServiceImpl implements BxProjectService {
         List<BxProject> list = bxProjectMapper.selectProjectByNameLike(name);
         return new PageInfo<>(list);
     }
+
+    @Override
+    public List<BxProject> selectAll() {
+        return bxProjectMapper.selectAll();
+    }
 }

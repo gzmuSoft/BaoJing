@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>农业保险项目</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>购买农业保险</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <div class="full-width">
+            <h4 class="shadow">填写保险申请表</h4>
+            <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
+        </div>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--表单-->
+        <div class="form">
+            <form class="form-horizontal" id="form">
+                <div class="form-group">
+                    <label for="projectId" class="col-sm-2 control-label">保险类型：</label>
+                    <div class="col-sm-10">
+                        <select name="projectId" id="projectId" class="form-control" onchange="calcCost()">
+                            <option selected="selected" disabled="disabled">-- 请选择 --</option>
+                            <option th:each="list:${list}" th:value="${list.id}" th:text="${list.name}" th:cost="${list.cost}"></option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="number" class="col-sm-2 control-label">购买数量：</label>
+                    <div class="col-sm-10">
+                        <input  type="number" name="number" class="form-control" id="number"  value="1" placeholder="购买的数量" onchange="calcCost()" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cost" class="col-sm-2 control-label">保险价格：</label>
+                    <div class="col-sm-10">
+                        <input  type="text" class="form-control" id="cost" placeholder="价格" required readonly="readonly">
+                    </div>
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">提交资料</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/insurance">
+        <div class="am-menu-column active" id="explore" style="width: 33%;">
+            <span>项目申请</span>
+        </div>
+    </a>
+    <a href="/insurance/myInsurance?pageNumber=1">
+        <div class="am-menu-column" id="index" style="width: 33%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+    <a href="/poverty/user">
+        <div class="am-menu-column" id="my" style="width: 33%;">
+            <span>我的资料</span>
+        </div>
+    </a>
+</footer>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+    //提交按钮的点击事件
+    $("#submit").click(function () {
+        //先获取数据
+        var projectId = $("#projectId").val();
+        var number = $("#number").val();
+        //表单验证
+        if (projectId == null || projectId ==""){
+            alert("请先选择要购买的保险项目");
+            return false;
+        }
+        if(number <= 0){
+            alert("购买的数量必须大于0");
+            return false;
+        }
+        $.post("/insurance/saveInsurance",$("#form").serialize(),function(data){
+            if(data.code == 1){
+                alert("信息提交成功！");
+            }else{
+                alert("信息提交失败！");
+            }
+        },"json");
+        return false;
+    });
+    function calcCost(){
+        var number = parseInt($("#number").val());
+        var cost = parseFloat($("#projectId").find("option:selected").attr("cost"));
+        var total = number * cost;
+        $("#cost").val("￥"+total+"元");
+    }
+</script>
+<!--<script type="text/javascript">
+    function download() {
+        var projectId = $("#poject").val();
+        if(projectId == null ){
+            alert("请先选择项目才能下载项目模板");
+            return;
+        }
+        window.location.href = "/insurance/download?id="+projectId;
+    }
+</script>-->
+</body>
+</html>

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gzmusxxy.mapper.BxInsuranceMapper">
-  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.BxInsurance">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="project_id" jdbcType="INTEGER" property="projectId" />
-    <result column="person_id" jdbcType="INTEGER" property="personId" />
-    <result column="buy_number" jdbcType="INTEGER" property="buyNumber" />
-    <result column="pay_cost" jdbcType="TINYINT" property="payCost" />
-    <result column="affected_photo" jdbcType="VARCHAR" property="affectedPhoto" />
-    <result column="affected_photo_name" jdbcType="VARCHAR" property="affectedPhotoName" />
-    <result column="claims_application" jdbcType="VARCHAR" property="claimsApplication" />
-    <result column="claims_application_name" jdbcType="VARCHAR" property="claimsApplicationName" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.BxInsurance">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="person_id" jdbcType="INTEGER" property="personId"/>
+        <result column="buy_number" jdbcType="INTEGER" property="buyNumber"/>
+        <result column="pay_cost" jdbcType="TINYINT" property="payCost"/>
+        <result column="affected_photo" jdbcType="VARCHAR" property="affectedPhoto"/>
+        <result column="affected_photo_name" jdbcType="VARCHAR" property="affectedPhotoName"/>
+        <result column="claims_application" jdbcType="VARCHAR" property="claimsApplication"/>
+        <result column="claims_application_name" jdbcType="VARCHAR" property="claimsApplicationName"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from bx_insurance
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.gzmusxxy.entity.BxInsurance">
-    insert into bx_insurance (id, project_id, person_id, 
-      buy_number, pay_cost, affected_photo, 
-      affected_photo_name, claims_application, claims_application_name, 
+    <insert id="insert" parameterType="com.gzmusxxy.entity.BxInsurance">
+    insert into bx_insurance (id, project_id, person_id,
+      buy_number, pay_cost, affected_photo,
+      affected_photo_name, claims_application, claims_application_name,
       status)
-    values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER}, 
-      #{buyNumber,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, #{affectedPhoto,jdbcType=VARCHAR}, 
-      #{affectedPhotoName,jdbcType=VARCHAR}, #{claimsApplication,jdbcType=VARCHAR}, #{claimsApplicationName,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER},
+      #{buyNumber,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, #{affectedPhoto,jdbcType=VARCHAR},
+      #{affectedPhotoName,jdbcType=VARCHAR}, #{claimsApplication,jdbcType=VARCHAR}, #{claimsApplicationName,jdbcType=VARCHAR},
       #{status,jdbcType=TINYINT})
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.BxInsurance">
+    <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.BxInsurance">
     update bx_insurance
     set project_id = #{projectId,jdbcType=INTEGER},
       person_id = #{personId,jdbcType=INTEGER},
@@ -40,25 +40,25 @@
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, project_id, person_id, buy_number, pay_cost, affected_photo, affected_photo_name, 
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, project_id, person_id, buy_number, pay_cost, affected_photo, affected_photo_name,
     claims_application, claims_application_name, status
     from bx_insurance
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select id, project_id, person_id, buy_number, pay_cost, affected_photo, affected_photo_name, 
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, project_id, person_id, buy_number, pay_cost, affected_photo, affected_photo_name,
     claims_application, claims_application_name, status
     from bx_insurance
   </select>
-  <select id="selectAuditByNameLike" resultMap="BaseResultMap">
+    <select id="selectAuditByNameLike" resultMap="BaseResultMap">
     select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.identity, b.telphone,b.poverty, b.poverty_prove,p.name as project_name
     from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.identity, p.telphone,p.poverty, p.poverty_prove
     from bx_insurance i join xjhb_person p
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status = 1 and b.poverty in (#{povertyA},#{povertyB})
   </select>
-  <select id="selectClaimsByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectClaimsByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
     select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.telphone,p.name as project_name,b.affected_photo
     ,b.affected_photo_name,b.claims_application,b.claims_application_name,b.id_card_front,b.id_card_reverse
     from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.telphone,i.affected_photo
@@ -67,7 +67,7 @@
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status in (4,5)
   </select>
-  <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
+    <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
     select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name,b.identity, b.telphone,p.name as project_name,p.cost,b.pay_cost
     from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.telphone,i.pay_cost,p.identity
     from bx_insurance i join xjhb_person p
@@ -79,7 +79,7 @@
     when b.pay_cost=1 then 2
     end
   </select>
-  <select id="selectClaimsById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    <select id="selectClaimsById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
     select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.telphone,p.name as project_name,b.affected_photo
     ,b.affected_photo_name,b.claims_application,b.claims_application_name,b.id_card_front,b.id_card_reverse
     from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.telphone,i.affected_photo
@@ -88,4 +88,59 @@
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id and b.id = #{id}
   </select>
+    <select id="selectInsuranceByPersonId" resultMap="InsuranceResultMap" parameterType="java.lang.Integer">
+    select  bp.`name` project_name,bp.`cost`,bi.affected_photo,bi.affected_photo_name,bi.buy_number,bi.id,bi.pay_cost,bi.project_id,bi.`status`
+    from bx_insurance bi
+    join bx_project bp
+    on bi.project_id = bp.id
+    where bi.person_id = #{personId,jdbcType=INTEGER}
+  </select>
+    <resultMap id="InsuranceResultMap" type="com.gzmusxxy.entity.BxInsurance">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="person_id" jdbcType="INTEGER" property="personId"/>
+        <result column="buy_number" jdbcType="INTEGER" property="buyNumber"/>
+        <result column="pay_cost" jdbcType="TINYINT" property="payCost"/>
+        <result column="affected_photo" jdbcType="VARCHAR" property="affectedPhoto"/>
+        <result column="affected_photo_name" jdbcType="VARCHAR" property="affectedPhotoName"/>
+        <result column="claims_application" jdbcType="VARCHAR" property="claimsApplication"/>
+        <result column="claims_application_name" jdbcType="VARCHAR" property="claimsApplicationName"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <!-- 额外的字段 添加的用于关联查询的映射 -->
+        <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
+        <!-- 额外的字段 添加的用于关联查询的映射 -->
+        <result column="cost" jdbcType="REAL" property="cost"/>
+
+    </resultMap>
+    <update id="updateStatusByPersonIdAndId">
+        update bx_insurance set status = #{status} where person_id = #{personId} and id = #{id}
+    </update>
+    <!--动态sql语句 更新保险的信息-->
+    <update id="updateByIdAndPersonId" parameterType="com.gzmusxxy.entity.BxInsurance">
+        update bx_insurance
+        <trim prefix="set" suffixOverrides=",">
+            <if test="buyNumber != null and buyNumber gt 0 ">
+                buy_number = #{buyNumber,jdbcType=INTEGER},
+            </if>
+            <if test="payCost != null and payCost != ''">
+                pay_cost = #{payCost,jdbcType=TINYINT},
+            </if>
+            <if test="affectedPhoto != null and affectedPhoto != ''">
+                affected_photo = #{affectedPhoto,jdbcType=VARCHAR},
+            </if>
+            <if test="affectedPhotoName != null and affectedPhotoName != ''">
+                affected_photo_name = #{affectedPhotoName,jdbcType=VARCHAR},
+            </if>
+            <if test="claimsApplication != null and claimsApplication != ''">
+                claims_application = #{claimsApplication,jdbcType=VARCHAR},
+            </if>
+            <if test="claimsApplicationName != null and claimsApplicationName != ''">
+                claims_application_name = #{claimsApplicationName,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status,jdbcType=TINYINT}
+            </if>
+        </trim>
+        where id = #{id,jdbcType=INTEGER} and person_id = #{personId,jdbcType=INTEGER}
+    </update>
 </mapper>

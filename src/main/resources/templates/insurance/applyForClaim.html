@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>保险理赔申请</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>保险理赔申请</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <div class="full-width">
+            <h4 class="shadow">在申请之前请先下载申请表，然后填写申请表中的内容后上传申请表！</h4>
+            <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
+        </div>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--表单-->
+        <div class="form">
+            <form class="form-horizontal" id="form">
+                <div class="form-group">
+                    <label for="projectName" class="col-sm-2 control-label">保险类型</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="projectName" class="form-control" disabled="disabled" th:value="${project.name}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="buyNumber" class="col-sm-2 control-label">已购买数量</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="buyNumber" class="form-control" disabled="disabled" th:value="${insurance.buyNumber}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="downloadTemplate" class="col-sm-2 control-label">理赔申请书模板下载：</label><br>
+                    <div class="col-sm-10">
+                        <button class="btn btn-info form-control" type="button" id="downloadTemplate" th:onclick="'download('+${project.id}+')'">模板下载</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="claimTemplate" class="col-sm-2 control-label">理赔申请书：</label><br>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传理赔申请书</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="claimTemplate" id="claimTemplate" onchange="saveFile(this)">
+                        </div>&nbsp;&nbsp;
+                        <span id="claimTemplateText" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="disasterPhoto" class="col-sm-2 control-label">受灾照片：</label><br>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传受灾照片</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="disasterPhoto" id="disasterPhoto" onchange="saveFile(this)">
+                        </div>&nbsp;&nbsp;
+                        <span id="disasterPhotoText" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileB"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">申请理赔</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/insurance">
+        <div class="am-menu-column " id="explore" style="width: 33%;">
+            <span>项目申请</span>
+        </div>
+    </a>
+    <a href="/insurance/myInsurance?pageNumber=1">
+        <div class="am-menu-column" id="index" style="width: 33%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+    <a href="/poverty/user">
+        <div class="am-menu-column active " id="my" style="width: 33%;">
+            <span>我的资料</span>
+        </div>
+    </a>
+</footer>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    //记录已上传文件的信息
+    var claimTemplate = null;
+    var claimTemplateName = null;
+    //记录上传文件的信息
+    var disasterPhoto = null;
+    var disasterPhotoName = null;
+
+    //保存文件
+    function saveFile(obj) {
+        var data = new FormData();
+        //上传的是理赔申请书
+        if(obj.id == 'claimTemplate'){
+            data.append('path', claimTemplate);
+            claimTemplateName = obj.files[0].name;
+            $("#claimTemplateText").text(claimTemplateName);
+            //添加单击事件
+            $('#fileA').click(function () {
+                window.location.href = "/poverty/download?path=" + claimTemplate + "&name=" + claimTemplateName;
+            });
+            //如果是隐藏则取消隐藏
+            if ($('#fileA').hasClass('hidden')) {
+                $('#fileA').removeClass('hidden');
+            }
+        }else{
+            data.append('path',disasterPhoto);
+            disasterPhotoName = obj.files[0].name;
+            $("#disasterPhotoText").text(disasterPhotoName);
+            //添加单击事件
+            $('#fileB').click(function(){
+                window.location.href="/poverty/download?path=" + disasterPhoto + "&name=" + disasterPhotoName;
+            });
+            //如果是隐藏则取消隐藏
+            if($('#fileB').hasClass('hidden')){
+                $('#fileB').removeClass('hidden');
+            }
+        }
+
+        data.append('file', obj.files[0]);
+        //切割类型
+        var extStart = obj.value.lastIndexOf('.');
+        var ext = obj.value.substring(extStart, obj.value.length);
+        data.append('type', ext);
+        $.ajax({
+            url: '/poverty/upload',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                if(obj.id == 'claimTemplate'){
+                    claimTemplate = result;
+                }else{
+                    disasterPhoto = result;
+                }
+
+
+                alert("上传成功！");
+            },
+            error: function (result) {
+                alert("上传失败！");
+            }
+        });
+    }
+    function download(projectId) {
+        if(projectId == null ){
+            alert("请先选择项目才能下载项目模板");
+            return;
+        }
+        window.location.href = "/insurance/download?id="+projectId;
+    }
+    $(function () {
+        //点击提交按钮
+        $("#submit").click(function () {
+            if(claimTemplate == null || disasterPhoto == null){
+                alert("请上传所有文件后才能提交");
+                return false;
+            }
+            //post提交的参数
+            var params = {
+                "id":[[${insurance.id}]],
+                "claimsApplication":claimTemplate,
+                "claimsApplicationName":claimTemplateName,
+                "affectedPhoto":disasterPhoto,
+                "affectedPhotoName":disasterPhotoName
+            };
+            $.post("/insurance/postApplyForClaim",params,function (data) {
+                if(data.code == 1){
+                    alert("理赔申请已经提交！");
+                    window.location.href = "/insurance/myInsurance?pageNumber=1";
+                }else{
+                    alert("信息提交失败请重新提交！");
+                }
+            },"json");
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

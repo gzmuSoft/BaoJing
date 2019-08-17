@@ -39,28 +39,26 @@
                     <label for="identity" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证号码：</label>
                     <div class="col-sm-10">
                         <input type="text" name="identity" disabled class="form-control" id="identity" placeholder="身份证号码">
-                        <div id="tishiIdentity" style="color: red;"></div>
+                        <div id="vIdentity" class="red"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="identity" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>农户一卡通：</label>
                     <div class="col-sm-10">
                         <input type="text" name="oneCardSolution" disabled class="form-control" id="oneCardSolution" placeholder="农户一卡通">
-                        <div id="tishiOneCardSolution" style="color: red;"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="tel" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>联系电话：</label>
                     <div class="col-sm-10">
                         <input type="tel" name="tel" disabled class="form-control" id="tel" placeholder="联系电话">
-                        <div id="tishiTel" style="color: red;"></div>
+                        <div id="vTel" class="red"></div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="village" class="col-sm-2 control-label">村组：</label>
                     <div class="col-sm-10">
                         <input type="text" name="village" disabled class="form-control" id="village" placeholder="村组">
-                        <div id="tishiVillage" style="color: red;"></div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -121,6 +119,7 @@
 <script th:inline="javascript">
     var front_path = null;
     var back_path = null;
+
     //上传身份证正反面
     function saveFile(obj,file,num){
         if(num===1){
@@ -222,7 +221,7 @@
                 });
         }else
         {
-            alert("请补充必填的资料！");
+            alert("请补充必填的资料并正确填写！");
         }
     });
 
@@ -231,10 +230,12 @@
         if($('#name').val() == null || $('#name').val() == ""){
             return false;
         }
-        if($('#identity').val()==null || $('#identity').val()==""){
+        if(!(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test($('#identity').val()))){
+            $('#vIdentity').text('身份证错误！');
             return false;
         }
-        if($('#tel').val()==null ||$('#tel').val()==""){
+        if(!(/^1[3456789]\d{9}$/.test($('#tel').val()))){
+            $('#vTel').text('电话号码错误！');
             return false;
         }
         if($('#oneCardSolution').val()==null ||$('#oneCardSolution').val()==""){
@@ -246,6 +247,8 @@
         if($("#filename1").html()=="未上传文件" || $("#filename2").html()=="未上传文件"){
             return false;
         }
+        $('#vIdentity').text('');
+        $('#vTel').text('');
         return true;
     }
 

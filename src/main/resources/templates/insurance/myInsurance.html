@@ -56,7 +56,7 @@
                             <div th:if="${insurance.payCost} eq 0">
                                 <btn  th:case="2" class="btn btn-xs btn-warning">待缴费</btn>
                             </div>
-                            <btn  th:case="3" class="btn btn-xs btn-danger" onclck="apply()">重新申请</btn>
+                            <btn  th:case="3" class="btn btn-xs btn-danger" onclick="apply()">重新申请</btn>
                             <btn  th:case="4" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
                             <btn  th:case="5" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
                             <btn  th:case="6" class="btn btn-xs btn-danger" th:onclick="'applyClaim('+${insurance.id}+')'">重新申请</btn>

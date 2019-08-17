@@ -66,7 +66,7 @@ public class InsuranceController {
             xjhbPersonService.insert(person);
         }
         //用户资料填写完整，查询项目资料
-        List<BxProject> bxProjects = bxProjectService.selectAll();
+        List<BxProject> bxProjects = bxProjectService.selectEffective();
         model.addAttribute("list", bxProjects);
         return "insurance/index";
     }

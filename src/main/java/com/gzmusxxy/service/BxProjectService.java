@@ -22,4 +22,10 @@ public interface BxProjectService {
      * @return
      */
     List<BxProject> selectAll();
+
+    /**
+     * 查询可以申请的保险信息
+     * @return
+     */
+    List<BxProject> selectEffective();
 }

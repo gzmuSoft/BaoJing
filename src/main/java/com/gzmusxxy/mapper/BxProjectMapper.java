@@ -12,6 +12,8 @@ public interface BxProjectMapper {
 
     List<BxProject> selectAll();
 
+    List<BxProject> selectEffective();
+
     int updateByPrimaryKey(BxProject record);
 
     List<BxProject> selectProjectByNameLike(String name);

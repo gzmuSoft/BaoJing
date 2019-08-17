@@ -38,13 +38,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="downloadTemplate" class="col-sm-2 control-label">理赔申请书模板下载：</label><br>
+                    <label for="downloadTemplate" class="col-sm-2 control-label">理赔申请书模板下载：</label>
                     <div class="col-sm-10">
                         <button class="btn btn-info form-control" type="button" id="downloadTemplate" th:onclick="'download('+${project.id}+')'">模板下载</button>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="claimTemplate" class="col-sm-2 control-label">理赔申请书：</label><br>
+                    <label for="claimTemplate" class="col-sm-2 control-label">理赔申请书：</label>
                     <div class="col-sm-10">
                         <div class="file-container"
                              style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
@@ -58,11 +58,11 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="disasterPhoto" class="col-sm-2 control-label">受灾照片：</label><br>
+                    <label for="disasterPhoto" class="col-sm-2 control-label">受灾照片：</label>
                     <div class="col-sm-10">
                         <div class="file-container"
                              style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                            <button class="btn btn-success fileinput-button form-control" type="button">上传受灾照片</button>
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传受灾照片  </button>
                             <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
                                    name="disasterPhoto" id="disasterPhoto" onchange="saveFile(this)">
                         </div>&nbsp;&nbsp;

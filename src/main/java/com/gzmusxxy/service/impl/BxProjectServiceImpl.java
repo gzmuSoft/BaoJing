@@ -58,4 +58,9 @@ public class BxProjectServiceImpl implements BxProjectService {
     public List<BxProject> selectAll() {
         return bxProjectMapper.selectAll();
     }
+
+    @Override
+    public List<BxProject> selectEffective() {
+        return bxProjectMapper.selectEffective();
+    }
 }

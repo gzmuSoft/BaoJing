@@ -60,4 +60,9 @@ public class XjhbProjectServiceImpl implements XjhbProjectService {
     public List<XjhbProject> selectAll() {
         return xjhbProjectMapper.selectAll();
     }
+
+    @Override
+    public List<XjhbProject> selectEffective() {
+        return xjhbProjectMapper.selectEffective();
+    }
 }

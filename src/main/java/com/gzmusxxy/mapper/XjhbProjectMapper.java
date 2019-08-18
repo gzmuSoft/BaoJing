@@ -16,4 +16,6 @@ public interface XjhbProjectMapper {
     int updateByPrimaryKey(XjhbProject record);
 
     List<XjhbProject> selectProjectByNameLike(String name);
+
+    List<XjhbProject> selectEffective();
 }

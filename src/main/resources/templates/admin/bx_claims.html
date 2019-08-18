@@ -88,6 +88,7 @@
                         <thead>
                         <tr>
                             <th >#</th>
+                            <th class="text-center">编号</th>
                             <th class="text-center">理赔保险名称</th>
                             <th class="text-center">保险购买数量</th>
                             <th class="text-center">理赔申请书</th>
@@ -102,6 +103,7 @@
                         <tbody>
                         <tr class="success" th:each="claims:${pageInfo.list}">
                             <th scope="row" th:text="${claimsStat.index+1}"></th>
+                            <td th:text="${claims.id}"></td>
                             <td th:text="${claims.projectName}"></td>
                             <td th:text="${claims.buyNumber}"></td>
                             <td>

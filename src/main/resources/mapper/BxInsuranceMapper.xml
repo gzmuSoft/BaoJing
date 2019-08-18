@@ -66,6 +66,11 @@
     from bx_insurance i join xjhb_person p
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status in (4,5)
+    order by
+    case
+    when b.status=4 then 1
+    when b.status=5 then 2
+    end
   </select>
     <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
     select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name,b.identity, b.telphone,p.name as project_name,p.cost,b.pay_cost

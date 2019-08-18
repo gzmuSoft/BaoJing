@@ -37,7 +37,7 @@
                         <td th:switch="${insurance.status}">
                             <div th:case="1" ><button class="btn btn-xs btn-default">等待审核</button></div>
                             <div th:case="2">
-                                <p class="btn-group" th:if="${insurance.payCost} eq 1">
+                                <p th:if="${insurance.payCost} eq 1">
                                     <button class="btn btn-xs btn-success">审核通过</button>
                                     <button class="btn btn-xs btn-primary" th:onclick="'applyClaim('+${insurance.id}+')'">申请理赔</button>
                                 </p>
@@ -46,14 +46,14 @@
                                 </div>
                             </div>
 
-                            <p class="btn-group" th:case="3" >
+                            <p th:case="3" >
                                 <button class="btn btn-xs btn-danger">审核失败</button>
                                 <button class="btn btn-xs btn-primary" onclick="apply()">重新申请</button>
                             </p>
 
                             <p th:case="4"><label class="label label-primary">理赔申请中</label></p>
                             <p th:case="5"><label class="label label-info">理赔通过</label></p>
-                            <p class="btn-group" th:case="6" >
+                            <p th:case="6" >
                                 <button class="btn btn-xs btn-danger">理赔失败</button>
                                 <button class="btn btn-xs btn-primary" th:onclick="'applyClaim('+${insurance.id}+')'">完善信息</button>
                             </p>

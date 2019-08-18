@@ -61,10 +61,10 @@
     $("#apply").click(function(){
         $.post("/poverty/verifyInformation",{},function(data){
             if(data == "yes"){
-                window.location.href="/poverty/information";
+                window.location.href="/insurance/apply";
             }else{
                 alert("需补充资料才可申请项目！");
-                window.location.href="/poverty/user";
+                window.location.href="/insurance/user";
             }
         });
     });

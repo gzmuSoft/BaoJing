@@ -39,14 +39,20 @@ public class InsuranceController {
     @Autowired
     private BxInsuranceService bxInsuranceService;
 
+    @IsLogin
+    @RequestMapping(value = {"", "/"})
+    public String index() {
+        return "insurance/index";
+    }
+
     /**
-     * 首页
+     * 申请项目
      *
      * @return
      */
     @IsLogin
-    @RequestMapping(value = {"", "/"})
-    public String index(Model model, HttpSession session) {
+    @RequestMapping(value = "/apply")
+    public String apply(Model model, HttpSession session) {
         //判断用户是否登录
         String openid = session.getAttribute("openid").toString();
         //通过openId获取用户信息
@@ -58,17 +64,59 @@ public class InsuranceController {
                 //所需要的资料未完全填写，跳转到资料填写界面
                 return "redirect:/insurance/user?supplement=true";
             }
-        }else{
+        } else {
             //用户不存在创建用户
             XjhbPerson person = new XjhbPerson();
             person.setOpenid(openid);
             person.setCreateTime(new Date());
             xjhbPersonService.insert(person);
+            //创建用户以后跳转到补充信息页面
+            return "redirect:/insurance/user?supplement=true";
         }
         //用户资料填写完整，查询项目资料
         List<BxProject> bxProjects = bxProjectService.selectEffective();
         model.addAttribute("list", bxProjects);
-        return "insurance/index";
+        return "insurance/apply";
+    }
+
+    /**
+     * 验证用户信息是否完整
+     *
+     * @param session
+     * @return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/verifyUserInfo")
+    public JsonResult verifyUserInfo(HttpSession session) {
+        JsonResult jsonResult = new JsonResult();
+        //判断用户是否登录
+        String openid = session.getAttribute("openid").toString();
+        //通过openId获取用户信息
+        XjhbPerson personByOpenId = xjhbPersonService.findPersonByOpenId(openid);
+        //判断用户信息是否为空
+        if (personByOpenId != null) {
+            //再次判断用户的信息收否填写完全
+            if (personByOpenId.getIdentity() == null || personByOpenId.getName() == null || personByOpenId.getTelphone() == null || personByOpenId.getOneCardSolution() == null || personByOpenId.getPoverty() == null) {
+                //所需要的资料未完全填写，返回数据
+                jsonResult.setCode(0);
+                jsonResult.setResult("请先补充资料！！");
+                return jsonResult;
+            }
+        } else {
+            //创建用户
+            XjhbPerson person = new XjhbPerson();
+            person.setOpenid(openid);
+            person.setCreateTime(new Date());
+            xjhbPersonService.insert(person);
+            //补充资料
+            jsonResult.setCode(0);
+            jsonResult.setResult("请先补充资料！！");
+            return jsonResult;
+        }
+        jsonResult.setCode(1);
+        jsonResult.setResult("ok");
+        return jsonResult;
     }
 
     /**
@@ -84,8 +132,10 @@ public class InsuranceController {
         BxProject bxProject = bxProjectService.selectByPrimaryKey(projectId);
         FileUtil.downloadFile(bxProject.getClaimsTemplate(), bxProject.getClaimsTemplateName(), request, response);
     }
+
     /**
      * 通用下载
+     *
      * @param name
      * @param path
      * @param request
@@ -93,27 +143,28 @@ public class InsuranceController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value= "/downloadFile")
-    public String download(String name,String path, HttpServletRequest request, HttpServletResponse response){
-        FileUtil.downloadFile(path,name,request,response);
+    @RequestMapping(value = "/downloadFile")
+    public String download(String name, String path, HttpServletRequest request, HttpServletResponse response) {
+        FileUtil.downloadFile(path, name, request, response);
         return "";
     }
 
     /**
      * 上传文件（通用）
-     * @param file  file
-     * @param path  path
-     * @param type  文件类型
+     *
+     * @param file file
+     * @param path path
+     * @param type 文件类型
      * @return return
      */
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/upload")
     public String upload(@RequestParam("file") MultipartFile file, String path, String type) {
-        if (path == null || path.equals("null") || path.equals("")){
-            return FileUtil.saveFile(file,null,type);
+        if (path == null || path.equals("null") || path.equals("")) {
+            return FileUtil.saveFile(file, null, type);
         }
-        return FileUtil.saveFile(file,path,type);
+        return FileUtil.saveFile(file, path, type);
     }
 
     /**
@@ -166,6 +217,7 @@ public class InsuranceController {
 
     /**
      * 进入保险理赔申请页面
+     *
      * @param id
      * @param model
      * @return
@@ -197,6 +249,7 @@ public class InsuranceController {
 
     /**
      * 提交保险理赔申请
+     *
      * @param bxInsurance
      * @param session
      * @return
@@ -228,20 +281,23 @@ public class InsuranceController {
 
     /**
      * 用户资料管理
+     *
      * @param session
      * @param model
      * @return
      */
     @IsLogin
     @RequestMapping(value = "/user")
-    public String user(HttpSession session,Model model) {
-        String openId =  session.getAttribute("openid").toString();
+    public String user(HttpSession session, Model model) {
+        String openId = session.getAttribute("openid").toString();
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openId);
-        model.addAttribute("person",person);
+        model.addAttribute("person", person);
         return "insurance/users";
     }
+
     /**
      * users页面上传身份证正反面照片
+     *
      * @param file
      * @param backPath
      * @param frontPath
@@ -253,18 +309,20 @@ public class InsuranceController {
     @RequestMapping(value = "/upIdCard")
     public String upIdCard(@RequestParam("file") MultipartFile file, String backPath, String frontPath, String type) {
         if (backPath != null && frontPath != null) {
-            return FileUtil.saveFile(file,null, type);
-        }else {
-            if (backPath != null ) {
-                return FileUtil.saveFile(file,backPath,type);
-            }else{
-                return FileUtil.saveFile(file,frontPath,type);}
+            return FileUtil.saveFile(file, null, type);
+        } else {
+            if (backPath != null) {
+                return FileUtil.saveFile(file, backPath, type);
+            } else {
+                return FileUtil.saveFile(file, frontPath, type);
+            }
         }
     }
 
     /**
      * 修改资料
      * 因为一开始登录时自动创建用户
+     *
      * @param xjhbPerson
      * @return
      */

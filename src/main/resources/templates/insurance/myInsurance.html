@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>Bootstrap 101 Template</title>
+    <title>我购买的保险</title>
     <!-- Bootstrap -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -24,43 +24,58 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>序号</th>
+                        <th>编号</th>
                         <th>保险名称</th>
-                        <th>购买数量</th>
-                        <th>保险单价</th>
-                        <th>申请状态</th>
-                        <th>操作</th>
+                        <th>状态</th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr th:each="insurance : ${pageInfo.list}">
                         <!-- 隐藏的编号 -->
-                        <td th:text="${insuranceStat.index+1}"></td>
+                        <td th:text="${insurance.id}"></td>
                         <td th:text="${insurance.projectName}"></td>
-                        <td th:text="${insurance.buyNumber}"></td>
-                        <td th:text="${insurance.cost}"></td>
                         <td th:switch="${insurance.status}">
-                            <span  th:case="1" class="label label-default">等待审核</span>
-                            <span  th:case="2" class="label label-success">审核通过</span>
-                            <span  th:case="3" class="label label-danger">审核失败</span>
-                            <span  th:case="4" class="label label-primary">理赔申请</span>
-                            <span  th:case="5" class="label label-info">理赔通过</span>
-                            <span  th:case="6" class="label label-danger">理赔失败</span>
+                            <div  th:case="1" ><label class="label label-default">等待审核</label></div>
+                            <div  th:case="2">
+                                <div class="btn-group" th:if="${insurance.payCost} eq 1">
+                                    <button type="button" class="btn btn-xs btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        审核通过<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" th:onclick="'applyClaim('+${insurance.id}+')'">申请理赔</a></li>
+                                    </ul>
+                                </div>
+                                <div  th:if="${insurance.payCost} eq 0">
+                                    <label class="label label-warning">等待缴费</label>
+                                </div>
+                            </div>
+
+                            <div  th:case="3" >
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-xs btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        审核失败<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" onclick="apply()">重新申请</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div  th:case="4"><label class="label label-primary">理赔申请中</label></div>
+                            <div  th:case="5"><label class="label label-info">理赔通过</label></div>
+                            <div  th:case="6" >
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-xs btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        理赔失败<span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="#" th:onclick="'applyClaim('+${insurance.id}+')'">完善信息</a></li>
+                                    </ul>
+                                </div>
+                            </div>
 
                         </td>
-                        <td th:switch="${insurance.status}" >
-                            <btn  th:case="1" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
-                            <div th:if="${insurance.payCost} eq 1">
-                                <btn  th:case="2" class="btn btn-xs btn-success" th:onclick="'applyClaim('+${insurance.id}+')'">申请理赔</btn>
-                            </div>
-                            <div th:if="${insurance.payCost} eq 0">
-                                <btn  th:case="2" class="btn btn-xs btn-warning">待缴费</btn>
-                            </div>
-                            <btn  th:case="3" class="btn btn-xs btn-danger" onclick="apply()">重新申请</btn>
-                            <btn  th:case="4" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
-                            <btn  th:case="5" class="btn btn-xs btn-default" disabled="disabled">无操作</btn>
-                            <btn  th:case="6" class="btn btn-xs btn-danger" th:onclick="'applyClaim('+${insurance.id}+')'">重新申请</btn>
-                        </td>
+
                     </tr>
                     </tbody> 
                 </table>

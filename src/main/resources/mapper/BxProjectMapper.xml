@@ -44,7 +44,7 @@
     <select id="selectEffective" resultMap="BaseResultMap">
     select id, name, claims_template_name, claims_template, start_time, end_time, cost
     from bx_project
-    where end_time >= now() and now() >= start_time
+    where end_time &gt;= now() and  start_time &lt;= now()
     order by id desc
   </select>
     <select id="selectProjectByNameLike" parameterType="java.lang.String" resultMap="BaseResultMap">

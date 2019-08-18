@@ -14,6 +14,7 @@ import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -332,6 +333,41 @@ public class InsuranceController {
     public String update(XjhbPerson xjhbPerson) {
         Integer re = xjhbPersonService.updateByPrimaryKey(xjhbPerson);
         return re.toString();
+    }
+
+    /**
+     * 更新状态为缴费待验证
+     *
+     * @param id
+     * @param session
+     * @return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/payment")
+    public JsonResult payment(@RequestParam("id") Integer id, HttpSession session) {
+        String openid = session.getAttribute("openid").toString();
+        //获得用户信息
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openid);
+        //用于保存结果
+        JsonResult jsonResult = new JsonResult();
+        if (person != null && person.getId() != 0) {
+            //更新当前状态为缴费待验证
+            int i = bxInsuranceService.updatePayCostByIdAndPersonId(person.getId(), id, (byte) 2);
+            if (i > 0) {
+                //更新成功
+                jsonResult.setCode(1);
+                jsonResult.setResult("ok");
+                return jsonResult;
+            } else {
+                jsonResult.setResult("保险状态不正常，无法缴费！");
+                jsonResult.setCode(0);
+                return jsonResult;
+            }
+        }
+        jsonResult.setCode(0);
+        jsonResult.setResult("用户信息不完整！");
+        return jsonResult;
     }
 
 }

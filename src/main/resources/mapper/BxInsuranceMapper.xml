@@ -117,9 +117,6 @@
         <result column="cost" jdbcType="REAL" property="cost"/>
 
     </resultMap>
-    <update id="updateStatusByPersonIdAndId">
-        update bx_insurance set status = #{status} where person_id = #{personId} and id = #{id}
-    </update>
     <!--动态sql语句 更新保险的信息-->
     <update id="updateByIdAndPersonId" parameterType="com.gzmusxxy.entity.BxInsurance">
         update bx_insurance
@@ -147,5 +144,11 @@
             </if>
         </trim>
         where id = #{id,jdbcType=INTEGER} and person_id = #{personId,jdbcType=INTEGER}
+    </update>
+    <update id="updatePayCostByIdAndPersonId">
+        update bx_insurance
+        set pay_cost = #{payCost,jdbcType=TINYINT}
+        where
+        status = 2 and person_id = #{personId,jdbcType=INTEGER} and #{id,jdbcType=INTEGER}
     </update>
 </mapper>

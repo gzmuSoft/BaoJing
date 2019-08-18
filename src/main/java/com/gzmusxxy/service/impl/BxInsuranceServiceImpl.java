@@ -95,12 +95,12 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
     }
 
     @Override
-    public int updateStatusByPersonIdAndId(Integer status, Integer personId, Integer id) {
-        return bxInsuranceMapper.updateStatusByPersonIdAndId(status, personId, id);
+    public int updateByIdAndPersonId(BxInsurance record) {
+        return bxInsuranceMapper.updateByIdAndPersonId(record);
     }
 
     @Override
-    public int updateByIdAndPersonId(BxInsurance record) {
-        return bxInsuranceMapper.updateByIdAndPersonId(record);
+    public int updatePayCostByIdAndPersonId(Integer personId, Integer id, Byte payCost) {
+        return bxInsuranceMapper.updatePayCostByIdAndPersonId(personId, id, payCost);
     }
 }

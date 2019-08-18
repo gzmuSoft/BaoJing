@@ -31,18 +31,18 @@ public interface BxInsuranceService {
     PageInfo<BxInsurance> selectInsuranceByPersonId(Integer personId, Integer pageNumber);
 
     /**
-     * 根据用户id和保险编号更新保险状态
-     * @param status
-     * @param personId
-     * @param id
-     * @return
-     */
-    int updateStatusByPersonIdAndId(Integer status, Integer personId, Integer id);
-
-    /**
      * 根据用户的id以及保险的id号，更新保险信息
+     *
      * @param record
      * @return
      */
     int updateByIdAndPersonId(BxInsurance record);
+
+    /**
+     * 通过用户id和保险id更新保险缴费状态
+     * @param personId
+     * @param id
+     * @return
+     */
+    int updatePayCostByIdAndPersonId(Integer personId, Integer id,Byte payCost);
 }

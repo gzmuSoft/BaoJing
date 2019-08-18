@@ -26,7 +26,7 @@ public interface BxInsuranceMapper {
 
     List<BxInsurance> selectInsuranceByPersonId(Integer personId);
 
-    int updateStatusByPersonIdAndId(@Param("status") Integer status, @Param("personId") Integer personId, @Param("id") Integer id);
-
     int updateByIdAndPersonId(BxInsurance record);
+
+    int updatePayCostByIdAndPersonId(@Param("personId") Integer personId, @Param("id") Integer id,@Param("payCost") Byte payCost);
 }

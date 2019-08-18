@@ -95,7 +95,7 @@ public class PovertyController {
     @IsLogin
     @RequestMapping(value = "/information")
     public String information(Model model){
-        model.addAttribute("projects",xjhbProjectService.selectAll());
+        model.addAttribute("projects",xjhbProjectService.selectEffective());
         model.addAttribute("information",new XjhbInformation());
         return "poverty/information";
     }

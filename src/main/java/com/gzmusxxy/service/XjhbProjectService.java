@@ -17,4 +17,6 @@ public interface XjhbProjectService {
     XjhbProject selectByPrimaryKey(Integer id);
 
     List<XjhbProject> selectAll();
+
+    List<XjhbProject> selectEffective();
 }

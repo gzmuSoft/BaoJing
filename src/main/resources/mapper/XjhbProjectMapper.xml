@@ -38,6 +38,13 @@
     from xjhb_project
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectEffective" resultMap="BaseResultMap">
+    select id, project_name, application_template_name, application_template, start_time,
+    end_time, period
+    from xjhb_project
+    where end_time >= now() and now() >= start_time
+    order by id desc
+  </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, project_name, application_template_name, application_template, start_time, 
     end_time, period

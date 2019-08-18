@@ -103,6 +103,7 @@
             $.post("/insurance/saveInsurance",$("#form").serialize(),function(data){
                 if(data.code == 1){
                     alert("信息提交成功！");
+                    window.location.href = "/insurance/myInsurance?pageNumber=1"
                 }else{
                     alert("信息提交失败！");
                 }

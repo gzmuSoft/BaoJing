@@ -41,7 +41,13 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="cost" class="col-sm-2 control-label">保险价格：</label>
+                    <label for="singleCost" class="col-sm-2 control-label">保险单价：</label>
+                    <div class="col-sm-10">
+                        <input  type="text" class="form-control" id="singleCost" placeholder="价格" required readonly="readonly">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="cost" class="col-sm-2 control-label">总价格：</label>
                     <div class="col-sm-10">
                         <input  type="text" class="form-control" id="cost" placeholder="价格" required readonly="readonly">
                     </div>
@@ -56,24 +62,6 @@
         </div>
     </div>
 </div>
-<!--底部导航条-->
-<!--<footer class="am-menu am-cf">
-    <a href="/insurance">
-        <div class="am-menu-column active" id="explore" style="width: 33%;">
-            <span>项目申请</span>
-        </div>
-    </a>
-    <a href="/insurance/myInsurance?pageNumber=1">
-        <div class="am-menu-column" id="index" style="width: 33%;">
-            <span>我的申请</span>
-        </div>
-    </a>
-    <a href="/insurance/user">
-        <div class="am-menu-column" id="my" style="width: 33%;">
-            <span>我的资料</span>
-        </div>
-    </a>
-</footer>-->
 <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
@@ -81,6 +69,7 @@
 <script type="text/javascript">
     $(function () {
         $("#number").bind("input propertychange",function(event){
+            this.value=this.value.replace(/\D/g,'');
             calcCost();
         });
         $("#projectId").bind("input propertychange",function(event){
@@ -114,8 +103,14 @@
     function calcCost(){
         var number = parseInt($("#number").val());
         var cost = parseFloat($("#projectId").find("option:selected").attr("cost"));
+        $("#singleCost").val("￥ "+ formatMoney($("#projectId").find("option:selected").attr("cost"),2) +" 元");
         var total = number * cost;
-        $("#cost").val("￥ "+ formatMoney(total,2) +" 元");
+        var reg=/^[0-9]+.?[0-9]*$/;
+        if(reg.test(total)){
+            $("#cost").val("￥ "+ formatMoney(total,2) +" 元");
+        }else{
+            $("#cost").val("");
+        }
     }
 
     /*

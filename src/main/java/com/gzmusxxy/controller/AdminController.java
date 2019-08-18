@@ -636,11 +636,15 @@ public class AdminController {
         }
         if (FileUtil.existFile(bxInsurance.getIdCardFront())){
             filePaths.add(bxInsurance.getIdCardFront());
-            fileNames.add("身份证正面照片");
+            String type = bxInsurance.getIdCardFront();
+            type = type.substring(type.lastIndexOf("."));
+            fileNames.add("身份证正面照片"+type);
         }
         if (FileUtil.existFile(bxInsurance.getIdCardReverse())){
             filePaths.add(bxInsurance.getIdCardReverse());
-            fileNames.add("身份证反面照片");
+            String type = bxInsurance.getIdCardReverse();
+            type = type.substring(type.lastIndexOf("."));
+            fileNames.add("身份证反面照片"+type);
         }
         if (FileUtil.existFile(bxInsurance.getAffectedPhoto())){
             filePaths.add(bxInsurance.getAffectedPhoto());
@@ -648,7 +652,9 @@ public class AdminController {
             if (!bxInsurance.getAffectedPhotoName().equals(bxInsurance.getClaimsApplicationName())) {
                 fileNames.add(bxInsurance.getAffectedPhotoName());
             } else {
-                fileNames.add("受灾照片");
+                String type = bxInsurance.getAffectedPhoto();
+                type = type.substring(type.lastIndexOf("."));
+                fileNames.add("受灾照片"+type);
             }
         }
         ZipUtil.toZip(filePaths,fileNames,zipPath);

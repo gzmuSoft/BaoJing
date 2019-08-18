@@ -88,6 +88,7 @@
                         <thead>
                         <tr>
                             <th >#</th>
+                            <th class="text-center">编号</th>
                             <th class="text-center">保险名称</th>
                             <th class="text-center">保险购买数量</th>
                             <th class="text-center">单个保险费用（元）</th>
@@ -100,6 +101,7 @@
                         <tbody>
                         <tr class="success" th:each="check:${pageInfo.list}">
                             <th scope="row" th:text="${checkStat.index+1}"></th>
+                            <td th:text="${check.id}"></td>
                             <td th:text="${check.projectName}"></td>
                             <td th:text="${check.buyNumber}"></td>
                             <td th:text="${check.cost}"></td>

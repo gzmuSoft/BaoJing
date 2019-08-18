@@ -45,14 +45,14 @@ public class WxConfig {
      *
      * @return 返回登录授权地址
      */
-    public static String getLoginUrl() {
+    public static String getLoginUrl(String state) {
         String newAppId = "";
         try {
             newAppId = URLEncoder.encode(REDIRECT_URL, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = HOST + "appid=" + APPID + "&redirect_uri=" + newAppId + "&response_type=code&scope=snsapi_userinfo&state=login#wechat_redirect";
+        String url = HOST + "appid=" + APPID + "&redirect_uri=" + newAppId + "&response_type=code&scope=snsapi_userinfo&state="+state;
         return url;
     }
 

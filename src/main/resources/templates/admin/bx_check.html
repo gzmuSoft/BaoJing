@@ -112,7 +112,7 @@
                             <td th:text="${check.identity}"></td>
                             <!--状态-->
                             <td th:if="${check.payCost == 0}">
-                                <button type="button" disabled class="btn btn-warning btn-xs">&nbsp;&nbsp;待缴费&nbsp;&nbsp;<span class="caret"></span></button>
+                                <button type="button" disabled class="btn btn-warning btn-xs">&nbsp;&nbsp;待缴费&nbsp;&nbsp;</button>
                             </td>
                             <td th:if="${check.payCost == 2}">
                                 <div class="btn-group">

@@ -210,9 +210,8 @@ public class InsuranceController {
         //通过openid获得用户id并获取购买的保险信息
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openid);
         //调用方法查询该用户购买的保险
-        PageInfo<BxInsurance> bxInsurancePageInfo = bxInsuranceService.selectInsuranceByPersonId(person.getId(), pageNumber);
-        model.addAttribute("pageInfo", bxInsurancePageInfo);
-        model.addAttribute("pages", PageUtil.getPage(bxInsurancePageInfo.getPages(), pageNumber));
+        List<BxInsurance> bxInsurancePageInfo = bxInsuranceService.selectInsuranceByPersonId(person.getId());
+        model.addAttribute("dataList", bxInsurancePageInfo);
         return "insurance/myInsurance";
     }
 

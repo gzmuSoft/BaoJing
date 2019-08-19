@@ -87,11 +87,9 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
     }
 
     @Override
-    public PageInfo<BxInsurance> selectInsuranceByPersonId(Integer personId, Integer pageNumber) {
-        //PageHelper插件的分页信息
-        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+    public List<BxInsurance> selectInsuranceByPersonId(Integer personId) {
         List<BxInsurance> list = bxInsuranceMapper.selectInsuranceByPersonId(personId);
-        return new PageInfo<>(list);
+        return list;
     }
 
     @Override

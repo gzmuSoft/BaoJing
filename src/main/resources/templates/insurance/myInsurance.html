@@ -30,7 +30,7 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr class="text-center" th:each="insurance : ${pageInfo.list}">
+                    <tr class="text-center" th:each="insurance : ${dataList}">
                         <!-- 隐藏的编号 -->
                         <td th:text="${insurance.id}"></td>
                         <td th:text="${insurance.projectName}"></td>

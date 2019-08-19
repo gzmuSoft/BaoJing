@@ -149,6 +149,6 @@
         update bx_insurance
         set pay_cost = #{payCost,jdbcType=TINYINT}
         where
-        status = 2 and person_id = #{personId,jdbcType=INTEGER} and #{id,jdbcType=INTEGER}
+        status = 2 and person_id = #{personId,jdbcType=INTEGER} and id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

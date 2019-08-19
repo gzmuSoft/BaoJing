@@ -28,7 +28,7 @@ public interface BxInsuranceService {
      * @param personId
      * @return
      */
-    PageInfo<BxInsurance> selectInsuranceByPersonId(Integer personId, Integer pageNumber);
+    List<BxInsurance> selectInsuranceByPersonId(Integer personId);
 
     /**
      * 根据用户的id以及保险的id号，更新保险信息

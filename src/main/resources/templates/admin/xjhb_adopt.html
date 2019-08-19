@@ -25,6 +25,7 @@
 					<li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
 						<a class="sf-brick">先建后补项目<span class="caret"></span></a>
 						<ul>
+							<li><a href="/admin/bulletin?sourceId=1">公告设置</a></li>
 							<li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
 							<li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
 							<li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
@@ -34,6 +35,7 @@
 					<li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
 						<a class="sf-globe">农业保险项目<span class="caret"></span></a>
 						<ul>
+							<li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
 							<li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
 							<li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
 							<li><a href="/admin/bxCheck?pageNumber=1">缴费验收</a></li>

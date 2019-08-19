@@ -46,6 +46,9 @@ public class AdminController {
     @Autowired
     private BxInsuranceService bxInsuranceService;
 
+    @Autowired
+    private BulletinService bulletinService;
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -90,6 +93,47 @@ public class AdminController {
     @RequestMapping(value = "/index")
     public String index() {
         return "admin/index";
+    }
+
+    /**
+     * 跳转设置公告页面
+     * @param sourceId 项目id
+     * @return
+     */
+    @RequestMapping(value = "/bulletin")
+    public String bulletin(int sourceId, Model model) {
+        Bulletin bulletin = bulletinService.selectBySourceId(sourceId);
+        if (bulletin != null){
+            model.addAttribute("bulletin",bulletin);
+        }else {
+            model.addAttribute("bulletin",new Bulletin());
+        }
+        //判断该回哪个页面
+        if (sourceId == 1){
+            return "admin/xjhb_bulletin";
+        }else {
+            return "admin/bx_bulletin";
+        }
+    }
+
+    /**
+     * 保存公告
+     * @param bulletin
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/saveBulletin")
+    public String saveBulletin(Bulletin bulletin){
+        if (bulletin.getId() != null){
+            bulletinService.updateByPrimaryKey(bulletin);
+            return "";
+        }else {
+            bulletin = bulletinService.insert(bulletin);
+            if (bulletin != null)
+                return bulletin.getId() + "";
+            else
+                return "";
+        }
     }
 
     /**

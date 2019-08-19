@@ -15,10 +15,10 @@
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.Bulletin">
     insert into bulletin (id, title, content, 
-      source_id, create_admin_id, update_time
+      source_id, create_admin_id
       )
     values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{sourceId,jdbcType=INTEGER}, #{createAdminId,jdbcType=INTEGER}, #{updateTime,jdbcType=TIMESTAMP}
+      #{sourceId,jdbcType=INTEGER}, #{createAdminId,jdbcType=INTEGER}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.Bulletin">
@@ -26,14 +26,18 @@
     set title = #{title,jdbcType=VARCHAR},
       content = #{content,jdbcType=VARCHAR},
       source_id = #{sourceId,jdbcType=INTEGER},
-      create_admin_id = #{createAdminId,jdbcType=INTEGER},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      create_admin_id = #{createAdminId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, title, content, source_id, create_admin_id, update_time
     from bulletin
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectBySourceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, title, content, source_id, create_admin_id, update_time
+    from bulletin
+    where source_id = #{source_id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, title, content, source_id, create_admin_id, update_time

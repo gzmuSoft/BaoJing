@@ -1,7 +1,10 @@
 package com.gzmusxxy.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Bulletin {
     private Integer id;
 

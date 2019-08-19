@@ -1,12 +1,14 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
 import com.gzmusxxy.entity.Bulletin;
+
 import java.util.List;
 
-public interface BulletinMapper {
+public interface BulletinService {
+
     int deleteByPrimaryKey(Integer id);
 
-    int insert(Bulletin record);
+    Bulletin insert(Bulletin record);
 
     Bulletin selectByPrimaryKey(Integer id);
 

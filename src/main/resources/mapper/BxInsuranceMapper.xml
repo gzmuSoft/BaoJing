@@ -76,12 +76,13 @@
     select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name,b.identity, b.telphone,p.name as project_name,p.cost,b.pay_cost
     from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.telphone,i.pay_cost,p.identity
     from bx_insurance i join xjhb_person p
-    where i.person_id=p.id and i.pay_cost in (0,1)) b join bx_project p
+    where i.person_id=p.id and i.pay_cost in (0,1,2)) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status in (2,4,5,6)
     order by
     case
-    when b.pay_cost=0 then 1
-    when b.pay_cost=1 then 2
+    when b.pay_cost=2 then 1
+    when b.pay_cost=0 then 2
+    when b.pay_cost=1 then 3
     end
   </select>
     <select id="selectClaimsById" resultMap="BaseResultMap" parameterType="java.lang.Integer">

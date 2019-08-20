@@ -9,6 +9,9 @@
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="role" jdbcType="INTEGER" property="role" />
   </resultMap>
+  <resultMap id="StringResultMap" type="java.lang.String">
+    <result column="email" jdbcType="VARCHAR" property="email" />
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from admin
     where id = #{id,jdbcType=INTEGER}
@@ -45,5 +48,10 @@
     select id, username, password, phone, email, role
     from admin
     where username = #{username,jdbcType=VARCHAR}
+  </select>
+  <select id="selectEmailByRole" resultMap="StringResultMap">
+    select distinct email
+    from admin
+    where role in (#{roleA},#{roleB})
   </select>
 </mapper>

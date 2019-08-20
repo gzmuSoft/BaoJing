@@ -42,4 +42,21 @@ public class AdminServiceImpl implements AdminService {
         }
         return admimMapper.updateByPrimaryKey(record);
     }
+
+    /**
+     * 查询权限  不需要的则null
+     * @param roleA
+     * @param roleB
+     * @return
+     */
+    @Override
+    public List<String> selectEmailByRole(Integer roleA, Integer roleB) {
+        if (roleA == null){
+            roleA = 0;
+        }
+        if (roleB == null){
+            roleB = 0;
+        }
+        return admimMapper.selectEmailByRole(roleA,roleB);
+    }
 }

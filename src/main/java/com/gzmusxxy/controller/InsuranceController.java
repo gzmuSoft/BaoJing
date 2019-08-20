@@ -6,11 +6,9 @@ import com.gzmusxxy.entity.Bulletin;
 import com.gzmusxxy.entity.BxInsurance;
 import com.gzmusxxy.entity.BxProject;
 import com.gzmusxxy.entity.XjhbPerson;
-import com.gzmusxxy.service.BulletinService;
-import com.gzmusxxy.service.BxInsuranceService;
-import com.gzmusxxy.service.BxProjectService;
-import com.gzmusxxy.service.XjhbPersonService;
+import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.FileUtil;
+import com.gzmusxxy.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +39,9 @@ public class InsuranceController {
 
     @Autowired
     private BulletinService bulletinService;
+
+    @Autowired
+    private AdminService adminService;
 
     @IsLogin
     @RequestMapping(value = {"", "/"})
@@ -202,6 +203,24 @@ public class InsuranceController {
         }
         jsonResult.setCode(1);
         jsonResult.setResult("ok");
+        //发送请求审核邮件
+        new Thread(){
+            @Override
+            public void run() {
+                List<String> emails = adminService.selectEmailByRole(1,3);
+                BxProject bxProject = bxProjectService.selectByPrimaryKey(projectId);
+                for (String email:
+                        emails) {
+                    if (email != null){
+                        MailUtil.sendMail("申请审核",
+                                person.getName() + "的" +
+                                        bxProject.getName() + "项目申请审核，请及时处理。",email
+                        );
+                    }
+                }
+                super.run();
+            }
+        }.start();
         return jsonResult;
     }
 
@@ -279,6 +298,26 @@ public class InsuranceController {
             if (i >= 0) {
                 jsonResult.setCode(1);
                 jsonResult.setResult("ok");
+                //发送请求理赔申请
+                new Thread(){
+                    @Override
+                    public void run() {
+                        //理赔申请 发送邮件
+                        List<String> emails = adminService.selectEmailByRole(1,3);
+                        BxInsurance bxInsurance1 = bxInsuranceService.selectByPrimaryKey(bxInsurance.getId());
+                        BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance1.getProjectId());
+                        for (String email:
+                                emails) {
+                            if (email != null){
+                                MailUtil.sendMail("申请理赔",
+                                        person.getName() + "的" +
+                                                bxProject.getName() + "项目申请理赔，请及时处理。",email
+                                );
+                            }
+                        }
+                        super.run();
+                    }
+                }.start();
                 return jsonResult;
             }
         }

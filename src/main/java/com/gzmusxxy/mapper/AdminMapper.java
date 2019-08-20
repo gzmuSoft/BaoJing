@@ -15,4 +15,6 @@ public interface AdminMapper {
     List<Admin> selectAll();
 
     int updateByPrimaryKey(Admin record);
+
+    List<String> selectEmailByRole(Integer roleA,Integer roleB);
 }

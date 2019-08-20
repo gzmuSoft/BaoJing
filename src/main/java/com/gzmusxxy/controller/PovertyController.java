@@ -5,11 +5,9 @@ import com.gzmusxxy.entity.Bulletin;
 import com.gzmusxxy.entity.XjhbInformation;
 import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.entity.XjhbProject;
-import com.gzmusxxy.service.BulletinService;
-import com.gzmusxxy.service.XjhbInformationService;
-import com.gzmusxxy.service.XjhbPersonService;
-import com.gzmusxxy.service.XjhbProjectService;
+import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.FileUtil;
+import com.gzmusxxy.util.MailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +41,9 @@ public class PovertyController {
 
     @Autowired
     private BulletinService bulletinService;
+
+    @Autowired
+    private AdminService adminService;
 
     /**
      * 主页
@@ -226,7 +227,26 @@ public class PovertyController {
         }else {
             xjhbInformationService.updateByPrimaryKey(xjhbInformation);
         }
-        System.out.println("创建的申请书"+xjhbInformation);
+        //发送请求审核邮件
+        new Thread(){
+            @Override
+            public void run() {
+                //申请 发送邮件
+                List<String> emails = adminService.selectEmailByRole(1,2);
+                XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(xjhbInformation.getPersonId());
+                XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(xjhbInformation.getProjectId());
+                for (String email:
+                        emails) {
+                    if (email != null){
+                        MailUtil.sendMail("申请审核",
+                                xjhbPerson.getName() + "的" +
+                                        xjhbProject.getProjectName() + "项目申请审核，请及时处理。",email
+                        );
+                    }
+                }
+                super.run();
+            }
+        }.start();
         return "success";
     }
 
@@ -256,6 +276,25 @@ public class PovertyController {
     public String saveCheck(XjhbInformation information) {
         information.setStatus((byte)4);
         xjhbInformationService.updateByPrimaryKey(information);
+        new Thread(){
+            @Override
+            public void run() {
+                //申请验收 发送邮件
+                List<String> emails = adminService.selectEmailByRole(1,2);
+                XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(information.getPersonId());
+                XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(information.getProjectId());
+                for (String email:
+                        emails) {
+                    if (email != null){
+                        MailUtil.sendMail("申请验收",
+                                xjhbPerson.getName() + "的" +
+                                        xjhbProject.getProjectName() + "项目申请验收，请及时处理。",email
+                                );
+                    }
+                }
+                super.run();
+            }
+        }.start();
         return "success";
     }
 

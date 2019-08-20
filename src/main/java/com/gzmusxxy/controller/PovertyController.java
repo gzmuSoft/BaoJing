@@ -4,6 +4,7 @@ import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.entity.XjhbInformation;
 import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.entity.XjhbProject;
+import com.gzmusxxy.service.BulletinService;
 import com.gzmusxxy.service.XjhbInformationService;
 import com.gzmusxxy.service.XjhbPersonService;
 import com.gzmusxxy.service.XjhbProjectService;
@@ -39,6 +40,9 @@ public class PovertyController {
     @Autowired
     private XjhbPersonService xjhbPersonService;
 
+    @Autowired
+    private BulletinService bulletinService;
+
     /**
      * 主页
      * 根据openId 用户不存在则创建用户
@@ -47,7 +51,7 @@ public class PovertyController {
      */
     @IsLogin
     @RequestMapping(value = "/apply")
-    public String apply(HttpSession session) {
+    public String apply(HttpSession session,Model model) {
         String openId =  session.getAttribute("openid").toString();
         if(xjhbPersonService.findPersonByOpenId(openId) == null){
             XjhbPerson person = new XjhbPerson();
@@ -55,6 +59,7 @@ public class PovertyController {
             person.setCreateTime(new Date());
             xjhbPersonService.insert(person);
         }
+        model.addAttribute("bulletin",bulletinService.selectBySourceId(1));
         return "poverty/apply";
     }
 

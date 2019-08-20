@@ -6,6 +6,7 @@ import com.gzmusxxy.common.JsonResult;
 import com.gzmusxxy.entity.BxInsurance;
 import com.gzmusxxy.entity.BxProject;
 import com.gzmusxxy.entity.XjhbPerson;
+import com.gzmusxxy.service.BulletinService;
 import com.gzmusxxy.service.BxInsuranceService;
 import com.gzmusxxy.service.BxProjectService;
 import com.gzmusxxy.service.XjhbPersonService;
@@ -40,9 +41,13 @@ public class InsuranceController {
     @Autowired
     private BxInsuranceService bxInsuranceService;
 
+    @Autowired
+    private BulletinService bulletinService;
+
     @IsLogin
     @RequestMapping(value = {"", "/"})
-    public String index() {
+    public String index(Model model) {
+        model.addAttribute("bulletin",bulletinService.selectBySourceId(2));
         return "insurance/index";
     }
 
@@ -77,6 +82,7 @@ public class InsuranceController {
         //用户资料填写完整，查询项目资料
         List<BxProject> bxProjects = bxProjectService.selectEffective();
         model.addAttribute("list", bxProjects);
+        model.addAttribute("bulletin",bulletinService.selectBySourceId(2));
         return "insurance/apply";
     }
 

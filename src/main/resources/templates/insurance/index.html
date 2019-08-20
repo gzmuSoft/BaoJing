@@ -18,10 +18,10 @@
 <body>
 <div class="container text-center">
     <div class="col-sm-12">
-        <h3 style="text-align: center;">申请项目注意事项</h3>
+        <h3 style="text-align: center;" th:text="${bulletin.title != null?bulletin.title:'申请项目注意事项'}">申请项目注意事项</h3>
         <!--分割线-->
         <div class="decoration"></div>
-        <div class="full-width" style="text-align: center;">
+        <div class="full-width" style="text-align: center;" id="content">
             <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
             <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
             <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
@@ -57,7 +57,10 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
-<script>
+<script th:inline="javascript">
+    if([[${bulletin.content}]] != null &&[[${bulletin.content}]] != ''){
+        $("#content").html([[${bulletin.content}]]);
+    }
     $("#apply").click(function(){
         $.post("/insurance/verifyUserInfo",{},function(data){
             if(data.code == 1){

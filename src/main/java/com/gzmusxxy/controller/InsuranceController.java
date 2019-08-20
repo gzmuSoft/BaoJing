@@ -3,6 +3,7 @@ package com.gzmusxxy.controller;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.common.JsonResult;
+import com.gzmusxxy.entity.Bulletin;
 import com.gzmusxxy.entity.BxInsurance;
 import com.gzmusxxy.entity.BxProject;
 import com.gzmusxxy.entity.XjhbPerson;
@@ -47,7 +48,11 @@ public class InsuranceController {
     @IsLogin
     @RequestMapping(value = {"", "/"})
     public String index(Model model) {
-        model.addAttribute("bulletin",bulletinService.selectBySourceId(2));
+        Bulletin bulletin = bulletinService.selectBySourceId(2);
+        if(bulletin == null){
+            bulletin = new Bulletin();
+        }
+        model.addAttribute("bulletin",bulletin);
         return "insurance/index";
     }
 

@@ -140,7 +140,7 @@
                                     <ul class="dropdown-menu" role="menu" style="width:50px">
                                         <li><a href="#" th:value="${audit.id+',2'}" onclick="status(this)">通过</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="#" th:value="${audit.id+',3'}" onclick="status(this)">否定</a></li>
+                                        <li><a href="#" data-toggle="modal" data-target="#remark" th:value="${audit.id+',3'}" onclick="remark(this)">否定</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -183,6 +183,36 @@
             </ul>
         </nav>
     </div>
+    <!--拒绝弹窗-->
+    <div id="remark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="remarkCha" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        否定
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="text" class="col-sm-4 control-label text-center">请描述否定原因：</label>
+                            <div class="col-sm-8 text-center">
+                                <input class="textarea col-sm-10" id="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="remarkSub" class="btn btn-primary">确定</button>
+                    <button type="button" id="remarkRet" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
     <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
@@ -194,6 +224,7 @@
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
 <script>
+    var remarkObj = null;
     //给当前页添加标识
     $('.addActive').parent().addClass("active");
     //搜索栏有数据则打开
@@ -201,14 +232,33 @@
         $("#cm-search").addClass("open");
     }
 
+    //给保存赋值
+    function remark(obj) {
+		remarkObj = obj;
+    }
+    //给保存事件
+	$("#remarkSub").click(function(){
+		status(remarkObj);
+	});
+
+	//退出清空弹窗数据
+	$("#remarkCha").click(function(){
+		$("#text").val('');
+	});
+	$("#remarkRet").click(function(){
+		$("#text").val('');
+	});
+
     //改变
     function status(obj){
     	var id = $(obj).attr("value");
     	$.post("/admin/bxStatus",{
     		"id":id.substring(0, id.indexOf(",")),
-    		"status":id.substring(id.indexOf(",")+1)
+    		"status":id.substring(id.indexOf(",")+1),
+    		"remark":$("#text").val()
     	},function(status){
     		if(status != "error"){
+    		    $("#text").val('');
     			window.location.href="/admin/bxAudit?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#selectName').val() +"&poverty="+ $('#selectPoverty').val();
     		}else{
     			alert("网络错误！");

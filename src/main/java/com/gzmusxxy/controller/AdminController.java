@@ -207,7 +207,7 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/status")
-    public String status(int id, byte status) {
+    public String status(int id, byte status, String remark) {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
         xjhbInformation.setStatus(status);
         if(xjhbInformationService.updateByPrimaryKey(xjhbInformation) == 1){
@@ -220,7 +220,7 @@ public class AdminController {
                         case 2:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！",
                                     xjhbProject.getProjectName()+"的申请",
-                                    false,"审核失败","请完善资料再申请审核","");break;
+                                    false,"审核失败",remark,"");break;
                         case 3:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,xjhbProject.getProjectName()+"的申请",
@@ -232,7 +232,7 @@ public class AdminController {
                         case 7:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,xjhbProject.getProjectName()+"的验收",
-                                    false,"验收失败","请完善资料再申请验收","");break;
+                                    false,"验收失败",remark,"");break;
                         case 6:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,xjhbProject.getProjectName()+"的验收",
@@ -749,7 +749,7 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/bxStatus")
-    public String bxStatus(int id, byte status) {
+    public String bxStatus(int id, byte status, String remark) {
         BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
         //是贫穷则默认付款
         if (status == 2 && xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId()).getPoverty() == 1) {
@@ -766,12 +766,12 @@ public class AdminController {
                         case 3:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！",
                                     bxProject.getName() + "的申请",
-                                    true, "审核失败", "请完善资料再申请审核", "");
+                                    false, "审核失败", remark, "");
                             break;
                         case 2:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
                                     , bxProject.getName()  + "的申请",
-                                    false, "审核通过", "请及时缴纳保险费用", "");
+                                    true, "审核通过", "请及时缴纳保险费用", "");
                             break;
                         case 5:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
@@ -781,7 +781,7 @@ public class AdminController {
                         case 6:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
                                     , bxProject.getName()  + "的验收",
-                                    false, "理赔申请失败", "请重新补充材料申请", "");
+                                    false, "理赔申请失败", remark, "");
                             break;
                     }
                     super.run();

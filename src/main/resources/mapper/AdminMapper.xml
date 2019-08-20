@@ -6,6 +6,7 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="role" jdbcType="INTEGER" property="role" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -14,29 +15,34 @@
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.Admin">
     insert into admin (id, username, password,
-      phone, role)
+      phone, email, role)
     values (#{id,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR},
-      #{phone,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER})
+    #{email,jdbcType=VARCHAR},#{phone,jdbcType=VARCHAR}, #{role,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.Admin">
     update admin
-    set username = #{username,jdbcType=VARCHAR},
+    <trim prefix="set" suffixOverrides=",">
+      username = #{username,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      role = #{role,jdbcType=INTEGER}
+      <if test="role != null and role != ''">
+        role = #{role,jdbcType=INTEGER}
+      </if>
+    </trim>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, username, password, phone, role
+    select id, username, password, phone, email, role
     from admin
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, username, password, phone, role
+    select id, username, password, phone, email, role
     from admin
   </select>
   <select id="selectByUsername" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select id, username, password, phone, role
+    select id, username, password, phone, email, role
     from admin
     where username = #{username,jdbcType=VARCHAR}
   </select>

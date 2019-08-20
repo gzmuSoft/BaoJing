@@ -1,6 +1,7 @@
 package com.gzmusxxy.controller;
 
 import com.gzmusxxy.annotation.IsLogin;
+import com.gzmusxxy.entity.Bulletin;
 import com.gzmusxxy.entity.XjhbInformation;
 import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.entity.XjhbProject;
@@ -59,7 +60,11 @@ public class PovertyController {
             person.setCreateTime(new Date());
             xjhbPersonService.insert(person);
         }
-        model.addAttribute("bulletin",bulletinService.selectBySourceId(1));
+        Bulletin bulletin = bulletinService.selectBySourceId(1);
+        if(bulletin == null){
+            bulletin = new Bulletin();
+        }
+        model.addAttribute("bulletin",bulletin);
         return "poverty/apply";
     }
 

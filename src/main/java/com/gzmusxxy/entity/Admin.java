@@ -12,6 +12,8 @@ public class Admin {
 
     private String phone;
 
+    private String email;
+
     private Integer role;
 
 

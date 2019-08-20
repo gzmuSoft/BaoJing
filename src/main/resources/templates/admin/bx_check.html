@@ -119,6 +119,8 @@
                                     <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待验证&nbsp;&nbsp;<span class="caret"></span></button>
                                     <ul class="dropdown-menu" role="menu" style="width:50px">
                                         <li><a href="#" th:value="${check.id+',1'}" onclick="status(this)">已缴费</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#" th:value="${check.id+',0'}" onclick="status(this)">未缴费</a></li>
                                     </ul>
                                 </div>
                             </td>

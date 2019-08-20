@@ -212,6 +212,7 @@ public class AdminController {
         xjhbInformation.setStatus(status);
         if(xjhbInformationService.updateByPrimaryKey(xjhbInformation) == 1){
             new Thread(){
+                @Override
                 public void run(){
                     XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(xjhbInformation.getPersonId());
                     XjhbProject xjhbProject = xjhbProjectService.selectByPrimaryKey(xjhbInformation.getProjectId());
@@ -240,6 +241,7 @@ public class AdminController {
                             WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,"转帐业务","补助已发放,请查验","如有问题，请联系电话xxxxxxxxxxxxx","");break;
                     }
+                    super.run();
                 }
             }.start();
         }
@@ -636,7 +638,24 @@ public class AdminController {
     public String bxPayCost(int id, byte payCost) {
         BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
         bxInsurance.setPayCost(payCost);
-        bxInsuranceService.updateByPrimaryKey(bxInsurance);
+        if (bxInsuranceService.updateByPrimaryKey(bxInsurance) == 1){
+            new Thread(){
+                @Override
+                public void run() {
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
+                    BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance.getProjectId());
+                    if (payCost == 1){
+                        WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话xxxxxxxxxxxxx","");
+                    }
+                    if (payCost == 0){
+                        WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话xxxxxxxxxxxxx","");
+                    }
+                    super.run();
+                }
+            }.start();
+        }
         return "";
     }
 
@@ -732,11 +751,43 @@ public class AdminController {
     @PostMapping(value = "/bxStatus")
     public String bxStatus(int id, byte status) {
         BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
+        //是贫穷则默认付款
         if (status == 2 && xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId()).getPoverty() == 1) {
             bxInsurance.setPayCost((byte)1);
         }
         bxInsurance.setStatus(status);
-        bxInsuranceService.updateByPrimaryKey(bxInsurance);
+        if(bxInsuranceService.updateByPrimaryKey(bxInsurance) == 1) {
+            new Thread() {
+                @Override
+                public void run() {
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
+                    BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance.getProjectId());
+                    switch (status) {
+                        case 3:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！",
+                                    bxProject.getName() + "的申请",
+                                    true, "审核失败", "请完善资料再申请审核", "");
+                            break;
+                        case 2:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , bxProject.getName()  + "的申请",
+                                    false, "审核通过", "请及时缴纳保险费用", "");
+                            break;
+                        case 5:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , bxProject.getName()  + "的理赔申请",
+                                    true, "理赔申请通过", "已将资料发送至保险公司，请耐心等待保险公司前来定损", "");
+                            break;
+                        case 6:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , bxProject.getName()  + "的验收",
+                                    false, "理赔申请失败", "请重新补充材料申请", "");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
+        }
         return "";
     }
 }

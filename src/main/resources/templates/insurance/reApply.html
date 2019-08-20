@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>保险项目申请</title>
+    <title>保险信息完善</title>
     <!-- Bootstrap -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -28,16 +28,16 @@
                 <div class="form-group">
                     <label for="projectId" class="col-sm-2 control-label">保险类型：</label>
                     <div class="col-sm-10">
-                        <select name="projectId" id="projectId" class="form-control">
+                        <select name="projectId" id="projectId" class="form-control" disabled="disabled" th:value="${insurance.projectId}">
                             <option selected="selected" disabled="disabled">-- 请选择 --</option>
-                            <option th:each="list:${list}" th:value="${list.id}" th:text="${list.name}" th:cost="${list.cost}"></option>
+                            <option th:each="list:${list}" th:value="${list.id}" th:text="${list.name}" th:cost="${list.cost}" th:selected="${insurance.projectId  eq list.id}"></option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="number" class="col-sm-2 control-label">购买数量：</label>
                     <div class="col-sm-10">
-                        <input  type="number" name="number" class="form-control" id="number"  value="1" placeholder="购买的数量" required>
+                        <input  type="number" name="number" class="form-control" id="number"  th:value="${insurance.buyNumber}" placeholder="购买的数量" required>
                     </div>
                 </div>
                 <div class="form-group">
@@ -55,7 +55,7 @@
                 <br />
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">提交资料</button>
+                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">更新资料</button>
                     </div>
                 </div>
             </form>
@@ -66,8 +66,9 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
-<script type="text/javascript">
+<script th:inline="javascript">
     $(function () {
+        calcCost();
         $("#number").bind("input propertychange",function(event){
             this.value=this.value.replace(/\D/g,'');
             calcCost();
@@ -89,12 +90,16 @@
                 alert("购买的数量必须大于0");
                 return false;
             }
-            $.post("/insurance/saveInsurance",$("#form").serialize(),function(data){
+            var param = {
+                "id":[[${insurance.id}]],
+                "number":number
+            }
+            $.post("/insurance/postReApply",param,function(data){
                 if(data.code == 1){
                     alert("信息提交成功！");
                     window.location.href = "/insurance/myInsurance?pageNumber=1"
                 }else{
-                    alert("信息提交失败！");
+                    alert(data.result);
                 }
             },"json");
             return false;

@@ -53,7 +53,7 @@
 
                             <p th:case="3" >
                                 <button class="btn btn-xs btn-danger" disabled="disabled">审核失败</button>
-                                <button class="btn btn-xs btn-primary" onclick="apply()">重新申请</button>
+                                <button class="btn btn-xs btn-primary" th:onclick="'apply('+${insurance.id}+')'">重新申请</button>
                             </p>
 
                             <p th:case="4"><button class="btn btn-xs btn-primary" disabled="disabled">理赔申请中</button></p>
@@ -135,8 +135,18 @@
      function applyClaim(id) {
          window.location.href = "/insurance/applyForClaim?id="+id;
      }
-     function apply() {
-         window.location.href = "/insurance/apply";
+     function apply(id) {
+         if(id != null && id != ""){
+             var choose = confirm("重新申请之前请完善你的资料，点击确认继续，点击取消自动跳转到完善资料页面！");
+             if(choose == true){
+                 window.location.href = "/insurance/updateInsurance?id="+id;
+             }else{
+                 window.location.href = "/insurance/user";
+             }
+         }else{
+             alert("数据出错！");
+         }
+
      }
      //用于显示缴费模态框的按钮
      function payment(id){

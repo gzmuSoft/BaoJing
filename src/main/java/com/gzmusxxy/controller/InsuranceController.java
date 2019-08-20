@@ -1,8 +1,8 @@
 package com.gzmusxxy.controller;
 
-import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.common.JsonResult;
+import com.gzmusxxy.entity.Bulletin;
 import com.gzmusxxy.entity.BxInsurance;
 import com.gzmusxxy.entity.BxProject;
 import com.gzmusxxy.entity.XjhbPerson;
@@ -11,11 +11,9 @@ import com.gzmusxxy.service.BxInsuranceService;
 import com.gzmusxxy.service.BxProjectService;
 import com.gzmusxxy.service.XjhbPersonService;
 import com.gzmusxxy.util.FileUtil;
-import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -47,7 +45,11 @@ public class InsuranceController {
     @IsLogin
     @RequestMapping(value = {"", "/"})
     public String index(Model model) {
-        model.addAttribute("bulletin",bulletinService.selectBySourceId(2));
+        Bulletin bulletin = bulletinService.selectBySourceId(2);
+        if(bulletin == null){
+            bulletin = new Bulletin();
+        }
+        model.addAttribute("bulletin",bulletin);
         return "insurance/index";
     }
 
@@ -375,4 +377,69 @@ public class InsuranceController {
         return jsonResult;
     }
 
+    @IsLogin
+    @RequestMapping(value = "/updateInsurance")
+    public String getBxInsurance(@RequestParam("id") Integer id,Model model){
+        BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
+        if(bxInsurance == null){
+            model.addAttribute("msg","查无数据！");
+            return "insurance/msg";
+        }
+        if(!bxInsurance.getStatus().equals((byte) 3)){
+            model.addAttribute("msg","当前保险状态无法修改！");
+            return "insurance/msg";
+        }
+        //判断时间
+        BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance.getProjectId());
+        Date startTime = bxProject.getStartTime();
+        Date endTime = bxProject.getEndTime();
+        Date now = new Date();
+        //now.after(startTime) && now.before(endTime)
+        if(startTime.after(now) || endTime.before(now)){
+            //时间不满足条件
+            model.addAttribute("msg","当前时间不可修改申请，可能已到期！");
+            return "insurance/msg";
+        }
+        List<BxProject> bxProjects = bxProjectService.selectEffective();
+        model.addAttribute("list", bxProjects);
+        model.addAttribute("insurance",bxInsurance);
+        return "insurance/reApply";
+    }
+
+    /**
+     * 重新申请：更新用户保险信息
+     * @param number
+     * @param id
+     * @param session
+     * @return
+     */
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/postReApply")
+    public JsonResult reApply(@RequestParam("number") Integer number,@RequestParam("id") Integer id,HttpSession session){
+        JsonResult jsonResult = new JsonResult();
+        String openid = session.getAttribute("openid").toString();
+        XjhbPerson person = xjhbPersonService.findPersonByOpenId(openid);
+        if(person != null && person.getId() > 0){
+            BxInsurance bxInsurance = new BxInsurance();
+            bxInsurance.setId(id);
+            bxInsurance.setStatus((byte)1);
+            bxInsurance.setPersonId(person.getId());
+            bxInsurance.setBuyNumber(number);
+            int i = bxInsuranceService.updateByIdAndPersonId(bxInsurance);
+            if(i > 0){
+                jsonResult.setCode(1);
+                jsonResult.setResult("ok");
+                return jsonResult;
+            }
+
+        }else{
+            jsonResult.setCode(0);
+            jsonResult.setResult("无法获取到用户的信息");
+            return jsonResult;
+        }
+        jsonResult.setResult("更新失败");
+        jsonResult.setCode(0);
+        return jsonResult;
+    }
 }

@@ -13,6 +13,7 @@ public class MailUtil{
     private static String username = "930926134@qq.com";
     private static String password = "xjezwwkfbmgvbfgb";
     private static String defaultEncoding = "UTF-8";
+    private static String port = "465";
     private static JavaMailSenderImpl javaMailSenderImpl;
 
     /**
@@ -29,6 +30,13 @@ public class MailUtil{
         javaMailSenderImpl.setPassword(password);
         javaMailSenderImpl.setDefaultEncoding(defaultEncoding);
         Properties p = new Properties();
+        p.setProperty("mail.smtp.auth", "true");//开启认证
+        p.setProperty("mail.debug", "true");//启用调试
+        p.setProperty("mail.smtp.timeout", "1000");//设置链接超时
+        p.setProperty("mail.smtp.port", port);//设置端口
+        p.setProperty("mail.smtp.socketFactory.port", port);//设置ssl端口
+        p.setProperty("mail.smtp.socketFactory.fallback", "false");
+        p.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
         javaMailSenderImpl.setJavaMailProperties(p);
         return javaMailSenderImpl;
     }

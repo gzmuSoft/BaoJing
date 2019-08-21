@@ -58,9 +58,10 @@
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
 <script th:inline="javascript">
-    if([[${bulletin.content}]] != null &&[[${bulletin.content}]] != ''){
-        $("#content").html([[${bulletin.content}]]);
+    if([[${content}]] != ''){
+        $("#content").html([[${content}]]);
     }
+
     $("#apply").click(function(){
         $.post("/insurance/verifyUserInfo",{},function(data){
             if(data.code == 1){

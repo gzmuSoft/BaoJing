@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -62,9 +63,19 @@ public class PovertyController {
             xjhbPersonService.insert(person);
         }
         Bulletin bulletin = bulletinService.selectBySourceId(1);
+        String content = "";
         if(bulletin == null){
             bulletin = new Bulletin();
+        }else {
+            if (bulletin.getContent() != null) {
+                try {
+                    content = new String(bulletin.getContent(), "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        model.addAttribute("content",content);
         model.addAttribute("bulletin",bulletin);
         return "poverty/apply";
     }

@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -104,6 +105,15 @@ public class AdminController {
     public String bulletin(int sourceId, Model model) {
         Bulletin bulletin = bulletinService.selectBySourceId(sourceId);
         if (bulletin != null){
+            if (bulletin.getContent() != null) {
+                try {
+                    model.addAttribute("content",new String(bulletin.getContent(),"UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }else {
+                model.addAttribute("content","");
+            }
             model.addAttribute("bulletin",bulletin);
         }else {
             model.addAttribute("bulletin",new Bulletin());
@@ -123,7 +133,13 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping(value = "/saveBulletin")
-    public String saveBulletin(Bulletin bulletin){
+    public String saveBulletin(Bulletin bulletin, String content){
+        try {
+            byte[] bytes = content.getBytes("UTF-8");
+            bulletin.setContent(bytes);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         if (bulletin.getId() != null){
             bulletinService.updateByPrimaryKey(bulletin);
             return "";

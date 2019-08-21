@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.Bulletin">
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="content" property="content" />
     <result column="source_id" jdbcType="INTEGER" property="sourceId" />
     <result column="create_admin_id" jdbcType="INTEGER" property="createAdminId" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -17,14 +17,14 @@
     insert into bulletin (id, title, content, 
       source_id, create_admin_id
       )
-    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{content},
       #{sourceId,jdbcType=INTEGER}, #{createAdminId,jdbcType=INTEGER}
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.Bulletin">
     update bulletin
     set title = #{title,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
+      content = #{content},
       source_id = #{sourceId,jdbcType=INTEGER},
       create_admin_id = #{createAdminId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}

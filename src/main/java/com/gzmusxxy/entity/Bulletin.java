@@ -10,7 +10,7 @@ public class Bulletin {
 
     private String title;
 
-    private String content;
+    private byte[] content;
 
     private Integer sourceId;
 
@@ -34,11 +34,11 @@ public class Bulletin {
         this.title = title;
     }
 
-    public String getContent() {
+    public byte[] getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(byte[] content) {
         this.content = content;
     }
 

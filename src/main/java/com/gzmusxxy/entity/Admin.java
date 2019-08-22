@@ -16,5 +16,9 @@ public class Admin {
 
     private Integer role;
 
+    private String bank;
 
+    private String cardNumber;
+
+    private String payee;
 }

@@ -29,6 +29,15 @@
       password = #{password,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
+      <if test="bank != null and bank != ''">
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="cardNumber != null and cardNumber != ''">
+        card_number = #{cardNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="payee != null and payee != ''">
+        payee = #{payee,jdbcType=VARCHAR},
+      </if>
       <if test="role != null and role != ''">
         role = #{role,jdbcType=INTEGER}
       </if>
@@ -36,12 +45,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, username, password, phone, email, role
+    select id, username, password, phone, email, role, bank, card_number, payee
     from admin
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectByRole" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, username, password, phone, email, role
+    select id, username, password, phone, email, role, bank, card_number, payee
     from admin
     where role = #{role,jdbcType=INTEGER}
   </select>

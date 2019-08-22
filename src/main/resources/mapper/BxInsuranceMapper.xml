@@ -95,11 +95,12 @@
     where b.project_id=p.id and b.id = #{id}
   </select>
     <select id="selectInsuranceByPersonId" resultMap="InsuranceResultMap" parameterType="java.lang.Integer">
-    select  bp.`name` project_name,bp.`cost`,bi.affected_photo,bi.affected_photo_name,bi.buy_number,bi.id,bi.pay_cost,bi.project_id,bi.`status`,bi.create_time
+    select  bp.`name` project_name,bp.`cost`,bi.affected_photo,bi.affected_photo_name,bi.buy_number,bi.total_price,bi.id,
+    bi.pay_cost,bi.project_id,bi.`status`,bi.create_time,bi.claims_application,bi.claims_application_name
     from bx_insurance bi
     join bx_project bp
     on bi.project_id = bp.id
-    where bi.person_id = #{personId,jdbcType=INTEGER}
+    where bi.person_id = #{personId,jdbcType=INTEGER} order by bi.create_time desc
   </select>
     <resultMap id="InsuranceResultMap" type="com.gzmusxxy.entity.BxInsurance">
         <id column="id" jdbcType="INTEGER" property="id"/>
@@ -107,6 +108,7 @@
         <result column="person_id" jdbcType="INTEGER" property="personId"/>
         <result column="buy_number" jdbcType="INTEGER" property="buyNumber"/>
         <result column="pay_cost" jdbcType="TINYINT" property="payCost"/>
+        <result column="total_price" jdbcType="REAL" property="totalPrice"/>
         <result column="affected_photo" jdbcType="VARCHAR" property="affectedPhoto"/>
         <result column="affected_photo_name" jdbcType="VARCHAR" property="affectedPhotoName"/>
         <result column="claims_application" jdbcType="VARCHAR" property="claimsApplication"/>

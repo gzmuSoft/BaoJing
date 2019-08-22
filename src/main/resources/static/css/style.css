@@ -17,7 +17,7 @@
     padding-top:15px;
 }
 body {
-    padding-top: 15px;
+    padding-top: 3px;
     background-image: url(../img/background.png);
     background-repeat: repeat;
 }
@@ -41,6 +41,7 @@ body {
 }
 foot a{
     display: block;
+    z-index: 100;
 }
 .active{
     display: block;
@@ -56,4 +57,59 @@ foot a{
 
 .form{
     margin-bottom: 60px;
+}
+.table-view{
+    list-style: none;
+    margin: 0 2px 54px 2px;
+    padding:0;
+}
+.table-view li{
+    position: relative;
+    overflow: hidden;
+    -webkit-touch-callout: none;
+    margin-bottom: 10px;
+    background-color: #e6e6e6;
+    border-radius: 10px;
+}
+.table-view-div{
+    -webkit-box-align: inherit;
+    -webkit-align-items: inherit;
+    align-items: inherit;
+    padding: 20px 15px;
+}
+.table-view-project{
+    position: relative;
+    height: 25px;
+    font-size: 1.2em;
+}
+.table-view-item{
+    position: relative;
+    height: 25px;
+    font-size: 1.2em;
+}
+.table-view-option{
+    position: relative;
+    height: 25px;
+    font-size: 1.2em;
+}
+.table-view-status{
+    position:absolute;
+    right:15px;
+    top:17px;
+    font-size: 1.1em;
+    z-index:5;
+}
+.table-view-div .shadow{
+    text-shadow: 1px 1px 1px #666666;
+}
+.w2{
+    letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
+    margin-right:-2em; /*同上*/
+}
+.w3{
+    letter-spacing:0.5em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-3）/(3-1)=0.5em */
+    margin-right:-0.5em; /*同上*/
+}
+.table-view-item a{
+    text-decoration:none;/*去掉a标签的下划线*/
 }

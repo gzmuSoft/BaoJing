@@ -12,68 +12,88 @@
 </head>
 <body>
 <div class="container">
-    <div class="col-sm-12">
+<!--    <div class="col-sm-12">-->
         <h3>保险申请进度</h3>
         <!--分割线-->
         <div class="decoration"></div>
-        <!--通知面板-->
-        <div class="panel panel-default">
-            <div class="panel-heading"></div>
-            <div class="panel-body">
+        <!--已经购买的保险列表-->
+        <ul class="table-view">
+            <li th:each="insurance : ${dataList}">
+                <div class="table-view-div">
+                    <div class="table-view-project" th:inline="text"><span class="shadow">项目名称：</span>[[${insurance.projectName}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">订单编号：</span>[[${insurance.id}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">购买数量：</span>[[${insurance.buyNumber}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">保险总价：</span>￥[[${#numbers.formatDecimal(insurance.totalPrice,0,'COMMA',2,'POINT')}]]</div>
+                    <!--功能标签，用于判断是否显示该列（受灾照片）-->
+                    <th:block th:if="${insurance.affectedPhoto != null}">
+                        <div class="table-view-item" th:inline="text"><span class="shadow">受灾照片：</span>
+                            <a th:href="'/insurance/downloadFile?path='+${insurance.affectedPhoto}+'&name='+${insurance.affectedPhotoName}">
+                                [[${insurance.affectedPhotoName}]]
+                                <img src="/assets/img/sf/cloud-down.svg" width="26" height="20">
+                            </a>
+                        </div>
+                    </th:block>
+                    <!--功能标签，用于判断是否显示该列（理赔申请书）-->
+                    <th:block th:if="${insurance.claimsApplication != null}">
+                        <!--class属性w3将3个中文和4个中文对齐-->
+                        <div class="table-view-item" th:inline="text"><span class="shadow"><span class="w3">申请书</span>：</span>
+                            <a th:href="'/insurance/downloadFile?path='+${insurance.claimsApplication}+'&name='+${insurance.claimsApplicationName}">
+                                [[${insurance.claimsApplicationName}]]
+                                <img src="/assets/img/sf/cloud-down.svg" width="26" height="20">
+                            </a>
+                        </div>
+                    </th:block>
 
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th class="text-center">编号</th>
-                        <th class="text-center">保险名称</th>
-                        <th class="text-center">状态</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="text-center" th:each="insurance : ${dataList}">
-                        <!-- 隐藏的编号 -->
-                        <td th:text="${insurance.id}"></td>
-                        <td th:text="${insurance.projectName}"></td>
-                        <td th:switch="${insurance.status}">
-                            <div th:case="1" ><button class="btn btn-xs btn-default" disabled="disabled">等待审核</button></div>
-                            <div th:case="2">
-                                <p th:if="${insurance.payCost} eq 1">
-                                    <button class="btn btn-xs btn-success" disabled="disabled">已缴费</button>
-                                    <button class="btn btn-xs btn-primary" th:onclick="'applyClaim('+${insurance.id}+')'">申请理赔</button>
-                                </p>
-                                <div  th:if="${insurance.payCost} eq 0">
-                                    <button class="btn btn-xs btn-warning" disabled>待缴费</button>
-                                    <button class="btn btn-xs btn-primary" th:onclick="'payment('+${insurance.id}+')'">立即缴费</button>
-                                </div>
-                                <div  th:if="${insurance.payCost} eq 2">
-                                    <button class="btn btn-xs btn-warning" disabled>待缴费</button>
-                                    <button class="btn btn-xs btn-primary" disabled>缴费验证中</button>
-                                </div>
-                            </div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">申请时间：</span>[[${#dates.format(insurance.createTime,'yyyy-MM-dd HH:mm:ss')}]]</div>
+                    <!--class属性w2将2个中文和4个中文对齐-->
+                    <div class="table-view-option"><span class="shadow"><span class="w2">操作</span>：</span>
+                        <!-- 功能标签-->
+                        <th:block th:switch="${insurance.status}">
+                            <!-- 功能标签-->
+                            <th:block th:case="2">
+                                <button th:if="${insurance.payCost} eq 1" class="btn btn-xs btn-primary" th:onclick="'applyClaim('+${insurance.id}+')'">申请理赔</button>
+                                <button th:if="${insurance.payCost} eq 0" class="btn btn-xs btn-primary" th:onclick="'payment('+${insurance.id}+')'">立即缴费</button>
+                                <button th:if="${insurance.payCost} eq 2" class="btn btn-xs btn-default" disabled="disabled">暂无操作</button>
+                            </th:block>
+                            <button th:case="3" class="btn btn-xs btn-primary" th:onclick="'apply('+${insurance.id}+')'">重新申请</button>
+                            <button th:case="6" class="btn btn-xs btn-primary" th:onclick="'applyClaim('+${insurance.id}+')'">完善信息</button>
+                            <button th:case="*" class="btn btn-xs btn-default" disabled="disabled">暂无操作</button>
+                        </th:block>
+                    </div>
 
-                            <p th:case="3" >
-                                <button class="btn btn-xs btn-danger" disabled="disabled">审核失败</button>
-                                <button class="btn btn-xs btn-primary" th:onclick="'apply('+${insurance.id}+')'">重新申请</button>
-                            </p>
+                    <!--用于显示状态的div-->
+                    <div class="table-view-status" th:switch="${insurance.status}">
+                        <label th:case="1" class="label label-default">等待审核</label>
+                        <!-- 功能标签-->
+                        <th:block th:case="2">
+                            <label th:if="${insurance.payCost} eq 1" class="label label-primary">已缴费</label>
+                            <label th:if="${insurance.payCost} eq 0" class="label label-warning">等待缴费</label>
+                            <label th:if="${insurance.payCost} eq 2" class="label label-warning">缴费验证中</label>
+                        </th:block>
 
-                            <p th:case="4"><button class="btn btn-xs btn-primary" disabled="disabled">理赔申请中</button></p>
-                            <p th:case="5"><button class="btn btn-xs btn-info" disabled="disabled">理赔通过</button></p>
-                            <p th:case="6" >
-                                <button class="btn btn-xs btn-danger" disabled="disabled">理赔失败</button>
-                                <button class="btn btn-xs btn-primary" th:onclick="'applyClaim('+${insurance.id}+')'">完善信息</button>
-                            </p>
-                        </td>
-                    </tr>
-                    </tbody> 
-                </table>
-            </div>
-        </div>
-        <script>
+                        <label th:case="3" class="label label-danger">审核失败</label>
+                        <label th:case="4" class="label label-info">理赔申请中</label>
+                        <label th:case="5" class="label label-success">理赔通过</label>
+                        <label th:case="6" class="label label-danger">理赔失败</label>
 
-        </script>
+                    </div>
+                </div>
+            </li>
+            <!--列表模板-->
+            <!-- <li>
+                <div class="table-view-div">
+                    <div class="table-view-project"><span class="shadow">项目名称：</span>测试项目1</div>
+                    <div class="table-view-item"><span class="shadow">购买数量：</span>200</div>
+                    <div class="table-view-item"><span class="shadow">保险总价：</span>2000元</div>
+                    <div class="table-view-item"><span class="shadow">申请时间：</span>2019-08-20 17:40:05</div>
+                    <div class="table-view-option"><span class="shadow">操&emsp;&emsp;作：</span><button class="btn btn-xs btn-primary">暂无操作</button></div>
+                    <div class="table-view-status"><label class="label label-success">审核通过</label></div>
+                </div>
+            </li>-->
+        </ul>
         <!--分割线-->
         <div class="decoration"></div>
-    </div>
+<!--    </div>-->
 </div>
 <!-- 模态框 -->
 <div class="modal fade" tabindex="-1" role="dialog" id="gridSystemModal">

@@ -2,6 +2,8 @@ package com.gzmusxxy.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class BxInsurance {
     private Integer id;
@@ -41,5 +43,7 @@ public class BxInsurance {
     private String claimsApplicationName;
     /**1待审核 2审核成功 3审核失败 4理赔申请 5理赔申请通过（待理赔） 6理赔申请失败*/
     private Byte status;
+
+    private Date createTime;
 
 }

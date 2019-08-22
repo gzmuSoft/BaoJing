@@ -21,11 +21,11 @@
     insert into bx_insurance (id, project_id, person_id,
       buy_number, pay_cost, affected_photo,
       affected_photo_name, claims_application, claims_application_name,
-      status,total_price)
+      status,total_price,create_time)
     values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER},
       #{buyNumber,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, #{affectedPhoto,jdbcType=VARCHAR},
       #{affectedPhotoName,jdbcType=VARCHAR}, #{claimsApplication,jdbcType=VARCHAR}, #{claimsApplicationName,jdbcType=VARCHAR},
-      #{status,jdbcType=TINYINT},#{totalPrice,jdbcType=REAL})
+      #{status,jdbcType=TINYINT},#{totalPrice,jdbcType=REAL},#{createTime,jdbcType=TIMESTAMP})
   </insert>
     <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.BxInsurance">
     update bx_insurance
@@ -95,7 +95,7 @@
     where b.project_id=p.id and b.id = #{id}
   </select>
     <select id="selectInsuranceByPersonId" resultMap="InsuranceResultMap" parameterType="java.lang.Integer">
-    select  bp.`name` project_name,bp.`cost`,bi.affected_photo,bi.affected_photo_name,bi.buy_number,bi.id,bi.pay_cost,bi.project_id,bi.`status`
+    select  bp.`name` project_name,bp.`cost`,bi.affected_photo,bi.affected_photo_name,bi.buy_number,bi.id,bi.pay_cost,bi.project_id,bi.`status`,bi.create_time
     from bx_insurance bi
     join bx_project bp
     on bi.project_id = bp.id
@@ -112,6 +112,7 @@
         <result column="claims_application" jdbcType="VARCHAR" property="claimsApplication"/>
         <result column="claims_application_name" jdbcType="VARCHAR" property="claimsApplicationName"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TINYINT" property="createTime"/>
         <!-- 额外的字段 添加的用于关联查询的映射 -->
         <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
         <!-- 额外的字段 添加的用于关联查询的映射 -->

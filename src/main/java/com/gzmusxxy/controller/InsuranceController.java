@@ -206,6 +206,7 @@ public class InsuranceController {
         bxInsurance.setPersonId(person.getId());
         bxInsurance.setPayCost((byte) 0);
         bxInsurance.setTotalPrice(total);
+        bxInsurance.setCreateTime(new Date());
         int insert = bxInsuranceService.insert(bxInsurance);
         JsonResult jsonResult = new JsonResult();
         if (insert <= 0) {

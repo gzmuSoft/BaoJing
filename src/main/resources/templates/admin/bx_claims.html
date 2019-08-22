@@ -109,7 +109,7 @@
                             <td th:text="${claims.projectName}"></td>
                             <td th:text="${claims.buyNumber}"></td>
                             <td th:text="${claims.cost}"></td>
-                            <td>总价</td>
+                            <td th:text="${claims.totalPrice}"></td>
                             <td>
                                 <div th:if="${claims.claimsApplicationName != null && claims.claimsApplicationName != 'null' && claims.claimsApplicationName != ''}">
                                     <span th:text="${claims.claimsApplicationName}"></span>&nbsp;

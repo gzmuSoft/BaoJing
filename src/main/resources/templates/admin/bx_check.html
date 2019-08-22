@@ -90,10 +90,10 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">编号</th>
                             <th class="text-center">名称</th>
                             <th class="text-center">数量</th>
                             <th class="text-center">单价</th>
+                            <th class="text-center">总价</th>
                             <th class="text-center">联系电话</th>
                             <th class="text-center">申请人</th>
                             <th class="text-center">身份证号码</th>
@@ -103,10 +103,10 @@
                         <tbody>
                         <tr class="success" th:each="check:${pageInfo.list}">
                             <th scope="row" th:text="${checkStat.index+1}"></th>
-                            <td th:text="${check.id}"></td>
                             <td th:text="${check.projectName}"></td>
                             <td th:text="${check.buyNumber}"></td>
                             <td th:text="${check.cost}"></td>
+                            <td th:text="${check.totalPrice}"></td>
                             <td th:text="${check.telphone}"></td>
                             <td th:text="${check.personName}"></td>
                             <td th:text="${check.identity}"></td>

@@ -79,6 +79,12 @@
                     </div>
                 </div>
             </li>
+            <!--如果没有数据-->
+            <li th:if="${dataList.size() == 0}">
+                <div class="table-view-div">
+                    <div class="table-view-project text-center"><span class="shadow">你没有购买任何保险！</span></div>
+                </div>
+            </li>
             <!--列表模板-->
             <!-- <li>
                 <div class="table-view-div">

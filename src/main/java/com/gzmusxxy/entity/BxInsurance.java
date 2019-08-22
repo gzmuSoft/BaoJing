@@ -10,6 +10,8 @@ public class BxInsurance {
 
     private Integer personId;
 
+    private Double totalPrice;
+
     private Integer buyNumber;
     /**没有的字段*/
     private String identity;

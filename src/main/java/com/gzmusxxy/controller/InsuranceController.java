@@ -196,7 +196,7 @@ public class InsuranceController {
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/saveInsurance")
-    public JsonResult saveInsurance(@RequestParam("projectId") Integer projectId, @RequestParam("number") Integer number, HttpSession session) {
+    public JsonResult saveInsurance(@RequestParam("projectId") Integer projectId, @RequestParam("number") Integer number,@RequestParam("totalPrice") Double total, HttpSession session) {
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(session.getAttribute("openid").toString());
         BxInsurance bxInsurance = new BxInsurance();
         //设置默认的状态为待审核
@@ -205,6 +205,7 @@ public class InsuranceController {
         bxInsurance.setBuyNumber(number);
         bxInsurance.setPersonId(person.getId());
         bxInsurance.setPayCost((byte) 0);
+        bxInsurance.setTotalPrice(total);
         int insert = bxInsuranceService.insert(bxInsurance);
         JsonResult jsonResult = new JsonResult();
         if (insert <= 0) {
@@ -466,7 +467,7 @@ public class InsuranceController {
     @IsLogin
     @ResponseBody
     @RequestMapping(value = "/postReApply")
-    public JsonResult reApply(@RequestParam("number") Integer number,@RequestParam("id") Integer id,HttpSession session){
+    public JsonResult reApply(@RequestParam("number") Integer number,@RequestParam("id") Integer id,@RequestParam("totalPrice") Double total,HttpSession session){
         JsonResult jsonResult = new JsonResult();
         String openid = session.getAttribute("openid").toString();
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openid);
@@ -476,6 +477,7 @@ public class InsuranceController {
             bxInsurance.setStatus((byte)1);
             bxInsurance.setPersonId(person.getId());
             bxInsurance.setBuyNumber(number);
+            bxInsurance.setTotalPrice(total);
             int i = bxInsuranceService.updateByIdAndPersonId(bxInsurance);
             if(i > 0){
                 jsonResult.setCode(1);

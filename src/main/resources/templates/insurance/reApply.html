@@ -80,7 +80,8 @@
         $("#submit").click(function () {
             //先获取数据
             var projectId = $("#projectId").val();
-            var number = $("#number").val();
+            var number = parseInt($("#number").val());
+            var cost = parseFloat($("#projectId").find("option:selected").attr("cost"));
             //表单验证
             if (projectId == null || projectId ==""){
                 alert("请先选择要购买的保险项目");
@@ -90,9 +91,14 @@
                 alert("购买的数量必须大于0");
                 return false;
             }
+            if(cost <= 0 || cost == ""){
+                alert("金额获取失败！");
+                return false;
+            }
             var param = {
                 "id":[[${insurance.id}]],
-                "number":number
+                "number":number,
+                "totalPrice": number * cost
             }
             $.post("/insurance/postReApply",param,function(data){
                 if(data.code == 1){

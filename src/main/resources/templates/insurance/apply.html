@@ -79,7 +79,8 @@
         $("#submit").click(function () {
             //先获取数据
             var projectId = $("#projectId").val();
-            var number = $("#number").val();
+            var number = parseInt($("#number").val());
+            var cost = parseFloat($("#projectId").find("option:selected").attr("cost"));
             //表单验证
             if (projectId == null || projectId ==""){
                 alert("请先选择要购买的保险项目");
@@ -89,7 +90,16 @@
                 alert("购买的数量必须大于0");
                 return false;
             }
-            $.post("/insurance/saveInsurance",$("#form").serialize(),function(data){
+            if(cost <= 0 || cost == ""){
+                alert("金额获取失败！");
+                return false;
+            }
+            var param = {
+                "projectId": projectId,
+                "number": number,
+                "totalPrice": number * cost
+            }
+            $.post("/insurance/saveInsurance",param,function(data){
                 if(data.code == 1){
                     alert("信息提交成功！");
                     window.location.href = "/insurance/myInsurance?pageNumber=1"

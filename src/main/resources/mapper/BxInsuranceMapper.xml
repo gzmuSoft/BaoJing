@@ -21,11 +21,11 @@
     insert into bx_insurance (id, project_id, person_id,
       buy_number, pay_cost, affected_photo,
       affected_photo_name, claims_application, claims_application_name,
-      status)
+      status,total_price)
     values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER},
       #{buyNumber,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, #{affectedPhoto,jdbcType=VARCHAR},
       #{affectedPhotoName,jdbcType=VARCHAR}, #{claimsApplication,jdbcType=VARCHAR}, #{claimsApplicationName,jdbcType=VARCHAR},
-      #{status,jdbcType=TINYINT})
+      #{status,jdbcType=TINYINT},#{totalPrice,jdbcType=REAL})
   </insert>
     <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.BxInsurance">
     update bx_insurance
@@ -124,6 +124,9 @@
         <trim prefix="set" suffixOverrides=",">
             <if test="buyNumber != null and buyNumber gt 0 ">
                 buy_number = #{buyNumber,jdbcType=INTEGER},
+            </if>
+            <if test="totalPrice != null and totalPrice gt 0 ">
+                total_price = #{totalPrice,jdbcType=REAL},
             </if>
             <if test="payCost != null and payCost != ''">
                 pay_cost = #{payCost,jdbcType=TINYINT},

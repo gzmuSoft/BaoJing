@@ -2,10 +2,7 @@ package com.gzmusxxy.controller;
 
 import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.common.JsonResult;
-import com.gzmusxxy.entity.Bulletin;
-import com.gzmusxxy.entity.BxInsurance;
-import com.gzmusxxy.entity.BxProject;
-import com.gzmusxxy.entity.XjhbPerson;
+import com.gzmusxxy.entity.*;
 import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.FileUtil;
 import com.gzmusxxy.util.MailUtil;
@@ -251,6 +248,11 @@ public class InsuranceController {
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openid);
         //调用方法查询该用户购买的保险
         List<BxInsurance> bxInsurancePageInfo = bxInsuranceService.selectInsuranceByPersonId(person.getId());
+        //查询银行账户信息
+        Admin admin = adminService.selectByRole(3);
+        model.addAttribute("bank",admin.getBank());
+        model.addAttribute("payee",admin.getPayee());
+        model.addAttribute("cardNumber",admin.getCardNumber());
         model.addAttribute("dataList", bxInsurancePageInfo);
         return "insurance/myInsurance";
     }

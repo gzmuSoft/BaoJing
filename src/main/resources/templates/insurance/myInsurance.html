@@ -111,15 +111,15 @@
                 <input type="hidden" id="insuranceId">
                 <div class="row">
                     <div class="col-xs-4 text-left">收款人：</div>
-                    <div class="col-xs-8">用于测试的收款人</div>
+                    <div class="col-xs-8" th:text="${payee}"></div>
                 </div>
                 <div class="row">
-                    <div class="col-xs-4 text-left">所属银行：</div>
-                    <div class="col-xs-8">中国农业银行</div>
+                    <div class="col-xs-4 text-left">开户行：</div>
+                    <div class="col-xs-8" th:text="${bank}"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4 text-left">银行卡号：</div>
-                    <div class="col-xs-8">6214414141414141414</div>
+                    <div class="col-xs-8" th:text="${cardNumber}"></div>
                 </div>
             </div>
             <div class="modal-footer">

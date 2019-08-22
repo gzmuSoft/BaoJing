@@ -21,9 +21,16 @@
         <h3>基本信息</h3>
         <!--分割线-->
         <div class="decoration"></div>
-        <div class="full-width">
-            <h4 class="shadow"><span class="red">*&nbsp;</span>号为必填项</h4>
-        </div>
+        <table style="width: 100%;">
+            <td>
+                <h4 class="shadow"><span class="red">*&nbsp;</span>号为必填项</h4>
+                <h5 class="shadow">点击编辑即可对资料进行修改</h5>
+            </td>
+            <td class="text-right">
+                <button type="button" id="edit" class="btn btn-info">编辑</button>
+                <button type="button" id="submit" class="btn btn-success hidden">保存</button>
+            </td>
+        </table>
         <!--分割线-->
         <div class="decoration"></div>
         <!--表单-->
@@ -81,13 +88,6 @@
                         </div>&nbsp;&nbsp;
                         <span id="filename2" style="vertical-align: middle">未上传文件</span>
                         <a href="#" class="hidden" id="fileB"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
-                    </div>
-                </div>
-                <br />
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" id="edit" class="btn btn-info" style="width: 100%;">编辑</button>
-                        <button type="button" id="submit" class="btn btn-success hidden" style="width: 100%;">保存</button>
                     </div>
                 </div>
             </form>

@@ -11,5 +11,7 @@ public interface AdminService {
 
     int updateByPrimaryKey(Admin record);
 
+    Admin selectByRole(Integer role);
+
     List<String> selectEmailByRole(Integer roleA, Integer roleB);
 }

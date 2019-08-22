@@ -43,6 +43,11 @@ public class AdminServiceImpl implements AdminService {
         return admimMapper.updateByPrimaryKey(record);
     }
 
+    @Override
+    public Admin selectByRole(Integer role) {
+        return admimMapper.selectByRole(role);
+    }
+
     /**
      * 查询权限  不需要的则null
      * @param roleA

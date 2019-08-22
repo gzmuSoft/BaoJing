@@ -255,7 +255,8 @@ public class AdminController {
                                     true,"验收通过","请等待补助发放","");break;
                         case 8:
                             WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                    ,"转帐业务","补助已发放,请查验","如有问题，请联系电话xxxxxxxxxxxxx","");break;
+                                    ,"转帐业务","补助已发放,请查验","如有问题，请联系电话:"+
+                                            adminService.selectByRole(1).getPhone(),"");break;
                     }
                     super.run();
                 }
@@ -660,13 +661,14 @@ public class AdminController {
                 public void run() {
                     XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
                     BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance.getProjectId());
+                    Admin admin = adminService.selectByRole(2);
                     if (payCost == 1){
                         WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话xxxxxxxxxxxxx","");
+                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话:"+admin.getPhone(),"");
                     }
                     if (payCost == 0){
                         WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话xxxxxxxxxxxxx","");
+                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话:"+admin.getPhone(),"");
                     }
                     super.run();
                 }

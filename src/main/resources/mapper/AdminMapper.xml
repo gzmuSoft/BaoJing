@@ -40,6 +40,11 @@
     from admin
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <select id="selectByRole" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, username, password, phone, email, role
+    from admin
+    where role = #{role,jdbcType=INTEGER}
+  </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, username, password, phone, email, role
     from admin

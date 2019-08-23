@@ -16,54 +16,42 @@
         <h3>项目管理</h3>
         <!--分割线-->
         <div class="decoration"></div>
-        <!--通知面板-->
-        <div class="panel panel-default">
-            <div class="panel-heading"></div>
-            <div class="panel-body">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th class="text-center">编号</th>
-                        <th class="text-center">项目名</th>
-                        <th class="text-center">进度</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr class="text-center" th:each="information : ${informationList}">
-                        <td th:text="${information.id}"></td>
-                        <td th:text="${information.projectName}"></td>
-                        <td  th:if="${information.status} eq '1' ">
-                             <button disabled class="btn btn-info btn-xs" >待审核</button>
-                        </td>
-                        <td th:if="${information.status} eq '2' ">
-                            <button disabled class="btn btn-danger btn-xs">审核失败</button>
-                            <a th:href="@{'/poverty/updateInformation?id='+${information.id}}" class="btn btn-primary btn-xs">重新申请</a>
-                        </td>
-                        <td th:if="${information.status} eq '3' ">
-                            <button disabled class="btn btn-success btn-xs">审核通过</button>
-                            <a th:href="@{'/poverty/check?id='+${information.id}}" class="btn btn-primary btn-xs">申请验收</a>
-                        </td>
-                        <td th:if="${information.status} eq '4' ">
-                            <button disabled class="btn btn-info btn-xs">待验收</button>
-                        </td>
-                        <td th:if="${information.status} eq '5' ">
-                            <button disabled class="btn btn-info btn-xs">待线下验收</button>
-                        </td>
-                        <td th:if="${information.status} eq '6' ">
-                            <button disabled class="btn btn-success btn-xs">验收通过</button>
-                        </td>
-                        <td th:if="${information.status} eq '7' ">
-                            <button disabled class="btn btn-danger btn-xs">验收失败</button>
-                            <a th:href="@{'/poverty/check?id='+${information.id}}" class="btn btn-primary btn-xs">重新申请</a>
-                        </td>
-                        <td th:if="${information.status} eq '8' ">
-                            <button disabled class="btn btn-success btn-xs">已转账</button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <ul class="table-view">
+            <li th:each="information : ${informationList}">
+                <div class="table-view-div">
+                    <div class="table-view-project" th:inline="text"><span class="shadow">项目名称：</span>[[${information.projectName}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">订单编号：</span>[[${information.id}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">申请时间：</span>[[${#dates.format(information.createTime,'yyyy-MM-dd HH:mm:ss')}]]</div>
+                    <!--class属性w2将2个中文和4个中文对齐-->
+                    <div class="table-view-option"><span class="shadow"><span class="w2">操作</span>：</span>
+                        <!-- 功能标签-->
+                        <th:block th:switch="${information.status}">
+                            <a th:case="2" th:href="@{'/poverty/updateInformation?id='+${information.id}}" class="btn btn-primary btn-xs">重新申请</a>
+                            <a th:case="3" th:href="@{'/poverty/check?id='+${information.id}}" class="btn btn-primary btn-xs">申请验收</a>
+                            <a th:case="7" th:href="@{'/poverty/check?id='+${information.id}}" class="btn btn-primary btn-xs">重新申请</a>
+                            <button th:case="*" class="btn btn-xs btn-default" disabled="disabled">暂无操作</button>
+                        </th:block>
+                    </div>
+                    <!--用于显示状态的div-->
+                    <div class="table-view-status" th:switch="${information.status}">
+                        <label th:case="1" class="label label-default">等待审核</label>
+                        <label th:case="2" class="label label-danger">审核失败</label>
+                        <label th:case="3" class="label label-success">审核通过</label>
+                        <label th:case="4" class="label label-info">等待验收</label>
+                        <label th:case="5" class="label label-primary">等待线下验收</label>
+                        <label th:case="6" class="label label-primary">验收通过,待转帐</label>
+                        <label th:case="7" class="label label-danger">验收失败</label>
+                        <label th:case="8" class="label label-success">已转账</label>
+                    </div>
+                </div>
+            </li>
+            <!--如果没有数据-->
+            <li th:if="${informationList.size() == 0}">
+                <div class="table-view-div">
+                    <div class="table-view-project text-center"><span class="shadow">你没有申请任何项目！</span></div>
+                </div>
+            </li>
+        </ul>
         <!--分割线-->
         <div class="decoration"></div>
     </div>

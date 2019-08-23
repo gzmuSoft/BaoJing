@@ -78,6 +78,7 @@ foot a{
     padding: 20px 15px;
 }
 .table-view-project{
+    font-weight:bold;
     position: relative;
     height: 25px;
     font-size: 1.2em;
@@ -100,7 +101,7 @@ foot a{
     z-index:5;
 }
 .table-view-div .shadow{
-    text-shadow: 1px 1px 1px #666666;
+    text-shadow: 1px 1px 1px;
 }
 .w2{
     letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */

@@ -117,15 +117,15 @@
                 <input type="hidden" id="insuranceId">
                 <div class="row">
                     <div class="col-xs-4 text-left">收款人：</div>
-                    <div class="col-xs-8" th:text="${payee}"></div>
+                    <div class="col-xs-8" id="payee"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4 text-left">开户行：</div>
-                    <div class="col-xs-8" th:text="${bank}"></div>
+                    <div class="col-xs-8" id="bank"></div>
                 </div>
                 <div class="row">
                     <div class="col-xs-4 text-left">银行卡号：</div>
-                    <div class="col-xs-8" th:text="${cardNumber}"></div>
+                    <div class="col-xs-8" id="cardNumber"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -176,6 +176,20 @@
      }
      //用于显示缴费模态框的按钮
      function payment(id){
+         //向模态框添加数据
+         $.get("/insurance/getBankInfo",function(data){
+             if(data != null && data != ''){
+                 if(data.bank != null){
+                    $("#bank").text(data.bank);
+                 }
+                 if(data.payee != null){
+                     $("#payee").text(data.payee);
+                 }
+                 if(data.cardNumber != null){
+                     $("#cardNumber").text(data.cardNumber );
+                 }
+             }
+         },"json");
          //设置模态框
          $("#insuranceId").val(id);
          $("#gridSystemModal").modal("show");

@@ -249,13 +249,6 @@ public class InsuranceController {
         //调用方法查询该用户购买的保险
         List<BxInsurance> bxInsurancePageInfo = bxInsuranceService.selectInsuranceByPersonId(person.getId());
         //查询银行账户信息
-        Admin admin = adminService.selectByRole(3);
-        if(admin == null){
-            admin = new Admin();
-        }
-        model.addAttribute("bank",admin.getBank());
-        model.addAttribute("payee",admin.getPayee());
-        model.addAttribute("cardNumber",admin.getCardNumber());
         model.addAttribute("dataList", bxInsurancePageInfo);
         return "insurance/myInsurance";
     }
@@ -499,5 +492,11 @@ public class InsuranceController {
         jsonResult.setResult("更新失败");
         jsonResult.setCode(0);
         return jsonResult;
+    }
+    @IsLogin
+    @ResponseBody
+    @RequestMapping(value = "/getBankInfo")
+    public Admin getBankInfo(){
+        return adminService.selectByRole(3);
     }
 }

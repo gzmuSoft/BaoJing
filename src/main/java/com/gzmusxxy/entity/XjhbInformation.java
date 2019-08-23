@@ -12,7 +12,7 @@ public class XjhbInformation {
     private Integer projectId;
     /**额外添加的字段*/
     private String projectName;
-
+    private Integer period;
     private Double outlay;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startTime;

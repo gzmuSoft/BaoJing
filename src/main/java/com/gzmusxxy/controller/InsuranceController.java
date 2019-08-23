@@ -250,6 +250,9 @@ public class InsuranceController {
         List<BxInsurance> bxInsurancePageInfo = bxInsuranceService.selectInsuranceByPersonId(person.getId());
         //查询银行账户信息
         Admin admin = adminService.selectByRole(3);
+        if(admin == null){
+            admin = new Admin();
+        }
         model.addAttribute("bank",admin.getBank());
         model.addAttribute("payee",admin.getPayee());
         model.addAttribute("cardNumber",admin.getCardNumber());

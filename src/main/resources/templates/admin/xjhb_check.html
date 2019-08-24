@@ -92,8 +92,11 @@
                             <th >#</th>
                             <th class="text-center">验收项目名称</th>
                             <th class="text-center">项目申请经费</th>
-							<th class="text-center">申请验收人</th>
+							<th class="text-center">项目起始时间</th>
+							<th class="text-center">项目结束时间</th>
+							<th class="text-center">项目建设周期</th>
 							<th class="text-center">现场照片</th>
+							<th class="text-center">创建时间</th>
 							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
@@ -102,15 +105,18 @@
 							<th scope="row" th:text="${checkStat.index+1}"></th>
 							<td th:text="${check.projectName}"></td>
 							<td th:text="${check.outlay}"></td>
-							<td th:text="${check.personName}"></td>
+							<td th:text="${#dates.format(check.startTime,'yyyy-MM-dd')}"></td>
+							<td th:text="${#dates.format(check.endTime,'yyyy-MM-dd')}"></td>
+							<td th:text="${check.period}"></td>
 							<td>
 								<div th:if="${check.scenePhotosName != null && check.scenePhotosName != 'null' && check.scenePhotosName != ''}">
 									<span th:text="${check.scenePhotosName}"></span>&nbsp;
 									<a th:href="@{'/admin/downloadScenePhotos?id='+${check.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
 								</div>
 							</td>
+							<td th:text="${#dates.format(check.createTime,'yyyy-MM-dd')}"></td>
 							<td>
-								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#select" th:value="${check.id}" onclick="select(this)">详细信息</button>
+								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#select" th:value="${check.id}" onclick="select(this)">申请人详情</button>
 								<div class="btn-group" th:if="${check.status == 4}">
 								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待验收&nbsp;&nbsp;<span class="caret"></span></button>
 								    <ul class="dropdown-menu" role="menu" style="width:50px">
@@ -200,6 +206,18 @@
 							</div>
 						</div>
 						<div class="form-group">
+							<label for="identity" class="col-sm-3 control-label">身份证号</label>
+							<div class="col-sm-9">
+								<input type="text" disabled class="form-control" id="identity"/>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="village" class="col-sm-3 control-label">村组</label>
+							<div class="col-sm-9">
+								<input type="text" disabled class="form-control" id="village"/>
+							</div>
+						</div>
+						<div class="form-group">
 							<label for="cardFront" class="col-sm-3 control-label">身份证正面</label>
 							<div class="col-sm-9">
 								<button type="button" class="form-control btn btn-success" id="cardFront" >下载身份证正面</button>
@@ -209,18 +227,6 @@
 							<label for="cardReverse" class="col-sm-3 control-label">身份证反面</label>
 							<div class="col-sm-9">
 								<button type="button" class="form-control btn btn-success" id="cardReverse" >下载身份证反面</button>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="period" class="col-sm-3 control-label">项目建设周期</label>
-							<div class="col-sm-9">
-								<input type="number" disabled class="form-control" id="period">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="createTime" class="col-sm-3 control-label">创建时间</label>
-							<div class="col-sm-9">
-								<input type="date" disabled class="form-control" id="createTime">
 							</div>
 						</div>
 					</form>
@@ -308,11 +314,11 @@
 		},
 		function(data){
 			var obj = $.parseJSON(data);
-			$('#period').val(obj.project.period);
 			$('#card').val(obj.person.oneCardSolution);
-			$('#createTime').val(obj.createTime);
 			$('#telphone').val(obj.person.telphone);
 			$('#personName').val(obj.person.name);
+			$('#identity').val(obj.person.identity);
+			$('#village').val(obj.person.village);
 			$('#cardFront').click(function(){
 				window.location.href="/admin/downloadCard?name=front&id=" + obj.person.id;
 			});

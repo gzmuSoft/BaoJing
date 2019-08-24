@@ -84,9 +84,9 @@
   </select>
   <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
     select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, p.one_card_solution, h.other_proof_name,h.scene_photos,h.scene_photos_name,
-    h.other_proof,h.project_application_name, h.project_application, h.person_id,p.name as person_name,h.create_time, h.status
+    h.other_proof,h.project_application_name, h.project_application, h.person_id,p.name as person_name,h.create_time, h.status,h.period
     from (select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.other_proof_name,i.scene_photos ,i.scene_photos_name,
-    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status
+    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status,p.period
     from xjhb_information i join xjhb_project p
     where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
     where h.person_id = p.id and h.status in (4,5)

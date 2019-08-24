@@ -103,7 +103,7 @@ public class WeChatController {
         //System.out.println(instance.getAccess_token());
         //WeChatUtil.sendBusinessNoticeMsg("oP1se1IxKwG6Su0y6K4Q-_3pkN_Y", "RLDS你好！！", "信息提交", "你的审核信息通过", "如有问题请联系我们！联系电话xxxxxxxxxxx","");
         //设置用于测试的session
-        session.setAttribute("openid", "oP1se1IxKwG6Su0y6K4Q-_3pkN_Y");
+        session.setAttribute("openid", "oP1se1CK6UkBU-T-b3CrAYYYhIk8");
         model.addAttribute("msg", "设置的openid为：" + session.getAttribute("openid"));
         return "wechat/msg";
     }

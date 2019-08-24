@@ -107,6 +107,9 @@ public class PovertyController {
         if (person.getIdCardReverse() == null || person.getIdCardReverse().equals("")){
             return "no";
         }
+        if (person.getVillage() == null || person.getVillage().equals("")) {
+            return "no";
+        }
         return "yes";
     }
 

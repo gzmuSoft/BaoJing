@@ -231,12 +231,12 @@ public class PovertyController {
     @ResponseBody
     @RequestMapping(value = "/saveInformation")
     public String saveInformation(XjhbInformation xjhbInformation,HttpSession session){
+        xjhbInformation.setCreateTime(new Date());
         xjhbInformation.setStatus((byte)1);
         if (xjhbInformation.getId() == null){
             String openId = session.getAttribute("openid").toString();
             XjhbPerson xjhbPerson = xjhbPersonService.findPersonByOpenId(openId);
             xjhbInformation.setPersonId(xjhbPerson.getId());
-            xjhbInformation.setCreateTime(new Date());
             xjhbInformationService.saveInformation(xjhbInformation);
         }else {
             xjhbInformationService.updateByPrimaryKey(xjhbInformation);
@@ -289,6 +289,7 @@ public class PovertyController {
     @RequestMapping(value = "/saveCheck")
     public String saveCheck(XjhbInformation information) {
         information.setStatus((byte)4);
+        information.setCreateTime(new Date());
         xjhbInformationService.updateByPrimaryKey(information);
         new Thread(){
             @Override

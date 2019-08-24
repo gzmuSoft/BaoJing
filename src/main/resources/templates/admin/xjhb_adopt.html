@@ -10,6 +10,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
 	<link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
 	<title>admin Page</title>
+	<style type="text/css">
+        textarea{
+            resize: none;
+        }
+    </style>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -94,8 +99,9 @@
                         <thead>
                         <tr>
                             <th >#</th>
-							<th class="text-center">编号</th>
-                            <th class="text-center">申请项目名称</th>
+                            <th class="text-center">类型</th>
+							<th class="text-center">名称</th>
+							<th class="text-center">简介</th>
                             <th class="text-center">项目申请经费</th>
 							<th class="text-center">申请人</th>
 							<th class="text-center">农户一卡通号</th>
@@ -105,8 +111,11 @@
                         <tbody>
 						<tr class="success" th:each="adopt:${pageInfo.list}">
 							<th scope="row" th:text="${adoptStat.index+1}"></th>
-							<th class="text-center" th:text="${adopt.id}"></th>
 							<td th:text="${adopt.projectName}"></td>
+							<td th:text="${adopt.projectTitle}"></td>
+							<td>
+								<textarea disabled th:inline="text">[[${adopt.projectContent}]]</textarea>
+							</td>
 							<td th:text="${adopt.outlay}"></td>
 							<td th:text="${adopt.personName}"></td>
 							<td th:text="${adopt.oneCardSolution}"></td>

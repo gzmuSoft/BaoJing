@@ -475,16 +475,17 @@ public class AdminController {
     @RequestMapping(value= "/downloadExcl")
     public String downloadExcl(int status, HttpServletRequest request, HttpServletResponse response){
         List<XjhbInformation> xjhbInformationList = xjhbInformationService.selectAdoptByStatus(status);
-        String title[] = new String[]{"编号","申请项目名称","项目申请经费","申请人","农户一卡通号"};
+        String title[] = new String[]{"项目类型","项目名称","项目简介","项目申请经费","申请人","农户一卡通号"};
         String items[][] = new String[xjhbInformationList.size()][title.length];
         int j = 0;
         for (XjhbInformation xjhbInformation:
         xjhbInformationList) {
-            items[j][0] = xjhbInformation.getId().toString();
-            items[j][1] = xjhbInformation.getProjectName();
-            items[j][2] = xjhbInformation.getOutlay().toString();
-            items[j][3] = xjhbInformation.getProjectName();
-            items[j][4] = xjhbInformation.getOneCardSolution();
+            items[j][0] = xjhbInformation.getProjectName();
+            items[j][1] = xjhbInformation.getProjectTitle();
+            items[j][2] = xjhbInformation.getProjectContent();
+            items[j][3] = xjhbInformation.getOutlay().toString();
+            items[j][4] = xjhbInformation.getProjectName();
+            items[j][5] = xjhbInformation.getOneCardSolution();
             j++;
         }
         String path = ExcelUtil.getHSSFWorkbook(

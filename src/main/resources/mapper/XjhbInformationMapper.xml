@@ -15,6 +15,8 @@
     <result column="project_application_name" jdbcType="VARCHAR" property="projectApplicationName" />
     <result column="person_id" jdbcType="INTEGER" property="personId" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="project_title" jdbcType="VARCHAR" property="projectTitle" />
+    <result column="project_content" jdbcType="VARCHAR" property="projectContent" />
     <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -25,12 +27,13 @@
     insert into xjhb_information (id, project_id, outlay,
       start_time, end_time, scene_photos,
       other_proof_name, other_proof, project_application,
-      project_application_name, person_id, create_time,
+      project_application_name, person_id, create_time,project_title,project_content,
       status)
     values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{outlay,jdbcType=DOUBLE},
       #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, #{scenePhotos,jdbcType=VARCHAR},
       #{otherProofName,jdbcType=VARCHAR}, #{otherProof,jdbcType=VARCHAR}, #{projectApplication,jdbcType=VARCHAR},
       #{projectApplicationName,jdbcType=VARCHAR}, #{personId,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP},
+      #{projectTitle,jdbcType=VARCHAR},#{projectContent,jdbcType=VARCHAR},
       #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.XjhbInformation">
@@ -47,19 +50,21 @@
       project_application_name = #{projectApplicationName,jdbcType=VARCHAR},
       person_id = #{personId,jdbcType=INTEGER},
       create_time = #{createTime,jdbcType=TIMESTAMP},
+      project_title = #{projectTitle,jdbcType=VARCHAR},
+      project_content = #{projectContent,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, project_id, outlay, start_time, end_time, scene_photos_name, scene_photos, other_proof_name,
-    other_proof, project_application, project_application_name, person_id, create_time,
+    other_proof, project_application, project_application_name, person_id, create_time, project_title, project_content,
     status
     from xjhb_information
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, project_id, outlay, start_time, end_time, scene_photos, other_proof_name,
-    other_proof, project_application, project_application_name, person_id, create_time,
+    other_proof, project_application, project_application_name, person_id, create_time,project_title, project_content,
     status
     from xjhb_information
   </select>
@@ -74,21 +79,21 @@
     where p.id = i.project_id
   </select>
   <select id="selectApplyByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, h.other_proof_name,h.period,
+    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, h.other_proof_name,h.period,h.project_title,h.project_content,
     h.other_proof,h.project_application_name, h.project_application, h.person_id,p.name as person_name,h.create_time, h.status
     from (select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.other_proof_name,
-    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time,i.status,p.period
+    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time,i.status,p.period,i.project_title,i.project_content
     from xjhb_information i join xjhb_project p
-    where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
+    where i.project_id= p.id and i.project_title like #{name}) h join xjhb_person p
     where h.person_id = p.id and h.status = 1
   </select>
   <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, p.one_card_solution, h.other_proof_name,h.scene_photos,h.scene_photos_name,
+    select h.id, h.project_id, h.project_name,h.outlay, h.start_time, h.end_time, p.one_card_solution, h.other_proof_name,h.scene_photos,h.scene_photos_name,h.project_title,h.project_content,
     h.other_proof,h.project_application_name, h.project_application, h.person_id,p.name as person_name,h.create_time, h.status,h.period
     from (select i.id, i.project_id, p.project_name,i.outlay, i.start_time, i.end_time, i.other_proof_name,i.scene_photos ,i.scene_photos_name,
-    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status,p.period
+    i.other_proof,i.project_application_name, i.project_application, i.person_id,i.create_time, i.status,p.period,i.project_title,i.project_content
     from xjhb_information i join xjhb_project p
-    where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
+    where i.project_id= p.id and i.project_title like #{name}) h join xjhb_person p
     where h.person_id = p.id and h.status in (4,5)
     order by
     case
@@ -97,8 +102,9 @@
     end
   </select>
   <select id="selectAdoptByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select h.id, h.project_id, h.project_name,h.outlay,p.one_card_solution,h.person_id,p.name as person_name, h.status
-    from (select i.id, i.project_id, p.project_name,i.outlay, i.person_id, i.status from xjhb_information i join xjhb_project p where i.project_id= p.id and p.project_name like #{name}) h join xjhb_person p
+    select h.id, h.project_id, h.project_name,h.outlay,p.one_card_solution,h.person_id,p.name as person_name, h.status,h.project_title,h.project_content
+    from (select i.id, i.project_id, p.project_name,i.outlay, i.person_id, i.status, i.project_title,i.project_content
+    from xjhb_information i join xjhb_project p where i.project_id= p.id and i.project_title like #{name}) h join xjhb_person p
     where h.person_id = p.id and h.status in (6,8)
     order by
     case
@@ -107,8 +113,9 @@
     end
   </select>
   <select id="selectAdoptByStatus" resultMap="BaseResultMap" parameterType="java.lang.Integer">
-    select h.id, h.project_id, h.project_name,h.outlay,p.one_card_solution,h.person_id,p.name as person_name, h.status
-    from (select i.id, i.project_id, p.project_name,i.outlay, i.person_id, i.status from xjhb_information i join xjhb_project p where i.project_id= p.id) h join xjhb_person p
+    select h.id, h.project_id, h.project_name,h.outlay,p.one_card_solution,h.person_id,p.name as person_name, h.status,h.project_title,h.project_content
+    from (select i.id, i.project_id, p.project_name,i.outlay, i.person_id, i.status, i.project_title,i.project_content
+    from xjhb_information i join xjhb_project p where i.project_id= p.id) h join xjhb_person p
     where h.person_id = p.id and h.status = #{status}
   </select>
   <update id="updateStatus">

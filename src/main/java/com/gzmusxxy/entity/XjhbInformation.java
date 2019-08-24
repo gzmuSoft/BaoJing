@@ -39,7 +39,8 @@ public class XjhbInformation {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date createTime;
     /**1.未审核 2.审核失败 3.审核通过 4.待验收 5.线下验收 6.验收通过（待转帐）7.验收失败 8.已转帐*/
+
+    private String projectTitle;
+    private String projectContent;
     private Byte status;
-
-
 }

@@ -33,7 +33,6 @@ public class XjhbInformationServiceImpl implements XjhbInformationService {
      */
     @Override
     public int saveInformation(XjhbInformation xjhbInformation){
-
         return xjhbInformationMapper.insert(xjhbInformation);
     }
 

@@ -10,6 +10,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
 	<link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
 	<title>admin Page</title>
+	<style type="text/css">
+        textarea{
+            resize: none;
+        }
+    </style>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -90,14 +95,16 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">申请项目名称</th>
-                            <th class="text-center">项目申请经费</th>
-                            <th class="text-center">项目申请书</th>
-							<th class="text-center">项目起始时间</th>
-							<th class="text-center">项目结束时间</th>
-							<th class="text-center">项目建设周期</th>
-							<th class="text-center">其他证明材料</th>
-							<th class="text-center">创建时间</th>
+							<th class="text-center">类型</th>
+                            <th class="text-center">名称</th>
+							<th class="text-center">简介</th>
+                            <th class="text-center">申请经费</th>
+                            <th class="text-center">申请书</th>
+							<th class="text-center">起始时间</th>
+							<th class="text-center">结束时间</th>
+							<th class="text-center">建设周期</th>
+							<th class="text-center">其他材料</th>
+							<th class="text-center">申请时间</th>
 							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
@@ -105,6 +112,10 @@
                         <tr class="info" th:each="apply:${pageInfo.list}">
                             <th scope="row" th:text="${applyStat.index+1}"></th>
                             <td th:text="${apply.projectName}"></td>
+							<td th:text="${apply.projectTitle}"></td>
+							<td>
+								<textarea disabled th:inline="text">[[${apply.projectContent}]]</textarea>
+							</td>
                             <td th:text="${apply.outlay}"></td>
                             <td>
 								<div th:if="${apply.projectApplicationName != null && apply.projectApplicationName != 'null' && apply.projectApplicationName != ''}">
@@ -121,7 +132,7 @@
 									<a th:href="@{'/admin/downloadApply?name=other&id='+${apply.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
 								</div>
 							</td>
-							<td th:text="${#dates.format(apply.createTime,'yyyy-MM-dd')}"></td>
+							<td th:text="${#dates.format(apply.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 							<!--状态-->
 							<td>
 								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#select" th:value="${apply.id}" onclick="select(this)">申请人详情</button>

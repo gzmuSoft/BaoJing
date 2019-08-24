@@ -10,6 +10,11 @@
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
 	<link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
 	<title>admin Page</title>
+	<style type="text/css">
+        textarea{
+            resize: none;
+        }
+    </style>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -90,13 +95,15 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">验收项目名称</th>
-                            <th class="text-center">项目申请经费</th>
-							<th class="text-center">项目起始时间</th>
-							<th class="text-center">项目结束时间</th>
-							<th class="text-center">项目建设周期</th>
+							<th class="text-center">类型</th>
+							<th class="text-center">名称</th>
+							<th class="text-center">简介</th>
+                            <th class="text-center">申请经费</th>
+							<th class="text-center">起始时间</th>
+							<th class="text-center">结束时间</th>
+							<th class="text-center">建设周期</th>
 							<th class="text-center">现场照片</th>
-							<th class="text-center">创建时间</th>
+							<th class="text-center">申请时间</th>
 							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
@@ -104,6 +111,10 @@
 						<tr class="success" th:each="check:${pageInfo.list}">
 							<th scope="row" th:text="${checkStat.index+1}"></th>
 							<td th:text="${check.projectName}"></td>
+							<td th:text="${check.projectTitle}"></td>
+							<td>
+								<textarea disabled th:inline="text">[[${check.projectContent}]]</textarea>
+							</td>
 							<td th:text="${check.outlay}"></td>
 							<td th:text="${#dates.format(check.startTime,'yyyy-MM-dd')}"></td>
 							<td th:text="${#dates.format(check.endTime,'yyyy-MM-dd')}"></td>
@@ -114,7 +125,7 @@
 									<a th:href="@{'/admin/downloadScenePhotos?id='+${check.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
 								</div>
 							</td>
-							<td th:text="${#dates.format(check.createTime,'yyyy-MM-dd')}"></td>
+							<td th:text="${#dates.format(check.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 							<td>
 								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#select" th:value="${check.id}" onclick="select(this)">申请人详情</button>
 								<div class="btn-group" th:if="${check.status == 4}">

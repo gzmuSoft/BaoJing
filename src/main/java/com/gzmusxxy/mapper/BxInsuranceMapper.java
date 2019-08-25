@@ -20,7 +20,7 @@ public interface BxInsuranceMapper {
 
     List<BxInsurance> selectClaimsByNameLike(String name);
 
-    List<BxInsurance> selectCheckByNameLike(String name);
+    List<BxInsurance> selectCheckByNameLike(String name, String personName, String idCard,Integer cost);
 
     BxInsurance selectClaimsById(Integer id);
 

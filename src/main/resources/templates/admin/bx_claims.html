@@ -38,7 +38,7 @@
                             <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
                             <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
-                            <li><a href="/admin/bxCheck?pageNumber=1">缴费验收</a></li>
+                            <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
                             <li class="active"><a href="#">理赔申请管理</a></li>
                         </ul>
                     </li>
@@ -53,15 +53,11 @@
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
             <h1>理赔申请管理</h1>
-            <form id="cm-search" action="/admin/bxClaims" method="get">
-                <input type="hidden" name="pageNumber" value="1">
-                <input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
-            </form>
         </div>
         <!-- 查询按钮 -->
-        <div class="pull-right">
-            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
-        </div>
+<!--        <div class="pull-right">-->
+<!--            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>-->
+<!--        </div>-->
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
@@ -86,6 +82,28 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">理赔申请管理</div>
+                    <div class="panel-body">
+                        <form class="form-inline" action="/admin/bxClaims">
+                            <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
+                            <div class="form-group">
+                                <label for="personName">&nbsp;申请人:&nbsp;</label>
+                                <input type="text" placeholder="请输入申请人名字..." name="personName" th:value="${personName}" class="form-control" id="personName">
+                            </div>
+                            <div class="form-group">
+                                <label for="personName">&nbsp;&nbsp;&nbsp;项目名称:&nbsp;</label>
+                                <input type="text" id="selectName" name="name" th:value="${name}" placeholder="输入需要查询的项目名称...">
+                            </div>
+                            <div class="form-group">
+                                <label for="start">&nbsp;&nbsp;&nbsp;理赔申请起始时间:&nbsp;</label>
+                                <input type="date" th:value="${startTime}" name="startTime" placeholder="请输入开始时间..." id="start">
+                            </div>
+                            <div class="form-group">
+                                <label for="start">&nbsp;&nbsp;&nbsp;理赔申请结束时间:&nbsp;</label>
+                                <input type="date" th:value="${endTime}" name="endTime" placeholder="请输入结束时间..." id="end">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
+                        </form>
+                    </div>
                     <table class="table text-center">
                         <thead>
                         <tr>
@@ -225,7 +243,6 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-    <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
@@ -240,9 +257,9 @@
 	//给当前页添加标识
     $('.addActive').parent().addClass("active");
     //搜索栏有数据则打开
-    if($("#selectName").val() != null && $("#selectName").val() != ''){
-        $("#cm-search").addClass("open");
-    }
+    //if($("#selectName").val() != null && $("#selectName").val() != ''){
+    //    $("#cm-search").addClass("open");
+    //}
 
     //给保存赋值
     function remark(obj) {

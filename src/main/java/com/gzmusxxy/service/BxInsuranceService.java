@@ -16,9 +16,9 @@ public interface BxInsuranceService {
 
     PageInfo<BxInsurance> selectAuditByNameLike(String name, Integer poverty, Integer pageNumber);
 
-    PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber);
+    PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber,String personName,String startTime,String endTime);
 
-    PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber);
+    PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber,String personName, String idCard,Integer cost);
 
     BxInsurance selectClaimsById(Integer id);
 

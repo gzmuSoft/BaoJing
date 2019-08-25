@@ -54,7 +54,7 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
     }
 
     @Override
-    public PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber) {
+    public PageInfo<BxInsurance> selectClaimsByNameLike(String name, Integer pageNumber, String personName, String startTime, String endTime) {
         if (name != null && name != "") {
             name = "%" + name + "%";
         } else {
@@ -68,16 +68,26 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
     }
 
     @Override
-    public PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber) {
+    public PageInfo<BxInsurance> selectCheckByNameLike(String name, Integer pageNumber, String personName, String idCard,Integer cost) {
         if (name != null && name != "") {
             name = "%" + name + "%";
         } else {
             name = "%%";
         }
+        if (personName != null && personName != "") {
+            personName = "%" + personName + "%";
+        } else {
+            personName = "%%";
+        }
+        if (idCard != null && idCard != "") {
+            idCard = "%" + idCard + "%";
+        } else {
+            idCard = "%%";
+        }
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
-        List<BxInsurance> list = bxInsuranceMapper.selectCheckByNameLike(name);
+        List<BxInsurance> list = bxInsuranceMapper.selectCheckByNameLike(name,personName,idCard,cost);
         return new PageInfo<>(list);
     }
 

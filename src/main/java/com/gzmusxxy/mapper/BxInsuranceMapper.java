@@ -18,7 +18,7 @@ public interface BxInsuranceMapper {
 
     List<BxInsurance> selectAuditByNameLike(String name, Integer povertyA, Integer povertyB);
 
-    List<BxInsurance> selectClaimsByNameLike(String name);
+    List<BxInsurance> selectClaimsByNameLike(String name, String personName, String startTime, String endTime);
 
     List<BxInsurance> selectCheckByNameLike(String name, String personName, String idCard,Integer cost);
 

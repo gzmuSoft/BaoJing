@@ -635,7 +635,6 @@ public class AdminController {
     @RequestMapping(value = "/bxCheck")
     public String bxCheck(Model model, String name, @RequestParam("pageNumber") Integer pageNumber,String personName, String idCard,Integer cost){
         PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectCheckByNameLike(name, pageNumber, personName, idCard, cost);
-        System.out.println(personName+ idCard+cost);
         model.addAttribute("personName",personName);
         model.addAttribute("idCard",idCard);
         model.addAttribute("cost",cost);
@@ -688,7 +687,6 @@ public class AdminController {
     @RequestMapping(value = "/bxClaims")
     public String bxClaims(Model model, String name, @RequestParam("pageNumber") Integer pageNumber, String personName, String startTime, String endTime){
         PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectClaimsByNameLike(name, pageNumber, personName, startTime, endTime);
-        System.out.println("s"+startTime+endTime);
         model.addAttribute("personName",personName);
         model.addAttribute("startTime",startTime);
         model.addAttribute("endTime",endTime);

@@ -68,7 +68,13 @@
     ,i.affected_photo_name,i.claims_application,i.claims_application_name,p.id_card_front,p.id_card_reverse,i.virement_time,i.claims_time
     from bx_insurance i join xjhb_person p
     where i.person_id=p.id) b join bx_project p
-    where b.project_id=p.id  and p.name like #{name} and b.status in (4,5)
+    where b.project_id=p.id  and p.name like #{name} and b.person_name like #{personName} and b.status in (4,5)
+        <if test="startTime != null and startTime != ''">
+            and b.claims_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime != ''">
+            and #{endTime} >= b.claims_time
+        </if>
     order by
     case
     when b.status=4 then 1

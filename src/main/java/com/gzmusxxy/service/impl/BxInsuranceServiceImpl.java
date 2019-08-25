@@ -9,6 +9,13 @@ import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -60,10 +67,26 @@ public class BxInsuranceServiceImpl implements BxInsuranceService {
         } else {
             name = "%%";
         }
+        if (personName != null && personName != "") {
+            personName = "%" + personName + "%";
+        } else {
+            personName = "%%";
+        }
+        if (endTime != null && !endTime.equals("")) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            ParsePosition pos = new ParsePosition(0);
+            Date strtodate = formatter.parse(endTime, pos);
+            //获取最大时间
+            LocalDateTime localDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(strtodate.getTime()), ZoneId.systemDefault());;
+            LocalDateTime endOfDay = localDateTime.with(LocalTime.MAX);
+            Date date = Date.from(endOfDay.atZone(ZoneId.systemDefault()).toInstant());
+            SimpleDateFormat formatter1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            endTime = formatter1.format(date);
+        }
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
-        List<BxInsurance> list = bxInsuranceMapper.selectClaimsByNameLike(name);
+        List<BxInsurance> list = bxInsuranceMapper.selectClaimsByNameLike(name, personName,startTime, endTime);
         return new PageInfo<>(list);
     }
 

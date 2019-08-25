@@ -127,7 +127,7 @@
                             <td th:text="${check.telphone}"></td>
                             <td th:text="${check.personName}"></td>
                             <td th:text="${check.identity}"></td>
-                            <td th:text="${#dates.format(check.createTime,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(check.virementTime,'yyyy-MM-dd')}"></td>
                             <!--状态-->
                             <td th:if="${check.payCost == 0}">
                                 <button type="button" disabled class="btn btn-warning btn-xs">&nbsp;&nbsp;待缴费&nbsp;&nbsp;</button>

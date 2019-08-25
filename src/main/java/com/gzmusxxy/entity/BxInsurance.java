@@ -46,4 +46,7 @@ public class BxInsurance {
 
     private Date createTime;
 
+    private Date virementTime;
+
+    private Date claimsTime;
 }

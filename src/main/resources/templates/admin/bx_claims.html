@@ -108,7 +108,7 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">保险名称</th>
+                            <th class="text-center">名称</th>
                             <th class="text-center">数量</th>
                             <th class="text-center">单价</th>
                             <th class="text-center">总价</th>
@@ -118,6 +118,8 @@
                             <th class="text-center">受灾照片</th>
                             <th class="text-center">申请人</th>
                             <th class="text-center">申请人电话</th>
+                            <th class="text-center">购买时间</th>
+                            <th class="text-center">申请时间</th>
                             <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
@@ -160,6 +162,8 @@
                             </td>
                             <td th:text="${claims.personName}"></td>
                             <td th:text="${claims.telphone}"></td>
+                            <td th:text="${#dates.format(claims.virementTime,'yyyy-MM-dd')}"></td>
+                            <td th:text="${#dates.format(claims.claimsTime,'yyyy-MM-dd')}"></td>
                             <!--状态-->
                             <td>
                                 <div class="btn-group" th:if="${claims.status == 4}">
@@ -187,7 +191,7 @@
         <nav class="text-center mt-50">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/bxClaims?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/bxClaims?pageNumber='+${pageInfo.prePage}+'&name='+${name}+'&personName='+${personName}+'&startTime='+${startTime}+'&endTime='+${endTime}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -198,7 +202,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/bxClaims?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/bxClaims?pageNumber='+${num}+'&name='+${name}+'&personName='+${personName}+'&startTime='+${startTime}+'&endTime='+${endTime}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -206,7 +210,7 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/bxClaims?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/bxClaims?pageNumber='+${pageInfo.nextPage}+'&name='+${name}+'&personName='+${personName}+'&startTime='+${startTime}+'&endTime='+${endTime}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
@@ -252,7 +256,7 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
-<script>
+<script th:inline="javascript">
     var remarkObj = null;
 	//给当前页添加标识
     $('.addActive').parent().addClass("active");
@@ -288,7 +292,7 @@
     	},function(status){
     		if(status != "error"){
     		    $("#text").val('');
-    			window.location.href="/admin/bxClaims?pageNumber="+ $('#pageNumber').val();
+    			window.location.href="/admin/bxClaims?pageNumber="+ $('#pageNumber').val() +'&personName='+[[${personName}]]+'&startTime='+[[${startTime}]]+'&endTime='+[[${endTime}]];
     		}else{
     			alert("网络错误！");
     		}

@@ -12,6 +12,9 @@
         <result column="claims_application" jdbcType="VARCHAR" property="claimsApplication"/>
         <result column="claims_application_name" jdbcType="VARCHAR" property="claimsApplicationName"/>
         <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="virement_time" jdbcType="TIMESTAMP" property="virementTime" />
+        <result column="claims_time" jdbcType="TIMESTAMP" property="claimsTime" />
     </resultMap>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from bx_insurance
@@ -60,9 +63,9 @@
   </select>
     <select id="selectClaimsByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
     select b.id,b.person_id,b.project_id,b.total_price,b.buy_number,b.status,b.person_name, b.telphone,p.name as project_name,b.affected_photo
-    ,b.affected_photo_name,b.claims_application,b.claims_application_name,b.id_card_front,b.id_card_reverse,p.cost
+    ,b.affected_photo_name,b.claims_application,b.claims_application_name,b.id_card_front,b.id_card_reverse,p.cost,b.virement_time,b.claims_time
     from (select i.id,i.person_id,i.project_id,i.total_price,i.buy_number,i.status,p.name as person_name, p.telphone,i.affected_photo
-    ,i.affected_photo_name,i.claims_application,i.claims_application_name,p.id_card_front,p.id_card_reverse
+    ,i.affected_photo_name,i.claims_application,i.claims_application_name,p.id_card_front,p.id_card_reverse,i.virement_time,i.claims_time
     from bx_insurance i join xjhb_person p
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status in (4,5)
@@ -73,8 +76,8 @@
     end
   </select>
     <select id="selectCheckByNameLike" resultMap="BaseResultMap" parameterType="java.lang.String">
-    select b.id,b.person_id,b.project_id,b.total_price,b.buy_number,b.status,b.person_name,b.identity, b.telphone,p.name as project_name,p.cost,b.pay_cost
-    from (select i.id,i.person_id,i.project_id,i.total_price,i.buy_number,i.status,p.name as person_name, p.telphone,i.pay_cost,p.identity
+    select b.id,b.person_id,b.project_id,b.total_price,b.buy_number,b.status,b.person_name,b.identity, b.telphone,p.name as project_name,p.cost,b.pay_cost,b.virement_time
+    from (select i.id,i.person_id,i.project_id,i.total_price,i.buy_number,i.status,p.name as person_name, p.telphone,i.pay_cost,p.identity,i.virement_time
     from bx_insurance i join xjhb_person p
     where i.person_id=p.id and i.pay_cost in (0,1,2)) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.person_name like #{personName} and b.identity like #{idCard}

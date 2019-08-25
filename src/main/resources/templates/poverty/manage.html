@@ -19,8 +19,10 @@
         <ul class="table-view">
             <li th:each="information : ${informationList}">
                 <div class="table-view-div">
-                    <div class="table-view-project" th:inline="text"><span class="shadow">项目名称：</span>[[${information.projectName}]]</div>
-                    <div class="table-view-item" th:inline="text"><span class="shadow">订单编号：</span>[[${information.id}]]</div>
+                    <div class="table-view-project" th:inline="text"><span class="shadow">项目类型：</span>[[${information.projectName}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">项目名称：</span>[[${information.projectTitle}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">项目简介：</span>[[${information.projectContent}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">申请金额：</span>[[${information.outlay}]]</div>
                     <div class="table-view-item" th:inline="text"><span class="shadow">申请时间：</span>[[${#dates.format(information.createTime,'yyyy-MM-dd HH:mm:ss')}]]</div>
                     <!--class属性w2将2个中文和4个中文对齐-->
                     <div class="table-view-option"><span class="shadow"><span class="w2">操作</span>：</span>

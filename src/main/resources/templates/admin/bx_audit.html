@@ -114,6 +114,7 @@
                             <th class="text-center">申请人</th>
                             <th class="text-center">是否贫困</th>
                             <th class="text-center">贫困证明材料</th>
+                            <th class="text-center">申请时间</th>
                             <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
@@ -133,6 +134,7 @@
                                 </div>
                             </td>
                             <td th:if="${audit.poverty != 1}">无</td>
+                            <td th:text="${#dates.format(audit.virementTime,'yyyy-MM-dd')}"></td>
                             <!--状态-->
                             <td>
                                 <div class="btn-group">

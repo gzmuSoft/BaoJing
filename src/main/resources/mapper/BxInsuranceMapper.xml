@@ -55,8 +55,8 @@
     from bx_insurance
   </select>
     <select id="selectAuditByNameLike" resultMap="BaseResultMap">
-    select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.identity, b.telphone,b.poverty, b.poverty_prove,p.name as project_name
-    from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.identity, p.telphone,p.poverty, p.poverty_prove
+    select b.id,b.person_id,b.project_id, b.buy_number,b.status,b.person_name, b.identity, b.telphone,b.poverty, b.poverty_prove,p.name as project_name,b.virement_time
+    from (select i.id,i.person_id,i.project_id, i.buy_number,i.status,p.name as person_name, p.identity, p.telphone,p.poverty, p.poverty_prove,i.virement_time
     from bx_insurance i join xjhb_person p
     where i.person_id=p.id) b join bx_project p
     where b.project_id=p.id  and p.name like #{name} and b.status = 1 and b.poverty in (#{povertyA},#{povertyB})

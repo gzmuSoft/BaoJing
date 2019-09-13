@@ -24,11 +24,11 @@
     insert into bx_insurance (id, project_id, person_id,
       buy_number, pay_cost, affected_photo,
       affected_photo_name, claims_application, claims_application_name,
-      status,total_price,create_time)
+      status,total_price,create_time,claims_time)
     values (#{id,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER},
       #{buyNumber,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, #{affectedPhoto,jdbcType=VARCHAR},
       #{affectedPhotoName,jdbcType=VARCHAR}, #{claimsApplication,jdbcType=VARCHAR}, #{claimsApplicationName,jdbcType=VARCHAR},
-      #{status,jdbcType=TINYINT},#{totalPrice,jdbcType=REAL},#{createTime,jdbcType=TIMESTAMP})
+      #{status,jdbcType=TINYINT},#{totalPrice,jdbcType=REAL},#{createTime,jdbcType=TIMESTAMP},#{claimsTime,jdbcType=TIMESTAMP})
   </insert>
     <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.BxInsurance">
     update bx_insurance
@@ -169,7 +169,7 @@
     </update>
     <update id="updatePayCostByIdAndPersonId">
         update bx_insurance
-        set pay_cost = #{payCost,jdbcType=TINYINT}
+        set pay_cost = #{payCost,jdbcType=TINYINT},virement_time = now()
         where
         status = 2 and person_id = #{personId,jdbcType=INTEGER} and id = #{id,jdbcType=INTEGER}
     </update>

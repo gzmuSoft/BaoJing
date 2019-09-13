@@ -45,8 +45,12 @@ public class BxInsurance {
     private Byte status;
 
     private Date createTime;
-
+    /**
+     * 缴费时间
+     */
     private Date virementTime;
-
+    /**
+     * 保险申请时间
+     */
     private Date claimsTime;
 }

@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description 多彩报京：视频播放
  * @Author RAINEROSION
  * @Date 2019/9/13 23:33
  */

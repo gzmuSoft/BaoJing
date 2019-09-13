@@ -4,6 +4,7 @@ import com.gzmusxxy.entity.QueArticle;
 import com.gzmusxxy.mapper.QueArticleMapper;
 import com.gzmusxxy.service.QueArticleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Author RAINEROSION
  * @Date 2019/9/13 23:28
  */
+@Service
 public class QueArticleServiceImpl implements QueArticleService {
     @Autowired
     private QueArticleMapper queArticleMapper;

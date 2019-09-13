@@ -5,6 +5,7 @@ import com.gzmusxxy.mapper.QueVideosMapper;
 import com.gzmusxxy.service.QueImagesService;
 import com.gzmusxxy.service.QueVideosService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @Author RAINEROSION
  * @Date 2019/9/13 23:33
  */
+@Service
 public class QueVideosServiceImpl implements QueVideosService {
 
     @Autowired

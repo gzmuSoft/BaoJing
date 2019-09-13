@@ -4,6 +4,7 @@ import com.gzmusxxy.entity.QueImages;
 import com.gzmusxxy.mapper.QueImagesMapper;
 import com.gzmusxxy.service.QueImagesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import java.util.List;
  * @Author RAINEROSION
  * @Date 2019/9/13 23:31
  */
+@Service
 public class QueImagesServiceImpl implements QueImagesService {
     @Autowired
     private QueImagesMapper queImagesMapper;

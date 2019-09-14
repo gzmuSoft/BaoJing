@@ -1,5 +1,6 @@
 package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.QueArticle;
 
 import java.util.List;
@@ -19,4 +20,11 @@ public interface QueArticleService {
     List<QueArticle> selectAll();
 
     int updateByPrimaryKey(QueArticle record);
+
+    /**
+     * 分页查询
+     * @param pageNumber 页码
+     * @return 返回分页信息
+     */
+    PageInfo<QueArticle> selectByPage(Integer pageNumber);
 }

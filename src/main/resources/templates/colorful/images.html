@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>admin Page</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
+</head>
+<body class="cm-no-transition cm-1-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><a href="/admin/index" class="cm-logo"></a></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="/admin/index" class="sf-house">主页</a></li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
+                        <a class="sf-brick">先建后补项目<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/bulletin?sourceId=1">公告设置</a></li>
+                            <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
+                            <li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
+                            <li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
+                            <li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
+                        <a class="sf-globe">农业保险项目<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
+                            <li class="active"><a href="#">保险项目管理</a></li>
+                            <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
+                            <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
+                            <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <h1>多彩报京</h1>
+
+        </div>
+
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong th:text="${session.admin.username}"></strong></a>
+                </li>
+                <li class="divider"></li><!--下划线 -->
+                <li>
+                    <a href="/admin/message"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
+                </li>
+                <li>
+                    <a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global">
+    <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+        <!-- 表格 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">图片展示</div>
+                    <div class="panel-body">
+                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加</button>
+                    </div>
+                    <table class="table text-center table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">序号</th>
+                            <th class="text-center">名称</th>
+                            <th class="text-center">上传时间</th>
+                            <th class="text-center"><code>操作</code></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="list : ${pageInfo.list}">
+                            <td th:text="${list.id}"></td>
+                            <td th:text="${list.name}"></td>
+                            <td th:text="${#dates.format(list.createTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <button type="button" class="btn btn-success btn-xs" onclick="preview(this)" th:value="${list.path}" data-toggle="modal" data-target="#preview">预览</button>
+                                &nbsp;
+                                <button type="button" class="btn btn-danger btn-xs"  th:value="${list.id}" onclick="del(this)">删除</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${pageInfo.list == null}">
+                            <th colspan="4" class="text-center">无数据</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <nav class="text-center">
+            <ul class="pagination shadowed" style="margin:0">
+                <li th:if="${pageInfo.prePage > 0}">
+                    <a th:href="@{'/colorful/photos?pageNumber='+${pageInfo.prePage}}">
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:each="num:${pages}">
+                    <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+                    <a th:href="@{'/colorful/photos?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                </li>
+                <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.nextPage > 0}">
+                    <a th:href="@{'/colorful/photos?pageNumber='+${pageInfo.nextPage}}">
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!--弹窗-->
+    <div id="preview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        图片预览
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <img src="" class="img-responsive" id="imgpreview" alt="Cinque Terre" width="100%" height="100%">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
+</div>
+<script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
+<script th:src="@{/assets/js/jquery.mousewheel.min.js}"></script>
+<script th:src="@{/assets/js/jquery.cookie.min.js}"></script>
+<script th:src="@{/assets/js/fastclick.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/clearmin.min.js}"></script>
+<script th:src="@{/assets/js/demo/home.js}"></script>
+<script>
+    //给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    $(function(){
+
+    });
+    function del(obj){
+        var id = $(obj).attr("value");
+        if(!confirm("确认删除当前图片？")){
+            return false;
+        }
+        //发出删除请求
+        if(id != null && id >0 ){
+            $.post("/colorful/deletePhotosById",{"id":id},function (data) {
+                if(data.code = 1){
+                    window.location.reload();
+                }else{
+                    alert(data.result);
+                }
+            },"json");
+        }
+    }
+    function preview(obj) {
+        //获取路径
+        var file = $(obj).attr("value");
+        if(file){
+            $("#imgpreview").attr("src","/preview/"+file);
+        }else{
+            alert("没有获取到图片地址！");
+        }
+    }
+</script>
+</body>
+</html>

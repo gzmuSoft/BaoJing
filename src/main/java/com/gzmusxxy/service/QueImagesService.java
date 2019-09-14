@@ -1,5 +1,6 @@
 package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.QueImages;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface QueImagesService {
 
     QueImages selectByPrimaryKey(Integer id);
 
-    List<QueImages> selectAll();
+    PageInfo<QueImages> selectAll(Integer pageNumber);
 
     int updateByPrimaryKey(QueImages record);
 }

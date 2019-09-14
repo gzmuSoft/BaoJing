@@ -1,8 +1,11 @@
 package com.gzmusxxy.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.QueImages;
 import com.gzmusxxy.mapper.QueImagesMapper;
 import com.gzmusxxy.service.QueImagesService;
+import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,8 +37,12 @@ public class QueImagesServiceImpl implements QueImagesService {
     }
 
     @Override
-    public List<QueImages> selectAll() {
-        return queImagesMapper.selectAll();
+    public PageInfo<QueImages> selectAll(Integer pageNumber) {
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<QueImages> list = queImagesMapper.selectAll();
+        return new PageInfo<>(list);
     }
 
     @Override

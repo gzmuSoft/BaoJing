@@ -7,25 +7,25 @@ public class JsonResult {
     /**
      * 显示结果的代码 1为成功 0 为失败
      */
-    private Integer Code;
+    private Integer code;
     /**
      * 具体的结果提示
      */
-    private String Result;
+    private String result;
 
     public Integer getCode() {
-        return Code;
+        return code;
     }
 
     public void setCode(Integer code) {
-        Code = code;
+        code = code;
     }
 
     public String getResult() {
-        return Result;
+        return result;
     }
 
     public void setResult(String result) {
-        Result = result;
+        result = result;
     }
 }

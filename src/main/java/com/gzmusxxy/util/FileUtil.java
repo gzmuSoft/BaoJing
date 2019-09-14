@@ -7,7 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.util.Hashtable;
+import java.util.Map;
 import java.util.UUID;
+
+import static com.sun.deploy.cache.Cache.exists;
 
 /**
  * 文件操作工具类
@@ -40,6 +44,7 @@ public class FileUtil {
         // 判断文件是否为空
         if (!file.isEmpty()) {
             try {
+
                 // 文件保存路径
                 String savePath;
                 if (path == null) {
@@ -131,11 +136,11 @@ public class FileUtil {
             e.printStackTrace();
         }
     }
+
     /**
      * 多彩报京专用：删除图片视频文件
      *
-     * @param fileName
-     *            要删除的文件的文件名
+     * @param fileName 要删除的文件的文件名
      * @return 单个文件删除成功返回true，否则返回false
      */
     public static boolean deleteImgVideFile(String fileName) {
@@ -153,23 +158,56 @@ public class FileUtil {
         }
     }
 
-    /** 文件重命名
-     * @param path 文件目录
-     * @param oldname  原来的文件名
+    /**
+     * 文件重命名
+     *
+     * @param path    文件目录
+     * @param oldname 原来的文件名
      * @param newname 新文件名
      */
-    public static void renameFile(String path,String oldname,String newname){
-        if(!oldname.equals(newname)){
-            File oldfile=new File(path+"/"+oldname);
-            File newfile=new File(path+"/"+newname);
-            if(!oldfile.exists()){
+    public static void renameFile(String path, String oldname, String newname) {
+        if (!oldname.equals(newname)) {
+            File oldfile = new File(path + "/" + oldname);
+            File newfile = new File(path + "/" + newname);
+            if (!oldfile.exists()) {
                 return;
             }
-            if(!newfile.exists()){
+            if (!newfile.exists()) {
                 oldfile.renameTo(newfile);
             }
-        }else{
+        } else {
             // System.out.println("新文件名和旧文件名相同...");
         }
+    }
+
+    /**
+     * @param file 文件
+     * @param path 路径
+     */
+    public static Map<String,String> uploadFile(MultipartFile file, String path) {
+        //文件扩展名
+        String extension = file.getOriginalFilename().substring(file.getOriginalFilename().indexOf("."));
+        //构建文件扩展名
+        String filename = UUID.randomUUID().toString().replace("-", "") + Long.toHexString(System.currentTimeMillis()) + extension;
+        String filepath = path + filename;
+        Map<String,String> map = new Hashtable<>();
+        try {
+            File dir = new File(path);
+            //判断文件夹是否存在
+            if (!dir.exists()) {
+                //创建文件夹
+                dir.mkdirs();
+            }
+            //转存文件
+            file.transferTo(new File(filepath));
+            map.put("originalFilename",file.getOriginalFilename());
+            map.put("fileName",filename);
+            return map;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //清空
+        map.clear();
+        return map;
     }
 }

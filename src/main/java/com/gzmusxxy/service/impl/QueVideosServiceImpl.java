@@ -1,9 +1,11 @@
 package com.gzmusxxy.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.QueVideos;
 import com.gzmusxxy.mapper.QueVideosMapper;
-import com.gzmusxxy.service.QueImagesService;
 import com.gzmusxxy.service.QueVideosService;
+import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,8 +38,12 @@ public class QueVideosServiceImpl implements QueVideosService {
     }
 
     @Override
-    public List<QueVideos> selectAll() {
-        return queVideosMapper.selectAll();
+    public PageInfo<QueVideos> selectAll(Integer pageNumber) {
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<QueVideos> list = queVideosMapper.selectAll();
+        return new PageInfo<>(list);
     }
 
     @Override

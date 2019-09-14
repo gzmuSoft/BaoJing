@@ -3,7 +3,9 @@ package com.gzmusxxy.controller;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.common.JsonResult;
 import com.gzmusxxy.entity.QueImages;
+import com.gzmusxxy.entity.QueVideos;
 import com.gzmusxxy.service.QueImagesService;
+import com.gzmusxxy.service.QueVideosService;
 import com.gzmusxxy.util.FileUtil;
 import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,8 @@ import java.util.UUID;
 public class ColorfulController {
     @Autowired
     private QueImagesService queImagesService;
+    @Autowired
+    private QueVideosService queVideosService;
 
     /**
      * 图片展示
@@ -38,7 +42,7 @@ public class ColorfulController {
         PageInfo<QueImages> queImagesPageInfo = queImagesService.selectAll(pageNumber > 0 ? pageNumber : 1);
         model.addAttribute("pageInfo", queImagesPageInfo);
         model.addAttribute("pages", PageUtil.getPage(queImagesPageInfo.getPages(), pageNumber));
-        return "colorful/images.html";
+        return "colorful/images";
     }
 
     /**
@@ -58,6 +62,33 @@ public class ColorfulController {
             if (queImages != null && queImages.getPath() != null) {
                 //执行文件删除
                 FileUtil.deleteImgVideFile(FileUtil.FILE_PATH + queImages.getPath());
+            }
+            jsonResult.setCode(1);
+            jsonResult.setResult("ok");
+            return jsonResult;
+        }
+        jsonResult.setCode(0);
+        jsonResult.setResult("删除失败！");
+        return jsonResult;
+    }
+
+    /**
+     * 删除视频
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "/deleteVideosById")
+    @ResponseBody
+    public JsonResult deleteVideos(@RequestParam("id") Integer id) {
+        JsonResult jsonResult = new JsonResult();
+        //先取出数据
+        QueVideos queVideos = queVideosService.selectByPrimaryKey(id);
+        int i = queVideosService.deleteByPrimaryKey(id);
+        if (i > 0) {
+            //数据删除成功以后删除文件
+            if (queVideos != null && queVideos.getPath() != null) {
+                //执行文件删除
+                FileUtil.deleteImgVideFile(FileUtil.FILE_PATH + queVideos.getPath());
             }
             jsonResult.setCode(1);
             jsonResult.setResult("ok");
@@ -91,5 +122,43 @@ public class ColorfulController {
         result.clear();
         result.put("error","文件上传失败！");
         return result;
+    }
+    /**
+     * 上传视频
+     * @param file
+     * @return
+     */
+    @RequestMapping("/uploadVideos")
+    @ResponseBody
+    public Map<String, String> uploadVideos(@RequestParam("file") MultipartFile file) {
+        Map<String, String> fileNameMap = FileUtil.uploadFile(file, FileUtil.FILE_PATH + "videos/");
+        Map<String, String> result = new Hashtable<>();
+        if(!fileNameMap.isEmpty()){
+            QueVideos queVideos = new QueVideos();
+            queVideos.setName(fileNameMap.get("originalFilename"));
+            queVideos.setPath("videos/"+fileNameMap.get("fileName"));
+            int insert = queVideosService.insert(queVideos);
+            if(insert > 0){
+                result.put("success","文件上传成功！");
+                return result;
+            }
+        }
+        result.clear();
+        result.put("error","文件上传失败！");
+        return result;
+    }
+
+    /**
+     * 视频展示
+     * @param pageNumber
+     * @param model
+     * @return
+     */
+    @RequestMapping(value = "/videos")
+    public String videoExhibition(@RequestParam("pageNumber") Integer pageNumber, Model model) {
+        PageInfo<QueVideos> queImagesPageInfo = queVideosService.selectAll(pageNumber > 0 ? pageNumber : 1);
+        model.addAttribute("pageInfo", queImagesPageInfo);
+        model.addAttribute("pages", PageUtil.getPage(queImagesPageInfo.getPages(), pageNumber));
+        return "colorful/videos";
     }
 }

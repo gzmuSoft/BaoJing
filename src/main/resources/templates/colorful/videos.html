@@ -52,8 +52,8 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1}">
                         <a class="sf-drop">多彩报京<span class="caret"></span></a>
                         <ul>
-                            <li class="active"><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
-                            <li><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
+                            <li><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
+                            <li class="active"><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
                             <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
                         </ul>
                     </li>
@@ -92,7 +92,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">图片展示</div>
+                    <div class="panel-heading">视频展示</div>
                     <div class="panel-body">
                         <button type="button" id="addPic" data-toggle="modal" data-target="#upload" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;添加</button>
                     </div>
@@ -128,7 +128,7 @@
         <nav class="text-center">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/colorful/photos?pageNumber='+${pageInfo.prePage}}">
+                    <a th:href="@{'/colorful/videos?pageNumber='+${pageInfo.prePage}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -139,7 +139,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/colorful/photos?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/colorful/videos?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -147,7 +147,7 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/colorful/photos?pageNumber='+${pageInfo.nextPage}}">
+                    <a th:href="@{'/colorful/videos?pageNumber='+${pageInfo.nextPage}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
@@ -156,20 +156,22 @@
     </div>
     <!--预览弹窗-->
     <div id="preview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog" style="width: 1200px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title" >
-                        图片预览
+                        视频播放
                         <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <img src="" class="img-responsive" id="imgpreview" alt="Cinque Terre" width="100%" height="100%">
+                    <video width="100%" height="100%" controls="controls" autoplay="true" id="video">
+                        <source src="" id="videourl" type="video/mp4">
+                    </video>
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button"  class="btn btn-default" data-dismiss="modal" onclick="pause()">关闭</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -183,7 +185,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title" >
-                        图片上传
+                        视频上传
                         <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
                     </h4>
                 </div>
@@ -225,9 +227,9 @@
         $("#kv-explorer").fileinput({
             language: 'zh',
             theme: 'explorer-fas',
-            uploadUrl: '/colorful/uploadPic',
+            uploadUrl: '/colorful/uploadVideos',
             overwriteInitial: true,
-            allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg', 'bmp', 'webp']
+            allowedFileExtensions: ['mp4']
         });
     });
     function del(obj){
@@ -237,7 +239,7 @@
         }
         //发出删除请求
         if(id != null && id >0 ){
-            $.post("/colorful/deletePhotosById",{"id":id},function (data) {
+            $.post("/colorful/deleteVideosById",{"id":id},function (data) {
                 if(data.code = 1){
                     window.location.reload();
                 }else{
@@ -252,10 +254,15 @@
         var file = $(obj).attr("value");
         if(file){
             //将图片添加到模态框中显示
-            $("#imgpreview").attr("src","/preview/"+file);
+            $("#videourl").attr("src","/preview/"+file);
+            $("#video").attr("src","/preview/"+file);
         }else{
             alert("没有获取到图片地址！");
         }
+    }
+    //暂停播放视频
+    function pause(){
+        $("video").get(0).pause();
     }
 </script>
 </body>

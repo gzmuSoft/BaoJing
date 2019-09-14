@@ -5,15 +5,16 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from que_videos
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.QueVideos">
-    insert into que_videos (id, name, path
+    insert into que_videos (name, path, create_time
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}
+    values (#{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, now()
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.QueVideos">
@@ -23,12 +24,12 @@
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, name, path
+    select id, name, path, create_time
     from que_videos
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, name, path
+    select id, name, path, create_time
     from que_videos
   </select>
 </mapper>

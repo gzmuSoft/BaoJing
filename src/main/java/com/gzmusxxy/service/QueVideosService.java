@@ -1,5 +1,6 @@
 package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.QueVideos;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface QueVideosService {
 
     QueVideos selectByPrimaryKey(Integer id);
 
-    List<QueVideos> selectAll();
+    PageInfo<QueVideos> selectAll(Integer pageNumber);
 
     int updateByPrimaryKey(QueVideos record);
 }

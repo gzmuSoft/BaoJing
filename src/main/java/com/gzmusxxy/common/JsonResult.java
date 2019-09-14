@@ -18,7 +18,7 @@ public class JsonResult {
     }
 
     public void setCode(Integer code) {
-        code = code;
+        this.code = code;
     }
 
     public String getResult() {
@@ -26,6 +26,6 @@ public class JsonResult {
     }
 
     public void setResult(String result) {
-        result = result;
+        this.result = result;
     }
 }

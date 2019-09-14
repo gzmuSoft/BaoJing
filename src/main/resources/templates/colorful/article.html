@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/summernote.css}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>article</title>
+</head>
+<body class="cm-no-transition cm-1-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><a href="/admin/index" class="cm-logo"></a></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="/admin/index" class="sf-house">主页</a></li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
+                        <a class="sf-brick">先建后补项目<span class="caret"></span></a>
+                        <ul>
+                            <li class="active"><a href="#">公告设置</a></li>
+                            <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
+                            <li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
+                            <li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
+                            <li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
+                        <a class="sf-globe">农业保险项目<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
+                            <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
+                            <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
+                            <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
+                            <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
+                        </ul>
+                    </li>
+                    <!--  多彩报京 -->
+                    <li class="cm-submenu" th:if="${session.admin.role == 1}">
+                        <a class="sf-drop">多彩报京<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="#">图片展览</a></li>
+                            <li><a href="#">视频播放</a></li>
+                            <li><a href="/colorful/article">报京文苑</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <h1>报京文苑</h1>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong th:text="${session.admin.username}"></strong></a>
+                </li>
+                <li class="divider"></li><!--下划线 -->
+                <li>
+                    <a href="/admin/message"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
+                </li>
+                <li>
+                    <a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global">
+    <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+        <!-- 表格 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">报京文苑管理</div>
+                    <div class="panel-body">
+                        <button type="button" id="addProject" data-toggle="modal" data-target="#InfoModal" class="btn btn-success">添加信息</button>
+                    </div>
+                    <input type="hidden" value="1" id="pageNumber">
+
+                    <table class="table text-center table-hover">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th class="text-center">名称</th>
+                            <th class="text-center">时间</th>
+                            <th class="text-center"><code>操作</code></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="list : ${pageInfo.list}">
+                            <td th:text="${list.id}"></td>
+                            <td th:text="${list.name}"></td>
+                            <td th:text="${#dates.format(list.createTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td>
+                                <button type="button" class="btn btn-success btn-xs" onclick="preview(this)" th:value="${list.id}" data-toggle="modal" data-target="#previewMsg">预览</button>
+                                &nbsp;
+                                <button type="button" class="btn btn-danger btn-xs"  th:value="${list.id}" onclick="del(this)">删除</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${pageInfo.list == null}">
+                            <th colspan="4" class="text-center">无数据</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <nav class="text-center">
+            <ul class="pagination shadowed" style="margin:0">
+                <li th:if="${pageInfo.prePage > 0}">
+                    <a th:href="@{'/colorful/article?pageNumber='+${pageInfo.prePage}}">
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:each="num:${pages}">
+                    <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+                    <a th:href="@{'/colorful/article?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                </li>
+                <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.nextPage > 0}">
+                    <a th:href="@{'/colorful/article?pageNumber='+${pageInfo.nextPage}}">
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!--添加文章模态框-->
+    <div id="InfoModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width:1200px;height: 600px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        添加报京文苑
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>标题</label>
+                                <input type="text" class="form-control" id="title" placeholder="Enter title">
+                            </div>
+                            <label>内容</label>
+                            <div id="summernote"></div>
+                            <div class="form-group text-right" style="margin-top:20px">
+                                <button type="button" id="addArticle" class="btn btn-default" value="">添加</button>
+                                <button type="button" class="btn btn-primary"data-dismiss="modal" aria-label="Close">返回</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+<!-- 预览模态框   -->
+    <div id="previewMsg" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="width: 900px">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        报京文苑预览
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label>标题</label><br>
+                                <span id="titleMsg"></span>
+                                <hr>
+                            </div>
+                            <label>内容</label><br>
+                            <span id="myMsg" style="width: 100%">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="addArticleMsg" class="btn btn-primary">修改</button>
+                    <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">关闭</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">© 930926134@qq.com</span></footer>
+</div>
+</body>
+<script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
+<script th:src="@{/assets/js/jquery.mousewheel.min.js}"></script>
+<script th:src="@{/assets/js/jquery.cookie.min.js}"></script>
+<script th:src="@{/assets/js/fastclick.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/clearmin.min.js}"></script>
+<script th:src="@{/assets/js/demo/home.js}"></script>
+<script th:src="@{/assets/js/summernote.min.js}"></script>
+<script th:src="@{/assets/js/demo/notepad.js}"></script>
+<script>
+    function del(obj){
+        var id = $(obj).attr("value");
+        if(!confirm("确认删除当前文章？")){
+            return false;
+        }
+        //发出删除请求
+        if(id != null && id >0 ){
+            $.post("/colorful/deleteArticle",{"id":id},function (data) {
+                if(data.code = 1){
+                    window.location.reload();
+                }else{
+                    alert(data.result);
+                }
+            },"json");
+        }
+    }
+    function preview(obj){
+        var id = $(obj).attr("value");
+
+        $.post("/colorful/getArticleById",{"id":id},function (data) {
+            if(data != null){
+                // 获得标题
+                var title = data.name;
+                //获得内容
+                var html = data.html;
+
+                $("#titleMsg").text(title);
+                $("#addArticleMsg").attr("value",data.id);
+                $("#myMsg").text("");
+                var img=$("#myMsg").find("img");
+                img.css("maxwidth",650+"px");
+                var div = $("#myMsg");
+                div.append(html);
+            }else {
+                alert("网络错误")
+            }
+        },"json");
+    }
+    $("#addArticle").click(function () {
+        $.post("/colorful/addArticle",{
+            "name":$("#title").val(),
+            "html":$("#summernote").code(),
+            "create_time": new Date()
+        },function (data) {
+            if(data.code == 1){
+                alert(data.result)
+                window.location.reload();
+            }else{
+                alert(data.result)
+            }
+        },"json");
+    });
+    $("#addArticleMsg").click(function () {
+       var id = $(this).attr("value");
+       window.location.href="/colorful/getArticleMsg?id="+id;
+    });
+</script>
+</html>

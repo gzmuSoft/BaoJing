@@ -12,9 +12,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.QueImages">
-    insert into que_images (id, name, path
+    insert into que_images (`name`, path, create_time
       )
-    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}
+    values (#{name,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, now()
       )
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.QueImages">
@@ -30,6 +30,6 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, `name`, path, create_time
-    from que_images
+    from que_images order by create_time desc
   </select>
 </mapper>

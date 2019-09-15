@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.IndustryGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.IndustryGoods">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="date" jdbcType="VARCHAR" property="date" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from industry_goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.IndustryGoods">
+    insert into industry_goods (id, name, type, 
+      content, date, userid
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, 
+      #{content,jdbcType=VARCHAR}, #{date,jdbcType=VARCHAR}, #{userid,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.IndustryGoods">
+    update industry_goods
+    set name = #{name,jdbcType=VARCHAR},
+      type = #{type,jdbcType=VARCHAR},
+      content = #{content,jdbcType=VARCHAR},
+      date = #{date,jdbcType=VARCHAR},
+      userid = #{userid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, type, content, date, userid
+    from industry_goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, type, content, date, userid
+    from industry_goods
+  </select>
+</mapper>

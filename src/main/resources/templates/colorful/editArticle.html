@@ -118,6 +118,14 @@
     });
     // 更新文章信息
     $("#edit").click(function () {
+        if($("#title").val() == null || $("#title").val() == ''){
+            alert("标题不能为空！");
+            return false;
+        }
+        if($("#summernote").code() == null || $("#summernote").code() == ''){
+            alert("内容不能为空！");
+            return false;
+        }
         $.post("/colorful/updateArticle",{
             "id": $("#ids").val(),
             "name":$("#title").val(),

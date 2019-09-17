@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpSession;
 
 /**
- * @Description 多彩报京数据展览
+ * @Description 多彩报京数据展览前台控制器
  * @Author RAINEROSION
  * @Date 2019/9/17 17:29
  */
@@ -31,7 +31,6 @@ public class ExhibitionController {
     private QueVideosService queVideosService;
     @Autowired
     private QueArticleService queArticleService;
-
     /**
      * 数据展示的首页
      * @return

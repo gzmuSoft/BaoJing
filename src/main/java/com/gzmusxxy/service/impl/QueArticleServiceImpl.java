@@ -54,4 +54,12 @@ public class QueArticleServiceImpl implements QueArticleService {
         List<QueArticle> list = this.queArticleMapper.selectAll();
         return new PageInfo<>(list);
     }
+    @Transactional
+    @Override
+    public PageInfo<QueArticle> selectIdAndNameAndCreateTimeByPage(Integer pageNumber) {
+        //PageHelper插件的分页信息：默认8条数据
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        List<QueArticle> list = this.queArticleMapper.selectIdAndNameAndCreateTimeByPage();
+        return new PageInfo<>(list);
+    }
 }

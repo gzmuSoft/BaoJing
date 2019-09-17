@@ -1,0 +1,15 @@
+.video-container {
+	width: 100%;
+	max-width: 1000px;
+	background-size:100%;
+	margin-bottom: 20px;
+	text-align: center;
+	line-height: 100px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+video{
+}
+.describ{
+	
+}

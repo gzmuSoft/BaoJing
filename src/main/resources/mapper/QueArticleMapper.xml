@@ -29,8 +29,13 @@
     from que_article
     where id = #{id,jdbcType=INTEGER}
   </select>
+
   <select id="selectAll" resultMap="BaseResultMap">
     select id, name, html, create_time
+    from que_article
+  </select>
+  <select id="selectIdAndNameAndCreateTimeByPage" resultMap="BaseResultMap">
+    select id, name, create_time
     from que_article
   </select>
 </mapper>

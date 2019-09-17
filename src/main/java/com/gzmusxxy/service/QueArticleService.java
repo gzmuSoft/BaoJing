@@ -27,4 +27,11 @@ public interface QueArticleService {
      * @return 返回分页信息
      */
     PageInfo<QueArticle> selectByPage(Integer pageNumber);
+
+    /**
+     * 分页查询
+     * @param pageNumber
+     * @return
+     */
+    public PageInfo<QueArticle> selectIdAndNameAndCreateTimeByPage(Integer pageNumber);
 }

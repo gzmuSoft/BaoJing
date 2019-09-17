@@ -1,10 +1,250 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport"content="width=device-width, initial-scala=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+    <title>多彩报京</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/baojing/css/common.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/baojing/css/baojingindex.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/baojing/css/bootstrap.min.css}">
+    <script type="text/javascript" th:src="@{/baojing/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/baojing/js/layer.js}"></script>
+    <script type="text/javascript" th:src="@{/baojing/js/jquerysession.js}"></script>
+    <script type="text/javascript" th:src="@{/baojing/js/bootstrap.min.js}"></script>
 </head>
 <body>
+<div class="article-container">
+    <!-- 顶部轮播图片B -->
+    <div class="top-img">
+        <div id="carousel-example-generic" class="carousel slide"
+             data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#carousel-example-generic" data-slide-to="0"
+                    class="active"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+            </ol>
 
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <img src="/baojing/img/slide1.jpg">
+                </div>
+                <div class="item">
+                    <img src="/baojing/img/slide2.jpg">
+                </div>
+                <div class="item">
+                    <img src="/baojing/img/slide3.jpg">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 顶部轮播图片E -->
+
+    <!-- 选项卡B -->
+    <div id="tab">
+        <ul>
+            <li type="image" id="imgExhibition" class="now">图片展览</li>
+            <li type="video" id="videoPlay">视频播放</li>
+            <li type="article" id="baojingWenYi">报京文苑</li>
+        </ul>
+    </div>
+
+    <div id="tablist">
+        <div class="tablist block" id="tabitem"></div>
+    </div>
+    <!-- 选项卡E -->
+
+</div>
 </body>
+<script type="text/javascript">
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.session.set('type', 'image');
+        getAllImages(1);
+    });
+    $(document).on("click", ".content", function() {
+        var type = $(this).attr("type");
+
+        var id = null;
+        if (type == "video") {
+            id = $(this).attr("id");
+            videoDetail(id);
+        } else if (type == "image") {
+            id = $(this).attr("id");
+            imageDetail(id);
+        } else if (type == "article") {
+            id = $(this).attr("id");
+            articleDetail(id);
+        }
+
+    });
+
+    //视频详情跳转
+    function videoDetail(id) {
+        window.open("/exhibition/getVideoDetailById?id="+id,"_self");
+    }
+    //视频详情跳转
+
+    //图片详情跳转
+    function imageDetail(id) {
+        window.open("/exhibition/getImageDetailById?id="+id,"_self");
+    }
+    //图片详情跳转
+
+    //文章详情跳转
+    function articleDetail(id) {
+        window.open("/exhibition/getArticleDetailById?id="+id,"_self");
+    }
+    //文章详情跳转
+
+    //报京文苑获取
+    $(document).on("click", "#baojingWenYi", function() {
+        getAllArticle(1);
+    });
+    //报京文苑获取
+
+    //图片展览获取
+    $(document).on("click", "#imgExhibition", function() {
+        getAllImages(1);
+    });
+    //图片展览获取
+
+    //视频播放获取
+    $(document).on("click", "#videoPlay", function() {
+        getAllVideos(1);
+    });
+    //视频播放获取
+
+    //视频播放B
+    function getAllVideos(pn) {
+        var load = layer.msg("正在加载数据,请稍后!", {icon : 16,shade : 0.05,time : 38 * 1000});
+        $.ajax({
+            url : '/exhibition/getVideoList',
+            type : 'get',
+            data : 'pn=' + pn,
+            dataType:"json",
+            success : function(data) {
+                layer.close(load);
+                if (data.code == 200) {
+                    var video = data.extend.paging.list;
+                    $.session.set('currPage',data.extend.paging.pageNum);
+                    $.session.set('nextPage',data.extend.paging.pageNum);
+                    if (data.extend.paging.hasNextPage == true) {
+                        $.session.set('nextPage',data.extend.paging.pageNum + 1);
+                    }
+                    $.each(video,function(index, item) {
+                        var content = $('<div class="content" id="'+item.id+'" type="video"><div>');
+                        var content_left = $('<img class="content-left fl" src="/baojing/img/video.png">');
+                        var content_right = $('<div  class="content-right fr">'+ item.name + '<div>');
+                        content.append(content_left).append(content_right);
+                        content.appendTo("#tabitem");
+                    });
+
+                } else {
+
+                }
+            }
+        })
+    }
+
+    //视频播放E
+
+    //图片展览B
+    function getAllImages(pn) {
+        var load = layer.msg("正在加载数据,请稍后!", {icon : 16,shade : 0.05,time : 38 * 1000});
+        $.ajax({
+            url : '/exhibition/getPhotoList',
+            type : 'get',
+            data : 'pn=' + pn,
+            dataType:"json",
+            success : function(data) {
+                layer.close(load);
+                if (data.code == 200) {
+                    var image = data.extend.paging.list;
+                    $.session.set('currPage',data.extend.paging.pageNum);
+                    $.session.set('nextPage',data.extend.paging.pageNum);
+                    if (data.extend.paging.hasNextPage == true) {
+                        $.session.set('nextPage',data.extend.paging.pageNum + 1);
+                    }
+                    $.each(image,function(index, item) {
+                        var content = $('<div class="content" id="'+item.id+'" type="image"><div>');
+                        var content_left = $('<img class="content-left fl" src="/preview/'+item.path+'" onclick="previewImg(this)">');
+                        var content_right = $('<div  class="content-right fr">'+ item.name + '<div>');
+                        content.append(content_left).append(content_right);
+                        content.appendTo("#tabitem");
+                    });
+                } else {
+                }
+            }
+        });
+    }
+    // 图片展览E
+
+    //报京文苑B
+    function getAllArticle(pn) {
+        var load = layer.msg("正在加载数据,请稍后!", {icon : 16,shade : 0.05,time : 38 * 1000});
+        $.ajax({
+            url : '/exhibition/getArticleList',
+            type : 'get',
+            data : 'pn=' + pn,
+            dataType:"json",
+            success : function(data) {
+                layer.close(load);
+                if (data.code == 200) {
+                    var article = data.extend.paging.list;
+                    $.session.set('currPage',data.extend.paging.pageNum);
+                    $.session.set('nextPage',data.extend.paging.pageNum);
+                    if (data.extend.paging.hasNextPage == true) {
+                        $.session.set('nextPage',data.extend.paging.pageNum + 1);
+                    }
+                    $.each(article,function(index, item) {
+                        var content = $('<div class="content" id="'+item.id+'" type="article"><div>');
+                        var content_left = $('<img class="content-left fl" src="/baojing/img/article.png">');
+                        var content_right = $('<div  class="content-right fr">'+ item.name + '<div>');
+                        content.append(content_left).append(content_right);
+                        content.appendTo("#tabitem");
+                    });
+                } else {
+                }
+            }
+        })
+    }
+    // 报京文苑E
+
+    //tab标签切换B
+    $("#tab li").click(function() {
+        $.session.set('type', $(this).attr("type"));
+
+        $("#tabitem").empty();
+        var menu = $("#tab").find("li"); //获取ID为tab+m标签下的li标签
+        for (i = 0; i < menu.length; i++) {
+            $(menu[i]).removeClass("now");
+        }
+        $(this).addClass("now");
+    });
+    //tab标签切换E
+
+    $(window).on('scroll',function() {
+        if ($(document).scrollTop() >= $(document).height()- $(window).height()) {
+            var nextPage = $.session.get('nextPage');
+            var currPage = $.session.get('currPage');
+            var type = $.session.get('type');
+
+            if (nextPage != currPage) {
+                if (type == "video") {
+                    getAllVideos(nextPage);
+                } else if (type == "image") {
+                    getAllImages(nextPage);
+                } else if (type == "article") {
+                    getAllArticle(nextPage);
+                }
+            }
+        }
+    });
+</script>
 </html>

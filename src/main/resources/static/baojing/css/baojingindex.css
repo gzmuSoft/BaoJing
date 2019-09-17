@@ -1,0 +1,94 @@
+
+.article-container {
+	width: 100%;
+	max-width: 1000px;
+	background-size:100%;
+	margin-bottom: 20px;
+	text-align: center;
+	line-height: 100px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+/*顶部图片B*/
+.top-img {
+	width: 100%;
+	max-width: 1000px;
+	background-size:100%;
+	margin-bottom: 20px;
+	text-align: center;
+	line-height: 100px;
+	margin: 0 auto;
+}
+.top-img img{
+	width: 100%;
+	min-height: 200px;
+	max-height:500px;
+}
+/*顶部图片E*/
+
+
+/*选项卡B*/
+#tab {
+	width: 100%;
+	max-width: 1000px;
+	height: 44px;
+	border-bottom: 0;
+	background-color:#F2F2F2;
+	margin: 0 auto;
+	font-size: 15px;
+}
+
+#tab ul {
+	margin: 0;
+	padding: 0;
+}
+
+#tab li {
+	float: left;
+	height: 44px;
+	width:33%;
+	line-height: 44px;
+	text-align: center;
+	cursor: pointer;
+}
+
+#tab li.now {
+	color: #5299c4;
+}
+
+.tablist {
+	width: 100%;
+	max-width: 1000px;
+	height: 100px;
+	padding: 10px;
+	font-size: 15px;
+	line-height: 24px;
+	border-top: 0;
+	display: none;
+	margin: 0 auto;
+}
+.tablist .content{
+	height:80px;
+	border-bottom: 1px solid #F2F2F2;
+	margin-top: 10px;
+}
+.tablist .content .content-left{
+	width: 80px;
+	height: 70px;
+	background-size: 100% 100%;
+}
+.tablist .content .content-right{
+	width: 70%;
+	height: 70px;
+	overflow: hidden; 
+	white-space: nowrap; 
+	text-overflow: ellipsis;
+	text-align: left;
+	margin-right: 15px;
+}
+
+.block {
+	display: block;
+}
+/*选项卡E*/

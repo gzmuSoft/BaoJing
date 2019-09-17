@@ -13,4 +13,7 @@ public interface QueArticleMapper {
     List<QueArticle> selectAll();
 
     int updateByPrimaryKey(QueArticle record);
+
+    List<QueArticle> selectIdAndNameAndCreateTimeByPage();
+
 }

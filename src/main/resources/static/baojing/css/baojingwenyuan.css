@@ -1,0 +1,21 @@
+.article-container {
+	width: 100%;
+	max-width: 1000px;
+	background-size:100%;
+	margin-bottom: 20px;
+	text-align: center;
+	line-height: 100px;
+	margin: 0 auto;
+	overflow: hidden;
+}
+
+.article-container span{
+	font-size: 15px;
+}
+.article-container div{
+	font-size: 15px;
+	line-height: 25px;
+	width: 90%;
+	text-align:left;
+	margin: 0 auto;
+}

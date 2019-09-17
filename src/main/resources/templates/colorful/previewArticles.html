@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scala=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
+	<title>报京文苑</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/baojing/css/common.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/baojing/css/baojingwenyuan.css}">
+	<script type="text/javascript" th:src="@{/baojing/js/jquery.min.js}"></script>
+</head>
+<body>
+	<!-- 文章B -->
+	<div class="article-container">
+		<span th:text="${article.name}"></span>
+		<div th:utext="${article.html}"></div>
+	</div>
+	<!-- 文章E -->
+</body>
+</html>

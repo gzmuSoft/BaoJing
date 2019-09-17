@@ -51,7 +51,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     return true;
                 }else{
                     //如果没有登录则返回登录界面
-                    response.sendRedirect("/market/login");
+                    response.sendRedirect("/supply/login");
                     return false;
                 }
             }else {

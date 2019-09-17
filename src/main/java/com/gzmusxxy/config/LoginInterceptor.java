@@ -1,8 +1,9 @@
 package com.gzmusxxy.config;
 
 import com.gzmusxxy.annotation.IsLogin;
+import com.gzmusxxy.annotation.MarketLogin;
+import com.gzmusxxy.entity.IndustryUser;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -23,7 +24,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             //System.out.println("当前执行的控制器是：" + controller);
             //判断方法上是否有注解
             IsLogin isLogin = hm.getMethodAnnotation(IsLogin.class);
-            //若有注解判断是否登录
+            MarketLogin marketLogin = hm.getMethodAnnotation(MarketLogin.class);
+            //若有注解判断是否微信登录
             if (isLogin != null) {
                 //存在注解则判断登录章台
                 String openid = (String) request.getSession().getAttribute("openid");
@@ -41,7 +43,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     }
                     return false;
                 }
-            } else {
+            }else if(marketLogin != null){
+                //获取session
+                IndustryUser user = (IndustryUser) request.getSession().getAttribute("user");
+                //判断是否登录
+                if(user != null){
+                    return true;
+                }else{
+                    //如果没有登录则返回登录界面
+                    response.sendRedirect("/market/login");
+                    return false;
+                }
+            }else {
                 return true;
             }
         } else {

@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface IsLogin {
-    boolean isLogin() default true;
+public @interface MarketLogin {
+    boolean MarketLogin() default true;
 }

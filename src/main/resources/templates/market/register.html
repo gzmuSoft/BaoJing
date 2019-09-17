@@ -1,101 +1,83 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
-        <title>供销交流平台</title>
-        <!-- 引入 FrozenUI -->
-        <link rel="stylesheet" href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css"/>
-        <link rel="stylesheet" href="/public/css/font-awesome.min.css"/>
-        <script type="text/javascript" src="/public/js/jquery.js"></script>
-        <script type="text/javascript" src="/public/js/common.js"></script>
-    </head>
-    <body>
-        <header class="ui-header ui-header-positive ui-border-b">
-            <i class="ui-icon-return" onclick="javascript:window.location.href='/person/login'"></i><h1>个人注册</h1> 
-        </header>
-                
-            <section class="ui-container">
-                <div class="ui-form ui-border-t">
-                    <form action="">
-                        <div class="ui-form-item ui-border-b" style="margin-top:20px;">
-                            <label>
-                            <span class=" fa fa-user"></span>
-                                用户名:
-                            </label>
-                            <input type="text" placeholder="请输入用户名" name="username">
-                            <a href="#" class="ui-icon-close" >
-                            </a>
-                        </div>
-                        <div class="ui-form-item ui-border-b">
-                            <label>
-                            <span class=" fa fa-unlock-alt"></span>
-                                密 &nbsp; 码：
-                            </label>
-                            <input type="password" placeholder="请输入密码" name="password">
-                            <a href="#" class="ui-icon-close">
-                            </a>
-                        </div>
-                        <div class="ui-form-item ui-border-b">
-                            <label>
-                            <span class=" fa fa-unlock-alt"></span>
-                                确认密码:
-                            </label>
-                            <input type="password" placeholder="请确认密码" name="passwordComfirm">
-                            <a href="#" class="ui-icon-close">
-                            </a>
-                        </div>
-                        <div class="ui-btn-wrap" style="padding-top:0">
-                            <button class="ui-btn-lg ui-btn-primary" type="button" id="register">
-                                注册
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <center>
-                    <div style="margin:20px 0;">
-                         <p><a href="/">返回</a> |关于我们</p>
-                         <span>©2018 All Rights Reserved</span>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <title>供销交流平台</title>
+    <!-- 引入 FrozenUI -->
+    <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
+    <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
+    <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/market/js/common.js}"></script>
+</head>
+<body>
+<header class="ui-header ui-header-positive ui-border-b">
+    <i class="ui-icon-return" onclick="javascript:window.location.href='/supply/register'"></i>
+    <h1>个人注册</h1>
+</header>
 
-                    </div>
-                </center>
-            </section>
-	        <!-- 提示框 -->
-	        <div id="showTip">
-	        		<!-- <div class="ui-dialog show">
-						<div class="ui-dialog-cnt">
-						    <div class="ui-dialog-bd">
-						         <p>您还没有登录，请先登录</p>
-						    </div>
-						    <div class="ui-dialog-ft">
-						        <button type="button" data-role="button" id="loginBtn">立即登录</button>
-						        <button type="button" data-role="button" id="cancelBtn">取消</button>
-						    </div>
-						</div> 
-					</div>  -->
-	        </div>
+<section class="ui-container">
+    <div class="ui-form ui-border-t">
+        <form action="">
+            <div class="ui-form-item ui-border-b" style="margin-top:20px;">
+                <label>
+                    <span class=" fa fa-user"></span>
+                    用户名:
+                </label>
+                <input type="text" placeholder="请输入用户名" name="username">
+                <a href="#" class="ui-icon-close">
+                </a>
+            </div>
+            <div class="ui-form-item ui-border-b">
+                <label>
+                    <span class=" fa fa-unlock-alt"></span>
+                    密 &nbsp; 码：
+                </label>
+                <input type="password" placeholder="请输入密码" name="password">
+                <a href="#" class="ui-icon-close">
+                </a>
+            </div>
+            <div class="ui-form-item ui-border-b">
+                <label>
+                    <span class=" fa fa-unlock-alt"></span>
+                    确认密码:
+                </label>
+                <input type="password" placeholder="请确认密码" name="passwordComfirm">
+                <a href="#" class="ui-icon-close">
+                </a>
+            </div>
+            <div class="ui-btn-wrap" style="padding-top:0">
+                <button class="ui-btn-lg ui-btn-primary" type="button" id="register">
+                    注册
+                </button>
+            </div>
+        </form>
+    </div>
+    <center>
+        <div style="margin:20px 0;">
+            <p><a href="/">返回</a> |关于我们</p>
+            <span>©2018 All Rights Reserved</span>
 
-	        <!-- <div style="height: 50px"></div> -->
-        <!-- <footer class="ui-footer ui-footer-btn">
-            <ul class="ui-tiled ui-border-t">
-               <li data-href="index.html" class="ui-border-r" ><a href="/"><div style="color:#777777">首页</div></a></li>
-                <li data-href="ui.html" class="ui-border-r" ><a href="/need"><div >发布需求</div></a></li>
-               <li data-href="/person"><a href="/person"><div style="color:#777777">我的</div></a></li>
-            </ul>
-        </footer> -->
-    </body>
-    <script type="text/javascript">
-    	$(function(){
+        </div>
+    </center>
+</section>
+<!-- 提示框 -->
+<div id="showTip">
 
-            var flag = true;
-    		$("#register").click(function(){
-                var username = $("input[name='username']").val();
-                var password = $("input[name='password']").val();
-    			var passwordComfirm = $("input[name='passwordComfirm']").val();
-                if(username==""||password==""||passwordComfirm=="")
-                {
-                    var html = '<div class="ui-dialog show">\
+</div>
+</body>
+<script type="text/javascript">
+    $(function () {
+
+        var flag = true;
+        $("#register").click(function () {
+            var username = $("input[name='username']").val();
+            var password = $("input[name='password']").val();
+            var passwordComfirm = $("input[name='passwordComfirm']").val();
+            if (username == "" || password == "" || passwordComfirm == "") {
+                var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>请先输入用户名和密码</p>\
@@ -107,8 +89,8 @@
                     </div> '
                 $("#showTip").html(html)
                 return;
-                }
-                if(password!=passwordComfirm){
+            }
+            if (password != passwordComfirm) {
                 var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
@@ -121,10 +103,10 @@
                     </div> '
                 $("#showTip").html(html)
                 return;
-                }
+            }
 
-                if(!flag){
-                    var html = '<div class="ui-dialog show">\
+            if (!flag) {
+                var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>该用户名已经被占用</p>\
@@ -134,16 +116,16 @@
                             </div>\
                         </div> \
                     </div> '
-                    $("#showTip").html(html)
-                    return;
-                }
-                $.ajax({
-                    url:'/person/register',
-                    data:{username:username,password:password},
-                    type:'post',
-                    success:function(data){
-                    if(data==1){
-                    var html = '<div class="ui-dialog show">\
+                $("#showTip").html(html)
+                return;
+            }
+            $.ajax({
+                url: '/supply/postRegister',
+                data: {username: username, password: password},
+                type: 'post',
+                success: function (data) {
+                    if (data == 1) {
+                        var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>注册成功</p>\
@@ -153,28 +135,40 @@
                             </div>\
                         </div> \
                     </div> '
-                    $("#showTip").html(html)
-                    }else{
-                    
+                        $("#showTip").html(html)
+                    } else if (data == 2) {
+                        var html = '<div class="ui-dialog show">\
+                        <div class="ui-dialog-cnt">\
+                            <div class="ui-dialog-bd">\
+                                 <p>用户已存在</p>\
+                            </div>\
+                            <div class="ui-dialog-ft">\
+                                <button type="button" data-role="button" id="backLogin">确定</button>\
+                            </div>\
+                        </div> \
+                    </div> '
+                        $("#showTip").html(html)
+                    } else {
+
                     }
                 }
-                    
-                });
-    		})	
-    		
-            //先验用户名正确性
-            $("input[name='username']").blur(function(){
-                flag = true;
-                var username = $(this).val();
-                if(username!=""){
+
+            });
+        })
+
+        //先验用户名正确性
+        $("input[name='username']").blur(function () {
+            flag = true;
+            var username = $(this).val();
+            if (username != "") {
                 $.ajax({
-                    url:'/person/checkName',
-                    data:{username:username},
-                    type:'get',
-                    success:function(data){
-                    if(data=="1"){
-                    flag = false;
-                    var html = '<div class="ui-dialog show">\
+                    url: '/supply/checkName',
+                    data: {username: username},
+                    type: 'get',
+                    success: function (data) {
+                        if (data == "1") {
+                            flag = false;
+                            var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>该用户名已经被占用</p>\
@@ -184,34 +178,34 @@
                             </div>\
                         </div> \
                     </div> '
-                    $("#showTip").html(html)
-                    }else{
+                            $("#showTip").html(html)
+                        } else {
 
+                        }
                     }
-                }
-                    
+
                 });
-                }
-            })
+            }
+        })
 
-    		// 确定按钮点击事件
-    		$(document).on("click",'#loginBtn',function(){
-    			window.location.href = "/person";
-    		})
+        // 确定按钮点击事件
+        $(document).on("click", '#loginBtn', function () {
+            window.location.href = "/supply";
+        })
 
-    		// 取消按钮点击事件
-            $(document).on("click",'#comfirm',function(){
-                $("#showTip").html("");
-            })
-            // 取消按钮点击事件
-            $(document).on("click",'.close',function(){
-                $("#showTip").html("");
-            })
+        // 取消按钮点击事件
+        $(document).on("click", '#comfirm', function () {
+            $("#showTip").html("");
+        })
+        // 取消按钮点击事件
+        $(document).on("click", '.close', function () {
+            $("#showTip").html("");
+        })
 
-            // 注册成功按钮点击事件
-    		$(document).on("click",'#backLogin',function(){
-    			window.location.href = "/person/login";
-    		})
-    	})
-    </script>
+        // 注册成功按钮点击事件
+        $(document).on("click", '#backLogin', function () {
+            window.location.href = "/supply/login";
+        })
+    })
+</script>
 </html>

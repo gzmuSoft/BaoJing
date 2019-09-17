@@ -1,5 +1,9 @@
 package com.gzmusxxy.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class IndustryUser {
     private Integer id;
 
@@ -7,7 +11,8 @@ public class IndustryUser {
 
     private String password;
 
-    private String registertime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date registertime;
 
     private String phone;
 
@@ -41,11 +46,11 @@ public class IndustryUser {
         this.password = password;
     }
 
-    public String getRegistertime() {
+    public Date getRegistertime() {
         return registertime;
     }
 
-    public void setRegistertime(String registertime) {
+    public void setRegistertime(Date registertime) {
         this.registertime = registertime;
     }
 

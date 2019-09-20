@@ -43,6 +43,15 @@
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
                         </ul>
                     </li>
+                    <!--  多彩报京 -->
+                    <li class="cm-submenu" th:if="${session.admin.role == 1}">
+                        <a class="sf-drop">多彩报京<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
+                            <li><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
+                            <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
                 </ul>
             </div>

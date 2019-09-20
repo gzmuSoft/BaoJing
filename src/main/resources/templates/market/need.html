@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
     <head>
-        <meta charset="UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
         <title>供销交流平台</title>
-        <!-- 引入 FrozenUI -->
-        <link rel="stylesheet" href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css"/>
-        <link rel="stylesheet" href="/public/css/font-awesome.min.css"/>
-        <script type="text/javascript" src="/public/js/jquery.js"></script>
-        <script type="text/javascript" src="/public/js/common.js"></script>
+		<!-- 引入 FrozenUI -->
+		<link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
+		<link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
+		<script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
+		<script type="text/javascript" th:src="@{/market/js/common.js}"></script>
     </head>
     <body>
-        <!-- <header class="ui-header ui-header-positive ui-border-b">
-            <i class="ui-icon-return" onclick="history.back()"></i><h1>基础样式 </h1><button class="ui-btn">回首页</button>
-        </header> -->
-       	<ul class="ui-list ui-list-single  ui-border-tb" style="border: none;background-color:#F2F2F2;"">
-	       	<form action="/need" method="post" id="needForm" enctype="multipart/form-data">
+       	<ul class="ui-list ui-list-single  ui-border-tb" style="border: none;background-color:#F2F2F2;">
+	       	<form action="/supply/postAddNeeds" method="post" id="needForm" enctype="multipart/form-data">
 	       		<li class="ui-border-t" style="margin:0;">
 	       			<div style="width: 99%;margin: 0 auto">
 	       				<textarea style="width:100%;padding: 6px;" rows="10" name="content" id="content"></textarea>
@@ -27,11 +23,11 @@
 				        <span>请选择内容的类型:</span>&nbsp;&nbsp;
 						<span>商品</span>
 				        <label class="ui-radio" for="type">
-				            <input type="radio" name="type" checked="true" value="商品">
+				            <input type="radio" name="type" checked="true" value="1">
 				        </label>
 				        <span>需求</span>
 				        <label class="ui-radio" for="type">
-				            <input type="radio" name="type"  value="需求">
+				            <input type="radio" name="type"  value="2">
 				        </label>
 				        
 				    </li>
@@ -47,19 +43,16 @@
 		       		</li>
 	       		</center>
 	        </form>
-
 	        <!-- 提示框 -->
 	        <div id="showTip">
 	        </div>
-	        
-
 	        <div style="height: 50px"></div>
         </ul>
         <footer class="ui-footer ui-footer-btn">
             <ul class="ui-tiled ui-border-t">
-               <li data-href="index.html" class="ui-border-r" ><a href="/"><div style="color:#777777">首页</div></a></li>
-                <li data-href="ui.html" class="ui-border-r" ><a href="/need/add"><div >发布需求</div></a></li>
-               <li data-href="/person"><a href="/person"><div style="color:#777777">我的</div></a></li>
+				<li class="ui-border-r" ><a href="/supply"><div style="color:#777777">首页</div></a></li>
+				<li class="ui-border-r" ><a href="/supply/addNeed"><div >发布需求</div></a></li>
+				<li class="ui-border-r"><a href="/supply/my"><div style="color:#777777">我的</div></a></li>
             </ul>
         </footer>
     </body>

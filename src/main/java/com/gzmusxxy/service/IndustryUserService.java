@@ -23,4 +23,6 @@ public interface IndustryUserService {
     IndustryUser login(String username, String password);
 
     IndustryUser selectUserByUserName(String username);
+
+    int updateNameAndPhoneById(IndustryUser record);
 }

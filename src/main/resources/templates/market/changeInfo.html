@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
     <head>
         <meta charset="UTF-8">
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
         <title>供销交流平台</title>
         <!-- 引入 FrozenUI -->
-        <link rel="stylesheet" href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css"/>
-        <link rel="stylesheet" href="/public/css/font-awesome.min.css"/>
-        <script type="text/javascript" src="/public/js/jquery.js"></script>
-        <script type="text/javascript" src="/public/js/common.js"></script>
+        <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
+        <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
+        <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
+        <script type="text/javascript" th:src="@{/market/js/common.js}"></script>
     </head>
     <body>
         <header class="ui-header ui-header-positive ui-border-b">
@@ -24,7 +24,7 @@
                             <span class=" fa fa-user"></span>
                                 用户昵称:
                             </label>
-                            <input type="text" placeholder="请输入新昵称" name="username" value="<%=name%>">
+                            <input type="text" placeholder="请输入新昵称" name="username" th:value="${user.name}">
                             <a href="#" class="ui-icon-close">
                             </a>
                         </div>
@@ -33,7 +33,7 @@
                             <span class=" fa fa-unlock-alt"></span>
                                 手机号码:
                             </label>
-                            <input type="text" placeholder="请输入手机号码" name="phone" value="<%=phone%>">
+                            <input type="text" placeholder="请输入手机号码" name="phone" th:value="${user.phone}">
                             <a href="#" class="ui-icon-close">
                             </a>
                         </div>
@@ -89,12 +89,11 @@
                     $("#showTip").html(html);
                     return;
                 }
-
-
                  $.ajax({
-                    url:'/person/changeInfo',
+                    url:'/supply/postChangeInfo',
                     data:{username:username,phone:phone},
                     type:'post',
+                     dataType:'json',
                     success:function(data){
                      console.log(data);
                     if(data=="1"){
@@ -131,17 +130,17 @@
 
             //取消按钮点击事件
     		$("#cancel").click(function(){
-    			window.location.href = "/person";
+    			window.location.href = "/supply";
     		})	
     			
     		// 注册按钮点击事件
             $(document).on("click",'.backPerson',function(){
-                window.location.href = "/person";
+                window.location.href = "/supply";
             })
 
             // 返回登录按钮点击事件
     		$(document).on("click",'.backLogin',function(){
-    			window.location.href = "/person/login";
+    			window.location.href = "/supply/login";
     		})
 
             // 取消按钮点击事件

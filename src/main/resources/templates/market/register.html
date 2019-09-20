@@ -101,7 +101,7 @@
                             </div>\
                         </div> \
                     </div> '
-                $("#showTip").html(html)
+                $("#showTip").html(html);
                 return;
             }
 
@@ -116,7 +116,7 @@
                             </div>\
                         </div> \
                     </div> '
-                $("#showTip").html(html)
+                $("#showTip").html(html);
                 return;
             }
             $.ajax({
@@ -165,6 +165,7 @@
                     url: '/supply/checkName',
                     data: {username: username},
                     type: 'get',
+                    dataType:'json',
                     success: function (data) {
                         if (data == "1") {
                             flag = false;

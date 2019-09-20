@@ -1,9 +1,16 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.IndustryNeed;
+
 import java.util.List;
 
-public interface IndustryNeedMapper {
+/**
+ * @Description 供销系统：需求
+ * @Author RAINEROSION
+ * @Date 2019/9/19 22:33
+ */
+public interface IndustryNeedService {
     int deleteByPrimaryKey(Integer id);
 
     int insert(IndustryNeed record);
@@ -14,7 +21,7 @@ public interface IndustryNeedMapper {
 
     int updateByPrimaryKey(IndustryNeed record);
 
-    List<IndustryNeed> selectByType(Integer type);
+    PageInfo<IndustryNeed> selectByType(Integer type,Integer pageNumber);
 
     int selectCountByUserIdAndType(Integer userId,Integer type);
 }

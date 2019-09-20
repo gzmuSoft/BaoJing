@@ -85,4 +85,18 @@ public class IndustryUser {
     public void setUserType(Integer userType) {
         this.userType = userType;
     }
+
+    @Override
+    public String toString() {
+        return "IndustryUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", registertime=" + registertime +
+                ", phone='" + phone + '\'' +
+                ", lastip='" + lastip + '\'' +
+                ", name='" + name + '\'' +
+                ", userType=" + userType +
+                '}';
+    }
 }

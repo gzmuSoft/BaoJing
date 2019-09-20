@@ -71,4 +71,9 @@ public class IndustryUserServiceImpl implements IndustryUserService {
     public IndustryUser selectUserByUserName(String username) {
         return industryUserMapper.selectUserByUserName(username);
     }
+
+    @Override
+    public int updateNameAndPhoneById(IndustryUser record) {
+        return industryUserMapper.updateNameAndPhoneById(record);
+    }
 }

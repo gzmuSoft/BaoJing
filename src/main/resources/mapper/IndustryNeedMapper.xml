@@ -3,10 +3,10 @@
 <mapper namespace="com.gzmusxxy.mapper.IndustryNeedMapper">
   <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.IndustryNeed">
     <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="type" jdbcType="VARCHAR" property="type" />
+    <result column="type" jdbcType="INTEGER" property="type" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="date" jdbcType="VARCHAR" property="date" />
-    <result column="userid" jdbcType="VARCHAR" property="userid" />
+    <result column="date" jdbcType="TIMESTAMP" property="date" />
+    <result column="userid" jdbcType="INTEGER" property="userid" />
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="file" jdbcType="VARCHAR" property="file" />
     <result column="comment_num" jdbcType="INTEGER" property="commentNum" />
@@ -16,19 +16,19 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.IndustryNeed">
-    insert into industry_need (id, type, content, 
+    insert into industry_need (type, content,
       date, userid, username, 
       file, comment_num)
-    values (#{id,jdbcType=INTEGER}, #{type,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, 
-      #{date,jdbcType=VARCHAR}, #{userid,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, 
+    values (#{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
+      #{date,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},
       #{file,jdbcType=VARCHAR}, #{commentNum,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.IndustryNeed">
     update industry_need
-    set type = #{type,jdbcType=VARCHAR},
+    set type = #{type,jdbcType=INTEGER},
       content = #{content,jdbcType=VARCHAR},
-      date = #{date,jdbcType=VARCHAR},
-      userid = #{userid,jdbcType=VARCHAR},
+      date = #{date,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=INTEGER},
       username = #{username,jdbcType=VARCHAR},
       file = #{file,jdbcType=VARCHAR},
       comment_num = #{commentNum,jdbcType=INTEGER}
@@ -42,5 +42,15 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, type, content, date, userid, username, file, comment_num
     from industry_need
+  </select>
+  <select id="selectByType" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select n.id, n.type, n.content, n.date, u.name username, n.file, n.comment_num
+    from industry_need n left join industry_user u on n.userid = u.id
+    where type = #{type,jdbcType=INTEGER} order by n.date desc
+  </select>
+  <select id="selectCountByUserIdAndType" resultType="java.lang.Integer">
+    select count(id)
+    from industry_need
+    where type = #{type,jdbcType=INTEGER} and userid = #{userId,jdbcType=INTEGER}
   </select>
 </mapper>

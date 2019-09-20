@@ -48,4 +48,10 @@
     from industry_user
     where username = #{username,jdbcType=VARCHAR}
   </select>
+  <update id="updateNameAndPhoneById" parameterType="com.gzmusxxy.entity.IndustryUser">
+    update industry_user
+    set name = #{name,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

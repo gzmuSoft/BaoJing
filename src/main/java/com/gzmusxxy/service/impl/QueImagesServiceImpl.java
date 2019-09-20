@@ -44,7 +44,6 @@ public class QueImagesServiceImpl implements QueImagesService {
         List<QueImages> list = queImagesMapper.selectAll();
         return new PageInfo<>(list);
     }
-
     @Override
     public int updateByPrimaryKey(QueImages record) {
         return queImagesMapper.updateByPrimaryKey(record);

@@ -18,22 +18,24 @@ $(function(){
 			    		$("#showMore").remove();
     					for(var i =0;i<data.length;i++)
     					{
-	    					html += '<div class="contentBox" >\
-				    		<div class="contentInnerBox"  >\
-					    		<div class="headerContent"  >\
-					    			<img src="public/images/mn.jpg" class="pic">\
-					    			<span class="username">'+data[i].name+'</span>\
-					    			<span class="time" >'+data[i].date+'</span>\
+	    					html += '<div class="contentBox" data-id="'+data[i].id+'">\
+				    		<div class="contentInnerBox" >\
+					    		<div class="headerContent" >\
+				    			<img src="public/images/mn.jpg"  width="50px"; height="50px"; style="border-radius: 50%;" class="pic">\
+				    			<span class="username">'+data[i].name+'</span><br /><br />\
+                                <hr style="color: #CCC; width: 25%; float: left; border: 1px dotted; margin-top: 12px;" />\
+                                <div class="fr">\
+						    		<span style="font-size: 14px; color: #CCC;" >发布时间：</span>\
+						    		<span class="time" >'+data[i].date+'</span>\
 					    		</div>\
-					    		<div class="contentText">'+data[i].content+'</div>\
-						    	<div height:30px>\
-						    		<span style="font-size:28px;">···</span>\
-						    		<div class="fr delete" style="margin-top:6px;cusor:pointer" data-id='+data[i].id+'>\
-							    		<span class="fa fa-trash "  > 删除</span>\
-						    		</div>\
-						    	</div>\
-					    	</div>\
-				    	</div>'
+				    		</div>\
+				    		<div id="clear"></div>\
+				    		<div class="contentText">'+data[i].content+'</div>\
+				    		<div>\
+								<img src="/uploads/<%= data.file%>" style="width:44%; height: 100px ; margin-left: 3%;" >\	
+								</div>\
+							</div>\
+						</div>'
     					}
     					if(data.length==0){
     						

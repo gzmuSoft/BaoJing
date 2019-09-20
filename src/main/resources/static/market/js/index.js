@@ -1,41 +1,86 @@
-$(function(){
+function formatNumber (n) {
+	n = n.toString()
+	return n[1] ? n : '0' + n;
+}
+function formatTime (number, format) {
+	var time = new Date(number)
+	var newArr = []
+	var formatArr = ['Y', 'M', 'D', 'h', 'm', 's']
+	newArr.push(time.getFullYear())
+	newArr.push(formatNumber(time.getMonth() + 1))
+	newArr.push(formatNumber(time.getDate()))
 
+	newArr.push(formatNumber(time.getHours()))
+	newArr.push(formatNumber(time.getMinutes()))
+	newArr.push(formatNumber(time.getSeconds()))
+
+	for (var i in newArr) {
+		format = format.replace(formatArr[i], newArr[i])
+	}
+	return format;
+}
+$(function(){
 			var currentPage = 1;
 			var currentType = 1;
     		function getData(page,type)
     		{	
     			$.ajax({
-    				url:'/need',
+    				url:'/supply/need',
     				data:{page:page,type:type},
     				type:'get',
+					dataType:'json',
     				success:function(data)
     				{
     					console.log(data);
-
     					var html = "";
-
     					//移除查看更多
 			    		$("#showMore").remove();
     					for(var i =0;i<data.length;i++)
     					{
-	    					html += '<div class="contentBox" data-id="'+data[i].id+'">\
-				    		<div class="contentInnerBox"  >\
-					    		<div class="headerContent"  >\
-					    			<img src="public/images/mn.jpg" class="pic">\
-					    			<span class="username">'+data[i].name+'</span>\
-					    			<span class="time" >'+data[i].date+'</span>\
-					    		</div>\
-					    		<div class="contentText">'+data[i].content+'</div>\
-						    	<div height:30px>\
-						    		<span style="font-size:28px;">···</span>\
-						    		<div class="fr">\
-							    		<span class="fa fa-comment-o comment" ></span>\
-							    		<span class="commentNum">'+data[i].comment_num+'</span>\
-						    		</div>\
-						    	</div>\
-					    	</div>\
-				    	</div>'
-    					}
+							if(!data[i].file){
+							html += '<div class="contentBox" data-id="'+data[i].id+'">\
+				    		<div class="contentInnerBox" >\
+					    		<div class="headerContent" >\
+				    			<img src="/market/images/mn.jpg"  width="50px"; height="50px"; style="border-radius: 50%;" class="pic">\
+				    			<span class="username">'+data[i].username+'</span>\
+								<div style=" clear:both;">\
+									<div class="fr">\
+										<span style="font-size: 14px; color: #CCC;" >发布时间：</span>\
+										<span class="time" >'+formatTime(data[i].date, 'Y-M-D h:m:s')+'</span>\
+									</div>\
+									<div id="clear"></div>\
+									</div>\
+				    		</div>\
+				    		<div id="clear"></div>\
+				    		<div class="contentText">'+data[i].content+'</div>\
+							<hr style=" margin-top:20px; width:100%; border:#DDD solid 0.5px;"   >\
+							</div>\
+						</div>'
+							}
+							else
+							{
+							html += '<div class="contentBox" data-id="'+data[i].id+'">\
+				    		<div class="contentInnerBox" >\
+					    		<div class="headerContent" >\
+				    			<img src="/market/images/mn.jpg"  width="50px"; height="50px"; style="border-radius: 50%;" class="pic">\
+				    			<span class="username">'+data[i].username+'</span>\
+								<div style=" clear:both;">\
+									<div class="fr">\
+										<span style="font-size: 14px; color: #CCC;" >发布时间：</span>\
+										<span class="time" >'+formatTime(data[i].date, 'Y-M-D h:m:s')+'</span>\
+									</div>\
+									<div id="clear"></div>\
+									</div>\
+				    		</div>\
+				    		<div id="clear"></div>\
+				    		<div class="contentText">'+data[i].content+'</div>\
+							<div class="img"><img src="/preview/'+data[i].file+'" style="width:44%; height: 100px ; margin-left: 3%;"/></div>\
+							<hr id="hr01" style="  width:98%; border:#DDD solid 0.5px;"   >\
+							</div>\
+						</div>'
+							}
+    					
+						}
     					if(data.length==0){
     						
     						html+= '<div style="height:80px;padding:3px 0 6px 0;">\
@@ -51,10 +96,6 @@ $(function(){
 			    		</center>\
 			    	</div>'
     					}
-    					
-
-			    	
-
 			    	$("#showSection").append(html);
     				}
     			})
@@ -90,7 +131,7 @@ $(function(){
 			//选项卡点击事件
 			$(document).on("click",".contentBox",function(){
 				var id = $(this).attr("data-id");
-				window.location.href="/need/needDetail/"+id;
+				window.location.href="/supply/needDetail/"+id;
 			})
 			
 			

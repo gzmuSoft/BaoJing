@@ -1,15 +1,20 @@
 package com.gzmusxxy.entity;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.util.Date;
+
 public class IndustryNeed {
     private Integer id;
 
-    private String type;
+    private Integer type;
 
     private String content;
 
-    private String date;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date date;
 
-    private String userid;
+    private Integer userid;
 
     private String username;
 
@@ -25,11 +30,11 @@ public class IndustryNeed {
         this.id = id;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
@@ -41,19 +46,19 @@ public class IndustryNeed {
         this.content = content;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getUserid() {
+    public Integer getUserid() {
         return userid;
     }
 
-    public void setUserid(String userid) {
+    public void setUserid(Integer userid) {
         this.userid = userid;
     }
 

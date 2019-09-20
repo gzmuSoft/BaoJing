@@ -14,10 +14,10 @@
 }
 
 .contentBox .headerContent .username{
-	 float:left;margin:16px 0 0 6px;font-weight:bold;
+	 float:left;margin:16px 0 10px 6px;font-weight:bold;
 }
 .contentBox .headerContent .time{
-	 float:right;margin-top:10px;
+	 float:right;margin-top:3px; font-size:14px; color:#CCCCCC;
 }
 .contentBox  .comment{
 	font-size:22px; color:#ccc;margin:6px 2px 0 0;
@@ -26,8 +26,18 @@
 	color:#ccc;margin:0 6px 0 0;
 }
 .contentBox .contentText{
-	width:100%;border-bottom:1px solid #ccc;padding:6px 0 10px 0
+	width:100%;padding:6px 0 10px 0px; clear:both;
 }
 .fr{
-	 float:right; 
+	 float:left; 
+}
+.clear{
+	clear:both;
+}
+.img{
+	margin-bottom:20px;
+}
+#hr01{
+	position:relative;
+	top:-10px;
 }

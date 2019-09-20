@@ -15,4 +15,6 @@ public interface IndustryUserMapper {
     int updateByPrimaryKey(IndustryUser record);
 
     IndustryUser selectUserByUserName(String username);
+
+    int updateNameAndPhoneById(IndustryUser record);
 }

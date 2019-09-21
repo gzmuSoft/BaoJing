@@ -8,6 +8,7 @@
     <result column="data_zip" jdbcType="VARCHAR" property="dataZip" />
     <result column="card" jdbcType="VARCHAR" property="card" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="application_time" jdbcType="TIMESTAMP" property="applicationTime" />
     <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
@@ -16,10 +17,10 @@
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.YlGuarantee">
     insert into yl_guarantee (id, person_id, pay_cost, 
-      data_zip, card, remark, 
+      data_zip, card, remark, application_time,
       status)
     values (#{id,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, 
-      #{dataZip,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{dataZip,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{applicationTime,jdbcType=TIMESTAMP},
       #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.YlGuarantee">
@@ -28,17 +29,23 @@
       pay_cost = #{payCost,jdbcType=TINYINT},
       data_zip = #{dataZip,jdbcType=VARCHAR},
       card = #{card,jdbcType=VARCHAR},
+      application_time = #{applicationTime,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, person_id, pay_cost, data_zip, card, remark, status
+    select id, person_id, pay_cost, data_zip, application_time, card, remark, status
     from yl_guarantee
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, person_id, pay_cost, data_zip, card, remark, status
+    select id, person_id, pay_cost, data_zip, card, application_time, remark, status
     from yl_guarantee
+  </select>
+  <select id="selectByNameCostLike" resultMap="BaseResultMap">
+    select y.id, x.name, y.person_id, y.pay_cost, y.data_zip, y.card, y.application_time, y.remark, y.status
+    from yl_guarantee y JOIN xjhb_person x
+    WHERE y.person_id = x.id and x.name like #{name} and y.status = 1
   </select>
 </mapper>

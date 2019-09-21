@@ -32,6 +32,20 @@ public class YlGuaranteeServiceImpl implements YlGuaranteeService {
     }
 
     @Override
+    public PageInfo<YlGuarantee> selectByNameLike(String name, Integer pageNumber) {
+        if (name != null && !name.equals("")){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<YlGuarantee> ylGuarantees = ylGuaranteeMapper.selectByNameLike(name);
+        return new PageInfo<>(ylGuarantees);
+    }
+
+    @Override
     public int deleteByPrimaryKey(Integer id) {
         return ylGuaranteeMapper.deleteByPrimaryKey(id);
     }

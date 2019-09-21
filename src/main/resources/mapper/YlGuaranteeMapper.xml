@@ -48,4 +48,9 @@
     from yl_guarantee y JOIN xjhb_person x
     WHERE y.person_id = x.id and x.name like #{name} and y.status = 1
   </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select y.id, x.name, x.identity, y.person_id, y.pay_cost, y.data_zip, y.card, y.application_time, y.remark, y.status
+    from yl_guarantee y JOIN xjhb_person x
+    WHERE y.person_id = x.id and x.name like #{name} and y.status = 4
+  </select>
 </mapper>

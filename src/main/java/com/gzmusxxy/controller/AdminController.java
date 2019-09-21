@@ -224,10 +224,15 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/status")
-    public String status(int id, byte status, String remark) {
+    public String status(int id, byte status, String remark, HttpSession session) {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
         xjhbInformation.setStatus(status);
         if(xjhbInformationService.updateByPrimaryKey(xjhbInformation) == 1){
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
             new Thread(){
                 @Override
                 public void run(){
@@ -257,7 +262,7 @@ public class AdminController {
                         case 8:
                             WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,"转帐业务","补助已发放,请查验","如有问题，请联系电话:"+
-                                            adminService.selectByRole(1).getPhone(),"");break;
+                                            finalAdmin.getPhone(),"");break;
                     }
                     super.run();
                 }
@@ -653,23 +658,27 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/bxPayCost")
-    public String bxPayCost(int id, byte payCost) {
+    public String bxPayCost(int id, byte payCost,HttpSession session) {
         BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
         bxInsurance.setPayCost(payCost);
         if (bxInsuranceService.updateByPrimaryKey(bxInsurance) == 1){
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
             new Thread(){
                 @Override
                 public void run() {
                     XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
                     BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance.getProjectId());
-                    Admin admin = adminService.selectByRole(2);
                     if (payCost == 1){
                         WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话:"+admin.getPhone(),"");
+                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话:"+finalAdmin.getPhone(),"");
                     }
                     if (payCost == 0){
                         WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话:"+admin.getPhone(),"");
+                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话:"+finalAdmin.getPhone(),"");
                     }
                     super.run();
                 }
@@ -841,6 +850,7 @@ public class AdminController {
      * 医疗保障分页查询验证缴费页面
      * @param model
      * @param pageNumber
+     * @param name
      * @return
      */
     @RequestMapping(value = "/ylVerificationPay")
@@ -853,6 +863,21 @@ public class AdminController {
     }
 
     /**
+     * 医疗保障分页查询报销页面
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/ylReimbursement")
+    public String ylReimbursement(Model model, Integer pageNumber, String name) {
+        PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name",name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/yl_reimbursement";
+    }
+
+    /**
      * 医疗保障改变状态
      * @param id id
      * @param status status
@@ -860,10 +885,47 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping(value = "/ylStatus")
-    public String ylStatus(Integer id, Byte status) {
+    public String ylStatus(Integer id, Byte status, String remark, HttpSession session) {
         YlGuarantee ylGuarantee = ylGuaranteeService.selectByPrimaryKey(id);
         ylGuarantee.setStatus(status);
         if (ylGuaranteeService.updateByPrimaryKey(ylGuarantee) > 0) {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
+            new Thread() {
+                @Override
+                public void run() {
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(ylGuarantee.getPersonId());
+                    switch (status) {
+                        case 2:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"缴费业务","转帐已收到","接下来您可以在需要报销的时候申请报销。如有问题，请联系电话:"+ finalAdmin.getPhone(),"");
+                            break;
+                        case 3:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"缴费业务","转帐未收到","如确实转帐，请再次申请验证。如有问题，请联系电话:"+ finalAdmin.getPhone(),"");
+                            break;
+                        case 6:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "申请报销",
+                                    true, "通过", "请耐心等待转账。如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
+                            break;
+                        case 5:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "申请报销",
+                                    false, "失败", remark, "");
+                            break;
+                        case 7:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"转帐业务","已转账, 请查验","如有问题，请联系电话:"+
+                                            finalAdmin.getPhone(),"");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
             return "yes";
         }
         return "no";

@@ -9,6 +9,8 @@ public interface YlGuaranteeService {
 
     PageInfo<YlGuarantee> selectByNameCostLike(String name, Integer pageNumber);
 
+    PageInfo<YlGuarantee> selectByNameLike(String name, Integer pageNumber);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(YlGuarantee record);

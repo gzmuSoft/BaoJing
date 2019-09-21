@@ -46,8 +46,8 @@
                         <a class="sf-globe">医疗保障<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/ylNotification?pageNumber=1">公告管理</a></li>
-                            <li class="active"><a href="#">缴费管理</a></li>
-                            <li><a href="/admin/ylReimbursement?pageNumber=1">申请报销管理</a></li>
+                            <li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
+                            <li class="active"><a href="#">申请报销管理</a></li>
                             <li><a href="/admin/ylNotification?pageNumber=1">待报销查看</a></li>
                         </ul>
                     </li>
@@ -97,7 +97,7 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">缴费验收管理</div>
                     <div class="panel-body">
-                        <form class="form-inline" action="/admin/ylVerificationPay">
+                        <form class="form-inline" action="/admin/ylReimbursement">
                             <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
                             <div class="form-group">
                                 <label for="name">&nbsp;&nbsp;&nbsp;申请人:&nbsp;</label>
@@ -111,7 +111,9 @@
                         <tr>
                             <th >#</th>
                             <th class="text-center">申请人</th>
-                            <th class="text-center">申请人身份证</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">一折通卡号</th>
+                            <th class="text-center">其他材料</th>
                             <th class="text-center">转账备注</th>
                             <th class="text-center">申请时间</th>
                             <th class="text-center"><code>操作</code></th>
@@ -122,16 +124,24 @@
                             <th scope="row" th:text="${ylStat.index+1}"></th>
                             <td th:text="${yl.name}"></td>
                             <td th:text="${yl.identity}"></td>
+                            <td th:text="${yl.card}"></td>
+                            <td>
+                                <div th:if="${yl.dataZip != null}">
+                                    <span>其他材料</span>&nbsp;
+                                    <a th:href="@{'/admin/download?name=其他材料&path='+${yl.dataZip}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                </div>
+                                <div th:if="${yl.dataZip == null}">无</div>
+                            </td>
                             <td th:text="${yl.remark}"></td>
                             <td th:text="${#dates.format(yl.applicationTime,'yyyy-MM-dd')}"></td>
                             <!--状态-->
                             <td>
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待验证&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待审核&nbsp;&nbsp;<span class="caret"></span></button>
                                     <ul class="dropdown-menu" role="menu" style="width:50px">
-                                        <li><a href="#" th:value="${yl.id+',2'}" onclick="status(this)">已缴费</a></li>
+                                        <li><a href="#" th:value="${yl.id+',6'}" onclick="status(this)">通过</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="#" th:value="${yl.id+',3'}" onclick="status(this)">未缴费</a></li>
+                                        <li><a href="#"  data-toggle="modal" data-target="#remark" th:value="${yl.id+',5'}" onclick="remark(this)">否定</a></li>
                                     </ul>
                                 </div>
                             </td>
@@ -148,7 +158,7 @@
         <nav class="text-center">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/ylVerificationPay?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/ylReimbursement?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -159,7 +169,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/ylVerificationPay?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/ylReimbursement?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -167,12 +177,42 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/ylVerificationPay?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/ylReimbursement?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
             </ul>
         </nav>
+    </div>
+    <!--拒绝弹窗-->
+    <div id="remark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="remarkCha" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        否定
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="text" class="col-sm-4 control-label text-center">请描述否定原因：</label>
+                            <div class="col-sm-8 text-center">
+                                <input class="textarea col-sm-10" id="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="remarkSub" class="btn btn-primary">确定</button>
+                    <button type="button" id="remarkRet" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
@@ -186,16 +226,35 @@
 <script th:inline="javascript">
     //给当前页添加标识
     $('.addActive').parent().addClass("active");
+    var remarkObj = null;
+
+    //给保存赋值
+    function remark(obj) {
+        remarkObj = obj;
+    }
+    //给保存事件
+    $("#remarkSub").click(function(){
+        status(remarkObj);
+    });
+
+    //退出清空弹窗数据
+    $("#remarkCha").click(function(){
+        $("#text").val('');
+    });
+    $("#remarkRet").click(function(){
+        $("#text").val('');
+    });
 
     //改变
     function status(obj){
         var id = $(obj).attr("value");
         $.post("/admin/ylStatus",{
             "id":id.substring(0, id.indexOf(",")),
-            "status":id.substring(id.indexOf(",")+1)
+            "status":id.substring(id.indexOf(",")+1),
+            "remark":$("#text").val()
         },function(data){
             if(data == "yes"){
-                window.location.href="/admin/ylVerificationPay?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#name').val();
+                window.location.href="/admin/ylReimbursement?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#name').val();
             }else{
                 alert("网络错误！");
             }

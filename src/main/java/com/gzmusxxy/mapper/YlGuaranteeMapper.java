@@ -15,4 +15,6 @@ public interface YlGuaranteeMapper {
     int updateByPrimaryKey(YlGuarantee record);
 
     List<YlGuarantee> selectByNameCostLike(String name);
+
+    List<YlGuarantee> selectByNameLike(String name);
 }

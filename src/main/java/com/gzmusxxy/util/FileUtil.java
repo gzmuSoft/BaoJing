@@ -19,7 +19,7 @@ import static com.sun.deploy.cache.Cache.exists;
 public class FileUtil {
 
     //    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
-    public static final String FILE_PATH = "D:/upload/";
+    public static final String FILE_PATH = "G:/";
 
     /**
      * 判断文件是否存在
@@ -44,7 +44,6 @@ public class FileUtil {
         // 判断文件是否为空
         if (!file.isEmpty()) {
             try {
-
                 // 文件保存路径
                 String savePath;
                 if (path == null) {

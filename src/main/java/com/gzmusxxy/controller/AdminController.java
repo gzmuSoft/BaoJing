@@ -17,10 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 后台管理
@@ -103,8 +100,9 @@ public class AdminController {
      */
     @RequestMapping(value = "/bulletin")
     public String bulletin(int sourceId, Model model) {
-        Bulletin bulletin = bulletinService.selectBySourceId(sourceId);
-        if (bulletin != null){
+        List<Bulletin> list = bulletinService.selectBySourceId(sourceId);
+        if (list.size() > 0){
+            Bulletin bulletin = list.get(0);
             if (bulletin.getContent() != null) {
                 try {
                     model.addAttribute("content",new String(bulletin.getContent(),"UTF-8"));
@@ -806,5 +804,45 @@ public class AdminController {
             }.start();
         }
         return "";
+    }
+
+//    医疗保障
+
+    /**
+     * 医疗保障分页查询通知
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/ylNotification")
+    public String ylNotification(Model model, Integer pageNumber) {
+        PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 3);
+        List<String> list =  new LinkedList<>();
+        for (Bulletin bulletin:
+        pageInfo.getList()) {
+            if (bulletin.getContent() != null) {
+                try {
+                    list.add(new String(bulletin.getContent(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("contentList", list);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/yl_guarantee";
+    }
+
+    /**
+     * 根据id删除公告
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delNotification")
+    public String delNotification(Integer id) {
+        Integer re = bulletinService.deleteByPrimaryKey(id);
+        return re.toString();
     }
 }

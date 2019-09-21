@@ -14,5 +14,5 @@ public interface BulletinMapper {
 
     int updateByPrimaryKey(Bulletin record);
 
-    Bulletin selectBySourceId(Integer id);
+    List<Bulletin> selectBySourceId(Integer id);
 }

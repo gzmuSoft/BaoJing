@@ -62,7 +62,11 @@ public class PovertyController {
             person.setCreateTime(new Date());
             xjhbPersonService.insert(person);
         }
-        Bulletin bulletin = bulletinService.selectBySourceId(1);
+        Bulletin bulletin = null;
+        List<Bulletin> bulletins = bulletinService.selectBySourceId(2);
+        if (bulletins.size() > 0) {
+            bulletin = bulletins.get(0);
+        }
         String content = "";
         if(bulletin == null){
             bulletin = new Bulletin();

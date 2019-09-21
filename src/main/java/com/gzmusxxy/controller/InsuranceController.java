@@ -44,7 +44,11 @@ public class InsuranceController {
     @IsLogin
     @RequestMapping(value = {"", "/"})
     public String index(Model model) {
-        Bulletin bulletin = bulletinService.selectBySourceId(2);
+        Bulletin bulletin = null;
+        List<Bulletin> bulletins = bulletinService.selectBySourceId(2);
+        if (bulletins.size() > 0) {
+            bulletin = bulletins.get(0);
+        }
         String content = "";
         if(bulletin == null){
             bulletin = new Bulletin();

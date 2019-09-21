@@ -5,9 +5,15 @@ package com.gzmusxxy.util;
  */
 public class PageUtil {
     /**
-     * 设置每页显示数据的行数
+     * 设置表格每页显示数据的行数
      */
     public static final Integer PAGE_ROW_COUNT = 8;
+
+    /**
+     * 设置通知每页显示数据的行数
+     */
+    public static final Integer ROW_COUNT = 1;
+
 
     /**
      * 固定显示5页

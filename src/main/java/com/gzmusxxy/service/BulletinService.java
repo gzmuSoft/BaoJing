@@ -1,5 +1,6 @@
 package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.Bulletin;
 
 import java.util.List;
@@ -16,5 +17,7 @@ public interface BulletinService {
 
     int updateByPrimaryKey(Bulletin record);
 
-    Bulletin selectBySourceId(Integer id);
+    List<Bulletin> selectBySourceId(Integer id);
+
+    PageInfo<Bulletin> selectAllBySourceId(Integer pageNumber, Integer sourceId);
 }

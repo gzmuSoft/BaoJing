@@ -60,4 +60,9 @@ public class IndustryNeedServiceImpl implements IndustryNeedService {
     public int selectCountByUserIdAndType(Integer userId, Integer type) {
         return industryNeedMapper.selectCountByUserIdAndType(userId,type);
     }
+
+    @Override
+    public int updateReadNumber(Integer id) {
+        return industryNeedMapper.updateReadNumber(id);
+    }
 }

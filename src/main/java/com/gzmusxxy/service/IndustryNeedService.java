@@ -24,4 +24,6 @@ public interface IndustryNeedService {
     PageInfo<IndustryNeed> selectByType(Integer type,Integer pageNumber);
 
     int selectCountByUserIdAndType(Integer userId,Integer type);
+
+    int updateReadNumber(Integer id);
 }

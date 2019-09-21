@@ -53,4 +53,7 @@
     from industry_need
     where type = #{type,jdbcType=INTEGER} and userid = #{userId,jdbcType=INTEGER}
   </select>
+  <update id="updateReadNumber" parameterType="java.lang.Integer">
+    update industry_need set comment_num = comment_num + 1 where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

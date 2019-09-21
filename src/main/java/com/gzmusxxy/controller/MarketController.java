@@ -162,6 +162,7 @@ public class MarketController {
         if(industryNeed == null){
             industryNeed = new IndustryNeed();
         }
+        industryNeedService.updateReadNumber(id);
         model.addAttribute("industryNeed",industryNeed);
         return "market/needDetail";
     }

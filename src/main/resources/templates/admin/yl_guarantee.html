@@ -1,16 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>admin Page</title>
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/summernote.css}">
-    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-    <title>admin Page</title>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -36,7 +35,7 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
                         <a class="sf-globe">农业保险项目<span class="caret"></span></a>
                         <ul>
-                            <li class="active"><a href="#">公告设置</a></li>
+                            <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
                             <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
                             <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
@@ -46,7 +45,7 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 4}">
                         <a class="sf-globe">医疗保障<span class="caret"></span></a>
                         <ul>
-                            <li><a href="/admin/ylNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="#" class="active">公告管理</a></li>
                             <li><a href="/admin/ylNotification?pageNumber=1">缴费管理</a></li>
                             <li><a href="/admin/ylNotification?pageNumber=1">申请报销管理</a></li>
                             <li><a href="/admin/ylNotification?pageNumber=1">待报销查看</a></li>
@@ -57,8 +56,8 @@
                         <a class="sf-drop">多彩报京<span class="caret"></span></a>
                         <ul>
                             <li><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
-                            <li><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
-                            <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
+                            <li><a href="#">视频播放</a></li>
+                            <li><a href="#">报京文苑</a></li>
                         </ul>
                     </li>
                     <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
@@ -71,7 +70,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>农业保险公告设置</h1>
+            <h1>保险项目管理</h1>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -91,22 +90,93 @@
     </nav>
 </header>
 <div id="global">
-    <div class="container-fluid  cm-container-white" style="margin-top:0;">
-        <div class="panel panel-default">
-            <div class="panel-heading">农业保险公告设置</div>
-            <div class="panel-body">
-                <div class="form-group">
-                    <label>标题</label>
-                    <input type="text" id="title" class="form-control" placeholder="Enter title">
-                </div>
-                <label>内容</label>
-                <div id="summernote"></div>
-                <div class="form-group text-center" style="margin-top:20px">
-                    <button type="button" id="sub" class="btn btn-success">保存</button>
-                    <button type="button" id="ret" class="btn btn-default">重置</button>
+    <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+        <!-- 表格 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">公告管理</div>
+                    <div class="panel-body">
+                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加公告</button>
+                        <h3></h3>
+                        <div class="panel panel-primary" th:each="yl:${pageInfo.list}">
+                            <div class="panel-heading">
+                                <h3 class="panel-title" th:text="${yl.title}"></h3>
+                            </div>
+                            <div class="panel-body addHtml">
+                                Panel content
+                            </div>
+                            <div class="panel-footer text-right">
+                                <button type="button" onclick="update(this)" th:value="${yl.id}" class="btn btn-primary">修改</button>
+                                <button type="button" onclick="del(this)" th:value="${yl.id}" class="btn btn-danger">删除</button>
+                            </div>
+                        </div>
+                        <div th:if="${pageInfo.pages <= 0}">
+                            <h1 class="text-center">无数据</h1>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- 分页 -->
+        <nav class="text-center">
+            <ul class="pagination shadowed" style="margin:0">
+                <li th:if="${pageInfo.prePage > 0}">
+                    <a th:href="@{'/admin/ylNotification?pageNumber='+${pageInfo.prePage}}">
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:each="num:${pages}">
+                    <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+                    <a th:href="@{'/admin/ylNotification?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                </li>
+                <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.nextPage > 0}">
+                    <a th:href="@{'/admin/ylNotification?pageNumber='+${pageInfo.nextPage}}">
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!--弹窗-->
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                        创建公告
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>标题</label>
+                        <input type="text" id="title" class="form-control" placeholder="Enter title">
+                    </div>
+                    <div class="form-group">
+                        <label>内容</label>
+                        <div id="summernote"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="sub" class="btn btn-primary">保存</button>
+                    <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
     </div>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
@@ -116,33 +186,50 @@
 <script th:src="@{/assets/js/fastclick.min.js}"></script>
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
-<script th:src="@{/assets/js/demo/home.js}"></script>
 <script th:src="@{/assets/js/summernote.min.js}"></script>
 <script th:src="@{/assets/js/demo/notepad.js}"></script>
+<script th:src="@{/assets/js/demo/home.js}"></script>
 <script th:inline="javascript">
-    //设置初始值
-    var id = [[${bulletin.id}]];
-    $('#title').val([[${bulletin.title}]]);
-    $('#summernote').html([[${content}]]);
+    //给当前页添加标识
+    $('.addActive').parent().addClass("active");
 
-    $("#ret").click(function(){
-        $('#title').val('');
-        $('#summernote').code('');
-    });
+    //设置初始值
+    var list = [[${contentList}]];
+    for(var i=0;i<list.length;i++){
+        $(".addHtml")[i].innerHTML = list[i];
+    }
+
+    function update(obj) {
+        alert("update"+obj);
+    }
+
+    function del(obj) {
+        if(confirm("确认是否删除?")){
+            $.post("/admin/delNotification",
+            {
+                "id":obj.value
+            },
+            function(data){
+                if(data > 0){
+                    window.location.href="/admin/ylNotification?pageNumber=" + [[${pageInfo.pageNum}]];
+                }else{
+                    alert("删除失败！");
+                }
+            });
+        }
+    }
 
     $("#sub").click(function(){
         $.post("/admin/saveBulletin",{
-            "id":id,
+            "id":'',
             "title":$('#title').val(),
             "content":$('#summernote').code(),
             "createAdminId":[[${session.admin.id}]],
-            "sourceId":2
+            "sourceId":3
         },function(data,status){
             if(status == "success"){
-                if(id == null || id == ''){
-                    id = data;
-                }
                 alert("保存成功！");
+                window.location.href = "/admin/ylNotification?pageNumber=1";
             }else{
                 alert("网络出错，请稍后再试！");
             }

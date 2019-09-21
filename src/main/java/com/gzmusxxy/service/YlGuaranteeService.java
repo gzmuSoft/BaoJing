@@ -1,9 +1,14 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.YlGuarantee;
+
 import java.util.List;
 
-public interface YlGuaranteeMapper {
+public interface YlGuaranteeService {
+
+    PageInfo<YlGuarantee> selectByNameCostLike(String name, Integer pageNumber);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(YlGuarantee record);
@@ -13,6 +18,4 @@ public interface YlGuaranteeMapper {
     List<YlGuarantee> selectAll();
 
     int updateByPrimaryKey(YlGuarantee record);
-
-    List<YlGuarantee> selectByNameCostLike(String name);
 }

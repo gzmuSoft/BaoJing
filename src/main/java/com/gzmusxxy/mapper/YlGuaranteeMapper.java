@@ -17,4 +17,10 @@ public interface YlGuaranteeMapper {
     List<YlGuarantee> selectByNameCostLike(String name);
 
     List<YlGuarantee> selectByNameLike(String name);
+
+    List<YlGuarantee> selectAccountByNameLike(String name);
+
+    List<YlGuarantee> selectAllByStatus(Integer status);
+
+    int updateStatus(Integer front, Integer after);
 }

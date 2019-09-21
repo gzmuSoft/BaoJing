@@ -38,7 +38,7 @@
                             <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
                             <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
-                            <li class="active"><a href="#">缴费验收</a></li>
+                            <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
                         </ul>
                     </li>
@@ -48,7 +48,7 @@
                             <li><a href="/admin/ylNotification?pageNumber=1">公告管理</a></li>
                             <li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
                             <li><a href="/admin/ylReimbursement?pageNumber=1">申请报销管理</a></li>
-                            <li><a href="/admin/ylTransferAccounts?pageNumber=1">待报销查看</a></li>
+                            <li class="active"><a href="#">待报销查看</a></li>
                         </ul>
                     </li>
                     <!--  多彩报京 -->
@@ -70,7 +70,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>购买保险申请管理</h1>
+            <h1>待报销查看</h1>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -95,27 +95,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">缴费验收管理</div>
+                    <div class="panel-heading">待报销查看</div>
                     <div class="panel-body">
-                        <form class="form-inline" action="/admin/bxCheck">
-                            <label for="cost" class="control-label">是否缴费：</label>
-                            <select class="form-control" name="cost" id="cost">
-                                <option value="3">不限</option>
-                                <option value="1">是</option>
-                                <option value="0">否</option>
-                            </select>
+                        <form class="form-inline" action="/admin/ylTransferAccounts">
+                            <button type="button" value="1" onclick="allTransfer(this)" class="btn btn-success">待收材料全部标记为待转帐</button>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" value="2" onclick="allTransfer(this)" class="btn btn-success">待转帐全部标记为已转帐</button>&nbsp;&nbsp;&nbsp;
+                            <button type="button" value="3" onclick="allTransfer(this)" class="btn btn-success">Excl导出全部待收材料信息</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <button type="button" value="4" onclick="allTransfer(this)" class="btn btn-success">Excl导出全部待转帐信息</button>&nbsp;&nbsp;&nbsp;&nbsp;
                             <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
                             <div class="form-group">
-                                <label for="personName">&nbsp;&nbsp;&nbsp;申请人:&nbsp;</label>
-                                <input type="text" placeholder="请输入申请人名字..." name="personName" th:value="${personName}" class="form-control" id="personName">
-                            </div>
-                            <div class="form-group">
-                                <label for="personName">&nbsp;&nbsp;&nbsp;项目名称:&nbsp;</label>
-                                <input type="text" id="selectName" name="name" th:value="${name}" placeholder="输入需要查询的项目名称...">
-                            </div>
-                            <div class="form-group">
-                                <label for="idCard">&nbsp;&nbsp;&nbsp;身份证号:&nbsp;</label>
-                                <input type="text" th:value="${idCard}" name="idCard" placeholder="请输入身份证号..." id="idCard">
+                                <label for="name">&nbsp;&nbsp;&nbsp;申请人:&nbsp;</label>
+                                <input type="text" placeholder="请输入申请人名字..." name="name" th:value="${name}" class="form-control" id="name">
                             </div>
                             <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
                         </form>
@@ -124,44 +114,49 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">名称</th>
-                            <th class="text-center">数量</th>
-                            <th class="text-center">单价</th>
-                            <th class="text-center">总价</th>
-                            <th class="text-center">联系电话</th>
                             <th class="text-center">申请人</th>
-                            <th class="text-center">身份证号码</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">一折通卡号</th>
+                            <th class="text-center">其他材料</th>
+                            <th class="text-center">转账备注</th>
                             <th class="text-center">申请时间</th>
                             <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="success" th:each="check:${pageInfo.list}">
-                            <th scope="row" th:text="${checkStat.index+1}"></th>
-                            <td th:text="${check.projectName}"></td>
-                            <td th:text="${check.buyNumber}"></td>
-                            <td th:text="${check.cost}"></td>
-                            <td th:text="${check.totalPrice}"></td>
-                            <td th:text="${check.telphone}"></td>
-                            <td th:text="${check.personName}"></td>
-                            <td th:text="${check.identity}"></td>
-                            <td th:text="${#dates.format(check.virementTime,'yyyy-MM-dd')}"></td>
-                            <!--状态-->
-                            <td th:if="${check.payCost == 0}">
-                                <button type="button" disabled class="btn btn-warning btn-xs">&nbsp;&nbsp;待缴费&nbsp;&nbsp;</button>
+                        <tr class="success" th:each="yl:${pageInfo.list}">
+                            <th scope="row" th:text="${ylStat.index+1}"></th>
+                            <td th:text="${yl.name}"></td>
+                            <td th:text="${yl.identity}"></td>
+                            <td th:text="${yl.card}"></td>
+                            <td>
+                                <div th:if="${yl.dataZip != null}">
+                                    <span>其他材料</span>&nbsp;
+                                    <a th:href="@{'/admin/download?name=其他材料&path='+${yl.dataZip}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                </div>
+                                <div th:if="${yl.dataZip == null}">无</div>
                             </td>
-                            <td th:if="${check.payCost == 2}">
+                            <td th:text="${yl.remark}"></td>
+                            <td th:text="${#dates.format(yl.applicationTime,'yyyy-MM-dd')}"></td>
+                            <!--状态-->
+                            <td th:if="${yl.status == 6}">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待验证&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <button type="button" class="btn btn-info dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待交材料&nbsp;&nbsp;<span class="caret"></span></button>
                                     <ul class="dropdown-menu" role="menu" style="width:50px">
-                                        <li><a href="#" th:value="${check.id+',1'}" onclick="status(this)">已缴费</a></li>
-                                        <li class="divider"></li>
-                                        <li><a href="#" th:value="${check.id+',0'}" onclick="status(this)">未缴费</a></li>
+                                        <li><a href="#" th:value="${yl.id+',7'}" onclick="status(this)">已交材料</a></li>
                                     </ul>
                                 </div>
                             </td>
-                            <td th:if="${check.payCost == 1}">
-                                <button type="button" disabled class="btn btn-success btn-xs">&nbsp;&nbsp;已缴费&nbsp;&nbsp;</button>
+                            <td th:if="${yl.status == 7}">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待转账&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu" role="menu" style="width:50px">
+                                        <li><a href="#" th:value="${yl.id+',8'}" onclick="status(this)">已转账</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td th:if="${yl.status == 8}">
+                                <button type="button" class="btn btn-success btn-xs" disabled>已转账</button>
                             </td>
                         </tr>
                         <tr th:if="${pageInfo.pages <= 0}">
@@ -176,7 +171,7 @@
         <nav class="text-center">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/bxCheck?pageNumber='+${pageInfo.prePage}+'&name='+${name}+'&personName='+${personName}+'&idCard='+${idCard}+'&cost='+${cost}}">
+                    <a th:href="@{'/admin/ylTransferAccounts?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -187,7 +182,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/bxCheck?pageNumber='+${num}+'&name='+${name}+'&personName='+${personName}+'&idCard='+${idCard}+'&cost='+${cost}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/ylTransferAccounts?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -195,7 +190,7 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/bxCheck?pageNumber='+${pageInfo.nextPage}+'&name='+${name}+'&personName='+${personName}+'&idCard='+${idCard}+'&cost='+${cost}}">
+                    <a th:href="@{'/admin/ylTransferAccounts?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
@@ -214,29 +209,54 @@
 <script th:inline="javascript">
     //给当前页添加标识
     $('.addActive').parent().addClass("active");
-    //设置下拉框默认值
-    for(var i=0;i<$("option").length;i++){
-        if($("option")[i].value == [[${cost}]]){
-            $("option")[i].selected = "selected";
-            break;
-        }
-    }
 
     //改变
     function status(obj){
-    	var id = $(obj).attr("value");
-    	$.post("/admin/bxPayCost",{
-    		"id":id.substring(0, id.indexOf(",")),
-    		"payCost":id.substring(id.indexOf(",")+1)
-    	},function(status){
-    		if(status != "error"){
-    			window.location.href="/admin/bxCheck?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#selectName').val()
-    			 +'&personName='+ $('#personName').val() + '&idCard=' + $('#idCard').val() +'&cost='+$('#cost').val();
-    		}else{
-    			alert("网络错误！");
-    		}
-    	});
-	}
+        var id = $(obj).attr("value");
+        $.post("/admin/ylStatus",{
+            "id":id.substring(0, id.indexOf(",")),
+            "status":id.substring(id.indexOf(",")+1)
+        },function(data){
+            if(data == "yes"){
+                window.location.href="/admin/ylTransferAccounts?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#name').val();
+            }else{
+                alert("网络错误！");
+            }
+        });
+    }
+
+    function allTransfer(obj) {
+        var n = obj.value;
+        // 待收材料全部标记为待转帐
+        // 待转帐全部标记为已转帐
+        // Excl导出全部待收材料信息
+        // Excl导出全部待转帐信息
+        switch (n) {
+            case "1":signAll(6,7);break;
+            case "2":signAll(7,8);break;
+            case "3":exclExport(6);break;
+            case "4":exclExport(7);break;
+        }
+    }
+
+    function signAll(i,j) {
+        $.post("/admin/ylUpdateSign",
+            {
+                "front":i,
+                "after":j
+            },function (data) {
+               if (data >= 0) {
+                   alert("更新了" + data + "条数据");
+                   window.location.href="/admin/ylTransferAccounts?pageNumber=1";
+               } else {
+                   alert("更新失败！");
+               }
+            });
+    }
+
+    function exclExport(i) {
+        window.location.href="/admin/downloadYlExcl?status=" + i;
+    }
 </script>
 </body>
 </html>

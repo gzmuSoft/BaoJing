@@ -11,6 +11,10 @@ public interface YlGuaranteeService {
 
     PageInfo<YlGuarantee> selectByNameLike(String name, Integer pageNumber);
 
+    PageInfo<YlGuarantee> selectAccountByNameLike(String name, Integer pageNumber);
+
+    List<YlGuarantee> selectAllByStatus(Integer status);
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(YlGuarantee record);
@@ -20,4 +24,6 @@ public interface YlGuaranteeService {
     List<YlGuarantee> selectAll();
 
     int updateByPrimaryKey(YlGuarantee record);
+
+    Integer updateStatus(Integer front, Integer after);
 }

@@ -48,7 +48,7 @@
                             <li><a href="/admin/ylNotification?pageNumber=1">公告管理</a></li>
                             <li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
                             <li class="active"><a href="#">申请报销管理</a></li>
-                            <li><a href="/admin/ylNotification?pageNumber=1">待报销查看</a></li>
+                            <li><a href="/admin/ylTransferAccounts?pageNumber=1">待报销查看</a></li>
                         </ul>
                     </li>
                     <!--  多彩报京 -->
@@ -70,7 +70,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>缴费管理</h1>
+            <h1>申请报销管理</h1>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -95,7 +95,7 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">缴费验收管理</div>
+                    <div class="panel-heading">申请报销管理</div>
                     <div class="panel-body">
                         <form class="form-inline" action="/admin/ylReimbursement">
                             <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>

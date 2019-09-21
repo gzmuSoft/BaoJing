@@ -878,6 +878,78 @@ public class AdminController {
     }
 
     /**
+     * 医疗保障分页查询转账页面
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/ylTransferAccounts")
+    public String ylTransferAccounts(Model model, Integer pageNumber, String name) {
+        PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectAccountByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name",name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/yl_transfer_accounts";
+    }
+
+    /**
+     * 医疗保障全部更新状态
+     * @param front 前状态
+     * @param after 后状态
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/ylUpdateSign")
+    public String ylUpdateSign(Integer front, Integer after) {
+        return ylGuaranteeService.updateStatus(front, after).toString();
+    }
+
+    /**
+     * 医疗导出excl
+     * @param status 对应类型
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadYlExcl")
+    public String downloadYlExcl(Integer status, HttpServletRequest request, HttpServletResponse response){
+        List<YlGuarantee> ylGuarantees = ylGuaranteeService.selectAllByStatus(status);
+        String title[] = new String[]{"申请人","身份证号","一折通卡号","转账备注","申请时间"};
+        String items[][] = new String[ylGuarantees.size()][title.length];
+        int j = 0;
+        for (YlGuarantee ylGuarantee:
+                ylGuarantees) {
+            items[j][0] = ylGuarantee.getName();
+            items[j][1] = ylGuarantee.getIdentity();
+            items[j][2] = ylGuarantee.getCard();
+            items[j][3] = ylGuarantee.getRemark();
+            if (ylGuarantee.getApplicationTime() != null) {
+                items[j][4] = ylGuarantee.getApplicationTime().toString();
+            }else {
+                items[j][4] = "";
+            }
+            j++;
+        }
+        String path = "";
+        if (status == 6) {
+            path = ExcelUtil.getHSSFWorkbook(
+                    "医疗保障待收材料名单",title,items,null,
+                    FileUtil.FILE_PATH,"医疗保障待收材料名单"
+            );
+        }else {
+            path = ExcelUtil.getHSSFWorkbook(
+                    "医疗保障待转账名单",title,items,null,
+                    FileUtil.FILE_PATH,"医疗保障待转账名单"
+            );
+        }
+        String name = path.substring(path.lastIndexOf("/"));
+        FileUtil.downloadFile(path,name,request,response);
+        FileUtil.deleteFile(path);
+        return "";
+    }
+
+    /**
      * 医疗保障改变状态
      * @param id id
      * @param status status
@@ -910,7 +982,7 @@ public class AdminController {
                         case 6:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
                                     , "申请报销",
-                                    true, "通过", "请耐心等待转账。如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
+                                    true, "通过", "请及时线下提交材料。如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
                             break;
                         case 5:
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
@@ -918,6 +990,11 @@ public class AdminController {
                                     false, "失败", remark, "");
                             break;
                         case 7:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"业务通知","材料已验收，请等待转账。","如有问题，请联系电话:"+
+                                            finalAdmin.getPhone(),"");
+                            break;
+                        case 8:
                             WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,"转帐业务","已转账, 请查验","如有问题，请联系电话:"+
                                             finalAdmin.getPhone(),"");

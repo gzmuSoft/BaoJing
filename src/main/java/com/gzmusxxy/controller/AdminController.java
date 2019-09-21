@@ -47,6 +47,9 @@ public class AdminController {
     @Autowired
     private BulletinService bulletinService;
 
+    @Autowired
+    private YlGuaranteeService ylGuaranteeService;
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -832,6 +835,38 @@ public class AdminController {
         model.addAttribute("contentList", list);
         model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/yl_guarantee";
+    }
+
+    /**
+     * 医疗保障分页查询验证缴费页面
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/ylVerificationPay")
+    public String ylVerificationPay(Model model, Integer pageNumber, String name) {
+        PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectByNameCostLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name",name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/yl_verification_pay";
+    }
+
+    /**
+     * 医疗保障改变状态
+     * @param id id
+     * @param status status
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/ylStatus")
+    public String ylStatus(Integer id, Byte status) {
+        YlGuarantee ylGuarantee = ylGuaranteeService.selectByPrimaryKey(id);
+        ylGuarantee.setStatus(status);
+        if (ylGuaranteeService.updateByPrimaryKey(ylGuarantee) > 0) {
+            return "yes";
+        }
+        return "no";
     }
 
     /**

@@ -9,6 +9,10 @@ public class YlGuarantee {
     private Integer id;
 
     private Integer personId;
+    /*没有的字段*/
+    private String name;
+    /*没有的字段*/
+    private String identity;
 
     private Byte payCost;
 

@@ -1,5 +1,7 @@
 package com.gzmusxxy.entity;
 
+import java.util.Date;
+
 public class YlGuarantee {
     private Integer id;
 
@@ -10,6 +12,8 @@ public class YlGuarantee {
     private String dataZip;
 
     private String card;
+
+    private Date applicationTime;
 
     private String remark;
 
@@ -53,6 +57,14 @@ public class YlGuarantee {
 
     public void setCard(String card) {
         this.card = card;
+    }
+
+    public Date getApplicationTime() {
+        return applicationTime;
+    }
+
+    public void setApplicationTime(Date applicationTime) {
+        this.applicationTime = applicationTime;
     }
 
     public String getRemark() {

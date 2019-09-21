@@ -7,6 +7,7 @@
     <result column="pay_cost" jdbcType="TINYINT" property="payCost" />
     <result column="data_zip" jdbcType="VARCHAR" property="dataZip" />
     <result column="card" jdbcType="VARCHAR" property="card" />
+    <result column="application_time" jdbcType="TIMESTAMP" property="applicationTime" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
@@ -16,11 +17,11 @@
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.YlGuarantee">
     insert into yl_guarantee (id, person_id, pay_cost, 
-      data_zip, card, remark, 
-      status)
+      data_zip, card, application_time, 
+      remark, status)
     values (#{id,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, 
-      #{dataZip,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{status,jdbcType=TINYINT})
+      #{dataZip,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR}, #{applicationTime,jdbcType=TIMESTAMP}, 
+      #{remark,jdbcType=VARCHAR}, #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.YlGuarantee">
     update yl_guarantee
@@ -28,17 +29,18 @@
       pay_cost = #{payCost,jdbcType=TINYINT},
       data_zip = #{dataZip,jdbcType=VARCHAR},
       card = #{card,jdbcType=VARCHAR},
+      application_time = #{applicationTime,jdbcType=TIMESTAMP},
       remark = #{remark,jdbcType=VARCHAR},
       status = #{status,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, person_id, pay_cost, data_zip, card, remark, status
+    select id, person_id, pay_cost, data_zip, card, application_time, remark, status
     from yl_guarantee
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, person_id, pay_cost, data_zip, card, remark, status
+    select id, person_id, pay_cost, data_zip, card, application_time, remark, status
     from yl_guarantee
   </select>
 </mapper>

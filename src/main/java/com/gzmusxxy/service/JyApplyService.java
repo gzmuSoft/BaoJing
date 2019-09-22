@@ -1,9 +1,11 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.JyApply;
+
 import java.util.List;
 
-public interface JyApplyMapper {
+public interface JyApplyService {
     int deleteByPrimaryKey(Integer id);
 
     int insert(JyApply record);
@@ -14,5 +16,5 @@ public interface JyApplyMapper {
 
     int updateByPrimaryKey(JyApply record);
 
-    List<JyApply> selectByNameLike(String name);
+    PageInfo<JyApply> selectByNameLike(String name, Integer pageNumber);
 }

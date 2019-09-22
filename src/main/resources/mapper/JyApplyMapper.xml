@@ -33,4 +33,9 @@
     select id, open_id, student_id, status
     from jy_apply
   </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select a.id, a.open_id, a.status, s.name, s.sex, s.identity, s.family_id, s.poor_id, s.village, s.group
+    from jy_student s join jy_apply a
+    where s.id = a.student_id and s.name like #{name} and status in (1,2)
+  </select>
 </mapper>

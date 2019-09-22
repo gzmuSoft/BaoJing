@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>报京微信公众号管理平台</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
+</head>
+<body class="cm-no-transition cm-1-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><a href="/admin/index" class="cm-logo"></a></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="/admin/index" class="sf-house">主页</a></li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
+                        <a class="sf-brick">先建后补<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/bulletin?sourceId=1">公告设置</a></li>
+                            <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
+                            <li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
+                            <li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
+                            <li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
+                        <a class="sf-globe">农业保险<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
+                            <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
+                            <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
+                            <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
+                            <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 4}">
+                        <a class="sf-heart">医疗保障<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/ylNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
+                            <li><a href="/admin/ylReimbursement?pageNumber=1">申请报销管理</a></li>
+                            <li><a href="/admin/ylTransferAccounts?pageNumber=1">待报销查看</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 5}">
+                        <a class="sf-book">教育保障<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/jyNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="/admin/jyStudent?pageNumber=1">贫困户学生管理</a></li>
+                            <li class="active"><a href="#">申请资助管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 6}">
+                        <a class="sf-shop">住房保障<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/zfNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
+                            <li><a href="/admin/ylReimbursement?pageNumber=1">申请报销管理</a></li>
+                            <li><a href="/admin/ylTransferAccounts?pageNumber=1">待报销查看</a></li>
+                        </ul>
+                    </li>
+                    <!--  多彩报京 -->
+                    <li class="cm-submenu" th:if="${session.admin.role == 1}">
+                        <a class="sf-drop">多彩报京<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
+                            <li><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
+                            <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <h1>申请资助管理</h1>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong th:text="${session.admin.username}"></strong></a>
+                </li>
+                <li class="divider"></li><!--下划线 -->
+                <li>
+                    <a href="/admin/message"><i class="fa fa-fw fa-cog"></i> 信息设置</a>
+                </li>
+                <li>
+                    <a href="/admin/login"><i class="fa fa-fw fa-sign-out"></i> 退出</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global">
+    <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
+        <!-- 表格 -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">申请资助管理</div>
+                    <div class="panel-body">
+                        <form class="form-inline" action="/admin/jyApply">
+                            <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
+                            <div class="form-group">
+                                <label for="name">&nbsp;&nbsp;&nbsp;申请人:&nbsp;</label>
+                                <input type="text" placeholder="请输入申请人名字..." name="name" th:value="${name}" class="form-control" id="name">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
+                        </form>
+                    </div>
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th >#</th>
+                            <th class="text-center">申请人</th>
+                            <th class="text-center">性别</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">家庭号</th>
+                            <th class="text-center">贫困户编号</th>
+                            <th class="text-center">村</th>
+                            <th class="text-center">组</th>
+                            <th class="text-center"><code>操作</code></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr class="success" th:each="jy:${pageInfo.list}">
+                            <th scope="row" th:text="${jyStat.index+1}"></th>
+                            <td th:text="${jy.name}"></td>
+                            <td th:text="${jy.sex == 1 ? '男' : '女'}"></td>
+                            <td th:text="${jy.identity}"></td>
+                            <td th:text="${jy.familyId}"></td>
+                            <td th:text="${jy.poorId}"></td>
+                            <td th:text="${jy.village}"></td>
+                            <td th:text="${jy.group}"></td>
+                            <!--状态-->
+                            <td th:if="${jy.status == 1}">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待审核&nbsp;&nbsp;<span class="caret"></span></button>
+                                    <ul class="dropdown-menu" role="menu" style="width:50px">
+                                        <li><a href="#" th:value="${jy.id+',2'}" onclick="status(this)">通过</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#"  data-toggle="modal" data-target="#remark" th:value="${jy.id+',3'}" onclick="remark(this)">否定</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                            <td th:if="${jy.status == 2}">
+                                <button type="button" class="btn btn-success btn-xs" disabled>&nbsp;&nbsp;已通过&nbsp;&nbsp;</button>
+                            </td>
+                        </tr>
+                        <tr th:if="${pageInfo.pages <= 0}">
+                            <th colspan="0" class="text-center">无数据</th>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!-- 分页 -->
+        <nav class="text-center">
+            <ul class="pagination shadowed" style="margin:0">
+                <li th:if="${pageInfo.prePage > 0}">
+                    <a th:href="@{'/admin/jyApply?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-left"></i></span>
+                    </a>
+                </li>
+                <li th:each="num:${pages}">
+                    <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
+                    <a th:href="@{'/admin/jyApply?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                </li>
+                <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
+                    <a>
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+                <li th:if="${pageInfo.nextPage > 0}">
+                    <a th:href="@{'/admin/jyApply?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                        <span><i class="fa fa-angle-right"></i></span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <!--拒绝弹窗-->
+    <div id="remark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="remarkCha" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        否定
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="text" class="col-sm-4 control-label text-center">请描述否定原因：</label>
+                            <div class="col-sm-8 text-center">
+                                <input class="textarea col-sm-10" id="text">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="remarkSub" class="btn btn-primary">确定</button>
+                    <button type="button" id="remarkRet" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
+</div>
+<script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
+<script th:src="@{/assets/js/jquery.mousewheel.min.js}"></script>
+<script th:src="@{/assets/js/jquery.cookie.min.js}"></script>
+<script th:src="@{/assets/js/fastclick.min.js}"></script>
+<script th:src="@{/assets/js/bootstrap.min.js}"></script>
+<script th:src="@{/assets/js/clearmin.min.js}"></script>
+<script th:src="@{/assets/js/demo/home.js}"></script>
+<script th:inline="javascript">
+    //给当前页添加标识
+    $('.addActive').parent().addClass("active");
+    var remarkObj = null;
+
+    //给保存赋值
+    function remark(obj) {
+        remarkObj = obj;
+    }
+    //给保存事件
+    $("#remarkSub").click(function(){
+        status(remarkObj);
+    });
+
+    //退出清空弹窗数据
+    $("#remarkCha").click(function(){
+        $("#text").val('');
+    });
+    $("#remarkRet").click(function(){
+        $("#text").val('');
+    });
+
+    //改变
+    function status(obj){
+        var id = $(obj).attr("value");
+        $.post("/admin/jyStatus",{
+            "id":id.substring(0, id.indexOf(",")),
+            "status":id.substring(id.indexOf(",")+1),
+            "remark":$("#text").val()
+        },function(data){
+            if(data == "yes"){
+                window.location.href="/admin/jyApply?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#name').val();
+            }else{
+                alert("网络错误！");
+            }
+        });
+    }
+</script>
+</body>
+</html>

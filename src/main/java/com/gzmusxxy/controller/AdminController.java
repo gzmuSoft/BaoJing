@@ -53,6 +53,9 @@ public class AdminController {
     @Autowired
     private JyStudentService jyStudentService;
 
+    @Autowired
+    private JyApplyService jyApplyService;
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -1078,6 +1081,63 @@ public class AdminController {
     public String addStudent(JyStudent jyStudent) {
         Integer re = jyStudentService.insert(jyStudent);
         return re.toString();
+    }
+
+    /**
+     * 教育保障 申请资助
+     * @param model
+     * @param pageNumber
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/jyApply")
+    public String jyApply(Model model, Integer pageNumber, String name) {
+        PageInfo<JyApply> pageInfo = jyApplyService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_apply";
+    }
+
+    /**
+     * 教育保障改变状态
+     * @param id id
+     * @param status status
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/jyStatus")
+    public String jyStatus(Integer id, Byte status, String remark, HttpSession session) {
+        JyApply jyApply = jyApplyService.selectByPrimaryKey(id);
+        jyApply.setStatus(status);
+        if (jyApplyService.updateByPrimaryKey(jyApply) > 0) {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
+            new Thread() {
+                @Override
+                public void run() {
+                    JyStudent jyStudent = jyStudentService.selectByPrimaryKey(jyApply.getStudentId());
+                    switch (status) {
+                        case 2:
+                            WeChatUtil.sendReviewNoticeMsg(jyApply.getOpenId(), jyStudent.getName() + " 你好！"
+                                    , "申请资助",
+                                    true, "通过", "如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
+                            break;
+                        case 3:
+                            WeChatUtil.sendReviewNoticeMsg(jyApply.getOpenId(), jyStudent.getName() + " 你好！"
+                                    , "申请资助",
+                                    false, "失败", remark, "");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
+            return "yes";
+        }
+        return "no";
     }
 
     /**

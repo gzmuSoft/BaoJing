@@ -140,7 +140,7 @@
         <nav class="text-center">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/ylNotification?pageNumber='+${pageInfo.prePage}}">
+                    <a th:href="@{'/admin/jyNotification?pageNumber='+${pageInfo.prePage}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -151,7 +151,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/ylNotification?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/jyNotification?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -159,7 +159,7 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/ylNotification?pageNumber='+${pageInfo.nextPage}}">
+                    <a th:href="@{'/admin/jyNotification?pageNumber='+${pageInfo.nextPage}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
@@ -224,16 +224,16 @@
     function del(obj) {
         if(confirm("确认是否删除?")){
             $.post("/admin/delNotification",
-            {
-                "id":obj.value
-            },
-            function(data){
-                if(data > 0){
-                    window.location.href="/admin/ylNotification?pageNumber=" + [[${pageInfo.pageNum}]];
-                }else{
-                    alert("删除失败！");
-                }
-            });
+                {
+                    "id":obj.value
+                },
+                function(data){
+                    if(data > 0){
+                        window.location.href="/admin/jyNotification?pageNumber=" + [[${pageInfo.pageNum}]];
+                    }else{
+                        alert("删除失败！");
+                    }
+                });
         }
     }
 
@@ -243,11 +243,11 @@
             "title":$('#title').val(),
             "content":$('#summernote').code(),
             "createAdminId":[[${session.admin.id}]],
-            "sourceId":3
+            "sourceId":4
         },function(data,status){
             if(status == "success"){
                 alert("保存成功！");
-                window.location.href = "/admin/ylNotification?pageNumber=1";
+                window.location.href = "/admin/jyNotification?pageNumber=1";
             }else{
                 alert("网络出错，请稍后再试！");
             }

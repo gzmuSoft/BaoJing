@@ -1008,6 +1008,33 @@ public class AdminController {
         return "no";
     }
 
+//    教育保障
+    /**
+     * 教育保障分页查询通知
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/jyNotification")
+    public String jyNotification(Model model, Integer pageNumber) {
+        PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 4);
+        List<String> list =  new LinkedList<>();
+        for (Bulletin bulletin:
+                pageInfo.getList()) {
+            if (bulletin.getContent() != null) {
+                try {
+                    list.add(new String(bulletin.getContent(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("contentList", list);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_notification";
+    }
+
     /**
      * 根据id删除公告
      * @param id

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>医疗保障 - 合医补助</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>合医补助报销</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <div class="full-width">
+            <h4 class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</h4>
+            <p class="shadow">需要将以下材料的电子档打包后上传。所需材料：1.病例 2.发票 3.疾病诊断书 4.费用清单 5.住院本人身份证（正反面） 6.	住院本人一折通存折</p>
+        </div>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--表单-->
+        <div class="form">
+            <form class="form-horizontal" id="form">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label">姓名：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="name" class="form-control" readonly="readonly" th:value="${user.name}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identity" class="col-sm-2 control-label">身份证号：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="identity" class="form-control" readonly="readonly" th:value="${user.identity}">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="card" class="col-sm-2 control-label">一折通号：</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="card" class="form-control" th:value="${ylGuarantee.card}" placeholder="请填写一折通卡号">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identify_front" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证正面（个人信息的一面）：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传文件</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="identify_front" id="identify_front" onchange=" saveFile(this,this.files[0],1)">
+                        </div>&nbsp;&nbsp;
+                        <span id="filename1" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identify_back" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证反面（带国徽的一面）：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传文件</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="identify_back" id="identify_back"
+                                   onchange="saveFile(this,this.files[0],2)">
+                        </div>&nbsp;&nbsp;
+                        <span id="filename2" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileB"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="file_zip" class="col-sm-2 control-label">合医补助报销材料：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传材料</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="file" id="file_zip" onchange="saveFile(this,this.files[0],3)">
+                        </div>&nbsp;&nbsp;
+                        <span id="filename3" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileC"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+                <br/>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">提交材料</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+    //记录已上传文件的信息
+    var file_zip = null;
+    var fileZipName = null;
+    //存身份证文件
+    var front_path = null;
+    var back_path = null;
+    //保存文件
+    function saveFile(obj, file, num) {
+        switch (num) {
+            case 1:
+                $("#filename1").html(file.name);
+                break;
+            case 2:
+                $("#filename2").html(file.name);
+                break;
+            case 3:
+                $("#filename3").html(file.name);
+                break;
+        }
+        var data = new FormData();
+        data.append('file', obj.files[0]);
+        if (front_path != null && obj.id == 'identify_front' && front_path != "") {
+            data.append('frontPath', front_path);
+        }
+        if (back_path != null && obj.id == 'identify_back' && back_path != "") {
+            data.append('backPath', back_path);
+        }
+        if (file_zip != null && obj.id == 'file_zip' && file_zip != "") {
+            data.append('fileZip', file_zip);
+        }
+        //判断类型
+        var filename = obj.value;
+        extStart = filename.lastIndexOf('.');
+        ext = obj.value.substring(extStart, filename.length).toUpperCase();
+        data.append('type', ext);
+        console.log(data)
+        $.ajax({
+            url: '/medical/upIdCard',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                alert("上传成功！");
+                switch (obj.id) {
+                    case 'identify_front':
+                        front_path = result;
+                        break;
+                    case 'identify_back':
+                        back_path = result;
+                        break;
+                    case 'file_zip':
+                        file_zip = result;
+                        break;
+                }
+            },
+            error: function (result) {
+                alert("上传失败！");
+            }
+        });
+    }
+    $(function () {
+        //设置初始值
+        file_zip = [[${ylGuarantee.dataZip}]];
+        fileName = "合医补助材料";
+        //判断文件是否已经上传
+        if ([[${user.idCardFront}]] != null && [[${user.idCardFront}]] != "") {
+            $("#filename1").html("已上传");
+            front_path = [[${user.idCardFront}]];
+            $('#fileA').removeClass('hidden');
+            $('#fileA').click(function () {
+                window.location.href = "/medical/downloadFile?path=" + front_path + "&name=身份证正面"+front_path.substring(front_path.lastIndexOf("."));
+            });
+        }
+        if ([[${user.idCardReverse}]] != null && [[${user.idCardReverse}]] != "") {
+            $("#filename2").html("已上传");
+            back_path = [[${user.idCardReverse}]];
+            $('#fileB').removeClass('hidden');
+            $('#fileB').click(function () {
+                window.location.href = "/medical/downloadFile?path=" + back_path + "&name=身份证反面"+back_path.substring(back_path.lastIndexOf("."));
+            });
+        }
+
+        if(file_zip != null && fileName != null){
+            if ($('#fileC').hasClass('hidden')) {
+                $('#fileC').removeClass('hidden');
+            }
+            $('#fileC').click(function () {
+                window.location.href = "/medical/downloadFile?path=" + file_zip + "&name=" + fileName + file_zip.substring(file_zip.lastIndexOf("."));
+            });
+            $("#filename3").text(fileName);
+        }
+        //点击提交按钮
+        $("#submit").click(function () {
+            var card = $("#card").val();
+            if(file_zip == null || front_path == null || back_path == null){
+                alert("请上传所有文件后才能提交");
+                return false;
+            }
+            //post提交的参数
+            var params = {
+                "id":[[${ylGuarantee.id}]],
+                "dataZip":file_zip,
+                "frontPath":front_path,
+                "backPath":back_path,
+                "card":card
+            };
+            console.log(params);
+            $.post("/medical/postApplyForSubsidy",params,function (data) {
+                if(data.code == 1){
+                    alert("合医补助报销信息已经提交！");
+                    window.location.href = "/medical/myApply?pageNumber=1";
+                }else{
+                    alert("合医补助报销信息提交失败请重新提交！");
+                }
+            },"json");
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

@@ -12,4 +12,8 @@ public interface XjhbPersonService {
     int updateByPrimaryKey(XjhbPerson record);
 
     XjhbPerson selectByPrimaryKey(Integer id);
+
+    int updateNameAndIdentityById(XjhbPerson record);
+
+    int updateIdCardFrontAndIdCardReverseById(XjhbPerson record);
 }

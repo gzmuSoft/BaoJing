@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.ZfApplyMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.ZfApply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="template_path" jdbcType="VARCHAR" property="templatePath" />
+    <result column="house_photos_path" jdbcType="VARCHAR" property="housePhotosPath" />
+    <result column="construction_path" jdbcType="VARCHAR" property="constructionPath" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zf_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.ZfApply">
+    insert into zf_apply (id, person_id, template_id, 
+      template_path, house_photos_path, construction_path, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER}, #{templateId,jdbcType=INTEGER}, 
+      #{templatePath,jdbcType=VARCHAR}, #{housePhotosPath,jdbcType=VARCHAR}, #{constructionPath,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.ZfApply">
+    update zf_apply
+    set person_id = #{personId,jdbcType=INTEGER},
+      template_id = #{templateId,jdbcType=INTEGER},
+      template_path = #{templatePath,jdbcType=VARCHAR},
+      house_photos_path = #{housePhotosPath,jdbcType=VARCHAR},
+      construction_path = #{constructionPath,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, person_id, template_id, template_path, house_photos_path, construction_path, 
+    status
+    from zf_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, person_id, template_id, template_path, house_photos_path, construction_path, 
+    status
+    from zf_apply
+  </select>
+</mapper>

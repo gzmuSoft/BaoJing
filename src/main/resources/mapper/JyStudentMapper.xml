@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.JyStudentMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.JyStudent">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="identity" jdbcType="VARCHAR" property="identity" />
+    <result column="family_id" jdbcType="VARCHAR" property="familyId" />
+    <result column="poor_id" jdbcType="VARCHAR" property="poorId" />
+    <result column="village" jdbcType="VARCHAR" property="village" />
+    <result column="group" jdbcType="VARCHAR" property="group" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jy_student
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.JyStudent">
+    insert into jy_student (id, name, sex, 
+      identity, family_id, poor_id, 
+      village, group)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
+      #{identity,jdbcType=VARCHAR}, #{familyId,jdbcType=VARCHAR}, #{poorId,jdbcType=VARCHAR}, 
+      #{village,jdbcType=VARCHAR}, #{group,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.JyStudent">
+    update jy_student
+    set name = #{name,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=INTEGER},
+      identity = #{identity,jdbcType=VARCHAR},
+      family_id = #{familyId,jdbcType=VARCHAR},
+      poor_id = #{poorId,jdbcType=VARCHAR},
+      village = #{village,jdbcType=VARCHAR},
+      group = #{group,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, sex, identity, family_id, poor_id, village, group
+    from jy_student
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, sex, identity, family_id, poor_id, village, group
+    from jy_student
+  </select>
+</mapper>

@@ -13,7 +13,10 @@ public class BaojingApplication {
         System.out.println("管理员：http://127.0.0.1:8083/admin/login");
         System.out.println("微信登录：http://127.0.0.1:8083/wechat/demo");
         System.out.println("先建后补：http://127.0.0.1:8083/poverty/apply");
-        System.out.println("保险后台：http://127.0.0.1:8083/insurance");
+        System.out.println("保险前台：http://127.0.0.1:8083/insurance");
+        System.out.println("保险后台：http://127.0.0.1:8083/supply");
+        System.out.println("多彩报京：http://127.0.0.1:8083/exhibition");
+        System.out.println("医疗保障：http://127.0.0.1:8083/medical");
     }
 
 }

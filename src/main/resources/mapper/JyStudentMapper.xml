@@ -16,9 +16,9 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.JyStudent">
-    insert into jy_student (id, name, sex, 
+    insert into jy_student(id, name, sex,
       identity, family_id, poor_id, 
-      village, group)
+      village, jy_student.`group`)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=INTEGER}, 
       #{identity,jdbcType=VARCHAR}, #{familyId,jdbcType=VARCHAR}, #{poorId,jdbcType=VARCHAR}, 
       #{village,jdbcType=VARCHAR}, #{group,jdbcType=VARCHAR})
@@ -31,16 +31,21 @@
       family_id = #{familyId,jdbcType=VARCHAR},
       poor_id = #{poorId,jdbcType=VARCHAR},
       village = #{village,jdbcType=VARCHAR},
-      group = #{group,jdbcType=VARCHAR}
+      jy_student.`group` = #{group,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, name, sex, identity, family_id, poor_id, village, group
+    select id, name, sex, identity, family_id, poor_id, village, jy_student.`group`
     from jy_student
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, name, sex, identity, family_id, poor_id, village, group
+    select id, name, sex, identity, family_id, poor_id, village, jy_student.`group`
     from jy_student
+  </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select id, name, sex, identity, family_id, poor_id, village, jy_student.`group`
+    from jy_student
+    where name like #{name}
   </select>
 </mapper>

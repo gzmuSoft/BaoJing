@@ -50,6 +50,12 @@ public class AdminController {
     @Autowired
     private YlGuaranteeService ylGuaranteeService;
 
+    @Autowired
+    private JyStudentService jyStudentService;
+
+    @Autowired
+    private JyApplyService jyApplyService;
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -1010,7 +1016,7 @@ public class AdminController {
 
 //    教育保障
     /**
-     * 教育保障分页查询通知
+     * 教育保障公告分页查询通知
      * @param model
      * @param pageNumber
      * @return
@@ -1033,6 +1039,156 @@ public class AdminController {
         model.addAttribute("contentList", list);
         model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/jy_notification";
+    }
+
+    /**
+     * 教育保障学生管理分页查询通知
+     * @param model
+     * @param pageNumber
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/jyStudent")
+    public String jyStudent(Model model, Integer pageNumber, String name) {
+        PageInfo<JyStudent> pageInfo = jyStudentService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_student";
+    }
+
+    /**
+     * 查询学生信息
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getStudent")
+    public String getStudent(Integer id) {
+        JyStudent jyStudent = jyStudentService.selectByPrimaryKey(id);
+        JSONObject json = new JSONObject();
+        json.put("jyStudent", jyStudent);
+        return json.toJSONString();
+    }
+
+    /**
+     *  插入学生
+     * @param jyStudent
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addStudent")
+    public String addStudent(JyStudent jyStudent) {
+        Integer re = jyStudentService.insert(jyStudent);
+        return re.toString();
+    }
+
+    /**
+     * 教育保障 申请资助
+     * @param model
+     * @param pageNumber
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/jyApply")
+    public String jyApply(Model model, Integer pageNumber, String name) {
+        PageInfo<JyApply> pageInfo = jyApplyService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_apply";
+    }
+
+    /**
+     * 教育保障改变状态
+     * @param id id
+     * @param status status
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/jyStatus")
+    public String jyStatus(Integer id, Byte status, String remark, HttpSession session) {
+        JyApply jyApply = jyApplyService.selectByPrimaryKey(id);
+        jyApply.setStatus(status);
+        if (jyApplyService.updateByPrimaryKey(jyApply) > 0) {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
+            new Thread() {
+                @Override
+                public void run() {
+                    JyStudent jyStudent = jyStudentService.selectByPrimaryKey(jyApply.getStudentId());
+                    switch (status) {
+                        case 2:
+                            WeChatUtil.sendReviewNoticeMsg(jyApply.getOpenId(), jyStudent.getName() + " 你好！"
+                                    , "申请资助",
+                                    true, "通过", "如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
+                            break;
+                        case 3:
+                            WeChatUtil.sendReviewNoticeMsg(jyApply.getOpenId(), jyStudent.getName() + " 你好！"
+                                    , "申请资助",
+                                    false, "失败", remark, "");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
+            return "yes";
+        }
+        return "no";
+    }
+
+    /**
+     * 更新学生信息
+     * @param jyStudent
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateStudent")
+    public String updateStudent(JyStudent jyStudent) {
+        Integer re = jyStudentService.updateByPrimaryKey(jyStudent);
+        return re.toString();
+    }
+
+    /**
+     * 根据id删除学生
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delStudent")
+    public String delStudent(Integer id) {
+        Integer re = jyStudentService.deleteByPrimaryKey(id);
+        return re.toString();
+    }
+
+    //住房保障
+    /**
+     * 住房保障分页查询通知
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/zfNotification")
+    public String zfNotification(Model model, Integer pageNumber) {
+        PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 5);
+        List<String> list =  new LinkedList<>();
+        for (Bulletin bulletin:
+                pageInfo.getList()) {
+            if (bulletin.getContent() != null) {
+                try {
+                    list.add(new String(bulletin.getContent(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("contentList", list);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_notification";
     }
 
     /**

@@ -36,7 +36,7 @@
                         <a class="sf-globe">农业保险<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
-                            <li class="active"><a href="#">保险项目管理</a></li>
+                            <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
                             <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
@@ -55,7 +55,7 @@
                         <a class="sf-book">教育保障<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/jyNotification?pageNumber=1">公告管理</a></li>
-                            <li><a href="/admin/jyStudent?pageNumber=1">贫困户学生管理</a></li>
+                            <li class="active"><a href="#">贫困户学生管理</a></li>
                             <li><a href="/admin/jyApply?pageNumber=1">申请资助管理</a></li>
                         </ul>
                     </li>
@@ -87,15 +87,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>保险项目管理</h1>
-            <form id="cm-search" action="/admin/bxProject" method="get">
-                <input type="hidden" name="pageNumber" value="1">
-                <input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
-            </form>
-        </div>
-        <!-- 查询按钮 -->
-        <div class="pull-right">
-            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
+            <h1>贫困户学生管理</h1>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -120,41 +112,46 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">保险项目管理</div>
+                    <div class="panel-heading">贫困户学生管理</div>
                     <div class="panel-body">
-                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加保险项目</button>
+                        <form class="form-inline" action="/admin/jyStudent">
+                            <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
+                            <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加学生</button>
+                            <div class="form-group">
+                                <label for="name">&nbsp;&nbsp;姓名:&nbsp;</label>
+                                <input type="text" placeholder="请输入姓名..." name="name" th:value="${name}" class="form-control" id="name">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
+                        </form>
                     </div>
-                    <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
-                    <table class="table text-center table-hover">
+                    <table class="table text-center">
                         <thead>
                         <tr>
-                            <th>#</th>
-                            <th class="text-center">保险名称</th>
-                            <th class="text-center">理赔申请书模板</th>
-                            <th class="text-center">申请起始时间</th>
-                            <th class="text-center">申请结束时间</th>
-                            <th class="text-center">单个保险费用(元)</th>
+                            <th >#</th>
+                            <th class="text-center">姓名</th>
+                            <th class="text-center">性别</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">家庭编号</th>
+                            <th class="text-center">贫困户号</th>
+                            <th class="text-center">村</th>
+                            <th class="text-center">组</th>
                             <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="success" th:each="project:${pageInfo.list}">
-                            <th scope="row" th:text="${projectStat.index+1}"></th>
-                            <td th:text="${project.name}"></td>
+                        <tr class="success" th:each="jy:${pageInfo.list}">
+                            <th scope="row" th:text="${jyStat.index+1}"></th>
+                            <td th:text="${jy.name}"></td>
+                            <td th:text="${jy.sex == 1 ? '男' : '女'}"></td>
+                            <td th:text="${jy.identity}"></td>
+                            <td th:text="${jy.familyId}"></td>
+                            <td th:text="${jy.poorId}"></td>
+                            <td th:text="${jy.village}"></td>
+                            <td th:text="${jy.group}"></td>
+                            <!--状态-->
                             <td>
-                                <div th:if="${project.claimsTemplateName != null && project.claimsTemplateName != 'null' && project.claimsTemplateName != ''}">
-                                    <span th:text="${project.claimsTemplateName}"></span>&nbsp;
-                                    <a th:href="@{'/admin/download?name='+${project.claimsTemplateName}+'&path='+${project.claimsTemplate}}">
-                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
-                                    </a>
-                                </div>
-                            </td>
-                            <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${project.cost}"></td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
-                                <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
+                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${jy.id}">修改</button>&nbsp;
+                                <button type="button" class="btn btn-danger btn-xs" th:value="${jy.id}" onclick="del(this)">删除</button>
                             </td>
                         </tr>
                         <tr th:if="${pageInfo.pages <= 0}">
@@ -169,7 +166,7 @@
         <nav class="text-center">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/bxProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/jyStudent?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -180,7 +177,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/bxProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/jyStudent?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -188,7 +185,7 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/bxProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/jyStudent?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
@@ -208,40 +205,53 @@
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal">
-                        <input type="hidden" id="projectId">
                         <div class="form-group">
-                            <label for="projectName" class="col-sm-2 control-label">项目名称</label>
+                            <label for="studentName" class="col-sm-2 control-label">姓名</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="projectName" name="name" placeholder="请输入项目名称..">
+                                <input type="text" class="form-control" id="studentName" name="studentName" placeholder="请输入姓名..">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="claimsTemplate" class="col-sm-2 control-label">理赔书模板</label>
+                            <label for="sexGroup" class="col-sm-2 control-label">性别</label>
                             <div class="col-sm-10">
-                                <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                                    <button type="button" class="btn btn-success fileinput-button form-control" >理赔书模板上传</button>
-                                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="claimsTemplate" id="claimsTemplate" onchange="saveFile(this)">
-                                </div>&nbsp;&nbsp;
-                                <span id="fileName" style="vertical-align: middle">未上传文件</span>
-                                <a href="#" class="hidden" id="fileA" onclick="downloadFile()"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                <span id="sexGroup">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="sex" id="inlineRadio1" value="1" checked> 男
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="sex" id="inlineRadio2" value="2"> 女
+                                    </label>
+                                </span>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="startTime" class="col-sm-2 control-label">起始时间</label>
+                            <label for="identity" class="col-sm-2 control-label">身份证号</label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control" name="startTime" id="startTime" placeholder="请输入可申请的起始时间...">
+                                <input type="text" class="form-control" name="identity" id="identity" placeholder="请输入身份证号...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="endTime" class="col-sm-2 control-label">结束时间</label>
+                            <label for="familyId" class="col-sm-2 control-label">家庭编号</label>
                             <div class="col-sm-10">
-                                <input type="date" class="form-control" name="endTime" id="endTime" placeholder="请输入可申请的结束时间...">
+                                <input type="text" class="form-control" name="familyId" id="familyId" placeholder="请输入家庭编号...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="cost" class="col-sm-2 control-label">保险费用</label>
+                            <label for="poorId" class="col-sm-2 control-label">贫困户编号</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="cost" name="cost" placeholder="请输入保险费用（元）...">
+                                <input type="text" class="form-control" name="poorId" id="poorId" placeholder="请输入贫困户编号...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="village" class="col-sm-2 control-label">村</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="village" id="village" placeholder="请输入村...">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="group" class="col-sm-2 control-label">组</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="group" id="group" placeholder="请输入组...">
                             </div>
                         </div>
                     </form>
@@ -264,167 +274,131 @@
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
-<script>
+<script th:inline="javascript">
     //给当前页添加标识
     $('.addActive').parent().addClass("active");
-    //搜索栏有数据则打开
-    if($("#selectName").val() != null && $("#selectName").val() != ''){
-        $("#cm-search").addClass("open");
-    }
-    var flag = null;
-    var name = null;
-    var filePath = null;
-    var yuan_filePath = null;
-    var yuan_fileName = null;
 
     //判断是增加还是修改
     $('#addProject').click(function(){
         flag = "add";
-        $("#myModalLabel").text("创建保险项目");
+        $("#myModalLabel").text("添加学生");
     });
+
+    var studentId = null;
 
     //获取要更新数据
     function update(obj){
         flag = "update";
-        $("#myModalLabel").text("修改保险项目");
+        $("#myModalLabel").text("修改学生信息");
         //获取数据显示
-        $.post("/admin/findBxProject",
-        {
-            "id":obj.value
-        },
-        function(data){
-            var project = $.parseJSON(data).project;
-            yuan_filePath = project.claimsTemplate;
-            yuan_fileName = project.claimsTemplateName;
-            $("#fileName").text(project.claimsTemplateName);
-            $('#fileA').removeClass('hidden');
-            $('#projectId').val(project.id);
-            $('#projectName').val(project.name);
-            $('#startTime').val($.parseJSON(data).startTime);
-            $('#endTime').val($.parseJSON(data).endTime);
-            $('#cost').val(project.cost);
-        }),"json";
+        $.post("/admin/getStudent",
+            {
+                "id":obj.value
+            },
+            function(data){
+                var jyStudent = $.parseJSON(data).jyStudent;
+                studentId = jyStudent.id;
+                $('#studentName').val(jyStudent.name);
+                console.log(jyStudent.sex == "1");
+                if (jyStudent.sex == "1") {
+                    $('#inlineRadio1').prop("checked",true);
+                }else {
+                    $('#inlineRadio2').prop("checked",true);
+                }
+                $('#identity').val(jyStudent.identity);
+                $('#familyId').val(jyStudent.familyId);
+                $('#poorId').val(jyStudent.poorId);
+                $('#village').val(jyStudent.village);
+                $('#group').val(jyStudent.group);
+            }),"json";
     }
+    $('#ret').click(function(){
+        clean();
+    });
 
     //点cha之后重置数据
     $('#cha').click(function(){
         clean();
     });
-    $('#ret').click(function(){
-        clean();
-    });
 
     //重置数据
     function clean(){
-        $('#projectId').val("");
-        $('#projectName').val("");
-        $('#startTime').val("");
-        $('#endTime').val("");
-        $('#cost').val("");
-        yuan_filePath = null;
-        yuan_fileName = null;
-        if(!$('#fileA').hasClass('hidden')){
-            $('#fileA').addClass('hidden');
-        }
-        $("#fileName").text("文件未上传");
+        $('#studentName').val("");
+        $('#inlineRadio1').prop("checked",true);
+        $('#identity').val("");
+        $('#familyId').val("");
+        $('#poorId').val("");
+        $('#village').val("");
+        $('#group').val("");
     }
 
     //删除
     function del(obj){
         if(confirm("确认是否删除?")){
-            $.post("/admin/delBxProject",
-            {
-                "id":obj.value
-            },
-            function(data){
-                if(data > 0){
-                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
-                }else{
-                    alert("删除失败！");
-                }
-            });
+            $.post("/admin/delStudent",
+                {
+                    "id":obj.value
+                },
+                function(data){
+                    if(data > 0){
+                        window.location.href="/admin/jyStudent?pageNumber=" + $('#pageNumber').val() + "&name=" + $('#name').val();
+                    }else{
+                        alert("删除失败！");
+                    }
+                });
         }
     }
 
     //添加和修改
     $('#save').click(function(){
+        // 获取选中性别
+        var sex = 0;
+        if ($("input[name='sex']")[0].checked == true){
+            sex = $("input[name='sex']")[0].value;
+        }else {
+            sex = $("input[name='sex']")[1].value;
+        }
         if(flag == "add"){
-            $.post("/admin/addBxProject",
-            {
-                'name':$('#projectName').val(),
-                'claimsTemplate':filePath,
-                'claimsTemplateName':name,
-                'startTime':$('#startTime').val(),
-                'endTime':$('#endTime').val(),
-                'cost':$('#cost').val()
-            },
-            function(data){
-                if(data > 0){
-                    alert("保存成功！");
-                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
-                }else{
-                    alert("保存失败！");
-                }
-            });
+            $.post("/admin/addStudent",
+                {
+                    'name':$('#studentName').val(),
+                    'sex':sex,
+                    'identity':$('#identity').val(),
+                    'familyId':$('#familyId').val(),
+                    'poorId':$('#poorId').val(),
+                    'village':$('#village').val(),
+                    'group':$('#group').val()
+                },
+                function(data){
+                    if(data > 0){
+                        alert("保存成功！");
+                        window.location.href="/admin/jyStudent?pageNumber=1&name=" + $('#name').val();
+                    }else{
+                        alert("保存失败！");
+                    }
+                });
         }else{
-            $.post("/admin/updateBxProject",
-            {
-                'id':$('#projectId').val(),
-                'name':$('#projectName').val(),
-                'claimsTemplate':yuan_filePath,
-                'claimsTemplateName':yuan_fileName,
-                'filePath':filePath,
-                'fileName':name,
-                'startTime':$('#startTime').val(),
-                'endTime':$('#endTime').val(),
-                'cost':$('#cost').val()
-            },
-            function(data){
-                if(data > 0){
-                    alert("保存成功！");
-                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
-                }else{
-                    alert("保存失败！");
-                }
-            });
+            $.post("/admin/updateStudent",
+                {
+                    'id':studentId,
+                    'name':$('#studentName').val(),
+                    'sex':sex,
+                    'identity':$('#identity').val(),
+                    'familyId':$('#familyId').val(),
+                    'poorId':$('#poorId').val(),
+                    'village':$('#village').val(),
+                    'group':$('#group').val()
+                },
+                function(data){
+                    if(data > 0){
+                        alert("保存成功！");
+                        window.location.href="/admin/jyStudent?pageNumber=" + $('#pageNumber').val() + "&name=" + $('#name').val();
+                    }else{
+                        alert("保存失败！");
+                    }
+                });
         }
     });
-
-    //下载修改时的模板文件
-    function downloadFile(){
-        window.location.href="/admin/download?name="+yuan_fileName+"&path="+yuan_filePath;
-    }
-
-    //保存文件
-    function saveFile(obj){
-        var data = new FormData();
-        data.append('path',filePath);
-        data.append('file', obj.files[0]);
-        var filename = obj.value;
-        name = obj.files[0].name;
-        $("#fileName").text(name);
-        var extStart = filename.lastIndexOf('.');
-        var ext = obj.value.substring(extStart,filename.length);
-        data.append('type',ext);
-        $.ajax({
-        url: '/admin/upload',
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success:function(result){
-                if(!$('#fileA').hasClass('hidden')){
-                    $('#fileA').addClass('hidden');
-                }
-                alert("上传成功！");
-                filePath = result;
-            },
-        error:function(result){
-                alert("上传失败！");
-            }
-        });
-    }
 </script>
 </body>
 </html>

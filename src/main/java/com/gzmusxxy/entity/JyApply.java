@@ -1,43 +1,28 @@
 package com.gzmusxxy.entity;
 
+import lombok.Data;
+
+@Data
 public class JyApply {
     private Integer id;
 
     private String openId;
 
     private Integer studentId;
-
+    //1待审核 2审核成功 3审核失败
     private Byte status;
+//--------没有的字段---------
+    private String name;
+    //1.男 2 女
+    private Integer sex;
 
-    public Integer getId() {
-        return id;
-    }
+    private String identity;
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private String familyId;
 
-    public String getOpenId() {
-        return openId;
-    }
+    private String poorId;
 
-    public void setOpenId(String openId) {
-        this.openId = openId;
-    }
+    private String village;
 
-    public Integer getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(Integer studentId) {
-        this.studentId = studentId;
-    }
-
-    public Byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(Byte status) {
-        this.status = status;
-    }
+    private String group;
 }

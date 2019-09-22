@@ -1,9 +1,11 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.JyStudent;
+
 import java.util.List;
 
-public interface JyStudentMapper {
+public interface JyStudentService {
     int deleteByPrimaryKey(Integer id);
 
     int insert(JyStudent record);
@@ -14,5 +16,5 @@ public interface JyStudentMapper {
 
     int updateByPrimaryKey(JyStudent record);
 
-    List<JyStudent> selectByNameLike(String name);
+    PageInfo<JyStudent> selectByNameLike(String name, Integer pageNumber);
 }

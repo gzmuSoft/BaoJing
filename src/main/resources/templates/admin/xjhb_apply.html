@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
 	<link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-	<title>admin Page</title>
+	<title>报京微信公众号管理平台</title>
 	<style type="text/css">
         textarea{
             resize: none;
@@ -60,9 +60,8 @@
 						<a class="sf-book">教育保障<span class="caret"></span></a>
 						<ul>
 							<li><a href="/admin/jyNotification?pageNumber=1">公告管理</a></li>
-							<li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
-							<li><a href="/admin/ylReimbursement?pageNumber=1">申请报销管理</a></li>
-							<li><a href="/admin/ylTransferAccounts?pageNumber=1">待报销查看</a></li>
+							<li><a href="/admin/jyStudent?pageNumber=1">贫困户学生管理</a></li>
+							<li><a href="/admin/jyApply?pageNumber=1">申请资助管理</a></li>
 						</ul>
 					</li>
 					<li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 6}">

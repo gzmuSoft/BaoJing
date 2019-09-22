@@ -4,7 +4,7 @@ public class JyStudent {
     private Integer id;
 
     private String name;
-
+//1.男 2 女
     private Integer sex;
 
     private String identity;

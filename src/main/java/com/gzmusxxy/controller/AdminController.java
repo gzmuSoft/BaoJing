@@ -50,6 +50,9 @@ public class AdminController {
     @Autowired
     private YlGuaranteeService ylGuaranteeService;
 
+    @Autowired
+    private JyStudentService jyStudentService;
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -1010,7 +1013,7 @@ public class AdminController {
 
 //    教育保障
     /**
-     * 教育保障分页查询通知
+     * 教育保障公告分页查询通知
      * @param model
      * @param pageNumber
      * @return
@@ -1033,6 +1036,99 @@ public class AdminController {
         model.addAttribute("contentList", list);
         model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/jy_notification";
+    }
+
+    /**
+     * 教育保障学生管理分页查询通知
+     * @param model
+     * @param pageNumber
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/jyStudent")
+    public String jyStudent(Model model, Integer pageNumber, String name) {
+        PageInfo<JyStudent> pageInfo = jyStudentService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_student";
+    }
+
+    /**
+     * 查询学生信息
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getStudent")
+    public String getStudent(Integer id) {
+        JyStudent jyStudent = jyStudentService.selectByPrimaryKey(id);
+        JSONObject json = new JSONObject();
+        json.put("jyStudent", jyStudent);
+        return json.toJSONString();
+    }
+
+    /**
+     *  插入学生
+     * @param jyStudent
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addStudent")
+    public String addStudent(JyStudent jyStudent) {
+        Integer re = jyStudentService.insert(jyStudent);
+        return re.toString();
+    }
+
+    /**
+     * 更新学生信息
+     * @param jyStudent
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateStudent")
+    public String updateStudent(JyStudent jyStudent) {
+        Integer re = jyStudentService.updateByPrimaryKey(jyStudent);
+        return re.toString();
+    }
+
+    /**
+     * 根据id删除学生
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delStudent")
+    public String delStudent(Integer id) {
+        Integer re = jyStudentService.deleteByPrimaryKey(id);
+        return re.toString();
+    }
+
+    //住房保障
+    /**
+     * 住房保障分页查询通知
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/zfNotification")
+    public String zfNotification(Model model, Integer pageNumber) {
+        PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 5);
+        List<String> list =  new LinkedList<>();
+        for (Bulletin bulletin:
+                pageInfo.getList()) {
+            if (bulletin.getContent() != null) {
+                try {
+                    list.add(new String(bulletin.getContent(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("contentList", list);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_notification";
     }
 
     /**

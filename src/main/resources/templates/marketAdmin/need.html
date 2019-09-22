@@ -1,21 +1,16 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-    <title>多彩报京</title>
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
-
-    <!--上传插件所需js-->
-    <link th:href="@{/fileinput/css/fileinput.css}" media="all" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
-    <link th:href="@{/fileinput/themes/explorer-fas/theme.css}" media="all" rel="stylesheet" type="text/css"/>
-
+    <link rel="stylesheet" type="text/css" th:href="@{/assets/css/summernote.css}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>需求管理</title>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -31,7 +26,7 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
                         <a class="sf-brick">先建后补项目<span class="caret"></span></a>
                         <ul>
-                            <li><a href="/admin/bulletin?sourceId=1">公告设置</a></li>
+                            <li class="active"><a href="#">公告设置</a></li>
                             <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
                             <li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
                             <li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
@@ -42,7 +37,7 @@
                         <a class="sf-globe">农业保险项目<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
-                            <li><a href="#">保险项目管理</a></li>
+                            <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
                             <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
@@ -52,9 +47,9 @@
                     <li class="cm-submenu" th:if="${session.admin.role == 1}">
                         <a class="sf-drop">多彩报京<span class="caret"></span></a>
                         <ul>
-                            <li class="active"><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
+                            <li><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
                             <li><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
-                            <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
+                            <li class="active"><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
                         </ul>
                     </li>
                     <!--  供销系统 -->
@@ -75,7 +70,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>多彩报京</h1>
+            <h1><a style="color: white" href="/supplyAdmin/getNeedByPage?pageNumber=1">需求管理</a></h1>
         </div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -100,32 +95,53 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">图片展示</div>
-                    <div class="panel-body">
-                        <button type="button" id="addPic" data-toggle="modal" data-target="#upload" class="btn btn-success"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;添加</button>
+                    <div class="panel-heading">供销系统管理</div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-4 col-md-2">
+                            <input type="text" id="nameMsg" style="width: 500px;height: 35px;margin-left: 10px;border-radius: 10px" class="form-control input-sm" placeholder="请输入需要查询的用户名">
+                        </div>
+                        <div class="col-lg-2">
+                            <select class="form-control" id="myType">
+                                <option value="0">不限</option>
+                                <option value="1">需求</option>
+                                <option value="2">商品</option>
+                            </select>
+                        </div>
+                        <div class="col-lg-2 text-left">
+                            <button type="button" id="findMsg"  style="margin-left: 0px" class="btn btn-success">立即查询</button>
+                        </div>
                     </div>
+                    <hr>
+                    <input type="hidden" value="1" id="pageNumber">
+
                     <table class="table text-center table-hover">
-                        <thead>
+                        <thead id="mhead">
                         <tr>
-                            <th class="text-center">序号</th>
-                            <th class="text-center">名称</th>
-                            <th class="text-center">上传时间</th>
+                            <th>发布编号</th>
+                            <th class="text-center">发布人</th>
+                            <th class="text-center">供销类型</th>
+                            <th class="text-center">发布日期</th>
+                            <th class="text-center">阅读量</th>
                             <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="myBody">
                         <tr th:each="list : ${pageInfo.list}">
                             <td th:text="${list.id}"></td>
-                            <td th:text="${list.name}"></td>
-                            <td th:text="${#dates.format(list.createTime, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${list.username}"></td>
+                            <td th:if="${list.type == 1}">需求</td>
+                            <td th:unless="${list.type == 1}">商品</td>
+                            <td th:text="${#dates.format(list.date, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${list.commentNum}"></td>
                             <td>
-                                <button type="button" class="btn btn-success btn-xs" onclick="preview(this)" th:value="${list.path}" data-toggle="modal" data-target="#preview">预览</button>
+                                <button type="button" class="btn btn-success btn-xs" onclick="updateMsg(this)" th:value="${list.id}" data-toggle="modal" data-target="#needMsg">预览</button>
                                 &nbsp;
                                 <button type="button" class="btn btn-danger btn-xs"  th:value="${list.id}" onclick="del(this)">删除</button>
                             </td>
                         </tr>
-                        <tr th:if="${#lists.size(pageInfo.list) <= 0}">
-                            <th colspan="4" class="text-center">无数据</th>
+                        <tr th:if="${pageInfo.list == null}">
+                            <th colspan="8" class="text-center">无数据</th>
                         </tr>
                         </tbody>
                     </table>
@@ -133,10 +149,10 @@
             </div>
         </div>
         <!-- 分页 -->
-        <nav class="text-center">
+        <nav class="text-center" id="myNav">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/colorful/photos?pageNumber='+${pageInfo.prePage}}">
+                    <a th:href="@{'/supplyAdmin/getNeedByPage?pageNumber='+${pageInfo.prePage}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -147,7 +163,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/colorful/photos?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/supplyAdmin/getNeedByPage?pageNumber='+${num}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -155,116 +171,71 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/colorful/photos?pageNumber='+${pageInfo.nextPage}}">
+                    <a th:href="@{'/supplyAdmin/getNeedByPage?pageNumber='+${pageInfo.nextPage}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
             </ul>
         </nav>
     </div>
-    <!--预览弹窗-->
-    <div id="preview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!-- 预览模态框   -->
+    <div id="needMsg" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button"  class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" >
-                        图片预览
-                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <img src="" class="img-responsive" id="imgpreview" alt="Cinque Terre" width="100%" height="100%">
-                </div>
-                <div class="modal-footer">
-                    <button type="button"  class="btn btn-default" data-dismiss="modal">关闭</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!--文件上传弹窗-->
-    <div id="upload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="width:1000px">
-            <div class="modal-content">
+            <div class="modal-content" style="width: 500px">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" >
-                        图片上传
+                    <h4 class="modal-title">
+                        内容预览
                         <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
                     </h4>
                 </div>
                 <div class="modal-body">
-                    <form enctype="multipart/form-data" method="post">
-                        <div class="file-loading">
-                            <input id="kv-explorer" type="file" name="file" multiple>
-                        </div>
-                    </form>
+                    <span id="text"></span>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="ret" class="btn btn-default" data-dismiss="modal" onclick="javascript:window.location.reload()">关闭</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 </div>
             </div>
             <!-- /.modal-content -->
         </div>
         <!-- /.modal-dialog -->
     </div>
-    <footer class="cm-footer"><span class="pull-left">多彩报京</span><span class="pull-right">&copy; 2019</span></footer>
+    <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">© 930926134@qq.com</span></footer>
 </div>
-<script th:src="@{/fileinput/js/jquery-3.3.1.min.js}"></script>
+</body>
+<!--导入JS文件-->
+<script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
 <script th:src="@{/assets/js/jquery.mousewheel.min.js}"></script>
 <script th:src="@{/assets/js/jquery.cookie.min.js}"></script>
 <script th:src="@{/assets/js/fastclick.min.js}"></script>
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
-<!--上传文件插件-->
-<script th:src="@{/fileinput/js/plugins/piexif.js}" type="text/javascript"></script>
-<script th:src="@{/fileinput/js/plugins/sortable.js}" type="text/javascript"></script>
-<script th:src="@{/fileinput/js/fileinput.js}" type="text/javascript"></script>
-<script th:src="@{/fileinput/js/locales/zh.js}" type="text/javascript"></script>
-<script th:src="@{/fileinput/themes/fas/theme.js}" type="text/javascript"></script>
-<script th:src="@{/fileinput/themes/explorer-fas/theme.js}" type="text/javascript"></script>
+<script th:src="@{/assets/js/summernote.min.js}"></script>
+<script th:src="@{/assets/js/demo/notepad.js}"></script>
+<!--自定义JS-->
 <script>
-    //给当前页添加标识
-    $('.addActive').parent().addClass("active");
-    $(function(){
-        $("#kv-explorer").fileinput({
-            language: 'zh',
-            theme: 'explorer-fas',
-            uploadUrl: '/colorful/uploadPic',
-            overwriteInitial: true,
-            allowedFileExtensions: ['jpg', 'png', 'gif', 'jpeg', 'bmp', 'webp']
-        });
-    });
-    function del(obj){
+    function updateMsg(obj) {
         var id = $(obj).attr("value");
-        if(!confirm("确认删除当前图片？")){
-            return false;
-        }
-        //发出删除请求
-        if(id != null && id >0 ){
-            $.post("/colorful/deletePhotosById",{"id":id},function (data) {
-                if(data.code = 1){
-                    window.location.reload();
+        $.post("/supplyAdmin/getNeedById",{"id":id},function (data) {
+            $("#text").text(data.content);
+        },"json");
+    }
+    function del(obj) {
+        var id = $(obj).attr("value");
+        if(confirm("确定要删除这条信息吗？")){
+            $.post("/supplyAdmin/deleteNeedById",{"id":id},function (data) {
+                if(data.code == 1){
+                    window.location.href = "/supplyAdmin/getNeedByPage?pageNumber=1"
                 }else{
-                    alert(data.result);
+                    alert(data.result)
+                    return false;
                 }
             },"json");
         }
     }
-    //向模态框中添加图片
-    function preview(obj) {
-        //获取路径
-        var file = $(obj).attr("value");
-        if(file){
-            //将图片添加到模态框中显示
-            $("#imgpreview").attr("src","/preview/"+file);
-        }else{
-            alert("没有获取到图片地址！");
-        }
-    }
+    $("#findMsg").click(function () {
+        window.location.href="/supplyAdmin/getNeedByPage?pageNumber=1&username="+$("#nameMsg").val()+"&type="+$("#myType").val()
+    });
 </script>
-</body>
 </html>

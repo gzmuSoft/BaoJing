@@ -1,8 +1,9 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.IndustryNeed;
-import java.util.List;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
 public interface IndustryNeedMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -19,4 +20,5 @@ public interface IndustryNeedMapper {
     int selectCountByUserIdAndType(Integer userId,Integer type);
 
     int updateReadNumber(Integer id);
+    List<IndustryNeed> selectByNameType(IndustryNeed record);
 }

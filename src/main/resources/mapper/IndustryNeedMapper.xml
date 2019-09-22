@@ -21,7 +21,7 @@
       file, comment_num)
     values (#{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR},
       #{date,jdbcType=TIMESTAMP}, #{userid,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR},
-      #{file,jdbcType=VARCHAR}, #{commentNum,jdbcType=INTEGER})
+      #{file,jdbcType=VARCHAR}, 0)
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.IndustryNeed">
     update industry_need
@@ -56,4 +56,16 @@
   <update id="updateReadNumber" parameterType="java.lang.Integer">
     update industry_need set comment_num = comment_num + 1 where id = #{id,jdbcType=INTEGER}
   </update>
+  <select id="selectByNameType" resultMap="BaseResultMap" parameterType="com.gzmusxxy.entity.IndustryNeed">
+     select id, type, content, date, userid, username, file, comment_num
+    from industry_need
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="username!=null and username != ''">
+        and username like concat('%',#{username},'%')
+      </if>
+      <if test="type != 0">
+        and type = #{type}
+      </if>
+    </trim>
+  </select>
 </mapper>

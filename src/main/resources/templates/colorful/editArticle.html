@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
@@ -50,6 +50,14 @@
                             <li><a href="/colorful/photos?pageNumber=1">图片展览</a></li>
                             <li><a href="/colorful/videos?pageNumber=1">视频播放</a></li>
                             <li class="active"><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
+                        </ul>
+                    </li>
+                    <!--  供销系统 -->
+                    <li class="cm-submenu" th:if="${session.admin.role == 1}">
+                        <a class="sf-wrench">供销系统<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/supplyAdmin/getNeedByPage?pageNumber=1&type=0&username=">需求管理</a></li>
+                            <li><a href="/supplyAdmin/getUserByPage?pageNumber=1&username=">用户管理</a></li>
                         </ul>
                     </li>
                     <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>

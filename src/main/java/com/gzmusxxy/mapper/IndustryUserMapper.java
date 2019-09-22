@@ -1,8 +1,9 @@
 package com.gzmusxxy.mapper;
 
 import com.gzmusxxy.entity.IndustryUser;
-import java.util.List;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
 public interface IndustryUserMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -17,4 +18,7 @@ public interface IndustryUserMapper {
     IndustryUser selectUserByUserName(String username);
 
     int updateNameAndPhoneById(IndustryUser record);
+
+    int updateById(IndustryUser record);
+    List<IndustryUser> getUserByName(IndustryUser industryUser);
 }

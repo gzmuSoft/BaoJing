@@ -50,6 +50,12 @@ public class AdminController {
     @Autowired
     private YlGuaranteeService ylGuaranteeService;
 
+    @Autowired
+    private JyStudentService jyStudentService;
+
+    @Autowired
+    private JyApplyService jyApplyService;
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -224,10 +230,15 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/status")
-    public String status(int id, byte status, String remark) {
+    public String status(int id, byte status, String remark, HttpSession session) {
         XjhbInformation xjhbInformation = xjhbInformationService.selectByPrimaryKey(id);
         xjhbInformation.setStatus(status);
         if(xjhbInformationService.updateByPrimaryKey(xjhbInformation) == 1){
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
             new Thread(){
                 @Override
                 public void run(){
@@ -257,7 +268,7 @@ public class AdminController {
                         case 8:
                             WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
                                     ,"转帐业务","补助已发放,请查验","如有问题，请联系电话:"+
-                                            adminService.selectByRole(1).getPhone(),"");break;
+                                            finalAdmin.getPhone(),"");break;
                     }
                     super.run();
                 }
@@ -653,23 +664,27 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/bxPayCost")
-    public String bxPayCost(int id, byte payCost) {
+    public String bxPayCost(int id, byte payCost,HttpSession session) {
         BxInsurance bxInsurance = bxInsuranceService.selectByPrimaryKey(id);
         bxInsurance.setPayCost(payCost);
         if (bxInsuranceService.updateByPrimaryKey(bxInsurance) == 1){
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
             new Thread(){
                 @Override
                 public void run() {
                     XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(bxInsurance.getPersonId());
                     BxProject bxProject = bxProjectService.selectByPrimaryKey(bxInsurance.getProjectId());
-                    Admin admin = adminService.selectByRole(2);
                     if (payCost == 1){
                         WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话:"+admin.getPhone(),"");
+                                ,"缴费业务",bxProject.getName()+"的转帐已收到","接下来您可以在需要理赔的时候申请理赔。如有问题，请联系电话:"+finalAdmin.getPhone(),"");
                     }
                     if (payCost == 0){
                         WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
-                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话:"+admin.getPhone(),"");
+                                ,"缴费业务",bxProject.getName()+"的转帐未收到","如确实转帐，请再次申请验收是否转帐。如有问题，请联系电话:"+finalAdmin.getPhone(),"");
                     }
                     super.run();
                 }
@@ -841,6 +856,7 @@ public class AdminController {
      * 医疗保障分页查询验证缴费页面
      * @param model
      * @param pageNumber
+     * @param name
      * @return
      */
     @RequestMapping(value = "/ylVerificationPay")
@@ -853,6 +869,93 @@ public class AdminController {
     }
 
     /**
+     * 医疗保障分页查询报销页面
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/ylReimbursement")
+    public String ylReimbursement(Model model, Integer pageNumber, String name) {
+        PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name",name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/yl_reimbursement";
+    }
+
+    /**
+     * 医疗保障分页查询转账页面
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/ylTransferAccounts")
+    public String ylTransferAccounts(Model model, Integer pageNumber, String name) {
+        PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectAccountByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name",name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/yl_transfer_accounts";
+    }
+
+    /**
+     * 医疗保障全部更新状态
+     * @param front 前状态
+     * @param after 后状态
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/ylUpdateSign")
+    public String ylUpdateSign(Integer front, Integer after) {
+        return ylGuaranteeService.updateStatus(front, after).toString();
+    }
+
+    /**
+     * 医疗导出excl
+     * @param status 对应类型
+     * @param request request
+     * @param response response
+     * @return return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadYlExcl")
+    public String downloadYlExcl(Integer status, HttpServletRequest request, HttpServletResponse response){
+        List<YlGuarantee> ylGuarantees = ylGuaranteeService.selectAllByStatus(status);
+        String title[] = new String[]{"申请人","身份证号","一折通卡号","转账备注","申请时间"};
+        String items[][] = new String[ylGuarantees.size()][title.length];
+        int j = 0;
+        for (YlGuarantee ylGuarantee:
+                ylGuarantees) {
+            items[j][0] = ylGuarantee.getName();
+            items[j][1] = ylGuarantee.getIdentity();
+            items[j][2] = ylGuarantee.getCard();
+            items[j][3] = ylGuarantee.getRemark();
+            if (ylGuarantee.getApplicationTime() != null) {
+                items[j][4] = ylGuarantee.getApplicationTime().toString();
+            }else {
+                items[j][4] = "";
+            }
+            j++;
+        }
+        String path = "";
+        if (status == 6) {
+            path = ExcelUtil.getHSSFWorkbook(
+                    "医疗保障待收材料名单",title,items,null,
+                    FileUtil.FILE_PATH,"医疗保障待收材料名单"
+            );
+        }else {
+            path = ExcelUtil.getHSSFWorkbook(
+                    "医疗保障待转账名单",title,items,null,
+                    FileUtil.FILE_PATH,"医疗保障待转账名单"
+            );
+        }
+        String name = path.substring(path.lastIndexOf("/"));
+        FileUtil.downloadFile(path,name,request,response);
+        FileUtil.deleteFile(path);
+        return "";
+    }
+
+    /**
      * 医疗保障改变状态
      * @param id id
      * @param status status
@@ -860,13 +963,232 @@ public class AdminController {
      */
     @ResponseBody
     @RequestMapping(value = "/ylStatus")
-    public String ylStatus(Integer id, Byte status) {
+    public String ylStatus(Integer id, Byte status, String remark, HttpSession session) {
         YlGuarantee ylGuarantee = ylGuaranteeService.selectByPrimaryKey(id);
         ylGuarantee.setStatus(status);
         if (ylGuaranteeService.updateByPrimaryKey(ylGuarantee) > 0) {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
+            new Thread() {
+                @Override
+                public void run() {
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(ylGuarantee.getPersonId());
+                    switch (status) {
+                        case 2:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"缴费业务","转帐已收到","接下来您可以在需要报销的时候申请报销。如有问题，请联系电话:"+ finalAdmin.getPhone(),"");
+                            break;
+                        case 3:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"缴费业务","转帐未收到","如确实转帐，请再次申请验证。如有问题，请联系电话:"+ finalAdmin.getPhone(),"");
+                            break;
+                        case 6:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "申请报销",
+                                    true, "通过", "请及时线下提交材料。如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
+                            break;
+                        case 5:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "申请报销",
+                                    false, "失败", remark, "");
+                            break;
+                        case 7:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"业务通知","材料已验收，请等待转账。","如有问题，请联系电话:"+
+                                            finalAdmin.getPhone(),"");
+                            break;
+                        case 8:
+                            WeChatUtil.sendBusinessNoticeMsg(xjhbPerson.getOpenid(),xjhbPerson.getName()+" 你好！"
+                                    ,"转帐业务","已转账, 请查验","如有问题，请联系电话:"+
+                                            finalAdmin.getPhone(),"");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
             return "yes";
         }
         return "no";
+    }
+
+//    教育保障
+    /**
+     * 教育保障公告分页查询通知
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/jyNotification")
+    public String jyNotification(Model model, Integer pageNumber) {
+        PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 4);
+        List<String> list =  new LinkedList<>();
+        for (Bulletin bulletin:
+                pageInfo.getList()) {
+            if (bulletin.getContent() != null) {
+                try {
+                    list.add(new String(bulletin.getContent(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("contentList", list);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_notification";
+    }
+
+    /**
+     * 教育保障学生管理分页查询通知
+     * @param model
+     * @param pageNumber
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/jyStudent")
+    public String jyStudent(Model model, Integer pageNumber, String name) {
+        PageInfo<JyStudent> pageInfo = jyStudentService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_student";
+    }
+
+    /**
+     * 查询学生信息
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getStudent")
+    public String getStudent(Integer id) {
+        JyStudent jyStudent = jyStudentService.selectByPrimaryKey(id);
+        JSONObject json = new JSONObject();
+        json.put("jyStudent", jyStudent);
+        return json.toJSONString();
+    }
+
+    /**
+     *  插入学生
+     * @param jyStudent
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/addStudent")
+    public String addStudent(JyStudent jyStudent) {
+        Integer re = jyStudentService.insert(jyStudent);
+        return re.toString();
+    }
+
+    /**
+     * 教育保障 申请资助
+     * @param model
+     * @param pageNumber
+     * @param name
+     * @return
+     */
+    @RequestMapping(value = "/jyApply")
+    public String jyApply(Model model, Integer pageNumber, String name) {
+        PageInfo<JyApply> pageInfo = jyApplyService.selectByNameLike(name, pageNumber);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("name", name);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/jy_apply";
+    }
+
+    /**
+     * 教育保障改变状态
+     * @param id id
+     * @param status status
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/jyStatus")
+    public String jyStatus(Integer id, Byte status, String remark, HttpSession session) {
+        JyApply jyApply = jyApplyService.selectByPrimaryKey(id);
+        jyApply.setStatus(status);
+        if (jyApplyService.updateByPrimaryKey(jyApply) > 0) {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
+            new Thread() {
+                @Override
+                public void run() {
+                    JyStudent jyStudent = jyStudentService.selectByPrimaryKey(jyApply.getStudentId());
+                    switch (status) {
+                        case 2:
+                            WeChatUtil.sendReviewNoticeMsg(jyApply.getOpenId(), jyStudent.getName() + " 你好！"
+                                    , "申请资助",
+                                    true, "通过", "如有问题，请联系电话:"+ finalAdmin.getPhone(), "");
+                            break;
+                        case 3:
+                            WeChatUtil.sendReviewNoticeMsg(jyApply.getOpenId(), jyStudent.getName() + " 你好！"
+                                    , "申请资助",
+                                    false, "失败", remark, "");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
+            return "yes";
+        }
+        return "no";
+    }
+
+    /**
+     * 更新学生信息
+     * @param jyStudent
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/updateStudent")
+    public String updateStudent(JyStudent jyStudent) {
+        Integer re = jyStudentService.updateByPrimaryKey(jyStudent);
+        return re.toString();
+    }
+
+    /**
+     * 根据id删除学生
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/delStudent")
+    public String delStudent(Integer id) {
+        Integer re = jyStudentService.deleteByPrimaryKey(id);
+        return re.toString();
+    }
+
+    //住房保障
+    /**
+     * 住房保障分页查询通知
+     * @param model
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/zfNotification")
+    public String zfNotification(Model model, Integer pageNumber) {
+        PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 5);
+        List<String> list =  new LinkedList<>();
+        for (Bulletin bulletin:
+                pageInfo.getList()) {
+            if (bulletin.getContent() != null) {
+                try {
+                    list.add(new String(bulletin.getContent(), "UTF-8"));
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("contentList", list);
+        model.addAttribute("pages",PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_notification";
     }
 
     /**

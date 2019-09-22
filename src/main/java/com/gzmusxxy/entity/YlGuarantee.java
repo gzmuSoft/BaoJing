@@ -21,7 +21,7 @@ public class YlGuarantee {
     private String card;
 
     private String remark;
-    //1待验证 2待验成功 3验证失败 4审核中 5审核失败 6审核通过（待转帐）7.已转帐
+    //1待验证 2待验成功 3验证失败 4审核中 5审核失败 6审核通过（等待线下提交资料）7.已提交材料 8.已转帐
     private Byte status;
 
     private Date applicationTime;

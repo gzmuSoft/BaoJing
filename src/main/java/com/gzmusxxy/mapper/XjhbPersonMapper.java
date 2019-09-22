@@ -15,4 +15,8 @@ public interface XjhbPersonMapper {
     int updateByPrimaryKey(XjhbPerson record);
 
     XjhbPerson findPersonByOpenId(String openId);
+
+    int updateNameAndIdentityById(XjhbPerson record);
+
+    int updateIdCardFrontAndIdCardReverseById(XjhbPerson record);
 }

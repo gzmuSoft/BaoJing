@@ -38,5 +38,13 @@ public class XjhbPersonServiceImpl implements XjhbPersonService {
         return xjhbPersonMapper.selectByPrimaryKey(id);
     }
 
+    @Override
+    public int updateNameAndIdentityById(XjhbPerson record) {
+        return xjhbPersonMapper.updateNameAndIdentityById(record);
+    }
 
+    @Override
+    public int updateIdCardFrontAndIdCardReverseById(XjhbPerson record) {
+        return xjhbPersonMapper.updateIdCardFrontAndIdCardReverseById(record);
+    }
 }

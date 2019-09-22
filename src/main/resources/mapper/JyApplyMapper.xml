@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.JyApplyMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.JyApply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jy_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.JyApply">
+    insert into jy_apply (id, open_id, student_id, 
+      status)
+    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, 
+      #{status,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.JyApply">
+    update jy_apply
+    set open_id = #{openId,jdbcType=VARCHAR},
+      student_id = #{studentId,jdbcType=INTEGER},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, open_id, student_id, status
+    from jy_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, open_id, student_id, status
+    from jy_apply
+  </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select a.id, a.open_id, a.status, s.name, s.sex, s.identity, s.family_id, s.poor_id, s.village, s.group
+    from jy_student s join jy_apply a
+    where s.id = a.student_id and s.name like #{name} and status in (1,2)
+  </select>
+</mapper>

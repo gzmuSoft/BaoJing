@@ -46,6 +46,12 @@
       poverty_prove = #{povertyProve,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateNameAndIdentityById" parameterType="com.gzmusxxy.entity.XjhbPerson">
+    update xjhb_person
+    set name = #{name,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, name, identity, telphone, village, create_time, one_card_solution, id_card_front,
     id_card_reverse, openId, poverty, poverty_prove
@@ -64,4 +70,10 @@
     id_card_reverse, openId, poverty, poverty_prove
     from xjhb_person
   </select>
+  <update id="updateIdCardFrontAndIdCardReverseById" parameterType="com.gzmusxxy.entity.XjhbPerson">
+    update xjhb_person
+    set id_card_front = #{idCardFront,jdbcType=VARCHAR},
+      id_card_reverse = #{idCardReverse,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

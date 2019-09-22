@@ -39,7 +39,7 @@
                             <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
                             <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
-                            <li class="active"><a href="#">理赔申请管理</a></li>
+                            <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
                         </ul>
                     </li>
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 4}">
@@ -56,7 +56,7 @@
                         <ul>
                             <li><a href="/admin/jyNotification?pageNumber=1">公告管理</a></li>
                             <li><a href="/admin/jyStudent?pageNumber=1">贫困户学生管理</a></li>
-                            <li><a href="/admin/jyApply?pageNumber=1">申请资助管理</a></li>
+                            <li class="active"><a href="#">申请资助管理</a></li>
                         </ul>
                     </li>
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 6}">
@@ -77,14 +77,6 @@
                             <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
                         </ul>
                     </li>
-                    <!--  供销系统 -->
-                    <li class="cm-submenu" th:if="${session.admin.role == 1}">
-                        <a class="sf-wrench">供销系统<span class="caret"></span></a>
-                        <ul>
-                            <li><a href="/supplyAdmin/getNeedByPage?pageNumber=1&type=0&username=">需求管理</a></li>
-                            <li><a href="/supplyAdmin/getUserByPage?pageNumber=1&username=">用户管理</a></li>
-                        </ul>
-                    </li>
                     <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
                 </ul>
             </div>
@@ -95,12 +87,8 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
-            <h1>理赔申请管理</h1>
+            <h1>申请资助管理</h1>
         </div>
-        <!-- 查询按钮 -->
-<!--        <div class="pull-right">-->
-<!--            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>-->
-<!--        </div>-->
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
@@ -124,25 +112,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">理赔申请管理</div>
+                    <div class="panel-heading">申请资助管理</div>
                     <div class="panel-body">
-                        <form class="form-inline" action="/admin/bxClaims">
+                        <form class="form-inline" action="/admin/jyApply">
                             <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
                             <div class="form-group">
-                                <label for="personName">&nbsp;申请人:&nbsp;</label>
-                                <input type="text" placeholder="请输入申请人名字..." name="personName" th:value="${personName}" class="form-control" id="personName">
-                            </div>
-                            <div class="form-group">
-                                <label for="personName">&nbsp;&nbsp;&nbsp;项目名称:&nbsp;</label>
-                                <input type="text" id="selectName" name="name" th:value="${name}" placeholder="输入需要查询的项目名称...">
-                            </div>
-                            <div class="form-group">
-                                <label for="start">&nbsp;&nbsp;&nbsp;理赔申请起始时间:&nbsp;</label>
-                                <input type="date" th:value="${startTime}" name="startTime" placeholder="请输入开始时间..." id="start">
-                            </div>
-                            <div class="form-group">
-                                <label for="start">&nbsp;&nbsp;&nbsp;理赔申请结束时间:&nbsp;</label>
-                                <input type="date" th:value="${endTime}" name="endTime" placeholder="请输入结束时间..." id="end">
+                                <label for="name">&nbsp;&nbsp;&nbsp;申请人:&nbsp;</label>
+                                <input type="text" placeholder="请输入申请人名字..." name="name" th:value="${name}" class="form-control" id="name">
                             </div>
                             <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
                         </form>
@@ -151,75 +127,39 @@
                         <thead>
                         <tr>
                             <th >#</th>
-                            <th class="text-center">名称</th>
-                            <th class="text-center">数量</th>
-                            <th class="text-center">单价</th>
-                            <th class="text-center">总价</th>
-                            <th class="text-center">理赔申请书</th>
-                            <th class="text-center">身份证正面照</th>
-                            <th class="text-center">身份证反面照</th>
-                            <th class="text-center">受灾照片</th>
                             <th class="text-center">申请人</th>
-                            <th class="text-center">申请人电话</th>
-                            <th class="text-center">购买时间</th>
-                            <th class="text-center">申请时间</th>
+                            <th class="text-center">性别</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">家庭号</th>
+                            <th class="text-center">贫困户编号</th>
+                            <th class="text-center">村</th>
+                            <th class="text-center">组</th>
                             <th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="success" th:each="claims:${pageInfo.list}">
-                            <th scope="row" th:text="${claimsStat.index+1}"></th>
-                            <td th:text="${claims.projectName}"></td>
-                            <td th:text="${claims.buyNumber}"></td>
-                            <td th:text="${claims.cost}"></td>
-                            <td th:text="${claims.totalPrice}"></td>
-                            <td>
-                                <div th:if="${claims.claimsApplicationName != null && claims.claimsApplicationName != 'null' && claims.claimsApplicationName != ''}">
-                                    <span th:text="${claims.claimsApplicationName}"></span>&nbsp;
-                                    <a th:href="@{'/admin/download?name='+${claims.claimsApplicationName}+'&path='+${claims.claimsApplication}}">
-                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
-                                    </a>
-                                </div>
-                            </td>
-                            <td>
-                                <div th:if="${claims.idCardFront != null && claims.idCardFront != 'null' && claims.idCardFront != ''}">
-                                    <a th:href="@{'/admin/download?name=身份证正面照&path='+${claims.idCardFront}}">
-                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
-                                    </a>
-                                </div>
-                            </td>
-                            <td>
-                                <div th:if="${claims.idCardReverse != null && claims.idCardReverse != 'null' && claims.idCardReverse != ''}">
-                                    <a th:href="@{'/admin/download?name=身份证反面照&path='+${claims.idCardReverse}}">
-                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
-                                    </a>
-                                </div>
-                            </td>
-                            <td>
-                                <div th:if="${claims.affectedPhotoName != null && claims.affectedPhotoName != 'null' && claims.affectedPhotoName != ''}">
-                                    <span th:text="${claims.affectedPhotoName}"></span>&nbsp;
-                                    <a th:href="@{'/admin/download?name='+${claims.affectedPhotoName}+'&path='+${claims.affectedPhoto}}">
-                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
-                                    </a>
-                                </div>
-                            </td>
-                            <td th:text="${claims.personName}"></td>
-                            <td th:text="${claims.telphone}"></td>
-                            <td th:text="${#dates.format(claims.virementTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${#dates.format(claims.claimsTime,'yyyy-MM-dd')}"></td>
+                        <tr class="success" th:each="jy:${pageInfo.list}">
+                            <th scope="row" th:text="${jyStat.index+1}"></th>
+                            <td th:text="${jy.name}"></td>
+                            <td th:text="${jy.sex == 1 ? '男' : '女'}"></td>
+                            <td th:text="${jy.identity}"></td>
+                            <td th:text="${jy.familyId}"></td>
+                            <td th:text="${jy.poorId}"></td>
+                            <td th:text="${jy.village}"></td>
+                            <td th:text="${jy.group}"></td>
                             <!--状态-->
-                            <td>
-                                <div class="btn-group" th:if="${claims.status == 4}">
-                                    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待理赔&nbsp;&nbsp;<span class="caret"></span></button>
+                            <td th:if="${jy.status == 1}">
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-primary dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待审核&nbsp;&nbsp;<span class="caret"></span></button>
                                     <ul class="dropdown-menu" role="menu" style="width:50px">
-                                        <li><a href="#" th:value="${claims.id+',5'}" onclick="status(this)">通过</a></li>
+                                        <li><a href="#" th:value="${jy.id+',2'}" onclick="status(this)">通过</a></li>
                                         <li class="divider"></li>
-                                        <li><a href="#" data-toggle="modal" data-target="#remark" th:value="${claims.id+',6'}" onclick="remark(this)">否定</a></li>
+                                        <li><a href="#"  data-toggle="modal" data-target="#remark" th:value="${jy.id+',3'}" onclick="remark(this)">否定</a></li>
                                     </ul>
                                 </div>
-                                <div class="btn-group" th:if="${claims.status == 5}">
-                                    <button type="button" class="btn btn-success btn-xs" th:value="${claims.id}" onclick="pack(this)">&nbsp;&nbsp;打包资料下载&nbsp;&nbsp;</span></button>
-                                </div>
+                            </td>
+                            <td th:if="${jy.status == 2}">
+                                <button type="button" class="btn btn-success btn-xs" disabled>&nbsp;&nbsp;已通过&nbsp;&nbsp;</button>
                             </td>
                         </tr>
                         <tr th:if="${pageInfo.pages <= 0}">
@@ -231,10 +171,10 @@
             </div>
         </div>
         <!-- 分页 -->
-        <nav class="text-center mt-50">
+        <nav class="text-center">
             <ul class="pagination shadowed" style="margin:0">
                 <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/bxClaims?pageNumber='+${pageInfo.prePage}+'&name='+${name}+'&personName='+${personName}+'&startTime='+${startTime}+'&endTime='+${endTime}}">
+                    <a th:href="@{'/admin/jyApply?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
@@ -245,7 +185,7 @@
                 </li>
                 <li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/bxClaims?pageNumber='+${num}+'&name='+${name}+'&personName='+${personName}+'&startTime='+${startTime}+'&endTime='+${endTime}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/jyApply?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -253,7 +193,7 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/bxClaims?pageNumber='+${pageInfo.nextPage}+'&name='+${name}+'&personName='+${personName}+'&startTime='+${startTime}+'&endTime='+${endTime}}">
+                    <a th:href="@{'/admin/jyApply?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
@@ -300,51 +240,42 @@
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
 <script th:src="@{/assets/js/demo/home.js}"></script>
 <script th:inline="javascript">
-    var remarkObj = null;
-	//给当前页添加标识
+    //给当前页添加标识
     $('.addActive').parent().addClass("active");
-    //搜索栏有数据则打开
-    //if($("#selectName").val() != null && $("#selectName").val() != ''){
-    //    $("#cm-search").addClass("open");
-    //}
+    var remarkObj = null;
 
     //给保存赋值
     function remark(obj) {
-		remarkObj = obj;
+        remarkObj = obj;
     }
     //给保存事件
-	$("#remarkSub").click(function(){
-		status(remarkObj);
-	});
+    $("#remarkSub").click(function(){
+        status(remarkObj);
+    });
 
-	//退出清空弹窗数据
-	$("#remarkCha").click(function(){
-		$("#text").val('');
-	});
-	$("#remarkRet").click(function(){
-		$("#text").val('');
-	});
+    //退出清空弹窗数据
+    $("#remarkCha").click(function(){
+        $("#text").val('');
+    });
+    $("#remarkRet").click(function(){
+        $("#text").val('');
+    });
 
     //改变
     function status(obj){
-    	var id = $(obj).attr("value");
-    	$.post("/admin/bxStatus",{
-    		"id":id.substring(0, id.indexOf(",")),
-    		"status":id.substring(id.indexOf(",")+1),
-    		"remark":$("#text").val()
-    	},function(status){
-    		if(status != "error"){
-    		    $("#text").val('');
-    			window.location.href="/admin/bxClaims?pageNumber="+ $('#pageNumber').val() +'&personName='+[[${personName}]]+'&startTime='+[[${startTime}]]+'&endTime='+[[${endTime}]];
-    		}else{
-    			alert("网络错误！");
-    		}
-    	});
-	}
-
-	function pack(obj){
-	    window.location.href="/admin/downloadZip?id=" + obj.value;
-	}
+        var id = $(obj).attr("value");
+        $.post("/admin/jyStatus",{
+            "id":id.substring(0, id.indexOf(",")),
+            "status":id.substring(id.indexOf(",")+1),
+            "remark":$("#text").val()
+        },function(data){
+            if(data == "yes"){
+                window.location.href="/admin/jyApply?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#name').val();
+            }else{
+                alert("网络错误！");
+            }
+        });
+    }
 </script>
 </body>
 </html>

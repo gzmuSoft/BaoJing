@@ -16,22 +16,38 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.YlGuarantee">
-    insert into yl_guarantee (id, person_id, pay_cost, 
+    insert into yl_guarantee (person_id, pay_cost,
       data_zip, card, remark, application_time,
       status)
-    values (#{id,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT}, 
+    values (#{personId,jdbcType=INTEGER}, #{payCost,jdbcType=TINYINT},
       #{dataZip,jdbcType=VARCHAR}, #{card,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{applicationTime,jdbcType=TIMESTAMP},
       #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.YlGuarantee">
     update yl_guarantee
-    set person_id = #{personId,jdbcType=INTEGER},
-      pay_cost = #{payCost,jdbcType=TINYINT},
-      data_zip = #{dataZip,jdbcType=VARCHAR},
-      card = #{card,jdbcType=VARCHAR},
-      application_time = #{applicationTime,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT}
+    <trim prefix="set" suffixOverrides=",">
+      <if test="personId != null and personId != ''">
+        person_id = #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="payCost != null and payCost != ''">
+        pay_cost = #{payCost,jdbcType=TINYINT},
+      </if>
+      <if test="dataZip != null and dataZip != ''">
+        data_zip = #{dataZip,jdbcType=VARCHAR},
+      </if>
+      <if test="card != null and card != ''">
+        card = #{card,jdbcType=VARCHAR},
+      </if>
+      <if test="applicationTime != null">
+        application_time = #{applicationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null and remark != ''">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null and status != ''">
+        status = #{status,jdbcType=TINYINT}
+      </if>
+    </trim>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -43,9 +59,45 @@
     select id, person_id, pay_cost, data_zip, card, application_time, remark, status
     from yl_guarantee
   </select>
+  <select id="selectByPersonId" resultMap="BaseResultMap">
+    select id, person_id, pay_cost, data_zip, card, application_time, remark, status
+    from yl_guarantee
+    where person_id = #{personId,jdbcType=INTEGER}
+  </select>
   <select id="selectByNameCostLike" resultMap="BaseResultMap">
     select y.id, x.name, x.identity, y.person_id, y.pay_cost, y.data_zip, y.card, y.application_time, y.remark, y.status
     from yl_guarantee y JOIN xjhb_person x
     WHERE y.person_id = x.id and x.name like #{name} and y.status = 1
   </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select y.id, x.name, x.identity, y.person_id, y.pay_cost, y.data_zip, y.card, y.application_time, y.remark, y.status
+    from yl_guarantee y JOIN xjhb_person x
+    WHERE y.person_id = x.id and x.name like #{name} and y.status = 4
+  </select>
+  <select id="selectAccountByNameLike" resultMap="BaseResultMap">
+    select y.id, x.name, x.identity, y.person_id, y.pay_cost, y.data_zip, y.card, y.application_time, y.remark, y.status
+    from yl_guarantee y JOIN xjhb_person x
+    WHERE y.person_id = x.id and x.name like #{name} and y.status in(6,7,8)
+  </select>
+  <select id="selectAllByStatus" resultMap="BaseResultMap">
+    select y.id, x.name, x.identity, y.person_id, y.pay_cost, y.data_zip, y.card, y.application_time, y.remark, y.status
+    from yl_guarantee y JOIN xjhb_person x
+    WHERE y.person_id = x.id and y.status = #{status}
+  </select>
+  <update id="updateStatus">
+    update yl_guarantee
+    set status = #{after}
+    where status = #{front}
+  </update>
+  <update id="updateStatusById">
+    update yl_guarantee
+    set status = #{status}
+    where id = #{id}
+  </update>
+  <update id="updateRemarkAndSatusByIdAndPersonId">
+    update yl_guarantee
+    set status = #{status},
+    remark = #{remark}
+    where id = #{id} and person_id = #{personId}
+  </update>
 </mapper>

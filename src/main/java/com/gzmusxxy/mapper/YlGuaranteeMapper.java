@@ -15,4 +15,18 @@ public interface YlGuaranteeMapper {
     int updateByPrimaryKey(YlGuarantee record);
 
     List<YlGuarantee> selectByNameCostLike(String name);
+
+    List<YlGuarantee> selectByNameLike(String name);
+
+    List<YlGuarantee> selectAccountByNameLike(String name);
+
+    List<YlGuarantee> selectAllByStatus(Integer status);
+
+    int updateStatus(Integer front, Integer after);
+
+    int updateRemarkAndSatusByIdAndPersonId(Integer id, String remark,Integer status,Integer personId);
+
+    List<YlGuarantee> selectByPersonId(Integer personid);
+
+    int updateStatusById(byte status,Integer id);
 }

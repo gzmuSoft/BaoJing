@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-cn" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
-    <title>报京微信公众号管理平台</title>
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/bootstrap-clearmin.min.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/roboto.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/material-design.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/small-n-flat.css}">
     <link rel="stylesheet" type="text/css" th:href="@{/assets/css/font-awesome.min.css}">
+    <link rel="icon" type="image/png" th:href="@{/assets/img/favicon.png}">
+    <title>报京微信公众号管理平台</title>
 </head>
 <body class="cm-no-transition cm-1-navbar">
 <div id="cm-menu">
@@ -36,7 +36,7 @@
                         <a class="sf-globe">农业保险<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
-                            <li class="active"><a href="#">保险项目管理</a></li>
+                            <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
                             <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
@@ -63,7 +63,7 @@
                         <a class="sf-shop">住房保障<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/zfNotification?pageNumber=1">公告管理</a></li>
-                            <li><a href="/admin/zfProject?pageNumber=1">申请表模块管理</a></li>
+                            <li class="active"><a href="#">申请表模块管理</a></li>
                             <li><a href="/admin/zfApply?pageNumber=1">危房改造申请管理</a></li>
                             <li><a href="/admin/zfPhoto?pageNumber=1">施工照片管理</a></li>
                             <li><a href="/admin/zfComplete?pageNumber=1">施工完成验收管理</a></li>
@@ -87,17 +87,9 @@
 <header id="cm-header">
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
-        <div class="cm-flex">
-            <h1>保险项目管理</h1>
-            <form id="cm-search" action="/admin/bxProject" method="get">
-                <input type="hidden" name="pageNumber" value="1">
-                <input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
-            </form>
-        </div>
-        <!-- 查询按钮 -->
-        <div class="pull-right">
-            <div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
-        </div>
+		<div class="cm-flex">
+			<h1>申请书模版管理</h1>
+		</div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
             <ul class="dropdown-menu">
@@ -117,71 +109,72 @@
 </header>
 <div id="global">
     <div class="container-fluid cm-container-white" style="margin-top:0;height:875px;">
-        <!-- 表格 -->
+		<!-- 表格 -->
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">保险项目管理</div>
+                    <div class="panel-heading">申请书模版管理</div>
                     <div class="panel-body">
-                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加保险项目</button>
+                        <form class="form-inline" action="/admin/zfProject">
+                            <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加模版</button>
+                            <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
+                            <div class="form-group">
+                                <label for="name">&nbsp;&nbsp;&nbsp;模版名称:&nbsp;</label>
+                                <input type="text" placeholder="请输入模版名称..." name="name" th:value="${name}" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
+                        </form>
                     </div>
-                    <input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
                     <table class="table text-center table-hover">
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th class="text-center">保险名称</th>
-                            <th class="text-center">理赔申请书模板</th>
-                            <th class="text-center">申请起始时间</th>
-                            <th class="text-center">申请结束时间</th>
-                            <th class="text-center">单个保险费用(元)</th>
-                            <th class="text-center"><code>操作</code></th>
+                            <th class="text-center">名称</th>
+                            <th class="text-center">申请书模板</th>
+							<th class="text-center">创建时间</th>
+							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="success" th:each="project:${pageInfo.list}">
-                            <th scope="row" th:text="${projectStat.index+1}"></th>
-                            <td th:text="${project.name}"></td>
-                            <td>
-                                <div th:if="${project.claimsTemplateName != null && project.claimsTemplateName != 'null' && project.claimsTemplateName != ''}">
-                                    <span th:text="${project.claimsTemplateName}"></span>&nbsp;
-                                    <a th:href="@{'/admin/download?name='+${project.claimsTemplateName}+'&path='+${project.claimsTemplate}}">
-                                        <img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20">
-                                    </a>
-                                </div>
-                            </td>
-                            <td th:text="${#dates.format(project.startTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${#dates.format(project.endTime,'yyyy-MM-dd')}"></td>
-                            <td th:text="${project.cost}"></td>
-                            <td>
-                                <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${project.id}">修改</button>&nbsp;
-                                <button type="button" class="btn btn-danger btn-xs" th:value="${project.id}" onclick="del(this)">删除</button>
-                            </td>
-                        </tr>
-                        <tr th:if="${pageInfo.pages <= 0}">
-                            <th colspan="0" class="text-center">无数据</th>
-                        </tr>
+                            <tr class="info" th:each="zf:${pageInfo.list}">
+                                <th scope="row" th:text="${zfStat.index+1}"></th>
+                                <td th:text="${zf.name}"></td>
+                                <td>
+                                    <div th:if="${zf.templateName != null && zf.templateName != 'null' && zf.templateName != ''}">
+                                        <span th:text="${zf.templateName}"></span>&nbsp;
+                                        <a th:href="@{'/admin/download?name=' + ${zf.templateName} + '&path='+${zf.templatePath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                    </div>
+                                </td>
+                                <td th:text="${#dates.format(zf.createTime,'yyyy-MM-dd')}"></td>
+                                <td>
+                                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${zf.id}">修改</button>&nbsp;
+                                    <button type="button" class="btn btn-danger btn-xs" th:value="${zf.id}" onclick="del(this)">删除</button>
+                                </td>
+                            </tr>
+                            <tr th:if="${pageInfo.pages <= 0}">
+                                <th colspan="0" class="text-center">无数据</th>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <!-- 分页 -->
-        <nav class="text-center">
-            <ul class="pagination shadowed" style="margin:0">
-                <li th:if="${pageInfo.prePage > 0}">
-                    <a th:href="@{'/admin/bxProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
-                        <span><i class="fa fa-angle-left"></i></span>
-                    </a>
-                </li>
+		<!-- 分页 -->
+		<nav class="text-center">
+			<ul class="pagination shadowed" style="margin:0">
+				<li th:if="${pageInfo.prePage > 0}">
+					<a th:href="@{'/admin/zfProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+						<span><i class="fa fa-angle-left"></i></span>
+					</a>
+				</li>
                 <li th:if="${pageInfo.prePage <= 0 && pageInfo.pages > 0}">
                     <a>
                         <span><i class="fa fa-angle-left"></i></span>
                     </a>
                 </li>
-                <li th:each="num:${pages}">
+				<li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/bxProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/zfProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -189,68 +182,50 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/bxProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/zfProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
-            </ul>
-        </nav>
+			</ul>
+		</nav>
     </div>
     <!--弹窗-->
     <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title" id="myModalLabel">
-                        Modal title
-                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
-                    </h4>
-                </div>
-                <div class="modal-body">
-                    <form class="form-horizontal">
-                        <input type="hidden" id="projectId">
+                    <div class="modal-header">
+                        <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="myModalLabel">
+                            Modal title
+                            <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                        </h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal">
+                            <input type="hidden" id="projectId">
                         <div class="form-group">
-                            <label for="projectName" class="col-sm-2 control-label">项目名称</label>
+                            <label for="name" class="col-sm-2 control-label">名称</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="projectName" name="name" placeholder="请输入项目名称..">
+                                <input type="text" class="form-control" id="name" name="name" placeholder="请输入模版名称..">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="claimsTemplate" class="col-sm-2 control-label">理赔书模板</label>
+                            <label for="templatePath" class="col-sm-2 control-label">申请书模板</label>
                             <div class="col-sm-10">
                                 <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                                    <button type="button" class="btn btn-success fileinput-button form-control" >理赔书模板上传</button>
-                                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="claimsTemplate" id="claimsTemplate" onchange="saveFile(this)">
+                                    <button type="button" class="btn btn-success fileinput-button form-control" >申请书模板上传</button>
+                                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="templatePath" id="templatePath" onchange="saveFile(this)">
                                 </div>&nbsp;&nbsp;
                                 <span id="fileName" style="vertical-align: middle">未上传文件</span>
                                 <a href="#" class="hidden" id="fileA" onclick="downloadFile()"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="startTime" class="col-sm-2 control-label">起始时间</label>
-                            <div class="col-sm-10">
-                                <input type="date" class="form-control" name="startTime" id="startTime" placeholder="请输入可申请的起始时间...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="endTime" class="col-sm-2 control-label">结束时间</label>
-                            <div class="col-sm-10">
-                                <input type="date" class="form-control" name="endTime" id="endTime" placeholder="请输入可申请的结束时间...">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="cost" class="col-sm-2 control-label">保险费用</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="cost" name="cost" placeholder="请输入保险费用（元）...">
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="save" class="btn btn-primary">保存</button>
-                    <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
-                </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="save" class="btn btn-primary">保存</button>
+                        <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -268,78 +243,72 @@
 <script>
     //给当前页添加标识
     $('.addActive').parent().addClass("active");
-    //搜索栏有数据则打开
-    if($("#selectName").val() != null && $("#selectName").val() != ''){
-        $("#cm-search").addClass("open");
-    }
+
     var flag = null;
     var name = null;
     var filePath = null;
-    var yuan_filePath = null;
-    var yuan_fileName = null;
-
+    var createTime = null;
     //判断是增加还是修改
     $('#addProject').click(function(){
         flag = "add";
-        $("#myModalLabel").text("创建保险项目");
+        $("#myModalLabel").text("创建模版");
+        if(!$('#fileA').hasClass('hidden')){
+            $('#fileA').addClass('hidden');
+        }
     });
 
     //获取要更新数据
     function update(obj){
         flag = "update";
-        $("#myModalLabel").text("修改保险项目");
+        $("#myModalLabel").text("修改模版");
         //获取数据显示
-        $.post("/admin/findBxProject",
+        $.post("/admin/zfGetTemplate",
         {
             "id":obj.value
         },
         function(data){
             var project = $.parseJSON(data).project;
-            yuan_filePath = project.claimsTemplate;
-            yuan_fileName = project.claimsTemplateName;
-            $("#fileName").text(project.claimsTemplateName);
-            $('#fileA').removeClass('hidden');
+            filePath = project.templatePath;
+            name = project.templateName;
+            if (project.templateName != null && project.templateName != 'null' && project.templateName != '') {
+                $("#fileName").text(project.templateName);
+                $('#fileA').removeClass('hidden');
+            }else {
+                $("#fileName").text("文件未上传");
+            }
             $('#projectId').val(project.id);
-            $('#projectName').val(project.name);
-            $('#startTime').val($.parseJSON(data).startTime);
-            $('#endTime').val($.parseJSON(data).endTime);
-            $('#cost').val(project.cost);
-        }),"json";
+            $('#name').val(project.name);
+            createTime = project.createTime;
+        });
     }
+    $('#ret').click(function(){
+        clean();
+    });
 
     //点cha之后重置数据
     $('#cha').click(function(){
-        clean();
-    });
-    $('#ret').click(function(){
         clean();
     });
 
     //重置数据
     function clean(){
         $('#projectId').val("");
-        $('#projectName').val("");
-        $('#startTime').val("");
-        $('#endTime').val("");
-        $('#cost').val("");
-        yuan_filePath = null;
-        yuan_fileName = null;
-        if(!$('#fileA').hasClass('hidden')){
-            $('#fileA').addClass('hidden');
-        }
+        $('#name').val("");
+        filePath = null;
+        name = null;
         $("#fileName").text("文件未上传");
     }
 
     //删除
     function del(obj){
         if(confirm("确认是否删除?")){
-            $.post("/admin/delBxProject",
+            $.post("/admin/zfDelTemplate",
             {
                 "id":obj.value
             },
             function(data){
                 if(data > 0){
-                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
+                    window.location.href="/admin/zfProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("删除失败！");
                 }
@@ -350,40 +319,33 @@
     //添加和修改
     $('#save').click(function(){
         if(flag == "add"){
-            $.post("/admin/addBxProject",
+            $.post("/admin/zfAddTemplate",
             {
-                'name':$('#projectName').val(),
-                'claimsTemplate':filePath,
-                'claimsTemplateName':name,
-                'startTime':$('#startTime').val(),
-                'endTime':$('#endTime').val(),
-                'cost':$('#cost').val()
+                'name':$('#name').val(),
+                'templatePath':filePath,
+                'templateName':name
             },
             function(data){
                 if(data > 0){
                     alert("保存成功！");
-                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
+                    window.location.href="/admin/zfProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("保存失败！");
                 }
             });
         }else{
-            $.post("/admin/updateBxProject",
+            $.post("/admin/zfUpdateTemplate",
             {
                 'id':$('#projectId').val(),
-                'name':$('#projectName').val(),
-                'claimsTemplate':yuan_filePath,
-                'claimsTemplateName':yuan_fileName,
-                'filePath':filePath,
-                'fileName':name,
-                'startTime':$('#startTime').val(),
-                'endTime':$('#endTime').val(),
-                'cost':$('#cost').val()
+                'name':$('#name').val(),
+                'templatePath':filePath,
+                'templateName':name,
+                'createTime':timestampToTime(createTime)
             },
             function(data){
                 if(data > 0){
                     alert("保存成功！");
-                    window.location.href="/admin/bxProject?pageNumber=" + $('#pageNumber').val();
+                    window.location.href="/admin/zfProject?pageNumber=" + $('#pageNumber').val();
                 }else{
                     alert("保存失败！");
                 }
@@ -393,7 +355,7 @@
 
     //下载修改时的模板文件
     function downloadFile(){
-        window.location.href="/admin/download?name="+yuan_fileName+"&path="+yuan_filePath;
+        window.location.href="/admin/download?name="+name+"&path="+filePath;
     }
 
     //保存文件
@@ -415,16 +377,26 @@
         processData: false,
         contentType: false,
         success:function(result){
-                if(!$('#fileA').hasClass('hidden')){
-                    $('#fileA').addClass('hidden');
-                }
                 alert("上传成功！");
+                $('#fileA').removeClass('hidden');
                 filePath = result;
             },
         error:function(result){
                 alert("上传失败！");
             }
         });
+    }
+
+    //处理格式
+    function timestampToTime(timestamp) {
+        var date = new Date(timestamp );//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+        Y = date.getFullYear() + '-';
+        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
+        D = date.getDate();
+        h = date.getHours() + ':';
+        m = date.getMinutes() + ':';
+        s = date.getSeconds();
+        return Y+M+D;
     }
 </script>
 </body>

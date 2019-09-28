@@ -1,9 +1,12 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.ZfTemplate;
+
 import java.util.List;
 
-public interface ZfTemplateMapper {
+public interface ZfTemplateService {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(ZfTemplate record);
@@ -14,5 +17,5 @@ public interface ZfTemplateMapper {
 
     int updateByPrimaryKey(ZfTemplate record);
 
-    List<ZfTemplate> selectByNameLike(String name);
+    PageInfo<ZfTemplate> selectByNameLike(String name, Integer pageNumber);
 }

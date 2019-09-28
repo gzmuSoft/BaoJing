@@ -35,4 +35,9 @@
     select id, name, template_name, template_path, create_time
     from zf_template
   </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select id, name, template_name, template_path, create_time
+    from zf_template
+    where name like #{name}
+  </select>
 </mapper>

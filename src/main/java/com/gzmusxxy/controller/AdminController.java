@@ -56,6 +56,10 @@ public class AdminController {
     @Autowired
     private JyApplyService jyApplyService;
 
+    @Autowired
+    private ZfTemplateService zfTemplateService;
+
+
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
         session.removeAttribute("admin");
@@ -1191,6 +1195,78 @@ public class AdminController {
         return "admin/zf_notification";
     }
 
+    /**
+     * 申请书模版查询加分页
+     * @param model model
+     * @param name name
+     * @param pageNumber pageNumber
+     * @return admin/zf_project
+     */
+    @RequestMapping(value = "/zfProject")
+    public String zfProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<ZfTemplate> pageInfo = zfTemplateService.selectByNameLike(name, pageNumber);
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_project";
+    }
+
+    /**
+     * 添加模版
+     * @param zfTemplate
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/zfAddTemplate")
+    public String zfAddTemplate(ZfTemplate zfTemplate) {
+        zfTemplate.setCreateTime(new Date());
+        Integer re = zfTemplateService.insert(zfTemplate);
+        return re.toString();
+    }
+
+    /**
+     * 更新模版
+     * @param zfTemplate
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/zfUpdateTemplate")
+    public String zfUpdateTemplate(ZfTemplate zfTemplate) {
+        Integer re = zfTemplateService.updateByPrimaryKey(zfTemplate);
+        return re.toString();
+    }
+
+    /**
+     * 获取模版
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/zfGetTemplate")
+    public String zfGetTemplate(int id) {
+        JSONObject jsonObject = new JSONObject();
+        ZfTemplate zfTemplate = zfTemplateService.selectByPrimaryKey(id);
+        if (zfTemplate != null) {
+            jsonObject.put("project",zfTemplate);
+        }else {
+            jsonObject.put("project",new ZfTemplate());
+        }
+        return jsonObject.toJSONString();
+    }
+
+    /**
+     * 删除模版
+     * @param id
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/zfDelTemplate")
+    public String zfDelTemplate(int id) {
+        Integer re = zfTemplateService.deleteByPrimaryKey(id);
+        return re.toString();
+    }
+
+    //通用
     /**
      * 根据id删除公告
      * @param id

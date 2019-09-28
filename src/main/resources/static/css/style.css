@@ -58,6 +58,9 @@ foot a{
 .form{
     margin-bottom: 60px;
 }
+/*
+* 我申请的项目样式表
+*/
 .table-view{
     list-style: none;
     margin: 0 2px 54px 2px;
@@ -101,7 +104,9 @@ foot a{
     z-index:5;
 }
 .table-view-div .shadow{
+    /*
     text-shadow: 1px 1px 1px;
+     */
 }
 .w2{
     letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
@@ -113,4 +118,67 @@ foot a{
 }
 .table-view-item a{
     text-decoration:none;/*去掉a标签的下划线*/
+}
+/**
+ * 医疗保险列表样式表
+ */
+.medical-view-div{
+    margin-bottom: 10px;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.5);
+    padding: 15px 15px 10px 15px;
+    box-shadow: 0 1px 16px 0 rgba(0,0,0,.1);
+}
+.medical-view-item{
+    padding: 0;
+    position: relative;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+.medical-view-item-bd{
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    min-width: 0;
+}
+.medical-view-item-fr{
+    font-size: 0.8rem;
+    text-align: right;
+    color: #999999;
+    padding-right: 13px;
+    position: relative;
+}
+.medical-view-item-fl{
+    color: #666666;
+    font-size: 0.8rem;
+    margin-bottom: 5px;
+    position: relative;
+    overflow: hidden;
+    padding-left: 10px;
+}
+.medical-bottom{
+    margin-top: 50px;
+}
+.medical-view-item-fl p{
+    text-indent:2em;
+    font-size: 1.7em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+.details-view{
+    border-radius: 2px;
+    background: rgba(255,255,255,0.5);
+    margin-top:20px ;
+    padding: 15px 15px 10px 15px;
+}
+.details-view p{
+    text-indent:2em;
 }

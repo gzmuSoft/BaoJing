@@ -93,4 +93,19 @@ public class YlGuaranteeServiceImpl implements YlGuaranteeService {
     public Integer updateStatus(Integer front, Integer after) {
         return ylGuaranteeMapper.updateStatus(front, after);
     }
+
+    @Override
+    public int updateRemarkAndSatusByIdAndPersonId(Integer id, String remark, Integer status,Integer personId) {
+        return ylGuaranteeMapper.updateRemarkAndSatusByIdAndPersonId(id, remark, status, personId);
+    }
+
+    @Override
+    public List<YlGuarantee> selectByPersonId(Integer personId) {
+        return ylGuaranteeMapper.selectByPersonId(personId);
+    }
+
+    @Override
+    public int updateStatusById(byte status, Integer id) {
+        return ylGuaranteeMapper.updateStatusById(status,id);
+    }
 }

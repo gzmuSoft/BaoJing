@@ -23,4 +23,10 @@ public interface YlGuaranteeMapper {
     List<YlGuarantee> selectAllByStatus(Integer status);
 
     int updateStatus(Integer front, Integer after);
+
+    int updateRemarkAndSatusByIdAndPersonId(Integer id, String remark,Integer status,Integer personId);
+
+    List<YlGuarantee> selectByPersonId(Integer personid);
+
+    int updateStatusById(byte status,Integer id);
 }

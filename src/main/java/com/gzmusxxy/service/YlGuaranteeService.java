@@ -26,4 +26,10 @@ public interface YlGuaranteeService {
     int updateByPrimaryKey(YlGuarantee record);
 
     Integer updateStatus(Integer front, Integer after);
+
+    int updateRemarkAndSatusByIdAndPersonId(Integer id, String remark,Integer status,Integer personId);
+
+    List<YlGuarantee> selectByPersonId(Integer personId);
+
+    int updateStatusById(byte status,Integer id);
 }

@@ -25,4 +25,5 @@ public interface IndustryUserService {
     IndustryUser selectUserByUserName(String username);
 
     int updateNameAndPhoneById(IndustryUser record);
+    int updateById(IndustryUser record);
 }

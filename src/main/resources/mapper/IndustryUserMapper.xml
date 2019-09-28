@@ -54,4 +54,20 @@
       phone = #{phone,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateById" parameterType="com.gzmusxxy.entity.IndustryUser">
+   update industry_user
+    set phone = #{phone,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getUserByName" resultMap="BaseResultMap" parameterType="com.gzmusxxy.entity.IndustryUser">
+    select id, username, password, registertime, phone, lastip, name, user_type
+    from industry_user
+    <trim prefix="where" prefixOverrides="and|or">
+      <if test="username!=null and username != ''">
+        and username like concat('%',#{username},'%')
+      </if>
+    </trim>
+  </select>
 </mapper>

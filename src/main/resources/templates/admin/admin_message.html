@@ -78,6 +78,14 @@
                                     <li><a href="/colorful/article?pageNumber=1">报京文苑</a></li>
                                 </ul>
                             </li>
+                            <!--  供销系统 -->
+                            <li class="cm-submenu" th:if="${session.admin.role == 1}">
+                                <a class="sf-wrench">供销系统<span class="caret"></span></a>
+                                <ul>
+                                    <li><a href="/supplyAdmin/getNeedByPage?pageNumber=1&type=0&username=">需求管理</a></li>
+                                    <li><a href="/supplyAdmin/getUserByPage?pageNumber=1&username=">用户管理</a></li>
+                                </ul>
+                            </li>
                             <li><a href="/admin/login" class="sf-lock-open">退出登录</a></li>
                         </ul>
                     </div>

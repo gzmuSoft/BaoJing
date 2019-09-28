@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>我的医疗保障</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<!--    <div class="col-sm-12">-->
+        <h3>保险申请进度</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--已经购买的保险列表-->
+        <ul class="table-view">
+            <li th:each="item : ${list}">
+                <div class="table-view-div">
+                    <div class="table-view-project" th:inline="text"><span class="shadow">保障编号</span>：[[${item.id}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow w2">姓名</span>：[[${user.name}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">证件号码</span>：[[${user.identity}]]</div>
+                    <th:block th:if="${item.card != null}">
+                        <div class="table-view-item" th:inline="text"><span class="shadow w3">一折通：</span>
+                            [[${item.card}]]
+                        </div>
+                    </th:block>
+                    <th:block th:if="${item.dataZip != null}">
+                        <div class="table-view-item" th:inline="text"><span class="shadow"><span class="w3">申请书</span>：</span>
+                            <a th:href="'/insurance/downloadFile?path='+${item.dataZip}+'&name='+${item.dataZip}">
+                                资料打包下载
+                                <img src="/assets/img/sf/cloud-down.svg" width="26" height="20">
+                            </a>
+                        </div>
+                    </th:block>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">申请时间</span>：[[${#dates.format(item.applicationTime,'yyyy-MM-dd HH:mm:ss')}]]</div>
+                    <th:block th:if="${item.remark != null}">
+                        <div class="table-view-item" th:inline="text"><span class="shadow">备注信息</span>：[[${item.remark}]]</div>
+                    </th:block>
+                    <div class="table-view-option"><span class="shadow"><span class="w2">操作</span>：</span>
+                        <!-- 功能标签-->
+                        <th:block th:switch="${item.status}">
+                            <!-- 功能标签-->
+                            <button th:case="0" class="btn btn-xs btn-primary" th:onclick="'payment('+${item.id}+')'">确认缴费</button>
+                            <th:block th:case="2">
+                                <button class="btn btn-xs btn-primary" th:onclick="'applySubsidy('+${item.id}+')'">补助报销</button>
+                            </th:block>
+                            <button th:case="3" class="btn btn-xs btn-primary" th:onclick="'apply('+${item.id}+')'">重新申请</button>
+                            <button th:case="5" class="btn btn-xs btn-primary" th:onclick="'applySubsidy('+${item.id}+')'">完善信息</button>
+                            <button th:case="*" class="btn btn-xs btn-default" disabled="disabled">暂无操作</button>
+                        </th:block>
+                    </div>
+                    <div class="table-view-status" th:switch="${item.status}">
+                        <label th:case="0" class="label label-default">待缴费</label>
+                        <label th:case="1" class="label label-default">待验证</label>
+                        <label th:case="2" class="label label-info">待验成功</label>
+                        <label th:case="3" class="label label-danger">验证失败</label>
+                        <label th:case="4" class="label label-info">审核中</label>
+                        <label th:case="5" class="label label-danger">审核失败</label>
+                        <label th:case="6" class="label label-warning">待提交材料</label>
+                        <label th:case="7" class="label label-info">已提交材料</label>
+                        <label th:case="8" class="label label-success">已转帐</label>
+
+                    </div>
+                </div>
+            </li>
+            <!--如果没有数据-->
+            <li th:if="${list.size() == 0}">
+                <div class="table-view-div">
+                    <div class="table-view-project text-center"><span class="shadow">你没有购买任何医疗保险！</span></div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="decoration"></div>
+</div>
+<!-- 模态框 -->
+<div class="modal fade" tabindex="-1" role="dialog" id="gridSystemModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">保险缴费</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="alert alert-info" role="alert">请先转账到以下银行账户后再点击确认缴费按钮！！</div>
+                </div>
+                <!--隐藏的表单域-->
+                <input type="hidden" id="medicalId">
+                <div class="row">
+                    <div class="col-xs-4 text-left">收款人：</div>
+                    <div class="col-xs-8" id="payee"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-left">开户行：</div>
+                    <div class="col-xs-8" id="bank"></div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-4 text-left">银行卡号：</div>
+                    <div class="col-xs-8" id="cardNumber"></div>
+                </div>
+                <div class="row" style="top: 10px;margin-left: 2px;margin-right: 2px;">
+                    <textarea class="form-control" id="remarkModal" placeholder="已缴费？在此填写医疗保障名称以及缴费的金额！"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="confirmPayment()">确认已缴费？</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/medical">
+        <div class="am-menu-column " id="explore" style="width: 50%;">
+            <span>医疗公告</span>
+        </div>
+    </a>
+    <a href="/medical/myApply?pageNumber=1">
+        <div class="am-menu-column active" id="index" style="width: 50%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+</footer>
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+<script type="text/javascript">
+     function applySubsidy(id) {
+         window.location.href = "/medical/applySubsidy?id="+id;
+     }
+     function apply(id) {
+         if(id != null && id != ""){
+             window.location.href = "/medical/reApply?id="+id;
+         }else{
+             alert("数据出错！");
+         }
+     }
+     //用于显示缴费模态框的按钮
+     function payment(id){
+         //向模态框添加数据
+         $.get("/medical/getBankInfo",function(data){
+             if(data != null && data != ''){
+                 if(data.bank != null){
+                    $("#bank").text(data.bank);
+                 }
+                 if(data.payee != null){
+                     $("#payee").text(data.payee);
+                 }
+                 if(data.cardNumber != null){
+                     $("#cardNumber").text(data.cardNumber );
+                 }
+             }
+         },"json");
+         //设置模态框
+         $("#medicalId").val(id);
+         $("#gridSystemModal").modal("show");
+     }
+     function confirmPayment() {
+         if($("#medicalId").val() == null || $("#medicalId").val() == ""){
+             alert("无法获取信息，无法提交！");
+            return false;
+         }
+         if($("#remarkModal").val() == null || $("#remarkModal").val() == ""){
+             alert("请输入备注信息！");
+             return false;
+         }
+         var params = {
+             "id":$("#medicalId").val(),
+             "remark":$("#remarkModal").val()
+         }
+         $.post("/medical/payment",params,function (data) {
+             if(data.code == 1){
+                 $("#gridSystemModal").modal("hide");
+                 window.location.reload();
+             }else{
+                 alert(data.result);
+             }
+         },"json");
+     }
+</script>
+</body>
+</html>

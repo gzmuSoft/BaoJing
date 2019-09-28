@@ -6,6 +6,7 @@ import com.gzmusxxy.service.IndustryUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 
 import java.util.List;
@@ -75,5 +76,11 @@ public class IndustryUserServiceImpl implements IndustryUserService {
     @Override
     public int updateNameAndPhoneById(IndustryUser record) {
         return industryUserMapper.updateNameAndPhoneById(record);
+    }
+
+    @Transactional
+    @Override
+    public int updateById(IndustryUser record) {
+        return this.industryUserMapper.updateById(record);
     }
 }

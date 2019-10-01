@@ -63,8 +63,8 @@
                         <a class="sf-shop">住房保障<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/zfNotification?pageNumber=1">公告管理</a></li>
-                            <li class="active"><a href="#">申请表模块管理</a></li>
-                            <li><a href="/admin/zfApply?pageNumber=1">危房改造申请管理</a></li>
+                            <li><a href="/admin/zfProject?pageNumber=1">申请表模块管理</a></li>
+                            <li class="active"><a href="#">危房改造申请管理</a></li>
                             <li><a href="/admin/zfPhoto?pageNumber=1">施工照片管理</a></li>
                             <li><a href="/admin/zfComplete?pageNumber=1">施工完成验收管理</a></li>
                         </ul>
@@ -88,7 +88,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
-			<h1>申请书模版管理</h1>
+			<h1>危房改造申请管理</h1>
 		</div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -113,14 +113,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">申请书模版管理</div>
+                    <div class="panel-heading">危房改造申请管理</div>
                     <div class="panel-body">
-                        <form class="form-inline" action="/admin/zfProject">
-                            <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加模版</button>
+                        <form class="form-inline" action="/admin/zfApply">
                             <input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
                             <div class="form-group">
-                                <label for="name">&nbsp;&nbsp;&nbsp;模版名称:&nbsp;</label>
-                                <input type="text" placeholder="请输入模版名称..." name="name" th:value="${name}" class="form-control">
+                                <label for="name">&nbsp;&nbsp;&nbsp;申请人姓名:&nbsp;</label>
+                                <input type="text" placeholder="请输入申请人姓名..." name="name" id="name" th:value="${name}" class="form-control">
                             </div>
                             <button type="submit" class="btn btn-primary" id="selectSub">查询</button>
                         </form>
@@ -129,9 +128,11 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th class="text-center">名称</th>
-                            <th class="text-center">申请书模板</th>
-							<th class="text-center">创建时间</th>
+                            <th class="text-center">申请人</th>
+                            <th class="text-center">身份证号</th>
+                            <th class="text-center">手机号</th>
+                            <th class="text-center">危改申请表</th>
+                            <th class="text-center">房屋照片</th>
 							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
@@ -139,16 +140,32 @@
                             <tr class="info" th:each="zf:${pageInfo.list}">
                                 <th scope="row" th:text="${zfStat.index+1}"></th>
                                 <td th:text="${zf.name}"></td>
+                                <td th:text="${zf.identity}"></td>
+                                <td th:text="${zf.telphone}"></td>
                                 <td>
-                                    <div th:if="${zf.templateName != null && zf.templateName != 'null' && zf.templateName != ''}">
-                                        <span th:text="${zf.templateName}"></span>&nbsp;
-                                        <a th:href="@{'/admin/download?name=' + ${zf.templateName} + '&path='+${zf.templatePath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                    <div th:if="${zf.templatePath != null && zf.templatePath != 'null' && zf.templatePath != ''}">
+                                        <span>危改申请表</span>&nbsp;
+                                        <a th:href="@{'/admin/download?name=危改申请表&path='+${zf.templatePath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                                     </div>
                                 </td>
-                                <td th:text="${#dates.format(zf.createTime,'yyyy-MM-dd')}"></td>
                                 <td>
-                                    <button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#myModal" onclick="update(this)" th:value="${zf.id}">修改</button>&nbsp;
-                                    <button type="button" class="btn btn-danger btn-xs" th:value="${zf.id}" onclick="del(this)">删除</button>
+                                    <div th:if="${zf.housePhotosPath != null && zf.housePhotosPath != 'null' && zf.housePhotosPath != ''}">
+                                        <span>危房照片</span>&nbsp;
+                                        <a th:href="@{'/admin/download?name=危房照片&path='+${zf.housePhotosPath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+                                    </div>
+                                </td>
+                                <td th:if="${zf.status == 1}">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;审核&nbsp;&nbsp;<span class="caret"></span></button>
+                                        <ul class="dropdown-menu" role="menu" style="width:50px">
+                                            <li><a href="#" data-toggle="modal" data-target="#upload" th:value="${zf.id+',2'}" onclick="upload(this)">通过</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#" data-toggle="modal" data-target="#remark" th:value="${zf.id+',3'}" onclick="remark(this)">否定</a></li>
+                                        </ul>
+                                    </div>
+                                </td>
+                                <td th:if="${zf.status == 2}">
+                                    <button type="button" disabled class="btn btn-success btn-xs">&nbsp;&nbsp;等待施工&nbsp;&nbsp;</button>
                                 </td>
                             </tr>
                             <tr th:if="${pageInfo.pages <= 0}">
@@ -163,7 +180,7 @@
 		<nav class="text-center">
 			<ul class="pagination shadowed" style="margin:0">
 				<li th:if="${pageInfo.prePage > 0}">
-					<a th:href="@{'/admin/zfProject?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+					<a th:href="@{'/admin/zfApply?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
@@ -174,7 +191,7 @@
                 </li>
 				<li th:each="num:${pages}">
                     <a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-                    <a th:href="@{'/admin/zfProject?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+                    <a th:href="@{'/admin/zfApply?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
                 </li>
                 <li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
                     <a>
@@ -182,50 +199,68 @@
                     </a>
                 </li>
                 <li th:if="${pageInfo.nextPage > 0}">
-                    <a th:href="@{'/admin/zfProject?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+                    <a th:href="@{'/admin/zfApply?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
                         <span><i class="fa fa-angle-right"></i></span>
                     </a>
                 </li>
 			</ul>
 		</nav>
     </div>
-    <!--弹窗-->
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <!--拒绝弹窗-->
+    <div id="remark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                        <h4 class="modal-title" id="myModalLabel">
-                            Modal title
-                            <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
-                        </h4>
-                    </div>
-                    <div class="modal-body">
-                        <form class="form-horizontal">
-                            <input type="hidden" id="projectId">
+                <div class="modal-header">
+                    <button type="button" class="close" id="remarkCha" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        否定
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal">
                         <div class="form-group">
-                            <label for="name" class="col-sm-2 control-label">名称</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="name" name="name" placeholder="请输入模版名称..">
+                            <label for="text" class="col-sm-4 control-label text-center">请描述否定原因：</label>
+                            <div class="col-sm-8 text-center">
+                                <input class="textarea col-sm-10" id="text">
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label for="templatePath" class="col-sm-2 control-label">申请书模板</label>
-                            <div class="col-sm-10">
-                                <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                                    <button type="button" class="btn btn-success fileinput-button form-control" >申请书模板上传</button>
-                                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="templatePath" id="templatePath" onchange="saveFile(this)">
-                                </div>&nbsp;&nbsp;
-                                <span id="fileName" style="vertical-align: middle">未上传文件</span>
-                                <a href="#" class="hidden" id="fileA" onclick="downloadFile()"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
-                            </div>
-                        </div>
-                        </form>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="remarkSub" class="btn btn-primary">确定</button>
+                    <button type="button" id="remarkRet" class="btn btn-default" data-dismiss="modal">取消</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!--成功弹窗-->
+    <div id="upload" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" id="uploadCha" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        上传施工要求
+                        <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <label class="col-sm-4"></label>
+                    <div class="form-group col-sm-8">
+                        <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button type="button" class="btn btn-success fileinput-button form-control" >施工要求上传</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="constructionPath" id="constructionPath" onchange="saveFile(this)">
+                        </div>&nbsp;&nbsp;
+                        <span id="fileName" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileA" onclick="downloadFile()"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" id="save" class="btn btn-primary">保存</button>
-                        <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
-                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="uploadSub" class="btn btn-primary">确认保存</button>
+                </div>
             </div>
             <!-- /.modal-content -->
         </div>
@@ -243,123 +278,52 @@
 <script>
     //给当前页添加标识
     $('.addActive').parent().addClass("active");
-
-    var flag = null;
-    var name = null;
+    var remarkObj = null;
+    var name = "施工要求";
     var filePath = null;
-    var createTime = null;
-    //判断是增加还是修改
-    $('#addProject').click(function(){
-        flag = "add";
-        $("#myModalLabel").text("创建模版");
-        if(!$('#fileA').hasClass('hidden')){
-            $('#fileA').addClass('hidden');
-        }
-    });
+    var applyId = null;
 
-    //获取要更新数据
-    function update(obj){
-        flag = "update";
-        $("#myModalLabel").text("修改模版");
-        //获取数据显示
-        $.post("/admin/zfGetTemplate",
-        {
-            "id":obj.value
-        },
-        function(data){
-            var project = $.parseJSON(data).project;
-            filePath = project.templatePath;
-            name = project.templateName;
-            if (project.templateName != null && project.templateName != 'null' && project.templateName != '') {
-                $("#fileName").text(project.templateName);
-                $('#fileA').removeClass('hidden');
-            }else {
-                $("#fileName").text("文件未上传");
+    //改变
+    function status(obj){
+        var id = $(obj).attr("value");
+        $.post("/admin/zfStatus",{
+            "id":id.substring(0, id.indexOf(",")),
+            "status":id.substring(id.indexOf(",")+1),
+            "remark":$("#text").val()
+        },function(data,status){
+            if(status != "error"){
+                $("#text").val('');
+                window.location.href="/admin/zfApply?pageNumber="+ $('#pageNumber').val() + "&name=" + $('#name').val();
+            }else{
+                alert("网络错误！");
             }
-            $('#projectId').val(project.id);
-            $('#name').val(project.name);
-            createTime = project.createTime;
         });
     }
-    $('#ret').click(function(){
-        clean();
+
+    //给保存remark赋值
+    function remark(obj) {
+        remarkObj = obj;
+    }
+    //给保存事件
+    $("#remarkSub").click(function() {
+        status(remarkObj);
+    });
+    //退出清空弹窗数据
+    $("#remarkCha").click(function() {
+        $("#text").val('');
+    });
+    $("#remarkRet").click(function() {
+        $("#text").val('');
     });
 
-    //点cha之后重置数据
-    $('#cha').click(function(){
-        clean();
-    });
-
-    //重置数据
-    function clean(){
-        $('#projectId').val("");
-        $('#name').val("");
+    $("#uploadCha").click(function () {
+        $("#fileName").val("未上传文件");
         filePath = null;
-        name = null;
-        $("#fileName").text("文件未上传");
+        applyId = null;
         if(!$('#fileA').hasClass('hidden')){
             $('#fileA').addClass('hidden');
         }
-    }
-
-    //删除
-    function del(obj){
-        if(confirm("确认是否删除?")){
-            $.post("/admin/zfDelTemplate",
-            {
-                "id":obj.value
-            },
-            function(data){
-                if(data > 0){
-                    window.location.href="/admin/zfProject?pageNumber=" + $('#pageNumber').val();
-                }else{
-                    alert("删除失败！");
-                }
-            });
-        }
-    }
-
-    //添加和修改
-    $('#save').click(function(){
-        if(flag == "add"){
-            $.post("/admin/zfAddTemplate",
-            {
-                'name':$('#name').val(),
-                'templatePath':filePath,
-                'templateName':name
-            },
-            function(data){
-                if(data > 0){
-                    alert("保存成功！");
-                    window.location.href="/admin/zfProject?pageNumber=" + $('#pageNumber').val();
-                }else{
-                    alert("保存失败！");
-                }
-            });
-        }else{
-            $.post("/admin/zfUpdateTemplate",
-            {
-                'id':$('#projectId').val(),
-                'name':$('#name').val(),
-                'templatePath':filePath,
-                'templateName':name,
-                'createTime':timestampToTime(createTime)
-            },
-            function(data){
-                if(data > 0){
-                    alert("保存成功！");
-                    window.location.href="/admin/zfProject?pageNumber=" + $('#pageNumber').val();
-                }else{
-                    alert("保存失败！");
-                }
-            });
-        }
     });
-
-    //下载修改时的模板文件
-    function downloadFile(){
-        window.location.href="/admin/download?name="+name+"&path="+filePath;
-    }
 
     //保存文件
     function saveFile(obj){
@@ -368,38 +332,58 @@
         data.append('file', obj.files[0]);
         var filename = obj.value;
         name = obj.files[0].name;
-        $("#fileName").text(name);
+        $("#fileName").text();
         var extStart = filename.lastIndexOf('.');
         var ext = obj.value.substring(extStart,filename.length);
         data.append('type',ext);
         $.ajax({
-        url: '/admin/upload',
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success:function(result){
+            url: '/admin/upload',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
                 alert("上传成功！");
-                $('#fileA').removeClass('hidden');
                 filePath = result;
+                $('#fileA').removeClass('hidden');
+                $("#fileName").text("已上传");
             },
-        error:function(result){
+            error:function(result){
                 alert("上传失败！");
             }
         });
     }
 
-    //处理格式
-    function timestampToTime(timestamp) {
-        var date = new Date(timestamp );//时间戳为10位需*1000，时间戳为13位的话不需乘1000
-        Y = date.getFullYear() + '-';
-        M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1) + '-';
-        D = date.getDate();
-        h = date.getHours() + ':';
-        m = date.getMinutes() + ':';
-        s = date.getSeconds();
-        return Y+M+D;
+    function upload(obj) {
+        applyId = obj;
+    }
+
+    $("#uploadSub").click(function () {
+        if (filePath != null) {
+            var id = $(applyId).attr("value");
+            $.post("/admin/zfSaveConstruction",
+                {
+                    "id": id.substring(0, id.indexOf(",")),
+                    "constructionPath": filePath
+                },function (data) {
+                    if (data > 0){
+                        alert("保存成功！");
+                        status(applyId);
+                    } else {
+                        console.log(data);
+                        alert("保存失败！");
+                    }
+                }
+            );
+        } else {
+            alert("请上传施工要求！");
+        }
+    });
+
+    //下载文件
+    function downloadFile(){
+        window.location.href="/admin/download?name="+name+"&path="+filePath;
     }
 </script>
 </body>

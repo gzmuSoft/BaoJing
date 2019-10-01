@@ -43,4 +43,10 @@
     status
     from zf_apply
   </select>
+  <select id="selectByNameLike" resultMap="BaseResultMap">
+    select z.id, z.person_id, z.template_id, z.template_path, z.house_photos_path, z.construction_path,
+     x.name, x.identity, x.telphone, z.status
+    from zf_apply z join xjhb_person x
+    where x.id = z.person_id and x.name like #{name} and z.status in (1,2)
+  </select>
 </mapper>

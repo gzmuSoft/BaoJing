@@ -61,7 +61,7 @@ public class ZfTemplateServiceImpl implements ZfTemplateService {
         //PageHelper插件的分页信息
         PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
         //查询数据
-        List<ZfTemplate> ylGuarantees = zfTemplateMapper.selectByNameLike(name);
-        return new PageInfo<>(ylGuarantees);
+        List<ZfTemplate> zfTemplates = zfTemplateMapper.selectByNameLike(name);
+        return new PageInfo<>(zfTemplates);
     }
 }

@@ -59,6 +59,9 @@ public class AdminController {
     @Autowired
     private ZfTemplateService zfTemplateService;
 
+    @Autowired
+    private ZfApplyService zfApplyService;
+
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -1264,6 +1267,74 @@ public class AdminController {
     public String zfDelTemplate(int id) {
         Integer re = zfTemplateService.deleteByPrimaryKey(id);
         return re.toString();
+    }
+
+
+    @RequestMapping(value = "/zfApply")
+    public String zfApply(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<ZfApply> pageInfo = zfApplyService.selectByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_apply";
+    }
+
+    /**
+     * 住房申请表拒绝备注
+     * @param id
+     * @param status
+     * @param remark
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/zfStatus")
+    public String zfStatus(int id, byte status, String remark) {
+        ZfApply zfApply = zfApplyService.selectByPrimaryKey(id);
+        zfApply.setStatus(status);
+        if(zfApplyService.updateByPrimaryKey(zfApply) == 1) {
+            new Thread() {
+                @Override
+                public void run() {
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(zfApply.getPersonId());
+                    switch (status) {
+                        case 3:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！",
+                                    "危房改造的申请",
+                                    false, "审核失败", remark, "");
+                            break;
+                        case 2:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "危房改造的申请",
+                                    true, "审核通过", "请严格遵守施工要求进行危房改造", "");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
+        }
+        return "";
+    }
+
+    /**
+     * 保存施工要求
+     * @param id
+     * @param constructionPath
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/zfSaveConstruction")
+    public String zfSaveConstruction(int id, String constructionPath) {
+        if (constructionPath != null && !constructionPath.equals("")) {
+            ZfApply zfApply = zfApplyService.selectByPrimaryKey(id);
+            zfApply.setConstructionPath(constructionPath);
+            Integer re = zfApplyService.updateByPrimaryKey(zfApply);
+            return re.toString();
+        }
+        return "0";
     }
 
     //通用

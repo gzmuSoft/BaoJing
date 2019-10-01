@@ -1,9 +1,11 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.ZfApply;
+
 import java.util.List;
 
-public interface ZfApplyMapper {
+public interface ZfApplyService {
     int deleteByPrimaryKey(Integer id);
 
     int insert(ZfApply record);
@@ -14,5 +16,5 @@ public interface ZfApplyMapper {
 
     int updateByPrimaryKey(ZfApply record);
 
-    List<ZfApply> selectByNameLike(String name);
+    PageInfo<ZfApply> selectByNameLike(String name, Integer pageNumber);
 }

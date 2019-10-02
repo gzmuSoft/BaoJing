@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gzmusxxy.mapper.ZfPhotoMapper">
+  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.ZfPhoto">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="photo_path_front" jdbcType="VARCHAR" property="photoPathFront" />
+    <result column="photo_path_center" jdbcType="VARCHAR" property="photoPathCenter" />
+    <result column="photo_path_after" jdbcType="VARCHAR" property="photoPathAfter" />
+    <result column="apply_id" jdbcType="INTEGER" property="applyId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from zf_photo
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gzmusxxy.entity.ZfPhoto">
+    insert into zf_photo (id, photo_path_front, photo_path_center, 
+      photo_path_after, apply_id)
+    values (#{id,jdbcType=INTEGER}, #{photoPathFront,jdbcType=VARCHAR}, #{photoPathCenter,jdbcType=VARCHAR}, 
+      #{photoPathAfter,jdbcType=VARCHAR}, #{applyId,jdbcType=INTEGER})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.ZfPhoto">
+    update zf_photo
+    set photo_path_front = #{photoPathFront,jdbcType=VARCHAR},
+      photo_path_center = #{photoPathCenter,jdbcType=VARCHAR},
+      photo_path_after = #{photoPathAfter,jdbcType=VARCHAR},
+      apply_id = #{applyId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, photo_path_front, photo_path_center, photo_path_after, apply_id
+    from zf_photo
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, photo_path_front, photo_path_center, photo_path_after, apply_id
+    from zf_photo
+  </select>
+</mapper>

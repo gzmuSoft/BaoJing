@@ -55,4 +55,18 @@ public class ZfApplyServiceImpl implements ZfApplyService {
         List<ZfApply> zfApplies = zfApplyMapper.selectByNameLike(name);
         return new PageInfo<>(zfApplies);
     }
+
+    @Override
+    public PageInfo<ZfApply> selectCompleteByNameLike(String name, Integer pageNumber) {
+        if (name != null && !name.equals("")){
+            name = "%" + name + "%";
+        }else {
+            name = "%%";
+        }
+        //PageHelper插件的分页信息
+        PageHelper.startPage(pageNumber, PageUtil.PAGE_ROW_COUNT);
+        //查询数据
+        List<ZfApply> zfApplies = zfApplyMapper.selectCompleteByNameLike(name);
+        return new PageInfo<>(zfApplies);
+    }
 }

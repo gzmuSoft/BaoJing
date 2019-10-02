@@ -15,4 +15,6 @@ public interface ZfApplyMapper {
     int updateByPrimaryKey(ZfApply record);
 
     List<ZfApply> selectByNameLike(String name);
+
+    List<ZfApply> selectCompleteByNameLike(String name);
 }

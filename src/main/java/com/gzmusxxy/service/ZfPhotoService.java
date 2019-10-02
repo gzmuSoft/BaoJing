@@ -1,9 +1,12 @@
-package com.gzmusxxy.mapper;
+package com.gzmusxxy.service;
 
+import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.ZfPhoto;
+
 import java.util.List;
 
-public interface ZfPhotoMapper {
+public interface ZfPhotoService {
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(ZfPhoto record);
@@ -14,5 +17,5 @@ public interface ZfPhotoMapper {
 
     int updateByPrimaryKey(ZfPhoto record);
 
-    List<ZfPhoto> selectByNameLike(String name);
+    PageInfo<ZfPhoto> selectByNameLike(String name, Integer pageNumber);
 }

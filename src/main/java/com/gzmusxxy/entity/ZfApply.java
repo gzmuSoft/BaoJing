@@ -21,6 +21,6 @@ public class ZfApply {
     private String housePhotosPath;
     //施工要求
     private String constructionPath;
-    //1.审核中 2.审核通过 3.审核失败 4.施工前 5施工中 6施工完成 7申请验收 8验收失败（重写回到4） 9验收通过(待发补助）10.已发钱
+    //1.审核中 2.审核通过 3.审核失败 4.施工前 5施工中 6施工完成 7.照片通过 8申请验收 9验收失败（重写回到2）10线下 11验收通过(待发补助）12.已发钱
     private Byte status;
 }

@@ -17,4 +17,6 @@ public interface ZfApplyService {
     int updateByPrimaryKey(ZfApply record);
 
     PageInfo<ZfApply> selectByNameLike(String name, Integer pageNumber);
+
+    PageInfo<ZfApply> selectCompleteByNameLike(String name, Integer pageNumber);
 }

@@ -62,6 +62,9 @@ public class AdminController {
     @Autowired
     private ZfApplyService zfApplyService;
 
+    @Autowired
+    private ZfPhotoService zfPhotoService;
+
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -1270,6 +1273,13 @@ public class AdminController {
     }
 
 
+    /**
+     * 申请书管理
+     * @param model
+     * @param name
+     * @param pageNumber
+     * @return
+     */
     @RequestMapping(value = "/zfApply")
     public String zfApply(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<ZfApply> pageInfo = zfApplyService.selectByNameLike(name, pageNumber);
@@ -1337,7 +1347,97 @@ public class AdminController {
         return "0";
     }
 
-    //通用
+    /**
+     * 照片管理
+     * @param model
+     * @param name
+     * @param pageNumber
+     * @return
+     */
+    @RequestMapping(value = "/zfPhoto")
+    public String zfPhoto(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<ZfPhoto> pageInfo = zfPhotoService.selectByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_photo";
+    }
+
+    /**
+     * 改变状态和isUpload
+     * @param id
+     * @param isUpload
+     * @param remark
+     * @return
+     */
+    @ResponseBody
+    @PostMapping(value = "/zfStatusUpload")
+    public String zfStatusUpload(int id, int isUpload, String remark) {
+        ZfPhoto zfPhoto = zfPhotoService.selectByPrimaryKey(id);
+        ZfApply zfApply = zfApplyService.selectByPrimaryKey(zfPhoto.getApplyId());
+        zfPhoto.setIsUpload(0);
+        switch (zfApply.getStatus()) {
+            case 4:if (isUpload == 0) {
+                zfApply.setStatus((byte)2);
+            } else {
+                zfApply.setStatus((byte)5);
+            }
+                break;
+            case 5:if (isUpload == 0) {
+                zfApply.setStatus((byte)4);
+            } else {
+                zfApply.setStatus((byte)6);
+            }
+                break;
+            case 6:if (isUpload == 0) {
+                zfApply.setStatus((byte)5);
+            } else {
+                zfApply.setStatus((byte)7);
+                zfPhoto.setIsUpload(1);
+            }
+                break;
+        }
+        if(zfPhotoService.updateByPrimaryKey(zfPhoto) == 1 && zfApplyService.updateByPrimaryKey(zfApply) == 1) {
+            new Thread() {
+                @Override
+                public void run() {
+                    XjhbPerson xjhbPerson = xjhbPersonService.selectByPrimaryKey(zfApply.getPersonId());
+                    switch (isUpload) {
+                        case 0:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！",
+                                    "施工照片的审核",
+                                    false, "审核失败", remark, "");
+                            break;
+                        case 1:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "施工照片的审核",
+                                    true, "审核通过", "请继续严格遵守施工要求进行危房改造", "");
+                            break;
+                    }
+                    super.run();
+                }
+            }.start();
+        }
+        return "";
+    }
+
+    @RequestMapping(value = "/zfComplete")
+    public String zfComplete(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
+        PageInfo<ZfApply> pageInfo = zfApplyService.selectCompleteByNameLike(name, pageNumber);
+        //防止搜索栏bug
+        if (name == null) {
+            name = "";
+        }
+        model.addAttribute("name",name);
+        model.addAttribute("pageInfo",pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
+        return "admin/zf_complete";
+    }
+
     /**
      * 根据id删除公告
      * @param id

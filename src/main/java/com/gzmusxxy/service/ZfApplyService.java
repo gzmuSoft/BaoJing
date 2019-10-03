@@ -19,4 +19,6 @@ public interface ZfApplyService {
     PageInfo<ZfApply> selectByNameLike(String name, Integer pageNumber);
 
     PageInfo<ZfApply> selectCompleteByNameLike(String name, Integer pageNumber);
+
+    List<ZfApply> selectByStatus(Integer status);
 }

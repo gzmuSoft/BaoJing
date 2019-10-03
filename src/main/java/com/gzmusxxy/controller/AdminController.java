@@ -1294,7 +1294,7 @@ public class AdminController {
     }
 
     /**
-     * 住房申请表拒绝备注
+     * 住房状态改变
      * @param id
      * @param status
      * @param remark
@@ -1302,10 +1302,15 @@ public class AdminController {
      */
     @ResponseBody
     @PostMapping(value = "/zfStatus")
-    public String zfStatus(int id, byte status, String remark) {
+    public String zfStatus(int id, byte status, String remark, HttpSession session) {
         ZfApply zfApply = zfApplyService.selectByPrimaryKey(id);
         zfApply.setStatus(status);
         if(zfApplyService.updateByPrimaryKey(zfApply) == 1) {
+            Admin admin = (Admin) session.getAttribute("admin");
+            if (admin == null) {
+                admin = new Admin();
+            }
+            Admin finalAdmin = admin;
             new Thread() {
                 @Override
                 public void run() {
@@ -1320,6 +1325,21 @@ public class AdminController {
                             WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
                                     , "危房改造的申请",
                                     true, "审核通过", "请严格遵守施工要求进行危房改造", "");
+                            break;
+                        case 9:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "危房改造的验收",
+                                    false, "审核失败", remark, "");
+                            break;
+                        case 10:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "危房改造的验收",
+                                    true, "审核通过", "请准备线下验收", "");
+                            break;
+                        case 11:
+                            WeChatUtil.sendReviewNoticeMsg(xjhbPerson.getOpenid(), xjhbPerson.getName() + " 你好！"
+                                    , "危房改造的验收",
+                                    true, "审核通过", "", "已将信息提交至县住建中心,请耐心等待补助发放,如有问题请联系电话："+finalAdmin.getPhone());
                             break;
                     }
                     super.run();
@@ -1425,6 +1445,13 @@ public class AdminController {
         return "";
     }
 
+    /**
+     *验收管理
+     * @param model
+     * @param name
+     * @param pageNumber
+     * @return
+     */
     @RequestMapping(value = "/zfComplete")
     public String zfComplete(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<ZfApply> pageInfo = zfApplyService.selectCompleteByNameLike(name, pageNumber);
@@ -1436,6 +1463,36 @@ public class AdminController {
         model.addAttribute("pageInfo",pageInfo);
         model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "admin/zf_complete";
+    }
+
+    /**
+     * 导出excl
+     * @param request
+     * @param response
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value= "/downloadZfExcl")
+    public String downloadZfExcl(HttpServletRequest request, HttpServletResponse response){
+        List<ZfApply> zfApplies = zfApplyService.selectByStatus(11);
+        String title[] = new String[]{"申请人","身份证号","联系电话"};
+        String items[][] = new String[zfApplies.size()][title.length];
+        int j = 0;
+        for (ZfApply ZfApply:
+                zfApplies) {
+            items[j][0] = ZfApply.getName();
+            items[j][1] = ZfApply.getIdentity();
+            items[j][2] = ZfApply.getTelphone();
+            j++;
+        }
+        String path = ExcelUtil.getHSSFWorkbook(
+                "住房保障验收通过名单",title,items,null,
+                FileUtil.FILE_PATH,"住房保障验收通过名单"
+        );
+        String name = path.substring(path.lastIndexOf("/"));
+        FileUtil.downloadFile(path,name,request,response);
+        FileUtil.deleteFile(path);
+        return "";
     }
 
     /**

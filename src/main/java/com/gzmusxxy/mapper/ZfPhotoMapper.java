@@ -15,4 +15,6 @@ public interface ZfPhotoMapper {
     int updateByPrimaryKey(ZfPhoto record);
 
     List<ZfPhoto> selectByNameLike(String name);
+
+    ZfPhoto selectByApplyId(Integer id);
 }

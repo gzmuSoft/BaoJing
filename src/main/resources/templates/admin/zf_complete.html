@@ -33,7 +33,7 @@
 							<li><a href="/admin/bulletin?sourceId=1">公告设置</a></li>
 							<li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
 							<li><a href="/admin/xjhbApply?pageNumber=1">申请书管理</a></li>
-							<li class="active"><a href="#">待验收管理</a></li>
+							<li><a href="/admin/xjhbCheck?pageNumber=1">待验收管理</a></li>
 							<li><a href="/admin/xjhbAdopt?pageNumber=1">验收通过查看</a></li>
 						</ul>
 					</li>
@@ -43,7 +43,7 @@
 							<li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
 							<li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
 							<li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
-							<li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
+							<li><a href="/admin/bxzf?pageNumber=1&cost=3">缴费验收</a></li>
 							<li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
 						</ul>
 					</li>
@@ -71,7 +71,7 @@
 							<li><a href="/admin/zfProject?pageNumber=1">申请表模块管理</a></li>
 							<li><a href="/admin/zfApply?pageNumber=1">危房改造申请管理</a></li>
 							<li><a href="/admin/zfPhoto?pageNumber=1">施工照片管理</a></li>
-							<li><a href="/admin/zfComplete?pageNumber=1">施工完成验收管理</a></li>
+							<li class="active"><a href="#">施工完成验收管理</a></li>
 						</ul>
 					</li>
 					<!--  多彩报京 -->
@@ -101,15 +101,7 @@
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
 		<div class="cm-flex">
-			<h1>待验收管理</h1>
-			<form id="cm-search" action="/admin/xjhbCheck" method="get">
-				<input type="hidden" name="pageNumber" value="1">
-				<input type="search" id="selectName" name="name" autocomplete="off" th:value="${name}" placeholder="输入需要查询的项目名称...">
-			</form>
-		</div>
-		<!-- 查询按钮 -->
-		<div class="pull-right">
-			<div id="cm-search-btn" class="btn btn-primary md-search-white" data-toggle="cm-search"></div>
+			<h1>施工完成验收管理</h1>
 		</div>
         <div class="dropdown pull-right">
             <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
@@ -134,59 +126,74 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="panel panel-default">
-                    <div class="panel-heading">先建后补待验收管理</div>
+                    <div class="panel-heading">施工完成验收管理</div>
+					<div class="panel-body">
+						<form class="form-inline" action="/admin/zfComplete">
+							<a class="btn btn-success" href="/admin/downloadZfExcl">Excl导出全部已通过信息</a>
+							<input type="hidden" th:value="${pageInfo.pageNum}" name="pageNumber" id="pageNumber"/>
+							<div class="form-group">
+								<label for="name">&nbsp;&nbsp;&nbsp;申请人姓名:&nbsp;</label>
+								<input type="text" placeholder="请输入申请人姓名..." name="name" id="name" th:value="${name}" class="form-control">
+							</div>
+							<button type="submit" class="btn btn-primary" id="selectSub">查询</button>
+						</form>
+					</div>
                     <table class="table text-center">
                         <thead>
                         <tr>
-                            <th >#</th>
-							<th class="text-center">类型</th>
-							<th class="text-center">名称</th>
-							<th class="text-center">简介</th>
-                            <th class="text-center">申请经费</th>
-							<th class="text-center">起始时间</th>
-							<th class="text-center">结束时间</th>
-							<th class="text-center">建设周期</th>
-							<th class="text-center">现场照片</th>
-							<th class="text-center">申请时间</th>
+							<th>#</th>
+							<th class="text-center">申请人</th>
+							<th class="text-center">身份证号</th>
+							<th class="text-center">手机号</th>
+							<th class="text-center">危改申请表</th>
+							<th class="text-center">房屋照片</th>
+							<th class="text-center">施工照片</th>
 							<th class="text-center"><code>操作</code></th>
                         </tr>
                         </thead>
                         <tbody>
-						<tr class="success" th:each="check:${pageInfo.list}">
-							<th scope="row" th:text="${checkStat.index+1}"></th>
-							<td th:text="${check.projectName}"></td>
-							<td th:text="${check.projectTitle}"></td>
+						<tr class="success" th:each="zf:${pageInfo.list}">
+							<th scope="row" th:text="${zfStat.index+1}"></th>
+							<td th:text="${zf.name}"></td>
+							<td th:text="${zf.identity}"></td>
+							<td th:text="${zf.telphone}"></td>
 							<td>
-								<textarea disabled th:inline="text">[[${check.projectContent}]]</textarea>
-							</td>
-							<td th:text="${check.outlay}"></td>
-							<td th:text="${#dates.format(check.startTime,'yyyy-MM-dd')}"></td>
-							<td th:text="${#dates.format(check.endTime,'yyyy-MM-dd')}"></td>
-							<td th:text="${check.period}"></td>
-							<td>
-								<div th:if="${check.scenePhotosName != null && check.scenePhotosName != 'null' && check.scenePhotosName != ''}">
-									<span th:text="${check.scenePhotosName}"></span>&nbsp;
-									<a th:href="@{'/admin/downloadScenePhotos?id='+${check.id}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+								<div th:if="${zf.templatePath != null && zf.templatePath != 'null' && zf.templatePath != ''}">
+									<span>危改申请表</span>&nbsp;
+									<a th:href="@{'/admin/download?name=危改申请表&path='+${zf.templatePath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
 								</div>
 							</td>
-							<td th:text="${#dates.format(check.createTime,'yyyy-MM-dd HH:mm:ss')}"></td>
 							<td>
-								<button type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#select" th:value="${check.id}" onclick="select(this)">申请人详情</button>
-								<div class="btn-group" th:if="${check.status == 4}">
+								<div th:if="${zf.housePhotosPath != null && zf.housePhotosPath != 'null' && zf.housePhotosPath != ''}">
+									<span>危房照片</span>&nbsp;
+									<a th:href="@{'/admin/download?name=危房照片&path='+${zf.housePhotosPath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+								</div>
+							</td>
+							<td>
+								<div th:if="${zf.photosPath != null && zf.photosPath != 'null' && zf.photosPath != ''}">
+									<span>施工照片</span>&nbsp;
+									<a th:href="@{'/admin/download?name=施工照片&path='+${zf.photosPath}}"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
+								</div>
+							</td>
+							<td>
+								<div class="btn-group" th:if="${zf.status == 8}">
 								    <button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待验收&nbsp;&nbsp;<span class="caret"></span></button>
 								    <ul class="dropdown-menu" role="menu" style="width:50px">
-										<li><a href="#" th:value="${check.id+',5'}" onclick="status(this)">线下验收</a></li>
+										<li><a href="#" th:value="${zf.id+',10'}" onclick="status(this)">线下验收</a></li>
 										<li class="divider"></li>
-								        <li><a href="#" data-toggle="modal" data-target="#remark" th:value="${check.id+',7'}" onclick="remark(this)">不合格</a></li>
+								        <li><a href="#" data-toggle="modal" data-target="#remark" th:value="${zf.id+',9'}" onclick="remark(this)">不合格</a></li>
 								    </ul>
 								</div>
-								<div class="btn-group" th:if="${check.status == 5}">
+								<div class="btn-group" th:if="${zf.status == 10}">
 									<button type="button" class="btn btn-warning dropdown-toggle btn-xs" data-toggle="dropdown" aria-expanded="false">&nbsp;&nbsp;待线下验收&nbsp;&nbsp;<span class="caret"></span></button>
 									<ul class="dropdown-menu" role="menu" style="width:50px">
-										<li><a href="#" th:value="${check.id+',6'}" onclick="status(this)">通过</a></li>
+										<li><a href="#" th:value="${zf.id+',11'}" onclick="status(this)">通过</a></li>
 										<li class="divider"></li>
-										<li><a href="#" data-toggle="modal" data-target="#remark" th:value="${check.id+',7'}" onclick="remark(this)">不合格</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#remark" th:value="${zf.id+',9'}" onclick="remark(this)">不合格</a></li>
 									</ul>
+								</div>
+								<div th:if="${zf.status == 11}">
+									<button type="button" class="btn btn-success btn-xs" disabled>&nbsp;&nbsp;验收通过&nbsp;&nbsp;</button>
 								</div>
 							</td>
 						</tr>
@@ -202,7 +209,7 @@
 		<nav class="text-center mt-50">
 			<ul class="pagination shadowed" style="margin:0">
 				<li th:if="${pageInfo.prePage > 0}">
-					<a th:href="@{'/admin/xjhbCheck?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
+					<a th:href="@{'/admin/zfComplete?pageNumber='+${pageInfo.prePage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-left"></i></span>
 					</a>
 				</li>
@@ -213,7 +220,7 @@
 				</li>
 				<li th:each="num:${pages}">
 					<a th:if="${pageInfo.pageNum == num}" th:text="${num}" class="addActive"></a>
-					<a th:href="@{'/admin/xjhbCheck?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
+					<a th:href="@{'/admin/zfComplete?pageNumber='+${num}+'&name='+${name}}" th:if="${pageInfo.pageNum != num}" th:text="${num}" class="pageHref"></a>
 				</li>
 				<li th:if="${pageInfo.nextPage <= 0 && pageInfo.pages > 0}">
 					<a>
@@ -221,79 +228,13 @@
 					</a>
 				</li>
 				<li th:if="${pageInfo.nextPage > 0}">
-					<a th:href="@{'/admin/xjhbCheck?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
+					<a th:href="@{'/admin/zfComplete?pageNumber='+${pageInfo.nextPage}+'&name='+${name}}">
 						<span><i class="fa fa-angle-right"></i></span>
 					</a>
 				</li>
 			</ul>
 		</nav>
     </div>
-	<!--弹窗-->
-	<div id="select" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-					<h4 class="modal-title" id="myModalLabel">
-						Modal title
-						<a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
-					</h4>
-				</div>
-				<div class="modal-body">
-					<form class="form-horizontal">
-						<input type="hidden" id="projectId">
-						<div class="form-group">
-							<label for="personName" class="col-sm-3 control-label">申请人</label>
-							<div class="col-sm-9">
-								<input type="text" disabled class="form-control" id="personName">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="card" class="col-sm-3 control-label">农行一卡通卡号</label>
-							<div class="col-sm-9">
-								<input type="text" disabled class="form-control" id="card"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="telphone" class="col-sm-3 control-label">电话号码</label>
-							<div class="col-sm-9">
-								<input type="text" disabled class="form-control" id="telphone">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="identity" class="col-sm-3 control-label">身份证号</label>
-							<div class="col-sm-9">
-								<input type="text" disabled class="form-control" id="identity"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="village" class="col-sm-3 control-label">村组</label>
-							<div class="col-sm-9">
-								<input type="text" disabled class="form-control" id="village"/>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="cardFront" class="col-sm-3 control-label">身份证正面</label>
-							<div class="col-sm-9">
-								<button type="button" class="form-control btn btn-success" id="cardFront" >下载身份证正面</button>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="cardReverse" class="col-sm-3 control-label">身份证反面</label>
-							<div class="col-sm-9">
-								<button type="button" class="form-control btn btn-success" id="cardReverse" >下载身份证反面</button>
-							</div>
-						</div>
-					</form>
-				</div>
-				<div class="modal-footer">
-					<button type="button" id="ret" class="btn btn-default" data-dismiss="modal">返回</button>
-				</div>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>
 	<!--拒绝弹窗-->
 	<div id="remark" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -324,7 +265,6 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-	<input type="hidden" th:value="${pageInfo.pageNum}" id="pageNumber"/>
     <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">&copy; 930926134@qq.com</span></footer>
 </div>
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
@@ -338,10 +278,6 @@
 	var remarkObj = null;
 	//给当前页添加标识
     $('.addActive').parent().addClass("active");
-    //搜索栏有数据则打开
-    if($("#selectName").val() != null && $("#selectName").val() != ''){
-        $("#cm-search").addClass("open");
-    }
 
     //给保存赋值
     function remark(obj) {
@@ -360,40 +296,17 @@
 		$("#text").val('');
 	});
 
-    //获取详细信息
-    function select(obj){
-        $("#myModalLabel").text("详细信息");
-        $.post("/admin/detailed",
-		{
-			"id":obj.value
-		},
-		function(data){
-			var obj = $.parseJSON(data);
-			$('#card').val(obj.person.oneCardSolution);
-			$('#telphone').val(obj.person.telphone);
-			$('#personName').val(obj.person.name);
-			$('#identity').val(obj.person.identity);
-			$('#village').val(obj.person.village);
-			$('#cardFront').click(function(){
-				window.location.href="/admin/downloadCard?name=front&id=" + obj.person.id;
-			});
-			$('#cardReverse').click(function(){
-				window.location.href="/admin/downloadCard?name=reverse&id=" + obj.person.id;
-			});
-        }),"json";
-    }
-
     //改变
     function status(obj){
     	var id = $(obj).attr("value");
-    	$.post("/admin/status",{
+    	$.post("/admin/zfStatus",{
     		"id":id.substring(0, id.indexOf(",")),
     		"status":id.substring(id.indexOf(",")+1),
     		"remark":$("#text").val()
-    	},function(status){
+    	},function(data,status){
     		if(status != "error"){
     			$("#text").val('');
-    			window.location.href="/admin/xjhbCheck?pageNumber="+ $('#pageNumber').val();
+    			window.location.href="/admin/zfComplete?pageNumber="+ $('#pageNumber').val();
     		}else{
     			alert("网络错误！");
     		}

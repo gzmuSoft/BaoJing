@@ -44,4 +44,9 @@
         where x.id = z.person_id and x.name like #{name} and z.status in (4,5,6)) z
     WHERE p.apply_id = z.id and p.is_upload = 1
   </select>
+  <select id="selectByApplyId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, photo_path_front, photo_path_center, photo_path_after, apply_id, is_upload
+    from zf_photo
+    where apply_id = #{applyId,jdbcType=INTEGER}
+  </select>
 </mapper>

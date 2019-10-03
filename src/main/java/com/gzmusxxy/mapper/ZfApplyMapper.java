@@ -12,6 +12,8 @@ public interface ZfApplyMapper {
 
     List<ZfApply> selectAll();
 
+    List<ZfApply> selectByStatus(Integer status);
+
     int updateByPrimaryKey(ZfApply record);
 
     List<ZfApply> selectByNameLike(String name);

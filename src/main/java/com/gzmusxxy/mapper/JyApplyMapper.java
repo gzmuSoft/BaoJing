@@ -15,4 +15,8 @@ public interface JyApplyMapper {
     int updateByPrimaryKey(JyApply record);
 
     List<JyApply> selectByNameLike(String name);
+
+    List<JyApply> selectByOpenId(String openId);
+
+    List<JyApply> findStudentByOpenId(String openId);
 }

@@ -15,4 +15,6 @@ public interface JyStudentMapper {
     int updateByPrimaryKey(JyStudent record);
 
     List<JyStudent> selectByNameLike(String name);
+
+    JyStudent selectByIdentity(String identity);
 }

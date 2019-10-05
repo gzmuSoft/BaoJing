@@ -7,14 +7,27 @@
     <result column="student_id" jdbcType="INTEGER" property="studentId" />
     <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
+  <resultMap id="GYResultMap" type="com.gzmusxxy.entity.JyApply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="open_id" jdbcType="VARCHAR" property="openId" />
+    <result column="student_id" jdbcType="INTEGER" property="studentId" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="sex" jdbcType="INTEGER" property="sex" />
+    <result column="identity" jdbcType="VARCHAR" property="identity" />
+    <result column="family_id" jdbcType="VARCHAR" property="familyId" />
+    <result column="poor_id" jdbcType="VARCHAR" property="poorId" />
+    <result column="village" jdbcType="VARCHAR" property="village" />
+    <result column="group" jdbcType="VARCHAR" property="group" />
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from jy_apply
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.JyApply">
-    insert into jy_apply (id, open_id, student_id, 
+    insert into jy_apply (open_id, student_id,
       status)
-    values (#{id,jdbcType=INTEGER}, #{openId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER}, 
+    values (#{openId,jdbcType=VARCHAR}, #{studentId,jdbcType=INTEGER},
       #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.JyApply">
@@ -37,5 +50,15 @@
     select a.id, a.open_id, a.status, s.name, s.sex, s.identity, s.family_id, s.poor_id, s.village, s.group
     from jy_student s join jy_apply a
     where s.id = a.student_id and s.name like #{name} and status in (1,2)
+  </select>
+  <select id="selectByOpenId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, open_id, student_id, status
+    from jy_apply
+    where open_id = #{openId,jdbcType=VARCHAR}
+  </select>
+  <select id="findStudentByOpenId" parameterType="java.lang.String" resultMap="GYResultMap">
+    select a.id,a.status,a.student_id,s.name,s.sex,s.identity,s.family_id, s.poor_id, s.village,s.group
+    from jy_apply a JOIN jy_student s on a.student_id = s.id
+    where a.open_id = #{openId,jdbcType=VARCHAR}
   </select>
 </mapper>

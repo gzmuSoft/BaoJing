@@ -55,4 +55,14 @@ public class ZfPhotoServiceImpl implements ZfPhotoService {
         List<ZfPhoto> zfPhotos = zfPhotoMapper.selectByNameLike(name);
         return new PageInfo<>(zfPhotos);
     }
+
+    @Override
+    public ZfPhoto selectByApplyId(Integer id) {
+        return zfPhotoMapper.selectByApplyId(id);
+    }
+
+    @Override
+    public int updateByApplyId(ZfPhoto record) {
+        return zfPhotoMapper.updateByApplyId(record);
+    }
 }

@@ -47,4 +47,12 @@ public class XjhbPersonServiceImpl implements XjhbPersonService {
     public int updateIdCardFrontAndIdCardReverseById(XjhbPerson record) {
         return xjhbPersonMapper.updateIdCardFrontAndIdCardReverseById(record);
     }
+
+    @Override
+    /**
+     * 更新用户信息：姓名、身份证、电话
+     */
+    public int updateNameAndIdentifyAndTelphoneById(XjhbPerson record) {
+        return xjhbPersonMapper.updateNameAndIdentifyAndTelphoneById(record);
+    }
 }

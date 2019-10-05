@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
-    <title>保险项目申请</title>
+    <title>住房保障 - 危改申请</title>
     <!-- Bootstrap -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
@@ -64,7 +64,7 @@
                                    name="templateFile" id="templateFile" onchange="saveFile(this)">
                         </div>&nbsp;&nbsp;
                         <span id="templateFileName" style="vertical-align: middle">未上传文件</span>
-                        <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                        <a href="" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
                                                                    height="20"></a>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                 <br />
                 <div class="form-group">
                     <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">提交资料</button>
+                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">更新资料</button>
                     </div>
                 </div>
             </form>
@@ -96,7 +96,23 @@
 <script th:src="@{/js/jquery.min.js}"></script>
 <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
 <script th:src="@{/js/bootstrap.min.js}"></script>
-<script type="text/javascript">
+<script th:inline="javascript">
+    $(function () {
+        //设置基本数据
+        if([[${info.templatePath}]] != '' && [[${info.templatePath}]] != null){
+            $("#fileA").removeClass('hidden');
+            $("#fileA").attr("href","/house/downloadFile?path=" + [[${info.templatePath}]] + "&name=我的申请表" + [[${#strings.substring(info.templatePath,#strings.indexOf(info.templatePath,'.'))}]]);
+            $("#templateFileName").text("已上传");
+        }
+        if([[${info.housePhotosPath}]] != '' && [[${info.housePhotosPath}]] != null){
+            $("#fileB").removeClass('hidden');
+            $("#fileB").attr("href","/house/downloadFile?path=" + [[${info.housePhotosPath}]] + "&name=我上传的房屋照片" + [[${#strings.substring(info.housePhotosPath,#strings.indexOf(info.housePhotosPath,'.'))}]]);
+            $("#photoFileName").text("已上传");
+        }
+        $("#template").val([[${info.templateId}]]);
+    });
+</script>
+<script th:inline="javascript">
     //申请表文件信息
     var templatePath = null;
     var templateName = null;
@@ -116,24 +132,25 @@
             var photo = $("#photoFile").val();
             var templateId = $("#template").find("option:selected").val();
             //表单验证
-            if (template == null || template ==""){
-                alert("必须上传申请表！");
-                return false;
-            }
-            if(photo == null || photo ==""){
-                alert("必须上传房屋照片！");
-                return false;
-            }
+            // if (template == null || template ==""){
+            //     alert("必须上传申请表！");
+            //     return false;
+            // }
+            // if(photo == null || photo ==""){
+            //     alert("必须上传房屋照片！");
+            //     return false;
+            // }
             if(templateId == null || templateId ==""){
                 alert("必须选择申请表模板！");
                 return false;
             }
             var param = {
+                "id":[[${info.id}]] ,
                 "templateId":templateId,
                 "template": templatePath,
                 "photo": photoPath,
             }
-            $.post("/house/postInfo",param,function(data){
+            $.post("/house/postUpdateInfo",param,function(data){
                 if(data.code == 1){
                     alert("信息提交成功！");
                     window.location.href = "/house/myApply?pageNumber=1"

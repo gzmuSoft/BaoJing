@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>保险项目申请</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>住房保障 - 施工照片上传</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <div class="full-width">
+            <h4 class="shadow">危改施工照片上传</h4>
+            <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
+        </div>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--表单-->
+        <div class="form">
+            <form class="form-horizontal" id="form">
+                <input id="applyid" type="hidden" th:value="${applyid}">
+                <div class="form-group">
+                    <label for="photoPathFront" class="col-sm-2 control-label">施工照片：</label>
+                    <div class="col-sm-10">
+                        <div class="file-container"
+                             style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
+                            <button class="btn btn-success fileinput-button form-control" type="button">上传施中的照片</button>
+                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file"
+                                   name="photoPathFront" id="photoPathFront" onchange="saveFile(this)">
+                        </div>&nbsp;&nbsp;
+                        <span id="photoPathFrontName" style="vertical-align: middle">未上传文件</span>
+                        <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26"
+                                                                   height="20"></a>
+                    </div>
+                </div>
+
+                <br />
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">提交资料</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script type="text/javascript">
+    var photoPathFront = null;
+    var photoPathFrontName = null;
+
+    //保存文件
+    function saveFile(obj){
+        var data = new FormData();
+        //上传的是申请书
+        data.append('path',photoPathFront);
+        photoPathFrontName = obj.files[0].name;
+        $("#photoPathFrontName").text(photoPathFrontName);
+        //添加单击事件
+        $('#fileA').click(function(){
+            window.location.href="/house/download?path=" + scenePhotos + "&name=" + scenePhotosName;
+        });
+        //如果是隐藏则取消隐藏
+        if($('#fileA').hasClass('hidden')){
+            $('#fileA').removeClass('hidden');
+        }
+        data.append('file', obj.files[0]);
+        //切割类型
+        var extStart = obj.value.lastIndexOf('.');
+        var ext = obj.value.substring(extStart, obj.value.length);
+        data.append('type',ext);
+        $.ajax({
+            url: '/house/upload',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
+                alert("上传成功！");
+                photoPathFront = result;
+            },
+            error:function(result){
+                alert("上传失败！");
+            }
+        });
+    }
+    $(function () {
+        //提交按钮的点击事件
+        $("#submit").click(function () {
+            //先获取数据
+            var front = photoPathFront;
+            var applyid = $("#applyid").val();
+            //表单验证
+            if (front == null || front ==""){
+                alert("必须上传照片！");
+                return false;
+            }
+            if(applyid == null || applyid ==""){
+                alert("数据获取失败！");
+                return false;
+            }
+            var param = {
+                "path":front,
+                "applyid":applyid,
+                "typeid":2
+            }
+            $.post("/house/postPhotoFunction",param,function(data){
+                if(data.code == 1){
+                    alert("信息提交成功！");
+                    window.location.href = "/house/myApply?pageNumber=1"
+                }else{
+                    alert("信息提交失败！");
+                }
+            },"json");
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

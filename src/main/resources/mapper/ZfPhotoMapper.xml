@@ -14,19 +14,37 @@
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.ZfPhoto">
-    insert into zf_photo (id, photo_path_front, photo_path_center, 
+    insert into zf_photo (photo_path_front, photo_path_center,
       photo_path_after, apply_id)
-    values (#{id,jdbcType=INTEGER}, #{photoPathFront,jdbcType=VARCHAR}, #{photoPathCenter,jdbcType=VARCHAR}, 
+    values (#{photoPathFront,jdbcType=VARCHAR}, #{photoPathCenter,jdbcType=VARCHAR},
       #{photoPathAfter,jdbcType=VARCHAR}, #{applyId,jdbcType=INTEGER})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.ZfPhoto">
     update zf_photo
     set photo_path_front = #{photoPathFront,jdbcType=VARCHAR},
-      photo_path_center = #{photoPathCenter,jdbcType=VARCHAR},
-      photo_path_after = #{photoPathAfter,jdbcType=VARCHAR},
-      apply_id = #{applyId,jdbcType=INTEGER},
-      is_upload = #{isUpload,jdbcType=INTEGER}
+        photo_path_center = #{photoPathCenter,jdbcType=VARCHAR},
+        photo_path_after = #{photoPathAfter,jdbcType=VARCHAR},
+        apply_id = #{applyId,jdbcType=INTEGER},
+        is_upload = #{isUpload,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByApplyId" parameterType="com.gzmusxxy.entity.ZfPhoto">
+    update zf_photo
+    <trim prefix="set" suffixOverrides=",">
+      <if test="photoPathFront != null and photoPathFront != ''">
+        photo_path_front = #{photoPathFront,jdbcType=VARCHAR},
+      </if>
+      <if test="photoPathCenter != null and photoPathCenter != ''">
+        photo_path_center = #{photoPathCenter,jdbcType=VARCHAR},
+      </if>
+      <if test="photoPathAfter != null and photoPathAfter != ''">
+        photo_path_after = #{photoPathAfter,jdbcType=VARCHAR},
+      </if>
+      <if test="isUpload != null">
+        is_upload = #{isUpload,jdbcType=INTEGER}
+      </if>
+    </trim>
+    where apply_id = #{applyId,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, photo_path_front, photo_path_center, photo_path_after, apply_id, is_upload

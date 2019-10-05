@@ -10,26 +10,50 @@
     <result column="construction_path" jdbcType="VARCHAR" property="constructionPath" />
     <result column="status" jdbcType="TINYINT" property="status" />
   </resultMap>
+  <resultMap id="myResultMap" type="com.gzmusxxy.entity.ZfApply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="person_id" jdbcType="INTEGER" property="personId" />
+    <result column="template_id" jdbcType="INTEGER" property="templateId" />
+    <result column="is_upload" jdbcType="INTEGER" property="isUpload" />
+    <result column="template_path" jdbcType="VARCHAR" property="templatePath" />
+    <result column="house_photos_path" jdbcType="VARCHAR" property="housePhotosPath" />
+    <result column="construction_path" jdbcType="VARCHAR" property="constructionPath" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from zf_apply
     where id = #{id,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.gzmusxxy.entity.ZfApply">
-    insert into zf_apply (id, person_id, template_id, 
+    insert into zf_apply (person_id, template_id,
       template_path, house_photos_path, construction_path, 
       status)
-    values (#{id,jdbcType=INTEGER}, #{personId,jdbcType=INTEGER}, #{templateId,jdbcType=INTEGER}, 
+    values (#{personId,jdbcType=INTEGER}, #{templateId,jdbcType=INTEGER},
       #{templatePath,jdbcType=VARCHAR}, #{housePhotosPath,jdbcType=VARCHAR}, #{constructionPath,jdbcType=VARCHAR}, 
       #{status,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.ZfApply">
     update zf_apply
-    set person_id = #{personId,jdbcType=INTEGER},
-      template_id = #{templateId,jdbcType=INTEGER},
-      template_path = #{templatePath,jdbcType=VARCHAR},
-      house_photos_path = #{housePhotosPath,jdbcType=VARCHAR},
-      construction_path = #{constructionPath,jdbcType=VARCHAR},
-      status = #{status,jdbcType=TINYINT}
+    <trim prefix="set" suffixOverrides=",">
+      <if test="personId != null and personId != ''">
+        person_id = #{personId,jdbcType=INTEGER},
+      </if>
+      <if test="templateId != null and templateId != ''">
+        template_id = #{templateId,jdbcType=INTEGER},
+      </if>
+      <if test="templatePath != null and templatePath != ''">
+        template_path = #{templatePath,jdbcType=VARCHAR},
+      </if>
+      <if test="housePhotosPath != null and housePhotosPath != ''">
+        house_photos_path = #{housePhotosPath,jdbcType=VARCHAR},
+      </if>
+      <if test="constructionPath != null and constructionPath != ''">
+        construction_path = #{constructionPath,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null and status != ''">
+        status = #{status,jdbcType=TINYINT}
+      </if>
+    </trim>
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
@@ -37,6 +61,14 @@
     status
     from zf_apply
     where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByPersonId" parameterType="java.lang.Integer" resultMap="myResultMap">
+    select a.id, a.person_id, a.template_id, a.template_path, a.house_photos_path, a.construction_path,
+    a.status, p.is_upload
+    from zf_apply a
+    left outer join zf_photo p
+    on a.id = p.apply_id
+    where a.person_id = #{personId,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, person_id, template_id, template_path, house_photos_path, construction_path, 

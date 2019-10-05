@@ -19,4 +19,6 @@ public interface ZfApplyMapper {
     List<ZfApply> selectByNameLike(String name);
 
     List<ZfApply> selectCompleteByNameLike(String name);
+
+    List<ZfApply> selectByPersonId(Integer personId);
 }

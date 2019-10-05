@@ -119,4 +119,12 @@ public class ZfApplyServiceImpl implements ZfApplyService {
     public List<ZfApply> selectByStatus(Integer status) {
         return zfApplyMapper.selectByStatus(status);
     }
+
+    @Override
+    /**
+     * 通过用户查询申请信息
+     */
+    public List<ZfApply> selectByPersonId(Integer personId) {
+        return zfApplyMapper.selectByPersonId(personId);
+    }
 }

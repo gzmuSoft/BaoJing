@@ -18,4 +18,8 @@ public interface ZfPhotoService {
     int updateByPrimaryKey(ZfPhoto record);
 
     PageInfo<ZfPhoto> selectByNameLike(String name, Integer pageNumber);
+
+    ZfPhoto selectByApplyId(Integer id);
+
+    int updateByApplyId(ZfPhoto record);
 }

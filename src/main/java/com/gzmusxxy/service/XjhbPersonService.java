@@ -16,4 +16,6 @@ public interface XjhbPersonService {
     int updateNameAndIdentityById(XjhbPerson record);
 
     int updateIdCardFrontAndIdCardReverseById(XjhbPerson record);
+
+    int updateNameAndIdentifyAndTelphoneById(XjhbPerson record);
 }

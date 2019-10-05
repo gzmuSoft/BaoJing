@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>个人资料</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+    <style>
+        .red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="col-sm-12">
+        <h3>基本信息</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <div class="full-width">
+            <table style="width: 100%;">
+                <td>
+                    <h4 class="shadow"><span class="red">*&nbsp;</span>号为必填项</h4>
+                    <h5 class="shadow">点击编辑即可对资料进行修改</h5>
+                </td>
+                <td class="text-right">
+                    <button type="button" id="edit" class="btn btn-info">编辑</button>
+                    <button type="button" id="submit" class="btn btn-success hidden">保存</button>
+                </td>
+            </table>
+        </div>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--表单-->
+        <div class="form">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="name" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>姓名：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="name" disabled class="form-control" id="name" placeholder="姓名">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="identity" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>身份证号码：</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="identity" disabled class="form-control" id="identity"
+                               placeholder="身份证号码">
+                        <div id="vIdentity" class="red"></div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="tel" class="col-sm-2 control-label"><span class="red">*&nbsp;</span>联系电话：</label>
+                    <div class="col-sm-10">
+                        <input type="tel" name="tel" disabled class="form-control" id="tel" placeholder="联系电话">
+                        <div id="vTel" class="red"></div>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/house">
+        <div class="am-menu-column" id="explore" style="width: 33%;">
+            <span>住房公告</span>
+        </div>
+    </a>
+    <a href="/house/myApply?pageNumber=1">
+        <div class="am-menu-column" id="my" style="width: 33%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+    <a href="/house/user">
+        <div class="am-menu-column active" id="index" style="width: 33%;">
+            <span>个人信息</span>
+        </div>
+    </a>
+</footer>
+<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<script th:inline="javascript">
+
+    function getQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]);
+        return null;
+    }
+    //设置存在的数据
+    $(function () {
+        //判断是否是补充个人信息
+        if(getQueryString("supplement") == 'true'){
+            alert('请补充个人信息才能申请！');
+        }
+        if ([[${person.id}]] != null) {
+            //用户姓名
+            $('#name').val([[${person.name}]]);
+            //用户身份证号码
+            $('#identity').val([[${person.identity}]]);
+            //用户的电话号码
+            $('#tel').val([[${person.telphone}]]);
+        }
+    });
+
+    //提交资料
+    $("#submit").click(function () {
+        if (notNull()) {
+            $.post('/house/updateUserInfo',
+                {
+                    'name': $('#name').val(),
+                    'identity': $('#identity').val(),
+                    'telphone': $('#tel').val(),
+                },
+                function (result) {
+                    if (result.code = 1) {
+                        alert("保存成功！");
+                        addDis();
+                        if ($('#edit').hasClass('hidden')) {
+                            $('#edit').removeClass('hidden');
+                        }
+                        if (!$('#submit').hasClass('hidden')) {
+                            $('#submit').addClass('hidden');
+                        }
+                    }
+                });
+        } else {
+            alert("请补充必填的资料并正确填写！");
+        }
+    });
+    //判断用户信息是不是为空
+    function notNull() {
+        if ($('#name').val() == null || $('#name').val() == "") {
+            return false;
+        }
+        if (!(/^[1-9]\d{7}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}$|^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X)$/.test($('#identity').val()))) {
+            $('#vIdentity').text('身份证错误！');
+            return false;
+        }
+        if (!(/^1[3456789]\d{9}$/.test($('#tel').val()))) {
+            $('#vTel').text('电话号码错误！');
+            return false;
+        }
+        return true;
+    }
+    //添加不可以编辑属性
+    function addDis() {
+        $("#name").attr("disabled", "disabled");
+        $("#identity").attr("disabled", "disabled");
+        $("#tel").attr("disabled", "disabled");
+    }
+    $('#edit').click(function () {
+        removeDis();
+        if ($('#submit').hasClass('hidden')) {
+            $('#submit').removeClass('hidden');
+        }
+        if (!$('#edit').hasClass('hidden')) {
+            $('#edit').addClass('hidden');
+        }
+    });
+    //移除不可以编辑
+    function removeDis() {
+        $("#name").removeAttr("disabled");
+        $("#identity").removeAttr("disabled");
+        $("#tel").removeAttr("disabled");
+    }
+</script>
+</body>
+</html>

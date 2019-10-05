@@ -17,4 +17,6 @@ public interface ZfPhotoMapper {
     List<ZfPhoto> selectByNameLike(String name);
 
     ZfPhoto selectByApplyId(Integer id);
+
+    int updateByApplyId(ZfPhoto record);
 }

@@ -76,4 +76,11 @@
       id_card_reverse = #{idCardReverse,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateNameAndIdentifyAndTelphoneById" parameterType="com.gzmusxxy.entity.XjhbPerson">
+    update xjhb_person
+    set name = #{name,jdbcType=VARCHAR},
+      identity = #{identity,jdbcType=VARCHAR},
+      telphone = #{telphone,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

@@ -19,4 +19,8 @@ public interface XjhbPersonMapper {
     int updateNameAndIdentityById(XjhbPerson record);
 
     int updateIdCardFrontAndIdCardReverseById(XjhbPerson record);
+
+    int updateNameAndIdentifyAndTelphoneById(XjhbPerson record);
+
+
 }

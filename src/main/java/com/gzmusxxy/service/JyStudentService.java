@@ -17,4 +17,6 @@ public interface JyStudentService {
     int updateByPrimaryKey(JyStudent record);
 
     PageInfo<JyStudent> selectByNameLike(String name, Integer pageNumber);
+
+    JyStudent selectByIdentity(String identity);
 }

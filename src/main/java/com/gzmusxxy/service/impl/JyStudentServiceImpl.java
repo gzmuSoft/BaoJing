@@ -55,4 +55,9 @@ public class JyStudentServiceImpl implements JyStudentService {
         List<JyStudent> jyStudents = jyStudentMapper.selectByNameLike(name);
         return new PageInfo<>(jyStudents);
     }
+
+    @Override
+    public JyStudent selectByIdentity(String identity) {
+        return this.jyStudentMapper.selectByIdentity(identity);
+    }
 }

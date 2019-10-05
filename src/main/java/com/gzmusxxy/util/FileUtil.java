@@ -19,7 +19,7 @@ import static com.sun.deploy.cache.Cache.exists;
 public class FileUtil {
 
     //    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
-    public static final String FILE_PATH = "G:/";
+    public static final String FILE_PATH = "/home/qfmx520/Desktop/file/";
 
     /**
      * 判断文件是否存在

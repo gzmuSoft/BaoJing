@@ -48,4 +48,9 @@
     from jy_student
     where name like #{name}
   </select>
+  <select id="selectByIdentity" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select id, name, sex, identity, family_id, poor_id, village, jy_student.`group`
+    from jy_student
+    where identity = #{identity,jdbcType=INTEGER}
+  </select>
 </mapper>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>教育资助-我的申请</title>
+    <!-- Bootstrap -->
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css}" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+<!--    <div class="col-sm-12">-->
+        <h3>教育资助申请进度</h3>
+        <!--分割线-->
+        <div class="decoration"></div>
+        <!--已经购买的保险列表-->
+        <ul class="table-view">
+            <li th:each="item : ${list}">
+                <div class="table-view-div">
+                    <div class="table-view-project" th:inline="text"><span class="shadow">资助编号</span>：[[${item.id}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow w2">姓名</span>：[[${item.name}]]</div>
+                    <th:block th:if="${item.sex == 1}">
+                        <div class="table-view-item" th:inline="text"><span class="shadow w2">性别</span>：男</div>
+                    </th:block>
+                    <th:block th:if="${item.sex == 2}">
+                        <div class="table-view-item" th:inline="text"><span class="shadow w2">性别</span>：女</div>
+                    </th:block>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">证件号码</span>：[[${item.identity}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">家庭编号</span>：[[${item.familyId}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow">贫困户编号</span>：[[${item.poorId}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow w3">村</span>：[[${item.village}]]</div>
+                    <div class="table-view-item" th:inline="text"><span class="shadow w3">组</span>：[[${item.group}]]</div>
+                    <div class="table-view-option"><span class="shadow"><span class="w2">操作</span>：</span>
+                        <!-- 功能标签-->
+                        <th:block th:switch="${item.status}">
+                            <!-- 功能标签-->
+                            <button th:case="3" class="btn btn-xs btn-primary" th:onclick="'apply('+${item.studentId}+','+${item.id}+')'">重新申请</button>
+                            <button th:case="*" class="btn btn-xs btn-default" disabled="disabled">暂无操作</button>
+                        </th:block>
+                    </div>
+                    <div class="table-view-status" th:switch="${item.status}">
+                        <label th:case="1" class="label label-warning">申请中</label>
+                        <label th:case="2" class="label label-success">申请通过</label>
+                        <label th:case="3" class="label label-danger">申请失败</label>
+                    </div>
+                </div>
+            </li>
+            <!--如果没有数据-->
+            <li th:if="${list.size() == 0}">
+                <div class="table-view-div">
+                    <div class="table-view-project text-center"><span class="shadow">你没有申请任何教育资助！</span></div>
+                </div>
+            </li>
+        </ul>
+
+        <div class="decoration"></div>
+</div>
+<!--底部导航条-->
+<footer class="am-menu am-cf">
+    <a href="/education/">
+        <div class="am-menu-column " id="explore" style="width: 50%;">
+            <span>资助通知</span>
+        </div>
+    </a>
+    <a href="/education/myApply?pageNumber=1">
+        <div class="am-menu-column active" id="index" style="width: 50%;">
+            <span>我的申请</span>
+        </div>
+    </a>
+</footer>
+<script th:src="@{/js/jquery.min.js}"></script>
+<!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+<script th:src="@{/js/bootstrap.min.js}"></script>
+
+<script type="text/javascript">
+     function applySubsidy(id) {
+         window.location.href = "/medical/applySubsidy?id="+id;
+     }
+     function apply(id) {
+         if(id != null && id != ""){
+             window.location.href = "/medical/reApply?id="+id;
+         }else{
+             alert("数据出错！");
+         }
+     }
+     //用于显示缴费模态框的按钮
+     function payment(id){
+         //向模态框添加数据
+         $.get("/medical/getBankInfo",function(data){
+             if(data != null && data != ''){
+                 if(data.bank != null){
+                    $("#bank").text(data.bank);
+                 }
+                 if(data.payee != null){
+                     $("#payee").text(data.payee);
+                 }
+                 if(data.cardNumber != null){
+                     $("#cardNumber").text(data.cardNumber );
+                 }
+             }
+         },"json");
+         //设置模态框
+         $("#medicalId").val(id);
+         $("#gridSystemModal").modal("show");
+     }
+     function confirmPayment() {
+         if($("#medicalId").val() == null || $("#medicalId").val() == ""){
+             alert("无法获取信息，无法提交！");
+            return false;
+         }
+         if($("#remarkModal").val() == null || $("#remarkModal").val() == ""){
+             alert("请输入备注信息！");
+             return false;
+         }
+         var params = {
+             "id":$("#medicalId").val(),
+             "remark":$("#remarkModal").val()
+         }
+         $.post("/medical/payment",params,function (data) {
+             if(data.code == 1){
+                 $("#gridSystemModal").modal("hide");
+                 window.location.reload();
+             }else{
+                 alert(data.result);
+             }
+         },"json");
+     }
+</script>
+<script>
+     function apply(student_id,id) {
+         if(id != null && id != ""){
+             window.location.href = "/education/reApply?student_id="+student_id+"&id="+id;
+         }else{
+             alert("数据出错！");
+         }
+     }
+</script>
+</body>
+</html>

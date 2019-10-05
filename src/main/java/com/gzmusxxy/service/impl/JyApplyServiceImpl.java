@@ -3,6 +3,7 @@ package com.gzmusxxy.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.entity.JyApply;
+import com.gzmusxxy.entity.XjhbPerson;
 import com.gzmusxxy.mapper.JyApplyMapper;
 import com.gzmusxxy.service.JyApplyService;
 import com.gzmusxxy.util.PageUtil;
@@ -43,6 +44,11 @@ public class JyApplyServiceImpl implements JyApplyService {
     }
 
     @Override
+    public List<JyApply> findStudentByOpenId(String openId) {
+        return jyApplyMapper.findStudentByOpenId(openId);
+    }
+
+    @Override
     public PageInfo<JyApply> selectByNameLike(String name, Integer pageNumber) {
         if (name != null && !name.equals("")){
             name = "%" + name + "%";
@@ -56,4 +62,8 @@ public class JyApplyServiceImpl implements JyApplyService {
         return new PageInfo<>(jyStudents);
     }
 
+    @Override
+    public List<JyApply> selectByOpenId(String openId) {
+        return jyApplyMapper.selectByOpenId(openId);
+    }
 }

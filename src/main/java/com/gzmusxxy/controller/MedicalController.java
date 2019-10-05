@@ -117,6 +117,7 @@ public class MedicalController {
      * @param model
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/myApply")
     public String myApply(HttpSession session, Model model) {
         //获取用户session
@@ -136,6 +137,7 @@ public class MedicalController {
      *
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/apply")
     public String apply(HttpSession session, Model model) {
         //获取用户session
@@ -162,6 +164,7 @@ public class MedicalController {
      * @param session
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/postInfo")
     @ResponseBody
     public JsonResult postInfo(YlGuarantee ylGuarantee, HttpSession session) {
@@ -199,6 +202,7 @@ public class MedicalController {
      *
      * @return
      */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/getBankInfo")
     public Admin getBankInfo() {
@@ -213,6 +217,7 @@ public class MedicalController {
      * @param session
      * @return
      */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/payment")
     public JsonResult payment(@RequestParam("id") Integer id, @RequestParam("remark") String remark, HttpSession session) {
@@ -245,6 +250,7 @@ public class MedicalController {
      *
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/applySubsidy")
     public String appluSubsudy(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String openid = session.getAttribute("openid").toString();
@@ -268,6 +274,7 @@ public class MedicalController {
      * @param session
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/reApply")
     public String reApply(@RequestParam("id") Integer id, Model model, HttpSession session) {
         String openid = session.getAttribute("openid").toString();
@@ -286,6 +293,7 @@ public class MedicalController {
      * @param session
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/postUpdateInfo")
     @ResponseBody
     public JsonResult postUpdateInfo(@RequestParam("id") Integer id, @RequestParam("name") String name, @RequestParam("identity") String identity, HttpSession session) {
@@ -333,7 +341,6 @@ public class MedicalController {
      * @param type 文件类型
      * @return return
      */
-    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/upload")
     public String upload(@RequestParam("file") MultipartFile file, String path, String type) {
@@ -380,7 +387,7 @@ public class MedicalController {
      * @param card
      * @return
      */
-
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/postApplyForSubsidy")
     public JsonResult postApplyForSubsidy(@RequestParam("id") Integer id, @RequestParam("dataZip") String dataZip, @RequestParam("frontPath") String frontPath, @RequestParam("backPath") String backPath, @RequestParam("card") String card, HttpSession session) {

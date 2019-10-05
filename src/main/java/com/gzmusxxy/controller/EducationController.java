@@ -1,5 +1,6 @@
 package com.gzmusxxy.controller;
 
+import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.common.JsonResult;
 import com.gzmusxxy.entity.*;
 import com.gzmusxxy.service.*;
@@ -98,6 +99,7 @@ public class EducationController {
      *
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/apply")
     public String apply() {
         return "education/apply";
@@ -109,6 +111,7 @@ public class EducationController {
      * @param identity 身份证号
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/findIdentity")
     @ResponseBody
     public JyStudent findIdentity(@RequestParam(value = "identity", required = false) String identity) {
@@ -121,6 +124,7 @@ public class EducationController {
      * @param session session
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/insertApply")
     @ResponseBody
     public JsonResult insertApply(JyApply jyApply,HttpSession session){
@@ -146,6 +150,7 @@ public class EducationController {
         jsonResult.setResult("提交申请失败");
         return jsonResult;
     }
+    @IsLogin
     @RequestMapping(value = "/myApply")
     public String myApply(HttpSession session, Model model) {
         //获取用户session
@@ -164,6 +169,7 @@ public class EducationController {
      * @param session session
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/reApply")
     public String reApply(@RequestParam("id") Integer id,@RequestParam("student_id") Integer student_id, Model model, HttpSession session){
         String openid = session.getAttribute("openid").toString();
@@ -178,6 +184,7 @@ public class EducationController {
      * 更新申请信息
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/updateApply")
     @ResponseBody
     public JsonResult updateApply(JyApply jyApply,HttpSession session){

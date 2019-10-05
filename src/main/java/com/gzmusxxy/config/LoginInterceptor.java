@@ -1,7 +1,9 @@
 package com.gzmusxxy.config;
 
+import com.gzmusxxy.annotation.AdminLogin;
 import com.gzmusxxy.annotation.IsLogin;
 import com.gzmusxxy.annotation.MarketLogin;
+import com.gzmusxxy.entity.Admin;
 import com.gzmusxxy.entity.IndustryUser;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -25,6 +27,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
             //判断方法上是否有注解
             IsLogin isLogin = hm.getMethodAnnotation(IsLogin.class);
             MarketLogin marketLogin = hm.getMethodAnnotation(MarketLogin.class);
+            AdminLogin adminLogin = hm.getMethodAnnotation(AdminLogin.class);
             //若有注解判断是否微信登录
             if (isLogin != null) {
                 //存在注解则判断登录章台
@@ -40,6 +43,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                     }else if(controller.equals("PovertyController")){
                         //先建后补
                         response.sendRedirect("/wechat/redirect?state=poverty");
+                    }else if(controller.equals("HouseController")){
+                        //住房保障
+                        response.sendRedirect("/wechat/redirect?state=house");
+                    }else if(controller.equals("EducationController")){
+                        //教育保障
+                        response.sendRedirect("/wechat/redirect?state=education");
+                    }else if(controller.equals("MedicalController")){
+                        //医疗保障
+                        response.sendRedirect("/wechat/redirect?state=medical");
                     }
                     return false;
                 }
@@ -52,6 +64,18 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
                 }else{
                     //如果没有登录则返回登录界面
                     response.sendRedirect("/supply/message?title=1");
+                    return false;
+                }
+            }else if(adminLogin != null){
+                //判断后台是否登录
+                //获取session
+                Admin user = (Admin) request.getSession().getAttribute("admin");
+                //判断是否登录
+                if(user != null){
+                    return true;
+                }else{
+                    //如果没有登录则返回登录界面
+                    response.sendRedirect("/admin/login");
                     return false;
                 }
             }else {

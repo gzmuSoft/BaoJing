@@ -46,6 +46,7 @@ public class HouseController {
      *
      * @return
      */
+    @IsLogin
     @RequestMapping(value = {"", "/"})
     public String index(Model model, HttpSession session) {
         String openid = session.getAttribute("openid").toString();
@@ -120,6 +121,7 @@ public class HouseController {
      * @param request
      * @param response
      */
+    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/download")
     public void downloadTemplate(@RequestParam("id") Integer id, HttpServletRequest request, HttpServletResponse response) {
@@ -132,6 +134,7 @@ public class HouseController {
      *
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/apply")
     public String apply(HttpSession session, Model model) {
         String openid = session.getAttribute("openid").toString();
@@ -154,6 +157,7 @@ public class HouseController {
      * @param model
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/user")
     public String user(HttpSession session, Model model) {
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(session.getAttribute("openid").toString());
@@ -165,6 +169,15 @@ public class HouseController {
         return "house/users";
     }
 
+    /**
+     * 更新用戶信息
+     * @param session
+     * @param name
+     * @param identity
+     * @param telphone
+     * @return
+     */
+    @IsLogin
     @RequestMapping(value = "/updateUserInfo")
     @ResponseBody
     public JsonResult updateUser(HttpSession session, @RequestParam("name") String name, @RequestParam("identity") String identity, @RequestParam("telphone") String telphone) {
@@ -235,6 +248,7 @@ public class HouseController {
      * @param photo
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/postInfo")
     @ResponseBody
     public JsonResult saveApply(HttpSession session, @RequestParam("templateId") Integer templateId, @RequestParam("template") String template, @RequestParam("photo") String photo) {
@@ -261,7 +275,13 @@ public class HouseController {
         return jsonResult;
     }
 
-
+    /**
+     * 我的申請
+     * @param session
+     * @param model
+     * @return
+     */
+    @IsLogin
     @RequestMapping(value = "/myApply")
     public String myApply(HttpSession session, Model model) {
         String openid = session.getAttribute("openid").toString();
@@ -280,6 +300,7 @@ public class HouseController {
      * @param session
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/reapply")
     public String reApply(Model model, HttpSession session, @RequestParam("id") Integer id) {
         String openid = session.getAttribute("openid").toString();
@@ -309,6 +330,7 @@ public class HouseController {
      * @param photo
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/postUpdateInfo")
     @ResponseBody
     public JsonResult postUpdateInfo(@RequestParam("id") Integer id, @RequestParam("templateId") Integer templateId, @RequestParam("template") String template, @RequestParam("photo") String photo) {
@@ -340,6 +362,7 @@ public class HouseController {
      * @param typeid
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/constructionPhoto")
     public String constructionPhoto(@RequestParam("applyid") Integer applyid, Model model, @RequestParam("typeid") Integer typeid) {
         String url = null;
@@ -366,6 +389,7 @@ public class HouseController {
      * @param path
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/postPhotoFunction")
     @ResponseBody
     public JsonResult postPhotoFront(@RequestParam("applyid") Integer applyid, @RequestParam("typeid") Integer typeid, @RequestParam("path") String path) {
@@ -423,6 +447,7 @@ public class HouseController {
      * @param id
      * @return
      */
+    @IsLogin
     @RequestMapping(value = "/acceptance")
     @ResponseBody
     public JsonResult acceptance(@RequestParam("id") Integer id){

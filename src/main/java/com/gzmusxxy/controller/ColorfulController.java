@@ -1,6 +1,7 @@
 package com.gzmusxxy.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.gzmusxxy.annotation.AdminLogin;
 import com.gzmusxxy.common.JsonResult;
 import com.gzmusxxy.entity.QueArticle;
 import com.gzmusxxy.entity.QueImages;
@@ -37,12 +38,15 @@ public class ColorfulController {
     private QueArticleService queArticleService;
     @Autowired
     private QueVideosService queVideosService;
+
     /**
      * 图片展示
+     *
      * @param pageNumber
      * @param model
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/photos")
     public String photosExhibition(@RequestParam("pageNumber") Integer pageNumber, Model model) {
         PageInfo<QueImages> queImagesPageInfo = queImagesService.selectAll(pageNumber > 0 ? pageNumber : 1);
@@ -53,9 +57,11 @@ public class ColorfulController {
 
     /**
      * 删除指定id图片
+     *
      * @param id
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/deletePhotosById")
     @ResponseBody
     public JsonResult deletePhotos(@RequestParam("id") Integer id) {
@@ -80,47 +86,55 @@ public class ColorfulController {
 
     /**
      * 获取所有文章
+     *
      * @return List类型的实例
      */
+    @AdminLogin
     @RequestMapping(value = "/getAllArticle")
     @ResponseBody
-    public List<QueArticle> getAllArticle(){
+    public List<QueArticle> getAllArticle() {
         List<QueArticle> list = this.queArticleService.selectAll();
-        try{
-            if(list != null && list.size() > 0){
-                Map<String,Object> map = new HashMap<>();
-                map.put("articleList",list);
+        try {
+            if (list != null && list.size() > 0) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("articleList", list);
                 return list;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
+
     /**
      * 文章分页
+     *
      * @param pageNumber 页码
-     * @param model 模型
+     * @param model      模型
      * @return 返回到文章页
      */
+    @AdminLogin
     @RequestMapping(value = "/article")
-    public String selectByArticlePage(@RequestParam("pageNumber") Integer pageNumber, Model model){
-        PageInfo<QueArticle> pageInfo = this.queArticleService.selectByPage(pageNumber>0?pageNumber:1);
-        model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(),pageNumber));
+    public String selectByArticlePage(@RequestParam("pageNumber") Integer pageNumber, Model model) {
+        PageInfo<QueArticle> pageInfo = this.queArticleService.selectByPage(pageNumber > 0 ? pageNumber : 1);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "colorful/article";
     }
+
     /**
      * 根据文章编号删除文章
-     * @param id  文章编号
+     *
+     * @param id 文章编号
      * @return JsonResult
      */
+    @AdminLogin
     @RequestMapping(value = "/deleteArticle")
     @ResponseBody
-    public JsonResult deleteArticle(@RequestParam("id") Integer id){
+    public JsonResult deleteArticle(@RequestParam("id") Integer id) {
         JsonResult jsonResult = new JsonResult();
         int i = this.queArticleService.deleteByPrimaryKey(id);
-        if(i > 0){
+        if (i > 0) {
             //删除成功
             jsonResult.setCode(1);
             jsonResult.setResult("文章删除成功");
@@ -134,16 +148,18 @@ public class ColorfulController {
 
     /**
      * 添加文章
+     *
      * @param queArticle 文章信息
      * @return JsonResult
      */
+    @AdminLogin
     @RequestMapping(value = "/addArticle")
     @ResponseBody
-    public JsonResult addArticle(QueArticle queArticle){
+    public JsonResult addArticle(QueArticle queArticle) {
         JsonResult jsonResult = new JsonResult();
         queArticle.setCreateTime(new Date());
         int insert = this.queArticleService.insert(queArticle);
-        if(insert > 0){
+        if (insert > 0) {
             jsonResult.setCode(1);
             jsonResult.setResult("添加成功");
             return jsonResult;
@@ -152,40 +168,49 @@ public class ColorfulController {
         jsonResult.setResult("添加失败");
         return jsonResult;
     }
+
     /**
      * 根据文章id获取文章
+     *
      * @param id 文章id
      * @return 文章完整信息
      */
+    @AdminLogin
     @RequestMapping(value = "/getArticleById")
     @ResponseBody
-    public QueArticle getArticleById(@RequestParam("id") Integer id){
+    public QueArticle getArticleById(@RequestParam("id") Integer id) {
         return this.queArticleService.selectByPrimaryKey(id);
     }
+
     /**
      * 获得文章信息编辑文章页面：用于填充编辑框
-     * @param id 编号
+     *
+     * @param id    编号
      * @param model model
      * @return 返回到编辑页面
      */
+    @AdminLogin
     @RequestMapping(value = "/getArticleMsg")
-    public String  getArticleMsg(@RequestParam("id") Integer id,Model model){
+    public String getArticleMsg(@RequestParam("id") Integer id, Model model) {
         QueArticle article = this.queArticleService.selectByPrimaryKey(id);
-        model.addAttribute("article",article);
+        model.addAttribute("article", article);
         return "colorful/editArticle";
     }
+
     /**
      * 更新文章信息
+     *
      * @param queArticle 更新的文章信息
      * @return 返回JsonResult类型的数据
      */
+    @AdminLogin
     @RequestMapping(value = "/updateArticle")
     @ResponseBody
-    public JsonResult updateArticle(QueArticle queArticle){
+    public JsonResult updateArticle(QueArticle queArticle) {
         JsonResult jsonResult = new JsonResult();
         queArticle.setCreateTime(new Date());
         int i = this.queArticleService.updateByPrimaryKey(queArticle);
-        if (i > 0){
+        if (i > 0) {
             jsonResult.setCode(1);
             jsonResult.setResult("更新数据成功");
             return jsonResult;
@@ -198,9 +223,11 @@ public class ColorfulController {
 
     /**
      * 删除视频
+     *
      * @param id
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/deleteVideosById")
     @ResponseBody
     public JsonResult deleteVideos(@RequestParam("id") Integer id) {
@@ -225,59 +252,66 @@ public class ColorfulController {
 
     /**
      * 上传图片
+     *
      * @param file
      * @return
      */
+    @AdminLogin
     @RequestMapping("/uploadPic")
     @ResponseBody
     public Map<String, String> uploadPic(@RequestParam("file") MultipartFile file) {
         Map<String, String> fileNameMap = FileUtil.uploadFile(file, FileUtil.FILE_PATH + "picture/");
         Map<String, String> result = new Hashtable<>();
-        if(!fileNameMap.isEmpty()){
+        if (!fileNameMap.isEmpty()) {
             QueImages queImages = new QueImages();
             queImages.setName(fileNameMap.get("originalFilename"));
-            queImages.setPath("picture/"+fileNameMap.get("fileName"));
+            queImages.setPath("picture/" + fileNameMap.get("fileName"));
             int insert = queImagesService.insert(queImages);
-            if(insert > 0){
-                result.put("success","文件上传成功！");
+            if (insert > 0) {
+                result.put("success", "文件上传成功！");
                 return result;
             }
         }
         result.clear();
-        result.put("error","文件上传失败！");
+        result.put("error", "文件上传失败！");
         return result;
     }
+
     /**
      * 上传视频
+     *
      * @param file
      * @return
      */
+    @AdminLogin
     @RequestMapping("/uploadVideos")
     @ResponseBody
     public Map<String, String> uploadVideos(@RequestParam("file") MultipartFile file) {
         Map<String, String> fileNameMap = FileUtil.uploadFile(file, FileUtil.FILE_PATH + "videos/");
         Map<String, String> result = new Hashtable<>();
-        if(!fileNameMap.isEmpty()){
+        if (!fileNameMap.isEmpty()) {
             QueVideos queVideos = new QueVideos();
             queVideos.setName(fileNameMap.get("originalFilename"));
-            queVideos.setPath("videos/"+fileNameMap.get("fileName"));
+            queVideos.setPath("videos/" + fileNameMap.get("fileName"));
             int insert = queVideosService.insert(queVideos);
-            if(insert > 0){
-                result.put("success","文件上传成功！");
+            if (insert > 0) {
+                result.put("success", "文件上传成功！");
                 return result;
             }
         }
         result.clear();
-        result.put("error","文件上传失败！");
+        result.put("error", "文件上传失败！");
         return result;
     }
 
     /**
      * 视频展示
+     *
      * @param pageNumber
      * @param model
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/videos")
     public String videoExhibition(@RequestParam("pageNumber") Integer pageNumber, Model model) {
         PageInfo<QueVideos> queImagesPageInfo = queVideosService.selectAll(pageNumber > 0 ? pageNumber : 1);

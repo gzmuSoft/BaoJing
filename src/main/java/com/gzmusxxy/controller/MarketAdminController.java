@@ -1,6 +1,7 @@
 package com.gzmusxxy.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.gzmusxxy.annotation.AdminLogin;
 import com.gzmusxxy.common.JsonResult;
 import com.gzmusxxy.entity.IndustryNeed;
 import com.gzmusxxy.entity.IndustryUser;
@@ -37,6 +38,7 @@ public class MarketAdminController {
      * @param id 用户id
      * @return 成功返回1，失败返回0
      */
+    @AdminLogin
     @RequestMapping(value = "/deleteUser")
     @ResponseBody
     public JsonResult deleteUser(@RequestParam("id") Integer id){
@@ -60,6 +62,7 @@ public class MarketAdminController {
      * @param user 用户信息
      * @return 成功返回0，失败返回1
      */
+    @AdminLogin
     @RequestMapping(value = "/updateUser")
     @ResponseBody
     public JsonResult updateUser(IndustryUser user){
@@ -86,6 +89,7 @@ public class MarketAdminController {
      * @param industryUser 分页数据
      * @return 返回到页面
      */
+    @AdminLogin
     @RequestMapping(value = "/getUserByPage")
     public String getUserByPage(@RequestParam("pageNumber") Integer pageNumber, Model model,IndustryUser industryUser){
         if(industryUser.getUsername() != "" || industryUser.getUsername().trim() != null){
@@ -105,6 +109,7 @@ public class MarketAdminController {
      * @param id 用户编号
      * @return 返回的用户管理页面
      */
+    @AdminLogin
     @RequestMapping(value = "/getUserById")
     @ResponseBody
     public IndustryUser getUserById(@RequestParam("id") Integer id){
@@ -117,6 +122,7 @@ public class MarketAdminController {
      * @param model model
      * @return 返回分页信息到分页页面
      */
+    @AdminLogin
     @RequestMapping(value = "/getNeedByPages")
     public String getNeedByPages(@RequestParam("pageNumber") Integer pageNumber, Model model){
         PageInfo<IndustryNeed> pageInfo = this.marketAdminService.getNeed(pageNumber > 0 ? pageNumber : 1);
@@ -130,11 +136,13 @@ public class MarketAdminController {
      * @param id 编号
      * @return IndustryNeed对象
      */
+    @AdminLogin
     @RequestMapping(value = "/getNeedById")
     @ResponseBody
     public IndustryNeed getNeedById(@RequestParam("id") Integer id){
        return this.industryNeedService.selectByPrimaryKey(id);
     }
+    @AdminLogin
     @RequestMapping(value = "/deleteNeedById")
     @ResponseBody
     public JsonResult deleteNeedById(@RequestParam("id") Integer id){
@@ -159,6 +167,7 @@ public class MarketAdminController {
      * @param username 用户名
      * @return 返回用户信息
      */
+    @AdminLogin
     @RequestMapping(value = "/getUserByName")
     @ResponseBody
     public IndustryUser getUserByName(@RequestParam("username") String username){
@@ -171,6 +180,7 @@ public class MarketAdminController {
      * @param pageNumber 页码
      * @return 分页分页信息
      */
+    @AdminLogin
     @RequestMapping(value = "/getNeedByPage")
     public String getNeedByPage(IndustryNeed industryNeed,@RequestParam("pageNumber") Integer pageNumber,Model model){
         if(industryNeed.getUsername() != "" || industryNeed.getUsername().trim() != null){

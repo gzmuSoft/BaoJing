@@ -2,6 +2,7 @@ package com.gzmusxxy.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
+import com.gzmusxxy.annotation.AdminLogin;
 import com.gzmusxxy.entity.*;
 import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.*;
@@ -77,6 +78,7 @@ public class AdminController {
      * @param admin
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/updateMsg")
     public String updateMsg(Admin admin){
@@ -107,7 +109,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/index")
+    @AdminLogin
+    @RequestMapping(value = {"","/index"})
     public String index() {
         return "admin/index";
     }
@@ -117,6 +120,7 @@ public class AdminController {
      * @param sourceId 项目id
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/bulletin")
     public String bulletin(int sourceId, Model model) {
         List<Bulletin> list = bulletinService.selectBySourceId(sourceId);
@@ -148,6 +152,7 @@ public class AdminController {
      * @param bulletin
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/saveBulletin")
     public String saveBulletin(Bulletin bulletin, String content){
@@ -176,6 +181,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return admin/xjhb_project
      */
+    @AdminLogin
     @RequestMapping(value = "/xjhbProject")
     public String xjhbProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbProject> pageInfo = xjhbProjectService.selectProjectByNameLike(name, pageNumber);
@@ -196,6 +202,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return return
      */
+    @AdminLogin
     @RequestMapping(value = "/xjhbApply")
     public String xjhbApply(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectApplyByNameLike(name, pageNumber);
@@ -214,6 +221,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/detailed")
     public String detailed(int id) {
@@ -238,6 +246,7 @@ public class AdminController {
      * @param status 申请书status
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/status")
     public String status(int id, byte status, String remark, HttpSession session) {
@@ -294,6 +303,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return return
      */
+    @AdminLogin
     @RequestMapping(value = "/xjhbCheck")
     public String xjhbCheck(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectCheckByNameLike(name, pageNumber);
@@ -314,6 +324,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return return
      */
+    @AdminLogin
     @RequestMapping(value = "/xjhbAdopt")
     public String xjhbAdopt(Model model,String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<XjhbInformation> pageInfo = xjhbInformationService.selectAdoptByNameLike(name, pageNumber);
@@ -331,6 +342,7 @@ public class AdminController {
      * 标记全部转帐
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/adoptAllTransfer")
     public String adoptAllTransfer(){
@@ -342,6 +354,7 @@ public class AdminController {
      * @param model model
      * @return return
      */
+    @AdminLogin
     @RequestMapping(value = "/message")
     public String message(Model model){
         return "admin/admin_message";
@@ -362,6 +375,7 @@ public class AdminController {
      * @param xjhbProject xjhbProject
      * @return return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/addProject")
     public String addProject(XjhbProject xjhbProject) {
@@ -374,6 +388,7 @@ public class AdminController {
      * @param id id
      * @return return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/delProject")
     public String delProject(int id) {
@@ -386,6 +401,7 @@ public class AdminController {
      * @param id id
      * @return return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/updateProject")
     public String updateProject(int id){
@@ -407,6 +423,7 @@ public class AdminController {
      * @param fileName fileName
      * @return return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/update")
     public String update(XjhbProject xjhbProject,String filePath, String fileName){
@@ -550,6 +567,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return admin/bx_project
      */
+    @AdminLogin
     @RequestMapping(value = "/bxProject")
     public String bxProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<BxProject> pageInfo = bxProjectService.selectProjectByNameLike(name, pageNumber);
@@ -568,6 +586,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/findBxProject")
     public String findBxProject(Integer id){
@@ -589,6 +608,7 @@ public class AdminController {
      * @param fileName
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/updateBxProject")
     public String updateBxProject(BxProject bxProject, String filePath, String fileName) {
@@ -606,6 +626,7 @@ public class AdminController {
      * @param bxProject
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/addBxProject")
     public String addBxProject(BxProject bxProject) {
@@ -618,6 +639,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/delBxProject")
     public String delBxProject(Integer id) {
@@ -633,6 +655,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/bxAudit")
     public String bxAudit(Model model, String name,Integer poverty, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectAuditByNameLike(name, poverty, pageNumber);
@@ -654,6 +677,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return admin/bx_audit
      */
+    @AdminLogin
     @RequestMapping(value = "/bxCheck")
     public String bxCheck(Model model, String name, @RequestParam("pageNumber") Integer pageNumber,String personName, String idCard,Integer cost){
         PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectCheckByNameLike(name, pageNumber, personName, idCard, cost);
@@ -672,6 +696,7 @@ public class AdminController {
      * @param payCost 是否付款
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/bxPayCost")
     public String bxPayCost(int id, byte payCost,HttpSession session) {
@@ -710,6 +735,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return admin/bx_claims
      */
+    @AdminLogin
     @RequestMapping(value = "/bxClaims")
     public String bxClaims(Model model, String name, @RequestParam("pageNumber") Integer pageNumber, String personName, String startTime, String endTime){
         PageInfo<BxInsurance> pageInfo = bxInsuranceService.selectClaimsByNameLike(name, pageNumber, personName, startTime, endTime);
@@ -790,6 +816,7 @@ public class AdminController {
      * @param status 需要改变的状态
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/bxStatus")
     public String bxStatus(int id, byte status, String remark) {
@@ -842,6 +869,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/ylNotification")
     public String ylNotification(Model model, Integer pageNumber) {
         PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 3);
@@ -869,6 +897,7 @@ public class AdminController {
      * @param name
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/ylVerificationPay")
     public String ylVerificationPay(Model model, Integer pageNumber, String name) {
         PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectByNameCostLike(name, pageNumber);
@@ -884,6 +913,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/ylReimbursement")
     public String ylReimbursement(Model model, Integer pageNumber, String name) {
         PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectByNameLike(name, pageNumber);
@@ -899,6 +929,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/ylTransferAccounts")
     public String ylTransferAccounts(Model model, Integer pageNumber, String name) {
         PageInfo<YlGuarantee> pageInfo = ylGuaranteeService.selectAccountByNameLike(name, pageNumber);
@@ -914,6 +945,7 @@ public class AdminController {
      * @param after 后状态
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/ylUpdateSign")
     public String ylUpdateSign(Integer front, Integer after) {
@@ -927,6 +959,7 @@ public class AdminController {
      * @param response response
      * @return return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value= "/downloadYlExcl")
     public String downloadYlExcl(Integer status, HttpServletRequest request, HttpServletResponse response){
@@ -971,6 +1004,7 @@ public class AdminController {
      * @param status status
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/ylStatus")
     public String ylStatus(Integer id, Byte status, String remark, HttpSession session) {
@@ -1031,6 +1065,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/jyNotification")
     public String jyNotification(Model model, Integer pageNumber) {
         PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 4);
@@ -1058,6 +1093,7 @@ public class AdminController {
      * @param name
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/jyStudent")
     public String jyStudent(Model model, Integer pageNumber, String name) {
         PageInfo<JyStudent> pageInfo = jyStudentService.selectByNameLike(name, pageNumber);
@@ -1072,6 +1108,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/getStudent")
     public String getStudent(Integer id) {
@@ -1086,6 +1123,7 @@ public class AdminController {
      * @param jyStudent
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/addStudent")
     public String addStudent(JyStudent jyStudent) {
@@ -1100,6 +1138,7 @@ public class AdminController {
      * @param name
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/jyApply")
     public String jyApply(Model model, Integer pageNumber, String name) {
         PageInfo<JyApply> pageInfo = jyApplyService.selectByNameLike(name, pageNumber);
@@ -1115,6 +1154,7 @@ public class AdminController {
      * @param status status
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/jyStatus")
     public String jyStatus(Integer id, Byte status, String remark, HttpSession session) {
@@ -1155,6 +1195,7 @@ public class AdminController {
      * @param jyStudent
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/updateStudent")
     public String updateStudent(JyStudent jyStudent) {
@@ -1167,6 +1208,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/delStudent")
     public String delStudent(Integer id) {
@@ -1181,6 +1223,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/zfNotification")
     public String zfNotification(Model model, Integer pageNumber) {
         PageInfo<Bulletin> pageInfo = bulletinService.selectAllBySourceId(pageNumber, 5);
@@ -1208,6 +1251,7 @@ public class AdminController {
      * @param pageNumber pageNumber
      * @return admin/zf_project
      */
+    @AdminLogin
     @RequestMapping(value = "/zfProject")
     public String zfProject(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<ZfTemplate> pageInfo = zfTemplateService.selectByNameLike(name, pageNumber);
@@ -1222,6 +1266,7 @@ public class AdminController {
      * @param zfTemplate
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/zfAddTemplate")
     public String zfAddTemplate(ZfTemplate zfTemplate) {
@@ -1235,6 +1280,7 @@ public class AdminController {
      * @param zfTemplate
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/zfUpdateTemplate")
     public String zfUpdateTemplate(ZfTemplate zfTemplate) {
@@ -1247,6 +1293,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/zfGetTemplate")
     public String zfGetTemplate(int id) {
@@ -1265,6 +1312,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/zfDelTemplate")
     public String zfDelTemplate(int id) {
@@ -1280,6 +1328,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/zfApply")
     public String zfApply(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<ZfApply> pageInfo = zfApplyService.selectByNameLike(name, pageNumber);
@@ -1300,6 +1349,7 @@ public class AdminController {
      * @param remark
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/zfStatus")
     public String zfStatus(int id, byte status, String remark, HttpSession session) {
@@ -1355,6 +1405,7 @@ public class AdminController {
      * @param constructionPath
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/zfSaveConstruction")
     public String zfSaveConstruction(int id, String constructionPath) {
@@ -1374,6 +1425,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/zfPhoto")
     public String zfPhoto(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<ZfPhoto> pageInfo = zfPhotoService.selectByNameLike(name, pageNumber);
@@ -1394,6 +1446,7 @@ public class AdminController {
      * @param remark
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @PostMapping(value = "/zfStatusUpload")
     public String zfStatusUpload(int id, int isUpload, String remark) {
@@ -1452,6 +1505,7 @@ public class AdminController {
      * @param pageNumber
      * @return
      */
+    @AdminLogin
     @RequestMapping(value = "/zfComplete")
     public String zfComplete(Model model, String name, @RequestParam("pageNumber") Integer pageNumber){
         PageInfo<ZfApply> pageInfo = zfApplyService.selectCompleteByNameLike(name, pageNumber);
@@ -1471,6 +1525,7 @@ public class AdminController {
      * @param response
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value= "/downloadZfExcl")
     public String downloadZfExcl(HttpServletRequest request, HttpServletResponse response){
@@ -1500,6 +1555,7 @@ public class AdminController {
      * @param id
      * @return
      */
+    @AdminLogin
     @ResponseBody
     @RequestMapping(value = "/delNotification")
     public String delNotification(Integer id) {

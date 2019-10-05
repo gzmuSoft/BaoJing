@@ -18,7 +18,7 @@ import java.util.List;
 
 /**
  * 设置页面拦截器和
- * 设置页面编码
+ * 设置页面编码以及解析器
  */
 @Configuration
 public class WebConfig extends WebMvcConfigurationSupport {
@@ -28,7 +28,17 @@ public class WebConfig extends WebMvcConfigurationSupport {
     //拦截器
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/poverty/**").addPathPatterns("/insurance/**").addPathPatterns("/supply/**");
+        //拦截以下地址
+        registry.addInterceptor(loginInterceptor)
+                .addPathPatterns("/poverty/**")
+                .addPathPatterns("/insurance/**")
+                .addPathPatterns("/supply/**")
+                .addPathPatterns("/house/**")
+                .addPathPatterns("/education/**")
+                .addPathPatterns("/admin/**")
+                .addPathPatterns("/colorful/**")
+                .addPathPatterns("/supplyAdmin/**")
+                .addPathPatterns("/medical/**");
         super.addInterceptors(registry);
     }
 
@@ -41,9 +51,10 @@ public class WebConfig extends WebMvcConfigurationSupport {
                 .addResourceLocations("classpath:/resources/");
         //配置图片视频资源映射
         registry.addResourceHandler("/preview/**")
-                .addResourceLocations("file:"+ FileUtil.FILE_PATH);
+                .addResourceLocations("file:" + FileUtil.FILE_PATH);
         super.addResourceHandlers(registry);
     }
+
     @Bean
     public HttpMessageConverter<String> responseBodyStringConverter() {
         StringHttpMessageConverter converter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
@@ -52,6 +63,7 @@ public class WebConfig extends WebMvcConfigurationSupport {
 
     /**
      * 将json解析器更换为fastjson
+     *
      * @param converters
      */
     @Override

@@ -66,12 +66,29 @@ public class WeChatController {
             session.setAttribute("openid", openId);
             //回到首页
             String uri = null;
-            if (weChat.getState().equals("insurance")) {
+            switch(weChat.getState()){
+                case "insurance":
+                    uri = "/insurance";
+                    break;
+                case "poverty":
+                    uri = "/poverty/apply";
+                    break;
+                case "house":
+                    uri = "/house";
+                    break;
+                case "education":
+                    uri = "/education";
+                    break;
+                case "medical":
+                    uri = "/medical";
+                    break;
+            }
+            /*if (weChat.getState().equals("insurance")) {
                 uri = "/insurance";
             }
             if (weChat.getState().equals("poverty")) {
                 uri = "/poverty/apply";
-            }
+            }*/
             return "redirect:" + uri;
         } else {
             model.addAttribute("msg", "登录失败，请重试！");

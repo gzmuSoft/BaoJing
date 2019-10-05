@@ -17,6 +17,8 @@ public class BaojingApplication {
         System.out.println("保险后台：http://127.0.0.1:8083/supply");
         System.out.println("多彩报京：http://127.0.0.1:8083/exhibition");
         System.out.println("医疗保障：http://127.0.0.1:8083/medical");
+        System.out.println("教育保障：http://127.0.0.1:8083/education");
+        System.out.println("住房保障：http://127.0.0.1:8083/house");
     }
 
 }

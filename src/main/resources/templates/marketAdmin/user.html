@@ -24,7 +24,7 @@
                 <ul class="cm-menu-items">
                     <li><a href="/admin/index" class="sf-house">主页</a></li>
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 2}">
-                        <a class="sf-brick">先建后补项目<span class="caret"></span></a>
+                        <a class="sf-brick">先建后补<span class="caret"></span></a>
                         <ul>
                             <li class="active"><a href="#">公告设置</a></li>
                             <li><a href="/admin/xjhbProject?pageNumber=1">项目管理</a></li>
@@ -34,13 +34,40 @@
                         </ul>
                     </li>
                     <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 3}">
-                        <a class="sf-globe">农业保险项目<span class="caret"></span></a>
+                        <a class="sf-globe">农业保险<span class="caret"></span></a>
                         <ul>
                             <li><a href="/admin/bulletin?sourceId=2">公告设置</a></li>
                             <li><a href="/admin/bxProject?pageNumber=1">保险项目管理</a></li>
                             <li><a href="/admin/bxAudit?pageNumber=1&poverty=3">购买申请审核</a></li>
                             <li><a href="/admin/bxCheck?pageNumber=1&cost=3">缴费验收</a></li>
                             <li><a href="/admin/bxClaims?pageNumber=1">理赔申请审核</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 4}">
+                        <a class="sf-heart">医疗保障<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/ylNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="/admin/ylVerificationPay?pageNumber=1">缴费管理</a></li>
+                            <li><a href="/admin/ylReimbursement?pageNumber=1">申请报销管理</a></li>
+                            <li><a href="/admin/ylTransferAccounts?pageNumber=1">待报销查看</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 5}">
+                        <a class="sf-book">教育保障<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/jyNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="/admin/jyStudent?pageNumber=1">贫困户学生管理</a></li>
+                            <li><a href="/admin/jyApply?pageNumber=1">申请资助管理</a></li>
+                        </ul>
+                    </li>
+                    <li class="cm-submenu" th:if="${session.admin.role == 1 || session.admin.role == 6}">
+                        <a class="sf-shop">住房保障<span class="caret"></span></a>
+                        <ul>
+                            <li><a href="/admin/zfNotification?pageNumber=1">公告管理</a></li>
+                            <li><a href="/admin/zfProject?pageNumber=1">申请表模块管理</a></li>
+                            <li><a href="/admin/zfApply?pageNumber=1">危房改造申请管理</a></li>
+                            <li><a href="/admin/zfPhoto?pageNumber=1">施工照片管理</a></li>
+                            <li><a href="/admin/zfComplete?pageNumber=1">施工完成验收管理</a></li>
                         </ul>
                     </li>
                     <!--  多彩报京 -->
@@ -96,15 +123,16 @@
             <div class="col-md-12">
                 <div class="panel panel-default">
                     <div class="panel-heading">供销系统管理</div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <input type="text" id="myname" style="width: 500px;height: 37px;margin-left: 10px;border-radius: 10px" class="form-control input-sm" placeholder="请输入需要查询的用户名">
-                        </div>
-                        <div class="col-lg-2 text-left">
-                            <button type="button" id="findUser"  style="margin-left: 0px" class="btn btn-success">立即查询</button>
+                    <div class="panel-body">
+                        <div class="form-inline">
+                            <div class="form-group">
+                                <label for="myname">&nbsp;&nbsp;&nbsp;輸入用戶名:&nbsp;</label>
+                                <input type="text" placeholder="输入需要查询的用户名..." name="name" id="myname"  class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-primary" id="findUser">立即查询</button>
                         </div>
                     </div>
+
                     <hr>
                     <input type="hidden" value="1" id="pageNumber">
 

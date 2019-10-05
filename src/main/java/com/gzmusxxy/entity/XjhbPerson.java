@@ -29,6 +29,4 @@ public class XjhbPerson {
     private Byte poverty;
 
     private String povertyProve;
-
-
 }

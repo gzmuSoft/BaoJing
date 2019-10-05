@@ -19,6 +19,4 @@ public class XjhbProject {
     private Date endTime;
 
     private Integer period;
-
-
 }

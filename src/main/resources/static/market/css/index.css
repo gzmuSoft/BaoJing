@@ -109,3 +109,13 @@ input[type="radio"]:checked+span {
 	border-radius: 6px;
 	box-shadow:0 0 7px #888888;
 }
+.text-center{
+	text-align: center;
+}
+.header{
+	margin: 50px 10px 50px 25px;
+	z-index: 100;
+}
+.inlineblk{
+	display: inline-block;
+}

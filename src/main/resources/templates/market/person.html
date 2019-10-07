@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
     <title>供销交流平台</title>
     <!-- 引入 FrozenUI -->
-    <link rel="stylesheet" href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css"/>
     <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
     <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
     <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
@@ -19,22 +18,23 @@
         <div style="width:100%">
             <center>
                 <img src="/market/images/mn.jpg" style="width:80px;height:80px;border-radius:40px;margin:60px 0 10px -250px">
-                <div style="position: absolute; left: 130px; top: 80px; z-index: 999" ><b><%=name %></b></div>
-                <div style="position: absolute;left: 130px; top: 100px; z-index: 999"><b>ID:</b></div>
+                <div style="position: absolute; left: 130px; top: 80px; z-index: 999" ><b style="color: #ffffff" th:text="${user.name}"></b></div>
+                <div style="position: absolute;left: 130px; top: 100px; z-index: 999"><b style="color: #ffffff">ID:<th:block th:text="${user.id}"></th:block></b></div>
             </center>
 
 
         </div>
     </div>
     <div class="ui-row-flex ui-whitespace" style="margin:10px 0 10px 0;padding: 0 0 0 0;" >
-        <div class="ui-col ui-col"><center><i style="margin-left:40%"><span><%=type1Count %></span>
-            <br/>&nbsp;&nbsp;&nbsp;<font size="-1"> 我的收藏</font> </i></center></div>
+
+        <div class="ui-col ui-col text-center"><center><i style="margin-left:20%"><span th:text="${countList.goodsCount}"></span>
+            <br/>&nbsp;&nbsp;&nbsp;<font size="-1"> 我的商品</font> </i></center></div>
         <div class="ui-col ui-col"><center><div style="width: 1px; height: 40px;background-color: #777777;"></div></center></div>
-        <div class="ui-col ui-col"><center><i style="margin-right:40%"><span><%=type2Count %></span>
-            <br/>&nbsp;&nbsp;&nbsp;<font size="-1">发布需求</font></i></center></div>
-        <div class="ui-col ui-col"><center><div style="width: 1px; height: 40px;background-color: #777777;"></div></center></div>
+        <div class="ui-col ui-col text-center"><i style="margin-right:20%">&nbsp;&nbsp;&nbsp;<span class="text-center" th:text="${countList.needsCount}"></span>
+            <br/><font size="-1">我的需求</font></i></div>
+<!--        <div class="ui-col ui-col"><center><div style="width: 1px; height: 40px;background-color: #777777;"></div></center></div>
         <div class="ui-col ui-col"><center><i style="margin-right:25%;"><span><%=type2Count %>&nbsp;&nbsp;&nbsp;</span>
-            <br/><font size="-1"> 我的订单</font></i></center></div>
+            <br/><font size="-1"> 我的订单</font></i></center></div>-->
     </div>
 
     <ul class="ui-list ui-list-link ui-border-tb" style="width:100%;margin:10px 0 0 0">
@@ -62,16 +62,6 @@
                 <h4 class="ui-nowrap">意见反馈</h4>
             </div>
         </li>
-        <%if(userType=="1"){%>
-        <li onclick="window.location.href='/admin'">
-            <div class="ui-list-thumb" style="margin-right:0px;width:40px">
-                <span style="background-image:url('/market/images/advice.png');background-size:32px 32px;margin:8px 0 0 0"></span>
-            </div>
-            <div class="ui-list-info ui-border-t">
-                <h4 class="ui-nowrap">内容管理</h4>
-            </div>
-        </li>
-        <%}%>
     </ul>
     <center>
         <button type="button" class="ui-btn ui-btn-danger"  style="width:90%; background-color: #912f2c; border-radius:20px; height:40px;margin:86px auto" id="exit">退出登录</button>
@@ -92,9 +82,9 @@
 <script type="text/javascript">
     $(function(){
 
-            $("#exit").click(function(){
-                    window.location.href="/supply/logout";
-            })
+        $("#exit").click(function(){
+            window.location.href="/supply/logout";
+        })
 
         //关于我们按钮点击事件
         $("#aboutUs").click(function(){
@@ -123,15 +113,15 @@
                             </div>\
                         </div> \
                     </div> ';
-                    $("#showTip").html(html);
-            })
-            //意见反馈按钮点击事件
-            $("#changeInfo").click(function(){
-                  window.location.href="/supply/changeInfo";
-            })
-            $(document).on("click",".close",function(){
-                $("#showTip").html("");
-            })
+            $("#showTip").html(html);
         })
-    </script>
+        //意见反馈按钮点击事件
+        $("#changeInfo").click(function(){
+            window.location.href="/supply/changeInfo";
+        })
+        $(document).on("click",".close",function(){
+            $("#showTip").html("");
+        })
+    })
+</script>
 </html>

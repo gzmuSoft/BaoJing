@@ -121,7 +121,6 @@ public class HouseController {
      * @param request
      * @param response
      */
-    @IsLogin
     @ResponseBody
     @RequestMapping(value = "/download")
     public void downloadTemplate(@RequestParam("id") Integer id, HttpServletRequest request, HttpServletResponse response) {

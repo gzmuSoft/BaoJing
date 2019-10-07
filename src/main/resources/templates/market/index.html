@@ -1,45 +1,47 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
-        <title>供销交流平台</title>
-        <!-- 引入 FrozenUI -->
-        <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
-        <link rel="stylesheet" th:href="@{/market/css/index.css}"/>
-        <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
-        <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
-        <script type="text/javascript" th:src="@{/market/js/common.js}"></script>
-        <script type="text/javascript" th:src="@{/market/js/index.js}"></script>
-    </head>
-    <body>
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <title>供销交流平台</title>
+    <!-- 引入 FrozenUI -->
+    <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
+    <link rel="stylesheet" th:href="@{/market/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
+    <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/market/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/market/js/index.js}"></script>
+</head>
+<body>
 
-        <section class="ui-container">
-            <div class="ui-tab ">
-                <div class="gon-bot">
-                    <div class="gon-box">
-                    <div class="radio-left" >
-                        <span id="good-img"></span><br>
-                        <label><input type="radio" name="type" value="商品" checked="checked" class="li-img" id="gon-good"/><span type="1">商品</span></label>
-                    </div>
-                    <div class="radio-right" id="gon-need1">
-                        <span id="need-img"></span><br>
-                        <label><input type="radio" name="type"  value="需求" class="li-img" id="gon-need"/><span type="2">需求</span></label>
-                    </div>
-                    </div>
+<section class="ui-container">
+
+    <div class="ui-tab ">
+        <div class="gon-bot">
+            <div class="gon-box">
+                <div class="radio-left current">
+                    <label id="goods" type="1"><span id="good-img"></span><br>
+                    <input type="radio" name="type" value="1" checked="checked" class="li-img" id="gon-good"/><span id="goodsSpan" style="font-size: 16px;">商品</span></label>
                 </div>
-                <div class="ui-tab-content" style="width:100%;position:absolute;">
-                    <section class="ui-list ui-list-pure ui-border-b" style="background-color:#F2F2F2;" id="showSection">
-                    </section>
+                <div class="radio-right" id="gon-need1">
+                    <label id="needs" type="2"><span id="need-img"></span><br>
+                    <input type="radio" name="type" value="2" class="li-img" id="gon-need"/><span id="needsSpan">需求</span></label>
                 </div>
             </div>
-        </section>
-        <footer class="ui-footer ui-footer-btn">
-            <ul class="ui-tiled ui-border-t">
-                <li class="ui-border-r" ><a href="/supply/"><div>首页</div></a></li>
-                <li class="ui-border-r" ><a href="/supply/addNeed"><div style="color:#777777">发布需求</div></a></li>
-                <li class="ui-border-r"><a href="/supply/my"><div style="color:#777777">我的</div></a></li>
-            </ul>
-        </footer>
-    </body>
+        </div>
+        <div class="ui-tab-content" style="width:100%;position:absolute;">
+            <section class="ui-list ui-list-pure ui-border-b" style="background-color:#F2F2F2;" id="showSection">
+            </section>
+        </div>
+    </div>
+</section>
+<footer class="ui-footer ui-footer-btn">
+    <ul class="ui-tiled ui-border-t">
+        <li class="ui-border-r" ><a href="/supply"><div>首页</div></a></li>
+        <li class="ui-border-r" ><a href="/supply/addNeed"><div style="color:#777777">发布需求</div></a></li>
+        <li><a href="/supply/my"><div style="color:#777777">我的</div></a></li>
+    </ul>
+</footer>
+</body>
 </html>

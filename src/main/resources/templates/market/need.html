@@ -14,17 +14,17 @@
 </head>
 <body>
 <ul class="ui-list ui-list-single  ui-border-tb" style="border: none;background-color:#F2F2F2;margin-top: 5px;">
-	<form action="/need" method="post" id="needForm" enctype="multipart/form-data">
+	<form action="/supply/postAddNeeds" method="post" id="needForm" enctype="multipart/form-data">
 
 		<div class="gon-bot">
 			<div class="gon-box">
 			<div class="radio-left" >
-				<span id="good-img"></span><br>
-				<label><input type="radio" name="type" value="商品" checked="checked" class="li-img" id="gon-good"/><span>商品</span></label>
+				<span id="good-img" for="gon-good"></span><br>
+				<input type="radio" name="type" value="1" checked="checked" class="li-img" id="gon-good"/><span>商品</span>
 			</div>
 			<div class="radio-right" id="gon-need1">
-				<span id="need-img"></span><br>
-				<label><input type="radio" name="type"  value="需求" class="li-img" id="gon-need"/><span>需求</span></label>
+				<span id="need-img" for="gon-need"></span><br>
+				<label><input type="radio" name="type"  value="2" class="li-img" id="gon-need"/><span>需求</span></label>
 			</div>
 			</div>
 		</div>
@@ -32,7 +32,7 @@
 
 		<li class="ui-border-t"  style="width: 100%">
 			<div style="width: 98%;margin: 0 auto">
-				<textarea style="width:100%;padding-top: 6px;margin: 0 auto;" rows="10" name="content" id="content" placeholder="请输入内容 "></textarea>
+				<textarea style="width:98%;padding-top: 10px;margin-left:2px;border-radius:3px" rows="10" name="content" id="content" placeholder="请输入内容 "></textarea>
 			</div>
 		</li>
 		<center>
@@ -110,8 +110,5 @@
             $("#showTip").html("");
         })
     })
-
-
-
 </script>
 </html>

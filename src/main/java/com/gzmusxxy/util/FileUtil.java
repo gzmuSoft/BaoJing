@@ -11,15 +11,13 @@ import java.util.Hashtable;
 import java.util.Map;
 import java.util.UUID;
 
-import static com.sun.deploy.cache.Cache.exists;
-
 /**
  * 文件操作工具类
  */
 public class FileUtil {
 
     //    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
-    public static final String FILE_PATH = "/home/qfmx520/Desktop/file/";
+    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
 
     /**
      * 判断文件是否存在

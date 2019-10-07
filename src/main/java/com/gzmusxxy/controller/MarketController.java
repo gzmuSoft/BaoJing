@@ -238,8 +238,7 @@ public class MarketController {
     }
 
     @RequestMapping(value = "/postAddNeeds")
-    public String postAddNeeds(HttpSession session,@RequestParam("img") MultipartFile file,@RequestParam("type") Integer type,@RequestParam("content") String content){
-        Map<String, String> fileNameMap = FileUtil.uploadFile(file, FileUtil.FILE_PATH + "market/");
+    public String postAddNeeds(HttpSession session,@RequestParam(value = "img",required = false) MultipartFile file,@RequestParam("type") Integer type,@RequestParam("content") String content){
         //获取session数据
         IndustryUser user = (IndustryUser)session.getAttribute("user");
         //保存数据到bean中
@@ -248,7 +247,11 @@ public class MarketController {
         industryNeed.setType(type);
         industryNeed.setUserid(user.getId());
         industryNeed.setUsername(user.getUsername());
-        industryNeed.setFile("market/"+fileNameMap.get("fileName"));
+        if(!file.isEmpty()){
+            Map<String, String> fileNameMap = FileUtil.uploadFile(file, FileUtil.FILE_PATH + "market/");
+            industryNeed.setFile("market/"+fileNameMap.get("fileName"));
+        }
+
         industryNeed.setDate(new Date());
         //插入数据
         int insert = industryNeedService.insert(industryNeed);

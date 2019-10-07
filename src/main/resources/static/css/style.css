@@ -69,14 +69,15 @@ foot a{
     overflow: hidden;
     -webkit-touch-callout: none;
     margin-bottom: 10px;
-    background-color: #e6e6e6;
+    background-color: rgba(230, 230, 230, 0.56);
     border-radius: 10px;
 }
 .table-view-div{
     -webkit-box-align: inherit;
     -webkit-align-items: inherit;
     align-items: inherit;
-    padding: 20px 15px;
+    padding: 20px 20px;
+    box-shadow: 0 1px 16px 0 rgba(0,0,0,.1);
 }
 .table-view-project{
     font-weight:bold;
@@ -143,7 +144,7 @@ foot a{
     min-width: 0;
 }
 .medical-view-item-fr{
-    font-size: 0.8rem;
+    font-size: 1.4rem;
     text-align: right;
     color: #999999;
     padding-right: 13px;
@@ -181,25 +182,41 @@ foot a{
 .red{
     color: red;
 }
+.red-v{
+    width: 90%;
+    padding-left: 5%;
+}
 .input-style{
-    width:100%;
+    width:90%;
     border: none;
-    border-bottom: 1px solid #cccccc;
-    padding-bottom: 7px;
+    outline: none;
+    line-height: 25px;
+    height: 25px;
+    font-size: 16px;
 }
 .input-style[disabled]{
     background-color: #FFFFFF;
 }
 .input-style-i{
-    width:100%;
+    width:90%;
     border: none;
-    border-bottom: 1px solid #cccccc;
     padding-bottom: 1px;
 }
 .center-input{
     width: 90%;
+    border-bottom: 1px solid #cccccc;
     margin: 0 auto;
     margin-top: 30px;
+    padding-left: 7px;
+    padding-bottom: 5px;
+}
+
+.center-input-bt{
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 30px;
+    padding-left: 7px;
+    padding-bottom: 5px;
 }
 .option-input{
     border: none;
@@ -209,4 +226,24 @@ foot a{
 .btn-info{
     background-color: #912f2c;
     border-color: #912f2c;
+}
+.b_icon{
+    width: 21px;
+    float: left;
+}
+.input-style[placeholder]{
+     padding-left: 20px;
+ }
+.input-style-pr{
+    width:90%;
+    border: none;
+    outline: none;
+    line-height: 25px;
+    height: 25px;
+    font-size: 16px;
+}
+.subBtn{
+    width: 100%;
+    height: 40px;
+    margin-top: 30px;
 }

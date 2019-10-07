@@ -28,11 +28,11 @@
                     </select>
                 </div>
                 <div class="center-input" >
-                    <input type="text" name="projectTitle" class="input-style" id="projectTitle" placeholder="项目名称">
+                    <input type="text" name="projectTitle" class="input-style-pr" id="projectTitle" placeholder="项目名称">
                 </div>
 
                 <div class="center-input" >
-                    <input type="text" name="outlay" class="input-style" id="outlay" placeholder="项目申请经费">
+                    <input type="text" name="outlay" class=" input-style-pr" id="outlay" placeholder="项目申请经费">
                 </div>
 
                 <div class="center-input" >
@@ -46,22 +46,22 @@
                 </div>
 
                 <div class="center-input" >
-                    <textarea name="projectContent" class="input-style" id="projectContent" placeholder="项目简介"></textarea>
+                    <textarea name="projectContent" class="input-style-pr" id="projectContent" placeholder="项目简介"></textarea>
                 </div>
 
-                <div class="center-input" >
+                <div class="center-input-bt" >
                     <label for="downloadTemplate" class="col-sm-2 control-label">项目申请书模板下载：</label><br>
                     <button class="btn" style="width:100%; color: #FFFFFF; background-color: #0089c6; padding:6px 10px!important;" type="button" id="downloadTemplate">模板下载</button>
                 </div>
 
-                <div class="center-input" style="position: relative;" >
+                <div class="center-input-bt" style="position: relative;" >
                     <button class="btn  " style="width:50%;  padding:6px 10px!important;" type="button">项目申请书上传</button>
                     <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0; width: 50%" type="file" name="identify_project" id="identify_project" onchange="saveFile(this)">
                     <span id="projectFileName" style="vertical-align: middle">未上传文件</span>
                     <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                 </div>
 
-                <div class="center-input" style="position: relative;">
+                <div class="center-input-bt" style="position: relative;">
                     <button class="btn " style="width:50%; padding:6px 10px!important; " type="button" id="other">其他证明材料上传</button>
                     <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0; width: 50%" type="file" name="identify_other" id="identify_other" onchange="saveFile(this)">
                     <span id="otherFileName">未上传文件</span>
@@ -69,8 +69,8 @@
                 </div>
                 <br />
                 <br /><br />
-                <div class="center-input">
-                    <button type="button" id="sub" class="btn input-style" style=" color: #FFFFFF ;background-color: #912f2c; border-radius: 20px">提交申请</button>
+                <div class="center-input-bt">
+                    <button type="button" id="sub" class="btn subBtn " style=" color: #FFFFFF ;background-color: #912f2c; border-radius: 20px">提交申请</button>
                 </div>
             </form>
         </div>

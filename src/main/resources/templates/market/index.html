@@ -17,21 +17,107 @@
             <i class="ui-icon-return" onclick="history.back()"></i><h1>基础样式 </h1><button class="ui-btn">回首页</button>
         </header> -->
         <section class="ui-container">
-		<div class="ui-tab ">
-		    <ul class="ui-tab-nav ui-border-b item">
-		        <li class="current "  type="1"><span>商品</span></li>
-		        <li  type="2"><span>需求</span></li>
-		    </ul>
-		    <div class="ui-tab-content" style="width:100%;position:absolute;">
-		    	<section class="ui-list ui-list-pure ui-border-b" style="background-color:#F2F2F2;" id="showSection">
+            <div class="ui-tab ">
+                <div class="gon-bot">
+                    <div class="gon-box">
+                    <div class="radio-left" >
+                        <span id="good-img"></span><br>
+                        <label><input type="radio" name="type" value="商品" checked="checked" class="li-img" id="gon-good"/><span type="1">商品</span></label>
+                    </div>
+                    <div class="radio-right" id="gon-need1">
+                        <span id="need-img"></span><br>
+                        <label><input type="radio" name="type"  value="需求" class="li-img" id="gon-need"/><span type="2">需求</span></label>
+                    </div>
+                    </div>
+                </div>
+                <div class="ui-tab-content" style="width:100%;position:absolute;">
+                    <section class="ui-list ui-list-pure ui-border-b" style="background-color:#F2F2F2;" id="showSection">
+                        <!--<input type="" name="" style="width:90%;height:30px;margin-left:5%;border-radius:5px;"><span class="fa fa-search"></span></input>-->
 
-		    	</section>
-		    </div>
-		</div>
+
+                    <!--
+                     <div class="contentBox" >
+                         <div class="contentInnerBox"  >
+                             <div class="headerContent"  >
+                                 <img src="../uploads/1543750704024-timg.jpg" width="50px" height="50px" style="border-radius: 50%;" class="pic">
+                                 <span class="username">会飞的鱼</span><br />
+                                 <hr style="color: #DDDDDD;"  />
+                             </div>
+                             <div class="contentText">有没有明天一起去看7点杨洋的生日会的小伙伴呀，看完一起回来，有的话联系我哟</div>
+                             <div>
+                                 <img src="../uploads/1536476868516-1531721904261.jpg" style="width:44%; height: 100px ; margin-left: 3%;" >
+                                 <img src="../uploads/1536476577213-宝贝.jpg" style="width:44%; height: 100px ; margin-left: 3%;" >
+                             </div>
+                             <div height:30px>
+
+                                 <hr style="color: #DDDDDD;"/>
+                                 <div class="fr">
+                                     <span >发布时间：</span>
+                                     <span class="time">2018-6-15</span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                                         <div class="contentBox" >
+                         <div class="contentInnerBox"  >
+                             <div class="headerContent"  >
+                                 <img src="../uploads/1543750704024-timg.jpg" width="50px" height="50px" style="border-radius: 50%;" class="pic">
+                                 <span class="username">会飞的鱼</span><br />
+                                 <hr style="color: #DDDDDD;"  />
+                             </div>
+                             <div class="contentText">有没有明天一起去看7点杨洋的生日会的小伙伴呀，看完一起回来，有的话联系我哟</div>
+                             <div>
+                                 <img src="../uploads/1536476868516-1531721904261.jpg" style="width:44%; height: 100px ; margin-left: 3%;" >
+                                 <img src="../uploads/1536476577213-宝贝.jpg" style="width:44%; height: 100px ; margin-left: 3%;" >
+                             </div>
+                             <div height:30px>
+
+                                 <hr style="color: #DDDDDD;"/>
+                                 <div class="fr">
+                                     <span >发布时间：</span>
+                                     <span class="time">2018-6-15</span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                                         <div class="contentBox" >
+                         <div class="contentInnerBox"  >
+                             <div class="headerContent"  >
+                                 <img src="../uploads/1543750704024-timg.jpg" width="50px" height="50px" style="border-radius: 50%;" class="pic">
+                                 <span class="username">会飞的鱼</span><br />
+                                 <hr style="color: #DDDDDD;"  />
+                             </div>
+                             <div class="contentText">有没有明天一起去看7点杨洋的生日会的小伙伴呀，看完一起回来，有的话联系我哟</div>
+                             <div>
+                                 <img src="../uploads/1536476868516-1531721904261.jpg" style="width:44%; height: 100px ; margin-left: 3%;" >
+                                 <img src="../uploads/1536476577213-宝贝.jpg" style="width:44%; height: 100px ; margin-left: 3%;" >
+                             </div>
+                             <div height:30px>
+
+                                 <hr style="color: #DDDDDD;"/>
+                                 <div class="fr">
+                                     <span >发布时间：</span>
+                                     <span class="time">2018-6-15</span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+
+
+                     <div style="height:80px;padding:3px 0 6px 0;color:#1EA076;" id="showMore">
+                         <center  >
+                             <span style="">查看更多</span>
+                             <span class="fa fa-angle-down"></span>
+                         </center>
+                     </div>
+                    -->
+                    </section>
+                </div>
+            </div>
         </section>
         <footer class="ui-footer ui-footer-btn">
             <ul class="ui-tiled ui-border-t">
-                <li class="ui-border-r" ><a href="/supply"><div>首页</div></a></li>
+                <li class="ui-border-r" ><a href="/supply/"><div>首页</div></a></li>
                 <li class="ui-border-r" ><a href="/supply/addNeed"><div style="color:#777777">发布需求</div></a></li>
                 <li class="ui-border-r"><a href="/supply/my"><div style="color:#777777">我的</div></a></li>
             </ul>

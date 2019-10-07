@@ -92,6 +92,7 @@ public class ExhibitionController {
         if(queImages != null){
             model.addAttribute("fileName",queImages.getName());
             model.addAttribute("path",queImages.getPath());
+            model.addAttribute("createTime",queImages.getCreateTime());
         }else{
             model.addAttribute("fileName","文件不存在");
             model.addAttribute("path","");

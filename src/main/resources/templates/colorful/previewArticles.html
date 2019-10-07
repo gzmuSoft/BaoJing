@@ -11,8 +11,9 @@
 <body>
 	<!-- 文章B -->
 	<div class="article-container">
-		<span th:text="${article.name}"></span>
-		<div th:utext="${article.html}"></div>
+		<div class="b_title" th:text="${article.name}"></div>
+		<div class="b_time" th:text="${#dates.format(article.createTime, 'yyyy-MM-dd')}"></div>
+		<div class="b_html" th:utext="${article.html}"></div>
 	</div>
 	<!-- 文章E -->
 </body>

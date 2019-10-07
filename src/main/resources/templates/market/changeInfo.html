@@ -1,67 +1,70 @@
 <!DOCTYPE html>
-<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
-        <title>供销交流平台</title>
-        <!-- 引入 FrozenUI -->
-        <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
-        <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
-        <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
-        <script type="text/javascript" th:src="@{/market/js/common.js}"></script>
-    </head>
-    <body>
-        <header class="ui-header ui-header-positive ui-border-b">
-            <i class="ui-icon-return" onclick="javascript:window.location.href='/person'"></i><h1>修改信息</h1> 
-        </header>
-                
-            <section class="ui-container">
-                <div class="ui-form ui-border-t">
-                    <form action="">
-                        <div class="ui-form-item ui-border-b" style="margin-top:20px;">
-                            <label>
-                            <span class=" fa fa-user"></span>
-                                用户昵称:
-                            </label>
-                            <input type="text" placeholder="请输入新昵称" name="username" th:value="${user.name}">
-                            <a href="#" class="ui-icon-close">
-                            </a>
-                        </div>
-                        <div class="ui-form-item ui-border-b">
-                            <label>
-                            <span class=" fa fa-unlock-alt"></span>
-                                手机号码:
-                            </label>
-                            <input type="text" placeholder="请输入手机号码" name="phone" th:value="${user.phone}">
-                            <a href="#" class="ui-icon-close">
-                            </a>
-                        </div>
-                        <div class="ui-btn-wrap">
-                            <button class="ui-btn-lg ui-btn-danger" type="button" id="update">
-                                确认修改
-                            </button>
-                        </div>
-                        <div class="ui-btn-wrap" style="padding-top:0">
-                            <button class="ui-btn-lg ui-btn-primary" type="button" id="cancel">
-                                取消
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-	         <!-- 提示框 -->
-            <div id="showTip"></div>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0, user-scalable=no">
+    <title>供销交流平台</title>
+    <!-- 引入 FrozenUI -->
+    <link rel="stylesheet" href="http://i.gtimg.cn/vipstyle/frozenui/2.0.0/css/frozen.css"/>
+    <link rel="stylesheet" th:href="@{/market/css/frozen.css}"/>
+    <link rel="stylesheet" th:href="@{/market/css/index.css}"/>
+    <link rel="stylesheet" th:href="@{/market/css/font-awesome.min.css}"/>
+    <script type="text/javascript" th:src="@{/market/js/jquery.js}"></script>
+    <script type="text/javascript" th:src="@{/market/js/common.js}"></script>
+    <script type="text/javascript" th:src="@{/market/js/index.js}"></script>
+</head>
+<body>
+<header class="ui-header ui-header-positive ui-border-b">
+    <i class="ui-icon-return" onclick="javascript:window.location.href='/person'"></i><h1>修改信息</h1>
+</header>
 
-    </body>
-    <script type="text/javascript">
-    	$(function(){
-            $("#update").click(function(){
-                var username = $("input[name='username']").val();
-                var phone = $("input[name='phone']").val();
-                if(username==""||phone=="")
-                {
-                    var html = '<div class="ui-dialog show">\
+<section class="ui-container">
+    <div class="ui-form ui-border-t">
+        <form action="">
+            <div class="ui-form-item ui-border-b" style="margin-top:20px;">
+                <label>
+                    <span class=" fa fa-user"></span>
+                    用户昵称:
+                </label>
+                <input type="text" placeholder="请输入新昵称" name="username" value="<%=name%>">
+                <a href="#" class="ui-icon-close">
+                </a>
+            </div>
+            <div class="ui-form-item ui-border-b">
+                <label>
+                    <span class=" fa fa-unlock-alt"></span>
+                    手机号码:
+                </label>
+                <input type="text" placeholder="请输入手机号码" name="phone" value="<%=phone%>">
+                <a href="#" class="ui-icon-close">
+                </a>
+            </div>
+            <div class="ui-btn-wrap">
+                <button class="ui-btn-lg ui-btn-danger" type="button" id="update">
+                    确认修改
+                </button>
+            </div>
+            <div class="ui-btn-wrap" style="padding-top:0">
+                <button class="ui-btn-lg ui-btn-primary" type="button" id="cancel">
+                    取消
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+<!-- 提示框 -->
+<div id="showTip"></div>
+
+</body>
+<script type="text/javascript">
+    $(function(){
+        $("#update").click(function(){
+            var username = $("input[name='username']").val();
+            var phone = $("input[name='phone']").val();
+            if(username==""||phone=="")
+            {
+                var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>修改信息不能为空</p>\
@@ -71,12 +74,12 @@
                             </div>\
                         </div> \
                     </div> '
-                    $("#showTip").html(html);
-                    return;
-                }
-                if(!checkPhone(phone))
-                {
-                    var html = '<div class="ui-dialog show">\
+                $("#showTip").html(html);
+                return;
+            }
+            if(!checkPhone(phone))
+            {
+                var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>手机号格式有误，请重新填写!</p>\
@@ -97,7 +100,7 @@
                     success:function(data){
                      console.log(data);
                     if(data=="1"){
-                    var html = '<div class="ui-dialog show">\
+                        var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
                             <div class="ui-dialog-bd">\
                                  <p>修改成功</p>\
@@ -107,7 +110,7 @@
                             </div>\
                         </div> \
                     </div> '
-                    $("#showTip").html(html)
+                        $("#showTip").html(html)
                     }else if(data=="403") {
                         var html = '<div class="ui-dialog show">\
                         <div class="ui-dialog-cnt">\
@@ -119,20 +122,20 @@
                             </div>\
                         </div> \
                     </div> ';
-                     $("#showTip").html(html)
+                        $("#showTip").html(html)
                     }
                 }
-                     
-                });
+
+            });
 
 
-            })
+        })
 
             //取消按钮点击事件
     		$("#cancel").click(function(){
     			window.location.href = "/supply";
-    		})	
-    			
+    		})
+
     		// 注册按钮点击事件
             $(document).on("click",'.backPerson',function(){
                 window.location.href = "/supply";
@@ -143,21 +146,21 @@
     			window.location.href = "/supply/login";
     		})
 
-            // 取消按钮点击事件
-            $(document).on("click",'.close',function(){
-                $("#showTip").html("");
-            })
+        // 取消按钮点击事件
+        $(document).on("click",'.close',function(){
+            $("#showTip").html("");
+        })
 
-            
 
-    	})
-        function checkPhone(phone){ 
 
-                if(!(/^1[34578]\d{9}$/.test(phone))){ 
-        
-                    return false; 
-                }
-                return true;
-            }
-    </script>
+    })
+    function checkPhone(phone){
+
+        if(!(/^1[34578]\d{9}$/.test(phone))){
+
+            return false;
+        }
+        return true;
+    }
+</script>
 </html>

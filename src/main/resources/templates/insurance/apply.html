@@ -9,9 +9,13 @@
     <!-- Bootstrap -->
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
+    <style>
+
+
+    </style>
 </head>
 <body>
-<div class="container">
+<div class="" style="background-color: #FFFFFF">
     <div class="col-sm-12">
         <h3>购买农业保险</h3>
         <!--分割线-->
@@ -21,42 +25,35 @@
             <p class="shadow">在提交申请表之前，请检查你的信息是否完整，不可有错误信息！</p>
         </div>
         <!--分割线-->
-        <div class="decoration"></div>
+
         <!--表单-->
         <div class="form">
             <form class="form-horizontal" id="form">
-                <div class="form-group">
-                    <label for="projectId" class="col-sm-2 control-label">保险类型：</label>
-                    <div class="col-sm-10">
-                        <select name="projectId" id="projectId" class="form-control">
-                            <option selected="selected" disabled="disabled">-- 请选择 --</option>
-                            <option th:each="list:${list}" th:value="${list.id}" th:text="${list.name}" th:cost="${list.cost}"></option>
-                        </select>
-                    </div>
+                <div class="center-input" >
+                    <select name="projectId"  class="input-style" id="projectId" >
+                        <option selected="selected" disabled="disabled">请选择保险类型</option>
+                        <option th:each="list:${list}" th:value="${list.id}" th:text="${list.name}" th:cost="${list.cost}"></option>
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label for="number" class="col-sm-2 control-label">购买数量：</label>
-                    <div class="col-sm-10">
-                        <input  type="number" name="number" class="form-control" id="number"  value="1" placeholder="购买的数量" required>
-                    </div>
+
+                <div class="center-input" >
+                    <label>购买的数量</label>
+                    <input  type="number" name="number" class=" input-style" id="number"  value="1" placeholder="购买的数量" required>
                 </div>
-                <div class="form-group">
-                    <label for="singleCost" class="col-sm-2 control-label">保险单价：</label>
-                    <div class="col-sm-10">
-                        <input  type="text" class="form-control" id="singleCost" placeholder="价格" required readonly="readonly">
-                    </div>
+
+                <div class="center-input" >
+                    <label>保险单价</label>
+                    <input  type="text" class="input-style" id="singleCost" placeholder="单价" disabled required readonly="readonly">
                 </div>
-                <div class="form-group">
-                    <label for="cost" class="col-sm-2 control-label">总价格：</label>
-                    <div class="col-sm-10">
-                        <input  type="text" class="form-control" id="cost" placeholder="价格" required readonly="readonly">
-                    </div>
+
+                <div class="center-input" >
+                    <label>保险总价格</label>
+                    <input  type="text" class=" input-style" id="cost" placeholder="总价格" disabled required readonly="readonly">
                 </div>
+
                 <br />
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" id="submit" class="btn btn-info" style="width: 100%;">提交资料</button>
-                    </div>
+                <div class="center-input">
+                    <button type="button" id="submit" class="btn input-style" style=" color: #FFFFFF ;background-color: #912f2c; border-radius: 20px; outline: none">提交资料</button>
                 </div>
             </form>
         </div>

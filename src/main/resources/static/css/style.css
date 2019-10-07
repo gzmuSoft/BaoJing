@@ -18,12 +18,10 @@
 }
 body {
     padding-top: 3px;
-    background-image: url(../img/background.png);
     background-repeat: repeat;
 }
 .container {
     margin-bottom:100px;
-    background-image: url(../img/header-deco.png);
     background-repeat: repeat-x;
     height: 5px;
     margin-left: -10px;
@@ -104,9 +102,7 @@ foot a{
     z-index:5;
 }
 .table-view-div .shadow{
-    /*
-    text-shadow: 1px 1px 1px;
-     */
+
 }
 .w2{
     letter-spacing:2em; /*如果需要y个字两端对齐，则为(x-y)/(y-1),这里是（4-2）/(2-1)=2em */
@@ -181,4 +177,36 @@ foot a{
 }
 .details-view p{
     text-indent:2em;
+}
+.red{
+    color: red;
+}
+.input-style{
+    width:100%;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 7px;
+}
+.input-style[disabled]{
+    background-color: #FFFFFF;
+}
+.input-style-i{
+    width:100%;
+    border: none;
+    border-bottom: 1px solid #cccccc;
+    padding-bottom: 1px;
+}
+.center-input{
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 30px;
+}
+.option-input{
+    border: none;
+    background-color: #FFFFFF;
+
+}
+.btn-info{
+    background-color: #912f2c;
+    border-color: #912f2c;
 }

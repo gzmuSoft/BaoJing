@@ -16,7 +16,6 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p,
 }
 
 body {
-	background-color: #F8F7FE;
 	overflow-x: hidden;
 }
 
@@ -38,7 +37,7 @@ table {
 body, th, td, button, input, select, textarea {
 	font: 12px/1.62 "Microsoft Yahei", "Hiragino Sans GB", "Helvetica Neue",
 		Helvetica, tahoma, arial, Verdana, sans-serif;
-	color: #333;
+
 }
 
 ol, ul, dl {
@@ -185,4 +184,37 @@ body.hideleftmenu .rightmain {
 
 .margin-right20 {
 	margin-right: 20px;
+}
+.article-container {
+	width: 90%;
+	max-width: 1000px;
+	background-size:100%;
+	margin-bottom: 20px;
+	padding-top: 10px;
+	overflow: hidden;
+	margin: 0 auto;
+}
+
+.article-container span{
+	font-size: 15px;
+}
+.article-container div{
+	line-height: 25px;
+
+}
+.b_title{
+	font-size: 24px;
+	text-align:left;
+	width: 100%;
+}
+.b_html{
+	font-size: 15px;
+	width: 100%;
+	text-align: left;
+}
+.b_time{
+	margin: 15px 0 15px 20px;
+	color: #a5a5a5;
+	font-size: 14px;
+
 }

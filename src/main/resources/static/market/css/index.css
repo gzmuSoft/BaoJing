@@ -1,23 +1,31 @@
+
+.fr{
+	 float:right;
+}
 .contentBox{
-	background-color:white;width:100%;margin-bottom:10px;
+	background-color:#FFF;width:100%;margin-bottom:30px;
 }
 
 .contentInnerBox{
-	width:90%;min-height:150px;margin:0 auto;background-color:white;
+	width:90%;min-height:150px;margin:0 auto;
+
 }
 
 .contentBox .headerContent{
 	height:50px;
 }
 .contentBox .headerContent .pic{
-	 border-radius:25px;height:50;width:50px;float:left; 
+	border-radius:25px;height:50px;width:50px;float:left;
 }
 
 .contentBox .headerContent .username{
-	 float:left;margin:16px 0 10px 6px;font-weight:bold;
+	color: #888888;
+	float:left;margin:16px 0 0 6px;font-weight:bold;
 }
 .contentBox .headerContent .time{
-	 float:right;margin-top:3px; font-size:14px; color:#CCCCCC;
+	margin-top:10px;
+	font-size: 14px;
+	color: #CCC;
 }
 .contentBox  .comment{
 	font-size:22px; color:#ccc;margin:6px 2px 0 0;
@@ -26,13 +34,32 @@
 	color:#ccc;margin:0 6px 0 0;
 }
 .contentBox .contentText{
-	width:100%;padding:6px 0 10px 0px; clear:both;
+	width:100%;border-bottom:1px solid #ccc;padding:6px 0 10px 0
 }
 .fr{
-	 float:left; 
+	 float:left;
 }
-.clear{
-	clear:both;
+.clear {
+    clear: both;
+}
+.headerContent img{
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+}
+
+#clear{
+	clear: both;
+	margin-left: 10px;
+}
+.gon-name{
+	width: 100px;
+	position: absolute;
+	left: 30%;
+}
+.gon-box{
+	width: 45%;
+	margin: 0 auto;
 }
 .img{
 	margin-bottom:20px;
@@ -40,4 +67,45 @@
 #hr01{
 	position:relative;
 	top:-10px;
+}
+
+input[type="radio"] {
+	display: none;
+}
+input[type="radio"]+span {
+	width: 50px;
+	height: 16px;
+	line-height: 16px;
+	font-size: 16px;
+	text-align: center;
+	background-color: #fff;
+}
+input[type="radio"]:checked+span {
+	color: #912f2c;
+	font-size: 20px;
+}
+.radio-left{
+	width: 40px;
+	float: left;
+	padding-top: 7px;
+}
+.radio-right{
+	padding-top: 7px;
+	width: 40px;
+	float: right;
+}
+.gon-cont{
+	width: 24px;
+	height: 35px !important;
+	color: #912f2c;
+	border-bottom: #912f2c solid 2px !important;
+}
+.gon-bot
+{
+	margin: 10px auto;
+	background-color: white;
+	width: 96%;
+	height: 60px;
+	border-radius: 6px;
+	box-shadow:0 0 7px #888888;
 }

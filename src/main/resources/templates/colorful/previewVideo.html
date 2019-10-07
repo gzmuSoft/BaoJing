@@ -10,10 +10,11 @@
 </head>
 <body>
 	<!-- 视频B -->
-	<div class="video-container">
-		<span th:text="${video.name}"></span>
+	<div class="article-container">
+		<div class="b_title" th:text="${video.name}"></div>
+		<div class="b_time" th:text="${#dates.format(video.createTime, 'yyyy-MM-dd')}"></div>
 		<video width="100%" height="100%" controls autoplay="autoplay">
-  			<source th:src="'/preview/'+${video.path}" type="video/mp4">
+			<source th:src="'/preview/'+${video.path}" type="video/mp4">
 		</video>
 	</div>
 	<!-- 视频E -->

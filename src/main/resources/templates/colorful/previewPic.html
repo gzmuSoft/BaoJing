@@ -10,9 +10,10 @@
 </head>
 <body>
 	<!-- 图片B -->
-	<div class="img-container">
-		<span th:text="${fileName}"></span><br/>
-		<img alt="" th:src="'/preview/'+${path}">
+	<div class="article-container">
+		<div class="b_title" th:text="${fileName}"></div>
+		<div class="b_time" th:text="${#dates.format(createTime, 'yyyy-MM-dd')}"></div>
+		<div class="b_html"><img alt="" th:src="'/preview/'+${path}"></div>
 	</div>
 	<!-- 图片E -->
 </body>

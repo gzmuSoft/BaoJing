@@ -21,79 +21,56 @@
         <div class="panel-heading">申请先建后补项目</div>
         <div class="panel-body" style="min-height: 264px;">
             <form class="form-horizontal">
-                <div class="form-group" >
-                    <label  class="col-sm-2 control-label">申请项目类型：</label>
-                    <div class="col-sm-10">
-                        <select  class="form-control col-sm-10" name="option" id="select">
-                            <option value="-1">请选择项目类型</option>
-                            <option th:each="project : ${projects}" th:value="${project.id}" th:text="${project.projectName}">
-                        </select>
-                    </div>
+                <div class="center-input" >
+                    <select   class="input-style" name="option" id="select">
+                        <option class="option-input" value="-1">申请项目类型</option>
+                        <option class="option-input" th:each="project : ${projects}" th:value="${project.id}" th:text="${project.projectName}">
+                    </select>
                 </div>
-                <div class="form-group">
-                    <label for="projectTitle" class="col-sm-2 control-label">项目名称：</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="projectTitle" class="form-control" id="projectTitle" placeholder="请输入项目名称...">
-                    </div>
+                <div class="center-input" >
+                    <input type="text" name="projectTitle" class="input-style" id="projectTitle" placeholder="项目名称">
                 </div>
-                <div class="form-group">
-                    <label for="projectContent" class="col-sm-2 control-label">项目简介：</label>
-                    <div class="col-sm-10">
-                        <textarea name="projectContent" class="form-control" id="projectContent" placeholder="请输入项目简介..."></textarea>
-                    </div>
+
+                <div class="center-input" >
+                    <input type="text" name="outlay" class="input-style" id="outlay" placeholder="项目申请经费">
                 </div>
-                <div class="form-group">
-                    <label for="outlay" class="col-sm-2 control-label">项目申请经费：</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="outlay" class="form-control" id="outlay" placeholder="请输入项目申请经费/元...">
-                    </div>
+
+                <div class="center-input" >
+                    <label>项目开始时间</label>
+                    <input type="date" name="startTime" class="input-style-i" id="startTime" placeholder="建设开始时间">
                 </div>
-                <div class="form-group">
-                    <label for="startTime" class="col-sm-2 control-label">建设开始时间：</label>
-                    <div class="col-sm-10">
-                        <input type="date" name="startTime" class="form-control" id="startTime" placeholder="请输入建设开始时间...">
-                    </div>
+
+                <div class="center-input" >
+                    <label>项目结束时间</label>
+                    <input type="date" name="startTime" class="input-style-i" id="endTime" placeholder="建设结束时间">
                 </div>
-                <div class="form-group">
-                    <label for="endTime" class="col-sm-2 control-label">建设结束时间：</label>
-                    <div class="col-sm-10">
-                        <input type="date" name="endTime" class="form-control" id="endTime" placeholder="请输入建设结束时间...">
-                    </div>
+
+                <div class="center-input" >
+                    <textarea name="projectContent" class="input-style" id="projectContent" placeholder="项目简介"></textarea>
                 </div>
-                <div class="form-group">
+
+                <div class="center-input" >
                     <label for="downloadTemplate" class="col-sm-2 control-label">项目申请书模板下载：</label><br>
-                    <div class="col-sm-10">
-                        <button class="btn btn-info form-control" type="button" id="downloadTemplate">模板下载</button>
-                    </div>
+                    <button class="btn" style="width:100%; color: #FFFFFF; background-color: #0089c6; padding:6px 10px!important;" type="button" id="downloadTemplate">模板下载</button>
                 </div>
-                <div class="form-group" >
-                    <label for="identify_project" class="col-sm-2 control-label">项目申请书：</label><br>
-                    <div class="col-sm-10">
-                        <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                            <button class="btn btn-success fileinput-button form-control" type="button">项目申请书上传</button>
-                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="identify_project" id="identify_project" onchange="saveFile(this)">
-                        </div>&nbsp;&nbsp;
-                        <span id="projectFileName" style="vertical-align: middle">未上传文件</span>
-                        <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
-                    </div>
+
+                <div class="center-input" style="position: relative;" >
+                    <button class="btn  " style="width:50%;  padding:6px 10px!important;" type="button">项目申请书上传</button>
+                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0; width: 50%" type="file" name="identify_project" id="identify_project" onchange="saveFile(this)">
+                    <span id="projectFileName" style="vertical-align: middle">未上传文件</span>
+                    <a href="#" class="hidden" id="fileA"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                 </div>
-                <div class="form-group" >
-                    <label for="identify_other" class="col-sm-2 control-label">其他证明材料：</label><br>
-                    <div class="col-sm-10">
-                        <div class="file-container" style="display:inline-block;position:relative;overflow: hidden;vertical-align:middle">
-                            <button class="btn btn-success fileinput-button form-control" type="button" id="other">其他证明材料上传</button>
-                            <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0" type="file" name="identify_other" id="identify_other" onchange="saveFile(this)">
-                        </div>&nbsp;&nbsp;
-                        <span id="otherFileName">未上传文件</span>
-                        <a href="#" class="hidden" id="fileB"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
-                    </div>
+
+                <div class="center-input" style="position: relative;">
+                    <button class="btn " style="width:50%; padding:6px 10px!important; " type="button" id="other">其他证明材料上传</button>
+                    <input style="position:absolute;top:0;left:0;font-size:34px; opacity:0; width: 50%" type="file" name="identify_other" id="identify_other" onchange="saveFile(this)">
+                    <span id="otherFileName">未上传文件</span>
+                    <a href="#" class="hidden" id="fileB"><img th:src="@{/assets/img/sf/cloud-down.svg}" width="26" height="20"></a>
                 </div>
                 <br />
                 <br /><br />
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="button" id="sub" class="btn btn-warning" style="width: 100%;">提交申请</button>
-                    </div>
+                <div class="center-input">
+                    <button type="button" id="sub" class="btn input-style" style=" color: #FFFFFF ;background-color: #912f2c; border-radius: 20px">提交申请</button>
                 </div>
             </form>
         </div>
@@ -189,13 +166,13 @@
         var ext = obj.value.substring(extStart, obj.value.length);
         data.append('type',ext);
         $.ajax({
-        url: '/poverty/upload',
-        type: 'POST',
-        data: data,
-        cache: false,
-        processData: false,
-        contentType: false,
-        success:function(result){
+            url: '/poverty/upload',
+            type: 'POST',
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function(result){
                 alert("上传成功！");
                 if(obj.id=='identify_project'){
                     //上传的是申请书
@@ -204,7 +181,7 @@
                     otherPath = result;
                 }
             },
-        error:function(result){
+            error:function(result){
                 alert("上传失败！");
             }
         });
@@ -244,28 +221,28 @@
             alert("请将资料填写完整！")
         }else{
             $.post('/poverty/saveInformation',
-            {
-                "id":informationId,
-                "personId":personId,
-                "createTime":createTime,
-                "projectTitle":$('#projectTitle').val(),
-                "projectContent":$('#projectContent').val(),
-                "projectId":$('#select').val(),
-                "outlay":$("#outlay").val(),
-                "startTime":$("#startTime").val(),
-                "endTime":$("#endTime").val(),
-                "otherProof":otherPath,
-                "otherProofName":otherName,
-                "projectApplication":applicationPath,
-                "projectApplicationName":applicationName
-            },function(status){
-                if(status == "success"){
-                    alert("保存成功！")
-                    window.location.href="/poverty/manage"
-                }else{
-                    alert("网络错误！请稍后再试");
-                }
-            });
+                {
+                    "id":informationId,
+                    "personId":personId,
+                    "createTime":createTime,
+                    "projectTitle":$('#projectTitle').val(),
+                    "projectContent":$('#projectContent').val(),
+                    "projectId":$('#select').val(),
+                    "outlay":$("#outlay").val(),
+                    "startTime":$("#startTime").val(),
+                    "endTime":$("#endTime").val(),
+                    "otherProof":otherPath,
+                    "otherProofName":otherName,
+                    "projectApplication":applicationPath,
+                    "projectApplicationName":applicationName
+                },function(status){
+                    if(status == "success"){
+                        alert("保存成功！")
+                        window.location.href="/poverty/manage"
+                    }else{
+                        alert("网络错误！请稍后再试");
+                    }
+                });
         }
     });
 

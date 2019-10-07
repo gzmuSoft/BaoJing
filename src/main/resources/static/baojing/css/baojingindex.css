@@ -54,7 +54,7 @@
 }
 
 #tab li.now {
-	color: #5299c4;
+	color: #912f2c;
 }
 
 .tablist {
@@ -74,7 +74,7 @@
 	margin-top: 10px;
 }
 .tablist .content .content-left{
-	width: 80px;
+	width: 85px;
 	height: 70px;
 	background-size: 100% 100%;
 }
@@ -92,3 +92,7 @@
 	display: block;
 }
 /*选项卡E*/
+.carousel-indicators{
+	position: absolute;
+	height: 50px !important;
+}

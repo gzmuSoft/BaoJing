@@ -63,6 +63,16 @@
 
 </script>
 <script type="text/javascript">
+
+    /*时间戳转换*/
+    function timeTemp(uData){
+        var myDate = new Date(uData);
+        var year = myDate.getFullYear();
+        var month = myDate.getMonth() + 1;
+        var day = myDate.getDate();
+        return ' '+year + '.' + month + '.' + day;
+    }
+
     $(document).ready(function() {
         $.session.set('type', 'image');
         getAllImages(1);
@@ -138,10 +148,11 @@
                         $.session.set('nextPage',data.extend.paging.pageNum + 1);
                     }
                     $.each(video,function(index, item) {
+                        var cTime = timeTemp(item.createTime);
                         var content = $('<div class="content" id="'+item.id+'" type="video"><div>');
-                        var content_left = $('<img class="content-left fl" src="/baojing/img/video.png">');
-                        var content_right = $('<div  class="content-right fr">'+ item.name + '<div>');
-                        content.append(content_left).append(content_right);
+                        var content_left = $('<img class="content-left fr" src="/baojing/img/video.png">');
+                        var content_right = $('<div  class="content-right fl">'+ item.name + '<div><p style="margin-top: 20px; font-size: 14px; color: #a5a5a5">'+cTime+'</p>');
+                        content.append(content_right).append(content_left);
                         content.appendTo("#tabitem");
                     });
 
@@ -172,10 +183,11 @@
                         $.session.set('nextPage',data.extend.paging.pageNum + 1);
                     }
                     $.each(image,function(index, item) {
+                        var cTime = timeTemp(item.createTime);
                         var content = $('<div class="content" id="'+item.id+'" type="image"><div>');
-                        var content_left = $('<img class="content-left fl" src="/preview/'+item.path+'" onclick="previewImg(this)">');
-                        var content_right = $('<div  class="content-right fr">'+ item.name + '<div>');
-                        content.append(content_left).append(content_right);
+                        var content_left = $('<img class="content-left fr" src="/preview/'+item.path+'" onclick="previewImg(this)">');
+                        var content_right = $('<div  class="content-right fl">'+ item.name + '<div><p style="margin-top: 20px; font-size: 14px; color: #a5a5a5">'+cTime+'</p>');
+                        content.append(content_right).append(content_left);
                         content.appendTo("#tabitem");
                     });
                 } else {
@@ -195,6 +207,7 @@
             dataType:"json",
             success : function(data) {
                 layer.close(load);
+               // console.log(data);
                 if (data.code == 200) {
                     var article = data.extend.paging.list;
                     $.session.set('currPage',data.extend.paging.pageNum);
@@ -203,10 +216,11 @@
                         $.session.set('nextPage',data.extend.paging.pageNum + 1);
                     }
                     $.each(article,function(index, item) {
+                        var cTime = timeTemp(item.createTime);
                         var content = $('<div class="content" id="'+item.id+'" type="article"><div>');
-                        var content_left = $('<img class="content-left fl" src="/baojing/img/article.png">');
-                        var content_right = $('<div  class="content-right fr">'+ item.name + '<div>');
-                        content.append(content_left).append(content_right);
+                        var content_left = $('<img class="content-left fr" src="/baojing/img/article.png">');
+                        var content_right = $('<div  class="content-right fl">'+ item.name + '<div><p style="margin-top: 20px; font-size: 14px; color: #a5a5a5">'+cTime+'</p>');
+                        content.append(content_right).append(content_left);
                         content.appendTo("#tabitem");
                     });
                 } else {

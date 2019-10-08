@@ -161,7 +161,7 @@ foot a{
 .medical-bottom{
     margin-top: 50px;
 }
-.medical-view-item-fl p{
+.medical-view-item-fl>p,.medical-view-item-fl>div,.medical-view-item-fl>span{
     text-indent:2em;
     font-size: 1.7em;
     overflow: hidden;

@@ -26,9 +26,8 @@
                     <span class="medical-view-item-fr">查看详情</span>
                 </a>
                 <div class="medical-view-item-fl">
-                    <p th:inline="text">
-                        [[${item.content}]]
-                    </p>
+                    <div th:utext="${item.content}">
+                    </div>
                 </div>
                 <span class="medical-view-item">
                     <div class="medical-view-item-bd"></div>

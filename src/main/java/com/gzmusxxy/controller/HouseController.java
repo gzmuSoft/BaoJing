@@ -139,7 +139,7 @@ public class HouseController {
         String openid = session.getAttribute("openid").toString();
         //获取用户信息
         XjhbPerson person = xjhbPersonService.findPersonByOpenId(openid);
-        if (person == null || person.getName().trim().equals("") || person.getIdentity().trim().equals("") || person.getTelphone().trim().equals("")) {
+        if (person == null || person.getName() == null || person.getIdentity() == null || person.getTelphone() == null || person.getName().trim().equals("") || person.getIdentity().trim().equals("") || person.getTelphone().trim().equals("")) {
             return "redirect:/house/user?supplement=true";
         }
         //获取申请书模板

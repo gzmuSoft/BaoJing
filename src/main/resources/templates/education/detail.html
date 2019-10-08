@@ -15,9 +15,8 @@
     <div class="details-view">
         <h4 th:inline="text" class="text-center">[[${bulletin.title}]]</h4>
         <div class="decoration"></div>
-        <p th:inline="text">
-            [[${bulletin.content}]]
-        </p>
+        <div th:utext="${bulletin.content}">
+        </div>
         <div class="text-right float-right" th:inline="text" style="color:#31708f">[[${bulletin.time}]]</div>
     </div>
     <div class="details-view text-center" style="margin-top: 10px">

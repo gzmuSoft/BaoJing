@@ -17,7 +17,8 @@ import java.util.UUID;
 public class FileUtil {
 
     //    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
-    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
+    //public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
+    public static final String FILE_PATH = "/home/rlds/Public/upload/";
 
     /**
      * 判断文件是否存在

@@ -38,4 +38,4 @@ pagehelper:
   support-methods-arguments: true
   params: count=countSql
 upload:
-  folder: /home/rlds/Public/upload/
+  folder: 'C:/Users/Administrator/Desktop/upload/'

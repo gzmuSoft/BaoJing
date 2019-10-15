@@ -19,14 +19,14 @@ import java.util.UUID;
 @Component
 public class FileUtil {
 
-    //public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
-    //public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
+    /**
+     * 这里的文件上传了路径已经改到了配置文件application.yml中
+     */
     public static String FILE_PATH;
 
     @Value("${upload.folder}")
     public void setFilePath(String folder){
         FILE_PATH = folder;
-        System.out.println("已设置上传路径：" + FILE_PATH);
     }
 
     /**

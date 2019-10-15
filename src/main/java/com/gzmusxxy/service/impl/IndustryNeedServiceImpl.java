@@ -65,4 +65,9 @@ public class IndustryNeedServiceImpl implements IndustryNeedService {
     public int updateReadNumber(Integer id) {
         return industryNeedMapper.updateReadNumber(id);
     }
+
+    @Override
+    public int updateById(IndustryNeed record) {
+        return industryNeedMapper.updateById(record);
+    }
 }

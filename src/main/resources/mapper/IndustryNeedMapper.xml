@@ -34,6 +34,21 @@
       comment_num = #{commentNum,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
+  <update id="updateById" parameterType="com.gzmusxxy.entity.IndustryNeed">
+    update industry_need
+    <trim prefix="set" suffixOverrides=",">
+      <if test="content != null and content != '' ">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="date != null">
+        date = #{date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="file != null and file !='' ">
+        file = #{file,jdbcType=VARCHAR},
+      </if>
+    </trim>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, type, content, date, userid, username, file, comment_num
     from industry_need

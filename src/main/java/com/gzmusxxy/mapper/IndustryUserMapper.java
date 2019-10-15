@@ -20,5 +20,8 @@ public interface IndustryUserMapper {
     int updateNameAndPhoneById(IndustryUser record);
 
     int updateById(IndustryUser record);
+
     List<IndustryUser> getUserByName(IndustryUser industryUser);
+
+
 }

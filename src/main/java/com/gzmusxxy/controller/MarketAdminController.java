@@ -8,6 +8,7 @@ import com.gzmusxxy.entity.IndustryUser;
 import com.gzmusxxy.service.IndustryNeedService;
 import com.gzmusxxy.service.IndustryUserService;
 import com.gzmusxxy.service.MarketAdminService;
+import com.gzmusxxy.util.FileUtil;
 import com.gzmusxxy.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,12 +16,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.Map;
 
 /**
  * @author QFMX
- * @Date  2019/9/21 18:38
+ * @Date 2019/9/21 18:38
  * @Description 供销交流平台后台管理
  */
 @Controller
@@ -35,46 +39,49 @@ public class MarketAdminController {
 
     /**
      * 删除用户(暂不启用)
+     *
      * @param id 用户id
      * @return 成功返回1，失败返回0
      */
     @AdminLogin
     @RequestMapping(value = "/deleteUser")
     @ResponseBody
-    public JsonResult deleteUser(@RequestParam("id") Integer id){
+    public JsonResult deleteUser(@RequestParam("id") Integer id) {
         JsonResult jsonResult = new JsonResult();
         try {
             int delete = this.industryUserService.deleteByPrimaryKey(id);
-            if(delete > 0){
+            if (delete > 0) {
                 jsonResult.setCode(1);
                 jsonResult.setResult("删除当前用户成功");
                 return jsonResult;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         jsonResult.setCode(0);
         jsonResult.setResult("删除当前用户失败");
         return jsonResult;
     }
+
     /**
      * 更新（编辑）用户
+     *
      * @param user 用户信息
      * @return 成功返回0，失败返回1
      */
     @AdminLogin
     @RequestMapping(value = "/updateUser")
     @ResponseBody
-    public JsonResult updateUser(IndustryUser user){
+    public JsonResult updateUser(IndustryUser user) {
         JsonResult jsonResult = new JsonResult();
         try {
             int update = this.industryUserService.updateById(user);
-            if (update > 0){
+            if (update > 0) {
                 jsonResult.setCode(1);
                 jsonResult.setResult("更新成功");
                 return jsonResult;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         jsonResult.setCode(0);
@@ -84,77 +91,83 @@ public class MarketAdminController {
 
     /**
      * 多条件分页查询
-     * @param pageNumber 页码
-     * @param model model
+     *
+     * @param pageNumber   页码
+     * @param model        model
      * @param industryUser 分页数据
      * @return 返回到页面
      */
     @AdminLogin
     @RequestMapping(value = "/getUserByPage")
-    public String getUserByPage(@RequestParam("pageNumber") Integer pageNumber, Model model,IndustryUser industryUser){
-        if(industryUser.getUsername() != "" || industryUser.getUsername().trim() != null){
+    public String getUserByPage(@RequestParam("pageNumber") Integer pageNumber, Model model, IndustryUser industryUser) {
+        if (industryUser.getUsername() != "" || industryUser.getUsername().trim() != null) {
             PageInfo<IndustryUser> userByName = this.marketAdminService.getUserByName(pageNumber > 0 ? pageNumber : 1, industryUser);
-            model.addAttribute("pageInfo",userByName);
-            model.addAttribute("pages", PageUtil.getPage(userByName.getPages(),pageNumber));
+            model.addAttribute("pageInfo", userByName);
+            model.addAttribute("pages", PageUtil.getPage(userByName.getPages(), pageNumber));
             return "marketAdmin/user";
         }
-        PageInfo<IndustryUser> pageInfo = this.marketAdminService.getUser(pageNumber>0?pageNumber:1);
-        model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(),pageNumber));
+        PageInfo<IndustryUser> pageInfo = this.marketAdminService.getUser(pageNumber > 0 ? pageNumber : 1);
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "marketAdmin/user";
     }
 
     /**
      * 根据用户id查询用户信息
+     *
      * @param id 用户编号
      * @return 返回的用户管理页面
      */
     @AdminLogin
     @RequestMapping(value = "/getUserById")
     @ResponseBody
-    public IndustryUser getUserById(@RequestParam("id") Integer id){
+    public IndustryUser getUserById(@RequestParam("id") Integer id) {
         IndustryUser industryUser = this.industryUserService.selectByPrimaryKey(id);
         return industryUser;
     }
+
     /**
-     *  需求分页查询
+     * 需求分页查询
+     *
      * @param pageNumber 页码
-     * @param model model
+     * @param model      model
      * @return 返回分页信息到分页页面
      */
     @AdminLogin
     @RequestMapping(value = "/getNeedByPages")
-    public String getNeedByPages(@RequestParam("pageNumber") Integer pageNumber, Model model){
+    public String getNeedByPages(@RequestParam("pageNumber") Integer pageNumber, Model model) {
         PageInfo<IndustryNeed> pageInfo = this.marketAdminService.getNeed(pageNumber > 0 ? pageNumber : 1);
-        model.addAttribute("pageInfo",pageInfo);
-        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(),pageNumber));
+        model.addAttribute("pageInfo", pageInfo);
+        model.addAttribute("pages", PageUtil.getPage(pageInfo.getPages(), pageNumber));
         return "marketAdmin/need";
     }
 
     /**
      * 根据供需编号查询内容
+     *
      * @param id 编号
      * @return IndustryNeed对象
      */
     @AdminLogin
     @RequestMapping(value = "/getNeedById")
     @ResponseBody
-    public IndustryNeed getNeedById(@RequestParam("id") Integer id){
-       return this.industryNeedService.selectByPrimaryKey(id);
+    public IndustryNeed getNeedById(@RequestParam("id") Integer id) {
+        return this.industryNeedService.selectByPrimaryKey(id);
     }
+
     @AdminLogin
     @RequestMapping(value = "/deleteNeedById")
     @ResponseBody
-    public JsonResult deleteNeedById(@RequestParam("id") Integer id){
+    public JsonResult deleteNeedById(@RequestParam("id") Integer id) {
         JsonResult jsonResult = new JsonResult();
         try {
             int delete = this.industryNeedService.deleteByPrimaryKey(id);
-            if(delete > 0){
+            if (delete > 0) {
                 jsonResult.setCode(1);
                 jsonResult.setResult("删除成功");
                 return jsonResult;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         jsonResult.setCode(0);
@@ -164,34 +177,61 @@ public class MarketAdminController {
 
     /**
      * 根据用户名查询用户信息
+     *
      * @param username 用户名
      * @return 返回用户信息
      */
     @AdminLogin
     @RequestMapping(value = "/getUserByName")
     @ResponseBody
-    public IndustryUser getUserByName(@RequestParam("username") String username){
+    public IndustryUser getUserByName(@RequestParam("username") String username) {
         return this.industryUserService.selectUserByUserName(username);
     }
 
     /**
      * 条件分页查询
+     *
      * @param industryNeed 条件
-     * @param pageNumber 页码
+     * @param pageNumber   页码
      * @return 分页分页信息
      */
     @AdminLogin
     @RequestMapping(value = "/getNeedByPage")
-    public String getNeedByPage(IndustryNeed industryNeed,@RequestParam("pageNumber") Integer pageNumber,Model model){
-        if(industryNeed.getUsername() != "" || industryNeed.getUsername().trim() != null){
+    public String getNeedByPage(IndustryNeed industryNeed, @RequestParam("pageNumber") Integer pageNumber, Model model) {
+        if (industryNeed.getUsername() != "" || industryNeed.getUsername().trim() != null) {
             PageInfo<IndustryNeed> needByNameType = this.marketAdminService.getNeedByNameType(pageNumber > 0 ? pageNumber : 1, industryNeed);
-            model.addAttribute("pageInfo",needByNameType);
-            model.addAttribute("pages", PageUtil.getPage(needByNameType.getPages(),pageNumber));
+            model.addAttribute("pageInfo", needByNameType);
+            model.addAttribute("pages", PageUtil.getPage(needByNameType.getPages(), pageNumber));
             return "marketAdmin/need";
         }
         PageInfo<IndustryUser> user = this.marketAdminService.getUser(pageNumber > 0 ? pageNumber : 1);
-        model.addAttribute("pageInfo",user);
-        model.addAttribute("pages", PageUtil.getPage(user.getPages(),pageNumber));
+        model.addAttribute("pageInfo", user);
+        model.addAttribute("pages", PageUtil.getPage(user.getPages(), pageNumber));
         return "marketAdmin/need";
+    }
+
+    /**
+     * 提交更新数据
+     *
+     * @param session
+     * @param file
+     * @param id
+     * @param content
+     * @return
+     */
+    @AdminLogin
+    @RequestMapping(value = "/postUpdateNeeds")
+    public String postAddNeeds(HttpSession session, @RequestParam(value = "img", required = false) MultipartFile file, @RequestParam("content") String content, @RequestParam("id") Integer id) {
+        //保存数据到bean中
+        IndustryNeed industryNeed = new IndustryNeed();
+        industryNeed.setContent(content);
+        industryNeed.setId(id);
+        if (!file.isEmpty()) {
+            Map<String, String> fileNameMap = FileUtil.uploadFile(file, FileUtil.FILE_PATH + "market/");
+            industryNeed.setFile("market/" + fileNameMap.get("fileName"));
+        }
+        industryNeed.setDate(new Date());
+        industryNeedService.updateById(industryNeed);
+        return "redirect:/supplyAdmin/getNeedByPage?pageNumber=1&type=0&username=";
     }
 }

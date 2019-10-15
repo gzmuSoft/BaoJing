@@ -26,4 +26,6 @@ public interface IndustryNeedService {
     int selectCountByUserIdAndType(Integer userId,Integer type);
 
     int updateReadNumber(Integer id);
+
+    int updateById(IndustryNeed record);
 }

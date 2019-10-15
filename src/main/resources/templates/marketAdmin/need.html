@@ -137,22 +137,7 @@
                             <button type="submit" class="btn btn-primary" id="findMsg">立即查询</button>
                         </div>
                     </div>
-                    <!--<div class="row">
-                        <div class="col-lg-4 col-md-2">
-                            <input type="text" id="nameMsg" style="width: 500px;height: 35px;margin-left: 10px;border-radius: 10px" class="form-control input-sm" placeholder="请输入需要查询的用户名">
-                        </div>
-                        <div class="col-lg-2">
-                            <select class="form-control" id="myType">
-                                <option value="0">不限</option>
-                                <option value="1">需求</option>
-                                <option value="2">商品</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2 text-left">
-                            <button type="button" id="findMsg"  style="margin-left: 0px" class="btn btn-success">立即查询</button>
-                        </div>
-                    </div>
-                    <hr>-->
+
                     <input type="hidden" value="1" id="pageNumber">
 
                     <table class="table text-center table-hover">
@@ -176,6 +161,8 @@
                             <td th:text="${list.commentNum}"></td>
                             <td>
                                 <button type="button" class="btn btn-success btn-xs" onclick="updateMsg(this)" th:value="${list.id}" data-toggle="modal" data-target="#needMsg">预览</button>
+
+                                &nbsp;&nbsp;<button type="button" class="btn btn-info btn-xs" onclick="editMsg(this)" th:value="${list.id}" data-toggle="modal" data-target="#editMsg">编辑</button>
                                 &nbsp;
                                 <button type="button" class="btn btn-danger btn-xs"  th:value="${list.id}" onclick="del(this)">删除</button>
                             </td>
@@ -220,8 +207,8 @@
     </div>
     <!-- 预览模态框   -->
     <div id="needMsg" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content" style="width: 500px">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">
@@ -231,6 +218,8 @@
                 </div>
                 <div class="modal-body">
                     <span id="text"></span>
+
+                    <p class="p"><br><img id="image" hidden="hidden" src="" alt="" width="100%"/></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
@@ -240,13 +229,48 @@
         </div>
         <!-- /.modal-dialog -->
     </div>
-    <footer class="cm-footer"><span class="pull-left">彩笔码农 在线码字</span><span class="pull-right">© 930926134@qq.com</span></footer>
+
+    <!-- 预览模态框   -->
+    <div id="editMsg" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title">
+                        编辑内容
+                        <a class="anchorjs-link" href=""><span class="anchorjs-icon"></span></a>
+                    </h4>
+                </div>
+                <form action="/supplyAdmin/postUpdateNeeds" method="post" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <input type="hidden" name="id" id="myUserId">
+                        <textarea id="content" name="content" class="form-control" width="100%" placeholder="编辑这里的内容">
+                        </textarea>
+                        <hr />
+                        <input type="file" accept="image/*" multiple style="display: none" id="selectBtn" onchange="upload('#selectBtn', '#img');" name="img" >
+                        <span>可上传图片:</span><button class="ui-btn ui-btn-primary" type="button" id="selectPic">选择图片 <span class="fa fa-camera"></span></button>
+                        <br>
+                        <img id="img" name="img" src="" style="width: 200px;display: none; margin-top: 5px">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary" id="editBtn">修改</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+    <footer class="cm-footer"><span class="pull-left">报京综合平台</span><span class="pull-right">&copy; 2019</span></footer>
 </div>
 </body>
 <!--导入JS文件-->
 <script th:src="@{/assets/js/lib/jquery-2.1.3.min.js}"></script>
 <script th:src="@{/assets/js/jquery.mousewheel.min.js}"></script>
 <script th:src="@{/assets/js/jquery.cookie.min.js}"></script>
+<script th:src="@{/assets/js/autoTextarea.js}"></script>
 <script th:src="@{/assets/js/fastclick.min.js}"></script>
 <script th:src="@{/assets/js/bootstrap.min.js}"></script>
 <script th:src="@{/assets/js/clearmin.min.js}"></script>
@@ -255,10 +279,29 @@
 <script th:src="@{/assets/js/demo/notepad.js}"></script>
 <!--自定义JS-->
 <script>
+    //查询数据
     function updateMsg(obj) {
         var id = $(obj).attr("value");
+        $("#image").attr("src","");
         $.post("/supplyAdmin/getNeedById",{"id":id},function (data) {
             $("#text").text(data.content);
+            if(data.hasOwnProperty("file")){
+                $("#image").attr("src","/preview/"+data.file);
+                $("#image").removeAttr("hidden");
+            }
+        },"json");
+    }
+    function editMsg(obj) {
+        var id = $(obj).attr("value");
+        // 设置隐藏表单id
+        $("#myUserId").val(id);
+        $("#img").attr("src","");
+        $.post("/supplyAdmin/getNeedById",{"id":id},function (data) {
+            $("#content").text(data.content);
+            if(data.hasOwnProperty("file")){
+                $("#img").attr("src","/preview/"+data.file);
+                $("#img").css("display", 'block');
+            }
         },"json");
     }
     function del(obj) {
@@ -276,6 +319,32 @@
     }
     $("#findMsg").click(function () {
         window.location.href="/supplyAdmin/getNeedByPage?pageNumber=1&username="+$("#nameMsg").val()+"&type="+$("#myType").val()
+    });
+    // 需要在完成渲染之前就加载
+    // 显示图片
+    function upload(c, d){
+        $c = document.querySelector(c),
+            $d = document.querySelector(d),
+            file = $c.files[0],
+            reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            $d.setAttribute("src", e.target.result);
+            $(d).css("display", 'block');
+        };
+    };
+    $(function() {
+        $("#selectPic").click(function () {
+            $("#selectBtn").trigger('click');
+        });
+        $("textarea").autoTextarea({
+            maxHeight:400,
+            minHeight:100
+        });
+
+        /*$("#editBtn").click(function(){
+            alert(提交安妮);
+        });*/
     });
 </script>
 </html>

@@ -3,8 +3,10 @@ package com.gzmusxxy.util;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+/**
+ * 微信接口配置文件
+ */
 public class WxConfig {
-    //私有变量
 
     /**
      * 微信公众号开发者ID
@@ -27,7 +29,6 @@ public class WxConfig {
      * 微信发送模板消息的url
      */
     private static final String SEND_WECHAT_MSG_URL = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=";
-    //公有变量
 
     /**
      * 业务通知消息模板id

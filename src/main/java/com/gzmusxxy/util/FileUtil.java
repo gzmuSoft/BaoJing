@@ -1,5 +1,7 @@
 package com.gzmusxxy.util;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.util.StringUtils;
 
@@ -14,11 +16,18 @@ import java.util.UUID;
 /**
  * 文件操作工具类
  */
+@Component
 public class FileUtil {
 
-    //    public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
     //public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
-    public static final String FILE_PATH = "/home/rlds/Public/upload/";
+    //public static final String FILE_PATH = "C:/Users/Administrator/Desktop/upload/";
+    public static String FILE_PATH;
+
+    @Value("${upload.folder}")
+    public void setFilePath(String folder){
+        FILE_PATH = folder;
+        System.out.println("已设置上传路径：" + FILE_PATH);
+    }
 
     /**
      * 判断文件是否存在

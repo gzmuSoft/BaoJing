@@ -15,9 +15,9 @@
         <sqlMapGenerator targetPackage="com.gzmusxxy.mapper" targetProject="src\main\java" />
         <javaClientGenerator targetPackage="com.gzmusxxy.mapper" targetProject="src\main\java" type="XMLMAPPER" />
 
-        <table schema="gzmu_bj" tableName="xjhb_information">
+        <!--<table schema="gzmu_bj" tableName="xjhb_information">
             <columnOverride column="useActualColumnNames" property="false" />
-        </table>
+        </table>-->
         <!--<table schema="gzmu_bj" tableName="xjhb_project">-->
             <!--<columnOverride column="useActualColumnNames" property="false" />-->
         <!--</table>-->

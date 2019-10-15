@@ -20,5 +20,8 @@ public interface IndustryNeedMapper {
     int selectCountByUserIdAndType(Integer userId,Integer type);
 
     int updateReadNumber(Integer id);
+
     List<IndustryNeed> selectByNameType(IndustryNeed record);
+
+    int updateById(IndustryNeed record);
 }

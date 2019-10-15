@@ -5,7 +5,7 @@ server:
 spring:
   datasource:
     username: root
-    password:
+    password: zxcvbnm
     url: jdbc:mysql://127.0.0.1:3306/gzmu_bj?serverTimezone=GMT%2B8&characterEncoding=utf8&useSSL=false
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -31,13 +31,11 @@ mybatis:
   type-aliases-package: com.gzmusxxy.entity
 logging:
   level:
-    com:
-      gzmusxxy:
-        mapper: debug
+    com.gzmusxxy.mapper: debug
 pagehelper:
   helper-dialect: mysql
   reasonable: true
   support-methods-arguments: true
   params: count=countSql
-#ws:
-#  fileUploadPath: D:/
+upload:
+  folder: /home/rlds/Public/upload/

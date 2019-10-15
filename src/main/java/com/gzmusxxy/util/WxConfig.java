@@ -23,7 +23,7 @@ public class WxConfig {
     /**
      * 开发者密码
      */
-    private static final String APPSECRET = "049013d010a4854e3c1997c93efe6c0e";
+    private static final String APPSECRET = "";
 
     /**
      * 微信发送模板消息的url

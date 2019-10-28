@@ -206,7 +206,7 @@ public class MedicalController {
     @ResponseBody
     @RequestMapping(value = "/getBankInfo")
     public Admin getBankInfo() {
-        return adminService.selectByRole(3);
+        return adminService.selectByRole(4);
     }
 
     /**

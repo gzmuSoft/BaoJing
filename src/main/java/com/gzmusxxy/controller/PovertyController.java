@@ -53,7 +53,7 @@ public class PovertyController {
      * @return poverty/apply
      */
     @IsLogin
-    @RequestMapping(value = "/apply")
+    @RequestMapping(value = {"","/apply","/"})
     public String apply(HttpSession session,Model model) {
         String openId =  session.getAttribute("openid").toString();
         if(xjhbPersonService.findPersonByOpenId(openId) == null){
@@ -63,7 +63,7 @@ public class PovertyController {
             xjhbPersonService.insert(person);
         }
         Bulletin bulletin = null;
-        List<Bulletin> bulletins = bulletinService.selectBySourceId(2);
+        List<Bulletin> bulletins = bulletinService.selectBySourceId(1);
         if (bulletins.size() > 0) {
             bulletin = bulletins.get(0);
         }

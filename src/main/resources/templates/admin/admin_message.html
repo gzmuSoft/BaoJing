@@ -150,7 +150,7 @@
                                     </div>
                                 </div>
                                 <!--当role为3时候显示输入框-->
-                                <th:block th:if="${session.admin.role == 3}">
+                                <th:block th:if="${session.admin.role == 3 || session.admin.role == 4}">
                                     <div class="form-group">
                                         <label for="bank" class="col-sm-2 control-label">开户行：</label>
                                         <div class="col-sm-8">

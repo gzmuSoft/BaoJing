@@ -15,4 +15,6 @@ public interface BulletinMapper {
     int updateByPrimaryKey(Bulletin record);
 
     List<Bulletin> selectBySourceId(Integer id);
+
+    int updateTitleAndContentById(Bulletin record);
 }

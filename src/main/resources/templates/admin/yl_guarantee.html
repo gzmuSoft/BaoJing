@@ -124,17 +124,17 @@
                 <div class="panel panel-default">
                     <div class="panel-heading">公告管理</div>
                     <div class="panel-body">
-                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success">添加公告</button>
+                        <button type="button" id="addProject" data-toggle="modal" data-target="#myModal" class="btn btn-success" onclick="addNotice()">添加公告</button>
                         <h3></h3>
                         <div class="panel panel-primary" th:each="yl:${pageInfo.list}">
                             <div class="panel-heading">
-                                <h3 class="panel-title" th:text="${yl.title}"></h3>
+                                <h3 class="panel-title" id="panel-title" th:text="${yl.title}"></h3>
                             </div>
                             <div class="panel-body addHtml">
-                                Panel content
+
                             </div>
                             <div class="panel-footer text-right">
-                                <button type="button" onclick="update(this)" th:value="${yl.id}" class="btn btn-primary">修改</button>
+                                <button type="button" onclick="update(this)" th:value="${yl.id}" class="btn btn-primary" data-toggle="modal" data-target="#myModal">修改</button>
                                 <button type="button" onclick="del(this)" th:value="${yl.id}" class="btn btn-danger">删除</button>
                             </div>
                         </div>
@@ -182,13 +182,14 @@
                 <div class="modal-header">
                     <button type="button" id="cha" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title" id="myModalLabel">
-                        创建公告
+                        <span id="noticeTitle">创建公告</span>
                         <a class="anchorjs-link" href="#myModalLabel"><span class="anchorjs-icon"></span></a>
                     </h4>
                 </div>
                 <div class="modal-body">
                     <div class="panel panel-default">
                         <div class="panel-body">
+                            <input type="hidden" id="updateId">
                             <div class="form-group">
                                 <label>标题</label>
                                 <input type="text" class="form-control" id="title" placeholder="Enter title">
@@ -199,7 +200,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="sub" class="btn btn-primary">保存</button>
+                    <button type="button" id="sub" class="btn btn-primary" style="display: none;">保存</button>
+                    <button type="button" id="update" class="btn btn-primary" style="display: none;">更新</button>
                     <button type="button" id="ret" class="btn btn-default" data-dismiss="modal">取消</button>
                 </div>
             </div>
@@ -229,7 +231,16 @@
     }
 
     function update(obj) {
-        alert("update"+obj);
+        $("#noticeTitle").text("更新数据");
+        $("#sub").css("display","none");
+        $("#update").css("display","inline");
+        if(obj.value != null && obj.value > 0){
+            $("#updateId").val(obj.value);
+            $("#title").val($("#panel-title").text());
+            $("#summernote").code($(".addHtml").html());
+        }else{
+            alert("信息获取失败");
+        }
     }
 
     function del(obj) {
@@ -247,7 +258,13 @@
             });
         }
     }
-
+    function addNotice(){
+        $("#noticeTitle").text("添加数据");
+        $("#sub").css("display","inline");
+        $("#update").css("display","none");
+        $("#title").val("");
+        $("#summernote").code("");
+    }
     $("#sub").click(function(){
         $.post("/admin/saveBulletin",{
             "id":'',
@@ -258,6 +275,20 @@
         },function(data,status){
             if(status == "success"){
                 alert("保存成功！");
+                window.location.href = "/admin/ylNotification?pageNumber=1";
+            }else{
+                alert("网络出错，请稍后再试！");
+            }
+        });
+    });
+    $("#update").click(function(){
+        $.post("/admin/updateBulletinById",{
+            "id":$("#updateId").val(),
+            "title":$('#title').val(),
+            "content":$('#summernote').code(),
+        },function(data,status){
+            if(status == "success"){
+                alert("更新成功！");
                 window.location.href = "/admin/ylNotification?pageNumber=1";
             }else{
                 alert("网络出错，请稍后再试！");

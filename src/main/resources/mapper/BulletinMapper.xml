@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gzmusxxy.mapper.BulletinMapper">
-  <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.Bulletin">
-    <id column="id" jdbcType="INTEGER" property="id" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
-    <result column="content" property="content" />
-    <result column="source_id" jdbcType="INTEGER" property="sourceId" />
-    <result column="create_admin_id" jdbcType="INTEGER" property="createAdminId" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <resultMap id="BaseResultMap" type="com.gzmusxxy.entity.Bulletin">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" property="content"/>
+        <result column="source_id" jdbcType="INTEGER" property="sourceId"/>
+        <result column="create_admin_id" jdbcType="INTEGER" property="createAdminId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from bulletin
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <insert id="insert" parameterType="com.gzmusxxy.entity.Bulletin">
+    <insert id="insert" parameterType="com.gzmusxxy.entity.Bulletin">
     insert into bulletin (id, title, content, 
       source_id, create_admin_id
       )
@@ -21,7 +21,7 @@
       #{sourceId,jdbcType=INTEGER}, #{createAdminId,jdbcType=INTEGER}
       )
   </insert>
-  <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.Bulletin">
+    <update id="updateByPrimaryKey" parameterType="com.gzmusxxy.entity.Bulletin">
     update bulletin
     set title = #{title,jdbcType=VARCHAR},
       content = #{content},
@@ -29,18 +29,24 @@
       create_admin_id = #{createAdminId,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, title, content, source_id, create_admin_id, update_time
     from bulletin
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectBySourceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <select id="selectBySourceId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select id, title, content, source_id, create_admin_id, update_time
     from bulletin
     where source_id = #{source_id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
+    <select id="selectAll" resultMap="BaseResultMap">
     select id, title, content, source_id, create_admin_id, update_time
     from bulletin
   </select>
+    <update id="updateTitleAndContentById" parameterType="com.gzmusxxy.entity.Bulletin">
+    update bulletin
+    set title = #{title,jdbcType=VARCHAR},
+    content = #{content}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
 </mapper>

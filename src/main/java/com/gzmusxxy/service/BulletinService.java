@@ -20,4 +20,6 @@ public interface BulletinService {
     List<Bulletin> selectBySourceId(Integer id);
 
     PageInfo<Bulletin> selectAllBySourceId(Integer pageNumber, Integer sourceId);
+
+    int updateTitleAndContentById(Bulletin record);
 }

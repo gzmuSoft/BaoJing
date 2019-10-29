@@ -3,6 +3,7 @@ package com.gzmusxxy.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.gzmusxxy.annotation.AdminLogin;
+import com.gzmusxxy.common.JsonResult;
 import com.gzmusxxy.entity.*;
 import com.gzmusxxy.service.*;
 import com.gzmusxxy.util.*;
@@ -65,7 +66,6 @@ public class AdminController {
 
     @Autowired
     private ZfPhotoService zfPhotoService;
-
 
     @RequestMapping(value = "/login")
         public String login(HttpSession session) {
@@ -1561,5 +1561,27 @@ public class AdminController {
     public String delNotification(Integer id) {
         Integer re = bulletinService.deleteByPrimaryKey(id);
         return re.toString();
+    }
+
+    /**
+     * 根据id更新公告洗信息
+     *
+     * @param bulletin
+     * @return
+     */
+    @AdminLogin
+    @ResponseBody
+    @RequestMapping(value = "/updateBulletinById")
+    public JsonResult updateBulletion(Bulletin bulletin){
+        JsonResult jsonResult = new JsonResult();
+        int i = bulletinService.updateTitleAndContentById(bulletin);
+        if(i > 0){
+          jsonResult.setCode(1);
+          jsonResult.setResult("ok");
+          return jsonResult;
+        }
+        jsonResult.setResult("error");
+        jsonResult.setCode(0);
+        return jsonResult;
     }
 }

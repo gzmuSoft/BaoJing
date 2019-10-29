@@ -59,6 +59,8 @@ public class BulletinServiceImpl implements BulletinService {
         List<Bulletin> list = bulletinMapper.selectBySourceId(sourceId);
         return new PageInfo<>(list);
     }
-
-
+    @Override
+    public int updateTitleAndContentById(Bulletin record) {
+        return bulletinMapper.updateTitleAndContentById(record);
+    }
 }
